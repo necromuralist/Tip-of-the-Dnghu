@@ -1,0 +1,114 @@
+#+BEGIN_COMMENT
+.. title: Natural Language Processing Review
+.. slug: natural-language-processing-review
+.. date: 2019-04-07 17:12:29 UTC-07:00
+.. tags: nlp,review
+.. category: NLP
+.. link: 
+.. description: A review of Natural Language Processing
+.. type: text
+.. status: 
+.. updated: 
+
+#+END_COMMENT
+#+OPTIONS: H:5
+#+TOC: headlines 2
+#+BEGIN_SRC ipython :session nlp :results none :exports none
+%load_ext autoreload
+%autoreload 2
+#+END_SRC
+* Departure
+** Imports
+#+begin_src ipython :session nlp :results none
+import spacy
+from nltk.tokenize import TweetTokenizer
+#+end_src
+** Set Up
+   I'm using the =en= model. Even after you install spacy you have to tell it which model to download.
+
+#+begin_src ipython :session nlp :results none
+python -m spacy download en
+#+end_src
+
+#+begin_src ipython :session nlp :results none
+processor = spacy.load("en")
+tokenizer = TweetTokenizer()
+#+end_src
+* Initiation
+** Some Vocabulary
+*** Natural Language Processing
+    [[https://www.wikiwand.com/en/Natural_language_processing][Natural Language Processing]] is the computational study of human language with the aim of solving practical problems involving language. There is a related field called [[https://www.wikiwand.com/en/Computational_linguistics][Computational Linguistics]] which is concerned more with the modeling of human language but seems related.
+*** Corpora
+    A text-dataset is called a /corpus/, usually made up of texts and metadata associated with each text. Texts are made up of characters grouped into units called /tokens/. In English a token is generally a word or number.
+**** Tokenization
+     The process of breaking a text up into /tokens/ is called tokenization. Here's some examples of how to do it with [[https://spacy.io/usage/spacy-101][spacy]] and the [[https://www.nltk.org][Natural Language Toolkit (NLTK)]].
+#+begin_src ipython :session nlp :results output :exports both
+text = "Those are my principles, and if you don't like them... well, I have others.".lower()
+print([str(token) for token in processor(text)])
+#+end_src
+
+#+RESULTS:
+: ['those', 'are', 'my', 'principles', ',', 'and', 'if', 'you', 'do', "n't", 'like', 'them', '...', 'well', ',', 'i', 'have', 'others', '.']
+
+#+begin_src ipython :session nlp :results output :exports both
+print(tokenizer.tokenize(text))
+#+end_src
+
+#+RESULTS:
+: ['those', 'are', 'my', 'principles', ',', 'and', 'if', 'you', "don't", 'like', 'them', '...', 'well', ',', 'i', 'have', 'others', '.']
+
+Spacy prefers to break contractions up, while NLTK doesn't, otherwise they treated them pretty much the same way.
+
+#+begin_src ipython :session nlp :results output :exports both
+tweet = text + " #GrouchoSaid@morning:-J".lower()
+print([str(token) for token in processor(tweet)])
+#+end_src
+
+#+RESULTS:
+: ['those', 'are', 'my', 'principles', ',', 'and', 'if', 'you', 'do', "n't", 'like', 'them', '...', 'well', ',', 'i', 'have', 'others', '.', '#', 'grouchosaid@morning:-j']
+
+#+begin_src ipython :session nlp :results output :exports both
+print(tokenizer.tokenize(tweet))
+#+end_src
+
+#+RESULTS:
+: ['those', 'are', 'my', 'principles', ',', 'and', 'if', 'you', "don't", 'like', 'them', '...', 'well', ',', 'i', 'have', 'others', '.', '#grouchosaid', '@morning', ':', '-', 'j']
+
+In this case, the TweetTokenizer and spacy treated the hash-tag and smiley differently.
+*** Types
+    /Types/ are the unique tokens in a corpus. The set of all the types in the corpus is its /vocabulary/ or /lexicon/. 
+*** Word Classes
+There are two classes of words /content words/ and /stopwords/. Stopwords are there mostly to glue the content words together ("a", "an", "the", etc.) and provide more noise than information.
+*** N-Grams
+    /N-grams/ are consecutive token-sequences of a fixed length (/n/). Common special cases are:
+    - unigrams: /n/ = 1
+    - bigrams: /n/ = 2
+    - trigrams: /n/ = 3
+
+Although n-grams are generally words in some cases they can be characters - if the suffixes are meaningful, for instance.
+*** Lemma
+[[https://www.wikiwand.com/en/Lemma_(morphology)][Lemmas]] are root-forms for words that can have different forms. As an example - /go/ is the lemma for /go/, /going/, /went/, and /gone/.
+
+#+begin_src ipython :session nlp :results output :exports both
+document = processor("an undefined problem has an infinite number of solutions")
+for token in document:
+    print("Token: {} -> Lemma: {}".format(token, token.lemma_))
+#+end_src
+
+#+RESULTS:
+: Token: an -> Lemma: an
+: Token: undefined -> Lemma: undefined
+: Token: problem -> Lemma: problem
+: Token: has -> Lemma: have
+: Token: an -> Lemma: an
+: Token: infinite -> Lemma: infinite
+: Token: number -> Lemma: number
+: Token: of -> Lemma: of
+: Token: solutions -> Lemma: solution
+
+There is a related method called /stemming/ which strips the endings off of words instead of changing to their lemmas. lemmatization is probably preferable, but is a more difficult method compared to stemming.
+*** Chunking
+    
+* Return
+** Sources
+   - Rao D, McMahan B. Natural language processing with PyTorch: build intelligent language applications using deep learning. Sebastopol, CA: OReilly Media; 2019.
