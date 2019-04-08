@@ -1,0 +1,15 @@
+#+BEGIN_COMMENT
+.. title: Reading List
+.. slug: reading-list
+.. date: 2019-04-07 16:34:53 UTC-07:00
+.. tags: reading,list
+.. category: Reading
+.. link: 
+.. description: A reading list.
+.. type: text
+.. status:
+.. updated: 
+
+#+END_COMMENT
+* Books on Natural Language Processing
+** Rao D, McMahan B. Natural language processing with PyTorch: build intelligent language applications using deep learning. Sebastopol, CA: OReilly Media; 2019.
