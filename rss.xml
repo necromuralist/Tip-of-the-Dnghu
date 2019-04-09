@@ -1,88 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tip of the Dnghu</title><link>https://necromuralist.github.io/Tip-of-the-Dnghu/</link><description>Natural Language Processing Notes</description><atom:link href="https://necromuralist.github.io/Tip-of-the-Dnghu/rss.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2019 &lt;a href="mailto:necromuralist@protonmail.com"&gt;Cloistered Monkey&lt;/a&gt; </copyright><lastBuildDate>Mon, 08 Apr 2019 17:13:57 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Natural Language Processing Review</title><link>https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/</link><dc:creator>Cloistered Monkey</dc:creator><description>&lt;div id="table-of-contents"&gt;
+<?xml-stylesheet type="text/xsl" href="assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tip of the Dnghu</title><link>https://necromuralist.github.io/Tip-of-the-Dnghu/</link><description>Natural Language Processing Notes</description><atom:link href="https://necromuralist.github.io/Tip-of-the-Dnghu/rss.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2019 &lt;a href="mailto:necromuralist@protonmail.com"&gt;Cloistered Monkey&lt;/a&gt; </copyright><lastBuildDate>Tue, 09 Apr 2019 01:01:26 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Natural Language Processing Review</title><link>https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/</link><dc:creator>Cloistered Monkey</dc:creator><description>&lt;div id="table-of-contents"&gt;
 &lt;h2&gt;Table of Contents&lt;/h2&gt;
 &lt;div id="text-table-of-contents"&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/#org6b5f17f"&gt;Departure&lt;/a&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/#orgcc27d61"&gt;Departure&lt;/a&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/#orgb082093"&gt;Imports&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/#org8d877d4"&gt;Set Up&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/#orge0610b5"&gt;Imports&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/#org5f45508"&gt;Set Up&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/#org0c5f329"&gt;Initiation&lt;/a&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/#orgce62f97"&gt;Initiation&lt;/a&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/#org8c30572"&gt;Some Vocabulary&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/#org21553d7"&gt;Some Vocabulary&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/#orga0e69c4"&gt;Return&lt;/a&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/#orgb0b3b0c"&gt;Return&lt;/a&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/#orgaa39cb8"&gt;Sources&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/#orgc39e16a"&gt;Sources&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org6b5f17f" class="outline-2"&gt;
-&lt;h2 id="org6b5f17f"&gt;Departure&lt;/h2&gt;
-&lt;div class="outline-text-2" id="text-org6b5f17f"&gt;
+&lt;div id="outline-container-orgcc27d61" class="outline-2"&gt;
+&lt;h2 id="orgcc27d61"&gt;Departure&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-orgcc27d61"&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgb082093" class="outline-3"&gt;
-&lt;h3 id="orgb082093"&gt;Imports&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-orgb082093"&gt;
-/home/athena/.virtualenvs/Tip-of-the-Dnghu/bin/python3: No module named virtualfish
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;import spacy
+&lt;div id="outline-container-orge0610b5" class="outline-3"&gt;
+&lt;h3 id="orge0610b5"&gt;Imports&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-orge0610b5"&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;from pathlib import Path
+&lt;/pre&gt;&lt;/div&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;from spacy import displacy
+import spacy
 from nltk.tokenize import TweetTokenizer
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org8d877d4" class="outline-3"&gt;
-&lt;h3 id="org8d877d4"&gt;Set Up&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org8d877d4"&gt;
+&lt;div id="outline-container-org5f45508" class="outline-3"&gt;
+&lt;h3 id="org5f45508"&gt;Set Up&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org5f45508"&gt;
 &lt;p&gt;
 I'm using the &lt;code&gt;en&lt;/code&gt; model. Even after you install spacy you have to tell it which model to download.
 &lt;/p&gt;
 
-/home/athena/.virtualenvs/Tip-of-the-Dnghu/bin/python3: No module named virtualfish
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;python -m spacy download en
-&lt;/pre&gt;&lt;/div&gt;
+&lt;pre class="example"&gt;
+python -m spacy download en
+&lt;/pre&gt;
 
-/home/athena/.virtualenvs/Tip-of-the-Dnghu/bin/python3: No module named virtualfish
+&lt;p&gt;
+Once you run that this next block should work - otherwise you'll get an &lt;code&gt;OSError&lt;/code&gt;.
+&lt;/p&gt;
+
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;processor = spacy.load("en")
 tokenizer = TweetTokenizer()
 &lt;/pre&gt;&lt;/div&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;SLUG = "natural-language-processing-review"
+OUTPUT_FOLDER = Path("../../files/posts/nlp/" + SLUG)
+if not OUTPUT_FOLDER.is_dir():
+    OUTPUT_FOLDER.mkdir(parents=True)
+&lt;/pre&gt;&lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org0c5f329" class="outline-2"&gt;
-&lt;h2 id="org0c5f329"&gt;Initiation&lt;/h2&gt;
-&lt;div class="outline-text-2" id="text-org0c5f329"&gt;
+
+&lt;div id="outline-container-orgce62f97" class="outline-2"&gt;
+&lt;h2 id="orgce62f97"&gt;Initiation&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-orgce62f97"&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org8c30572" class="outline-3"&gt;
-&lt;h3 id="org8c30572"&gt;Some Vocabulary&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org8c30572"&gt;
+&lt;div id="outline-container-org21553d7" class="outline-3"&gt;
+&lt;h3 id="org21553d7"&gt;Some Vocabulary&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org21553d7"&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org1b7c741" class="outline-4"&gt;
-&lt;h4 id="org1b7c741"&gt;Natural Language Processing&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org1b7c741"&gt;
+&lt;div id="outline-container-org3830116" class="outline-4"&gt;
+&lt;h4 id="org3830116"&gt;Natural Language Processing&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org3830116"&gt;
 &lt;p&gt;
 &lt;a href="https://www.wikiwand.com/en/Natural_language_processing"&gt;Natural Language Processing&lt;/a&gt; is the computational study of human language with the aim of solving practical problems involving language. There is a related field called &lt;a href="https://www.wikiwand.com/en/Computational_linguistics"&gt;Computational Linguistics&lt;/a&gt; which is concerned more with the modeling of human language but seems related.
 &lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org1db1f14" class="outline-4"&gt;
-&lt;h4 id="org1db1f14"&gt;Corpora&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org1db1f14"&gt;
+&lt;div id="outline-container-orga0bf497" class="outline-4"&gt;
+&lt;h4 id="orga0bf497"&gt;Corpora&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-orga0bf497"&gt;
 &lt;p&gt;
 A text-dataset is called a &lt;i&gt;corpus&lt;/i&gt;, usually made up of texts and metadata associated with each text. Texts are made up of characters grouped into units called &lt;i&gt;tokens&lt;/i&gt;. In English a token is generally a word or number.
 &lt;/p&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org73e2a8a" class="outline-5"&gt;
-&lt;h5 id="org73e2a8a"&gt;Tokenization&lt;/h5&gt;
-&lt;div class="outline-text-5" id="text-org73e2a8a"&gt;
+&lt;div id="outline-container-orgf0d28e0" class="outline-5"&gt;
+&lt;h5 id="orgf0d28e0"&gt;Tokenization&lt;/h5&gt;
+&lt;div class="outline-text-5" id="text-orgf0d28e0"&gt;
 &lt;p&gt;
 The process of breaking a text up into &lt;i&gt;tokens&lt;/i&gt; is called tokenization. Here's some examples of how to do it with &lt;a href="https://spacy.io/usage/spacy-101"&gt;spacy&lt;/a&gt; and the &lt;a href="https://www.nltk.org"&gt;Natural Language Toolkit (NLTK)&lt;/a&gt;.
 &lt;/p&gt;
-/home/athena/.virtualenvs/Tip-of-the-Dnghu/bin/python3: No module named virtualfish
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;text = "Those are my principles, and if you don't like them... well, I have others.".lower()
 print([str(token) for token in processor(text)])
 &lt;/pre&gt;&lt;/div&gt;
@@ -92,7 +103,6 @@ print([str(token) for token in processor(text)])
 
 &lt;/pre&gt;
 
-/home/athena/.virtualenvs/Tip-of-the-Dnghu/bin/python3: No module named virtualfish
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;print(tokenizer.tokenize(text))
 &lt;/pre&gt;&lt;/div&gt;
 
@@ -105,7 +115,6 @@ print([str(token) for token in processor(text)])
 Spacy prefers to break contractions up, while NLTK doesn't, otherwise they treated them pretty much the same way.
 &lt;/p&gt;
 
-/home/athena/.virtualenvs/Tip-of-the-Dnghu/bin/python3: No module named virtualfish
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;tweet = text + " #GrouchoSaid@morning:-J".lower()
 print([str(token) for token in processor(tweet)])
 &lt;/pre&gt;&lt;/div&gt;
@@ -115,7 +124,6 @@ print([str(token) for token in processor(tweet)])
 
 &lt;/pre&gt;
 
-/home/athena/.virtualenvs/Tip-of-the-Dnghu/bin/python3: No module named virtualfish
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;print(tokenizer.tokenize(tweet))
 &lt;/pre&gt;&lt;/div&gt;
 
@@ -130,25 +138,25 @@ In this case, the TweetTokenizer and spacy treated the hash-tag and smiley diffe
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgb96cff9" class="outline-4"&gt;
-&lt;h4 id="orgb96cff9"&gt;Types&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-orgb96cff9"&gt;
+&lt;div id="outline-container-org92338fa" class="outline-4"&gt;
+&lt;h4 id="org92338fa"&gt;Types&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org92338fa"&gt;
 &lt;p&gt;
 &lt;i&gt;Types&lt;/i&gt; are the unique tokens in a corpus. The set of all the types in the corpus is its &lt;i&gt;vocabulary&lt;/i&gt; or &lt;i&gt;lexicon&lt;/i&gt;. 
 &lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org48ab853" class="outline-4"&gt;
-&lt;h4 id="org48ab853"&gt;Word Classes&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org48ab853"&gt;
+&lt;div id="outline-container-orgc4b09c3" class="outline-4"&gt;
+&lt;h4 id="orgc4b09c3"&gt;Word Classes&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-orgc4b09c3"&gt;
 &lt;p&gt;
 There are two classes of words &lt;i&gt;content words&lt;/i&gt; and &lt;i&gt;stopwords&lt;/i&gt;. Stopwords are there mostly to glue the content words together ("a", "an", "the", etc.) and provide more noise than information.
 &lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgf4f43b4" class="outline-4"&gt;
-&lt;h4 id="orgf4f43b4"&gt;N-Grams&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-orgf4f43b4"&gt;
+&lt;div id="outline-container-orgb02130e" class="outline-4"&gt;
+&lt;h4 id="orgb02130e"&gt;N-Grams&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-orgb02130e"&gt;
 &lt;p&gt;
 &lt;i&gt;N-grams&lt;/i&gt; are consecutive token-sequences of a fixed length (&lt;i&gt;n&lt;/i&gt;). Common special cases are:
 &lt;/p&gt;
@@ -163,14 +171,13 @@ Although n-grams are generally words in some cases they can be characters - if t
 &lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orga07b40a" class="outline-4"&gt;
-&lt;h4 id="orga07b40a"&gt;Lemma&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-orga07b40a"&gt;
+&lt;div id="outline-container-org9e20c2f" class="outline-4"&gt;
+&lt;h4 id="org9e20c2f"&gt;Lemma&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org9e20c2f"&gt;
 &lt;p&gt;
 &lt;a href="https://www.wikiwand.com/en/Lemma_(morphology)"&gt;Lemmas&lt;/a&gt; are root-forms for words that can have different forms. As an example - &lt;i&gt;go&lt;/i&gt; is the lemma for &lt;i&gt;go&lt;/i&gt;, &lt;i&gt;going&lt;/i&gt;, &lt;i&gt;went&lt;/i&gt;, and &lt;i&gt;gone&lt;/i&gt;.
 &lt;/p&gt;
 
-/home/athena/.virtualenvs/Tip-of-the-Dnghu/bin/python3: No module named virtualfish
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;document = processor("an undefined problem has an infinite number of solutions")
 for token in document:
     print("Token: {} -&amp;gt; Lemma: {}".format(token, token.lemma_))
@@ -194,29 +201,47 @@ There is a related method called &lt;i&gt;stemming&lt;/i&gt; which strips the en
 &lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org7513f9f" class="outline-4"&gt;
-&lt;h4 id="org7513f9f"&gt;Chunking&lt;/h4&gt;
+&lt;div id="outline-container-org3862cdc" class="outline-4"&gt;
+&lt;h4 id="org3862cdc"&gt;Chunking&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org3862cdc"&gt;
+&lt;p&gt;
+There are different ways of chunking text instead of just using &lt;i&gt;n-grams&lt;/i&gt;, one way is called &lt;i&gt;chunking&lt;/i&gt; which breaks the text up into phrases.
+&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;document = processor("Mary had a little lamb, its fleece was white as snow.")
+for chunk in document.noun_chunks:
+    print("{} - {}".format(chunk, chunk.label_))
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;pre class="example"&gt;
+Mary - NP
+a little lamb - NP
+its fleece - NP
+snow - NP
+
+&lt;/pre&gt;
+&lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-orga0e69c4" class="outline-2"&gt;
-&lt;h2 id="orga0e69c4"&gt;Return&lt;/h2&gt;
-&lt;div class="outline-text-2" id="text-orga0e69c4"&gt;
+
+&lt;div id="outline-container-orgb0b3b0c" class="outline-2"&gt;
+&lt;h2 id="orgb0b3b0c"&gt;Return&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-orgb0b3b0c"&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgaa39cb8" class="outline-3"&gt;
-&lt;h3 id="orgaa39cb8"&gt;Sources&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-orgaa39cb8"&gt;
+&lt;div id="outline-container-orgc39e16a" class="outline-3"&gt;
+&lt;h3 id="orgc39e16a"&gt;Sources&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-orgc39e16a"&gt;
 &lt;ul class="org-ul"&gt;
 &lt;li&gt;Rao D, McMahan B. Natural language processing with PyTorch: build intelligent language applications using deep learning. Sebastopol, CA: OReilly Media; 2019.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;/div&gt;</description><category>nlp</category><category>review</category><guid>https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/</guid><pubDate>Mon, 08 Apr 2019 00:12:29 GMT</pubDate></item><item><title>Reading List</title><link>https://necromuralist.github.io/Tip-of-the-Dnghu/posts/reference/reading-list/</link><dc:creator>Cloistered Monkey</dc:creator><description>&lt;div id="outline-container-org37b56e6" class="outline-2"&gt;
-&lt;h2 id="org37b56e6"&gt;Books on Natural Language Processing&lt;/h2&gt;
-&lt;div class="outline-text-2" id="text-org37b56e6"&gt;
+&lt;/div&gt;</description><category>nlp</category><category>review</category><guid>https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/</guid><pubDate>Mon, 08 Apr 2019 00:12:29 GMT</pubDate></item><item><title>Reading List</title><link>https://necromuralist.github.io/Tip-of-the-Dnghu/posts/reference/reading-list/</link><dc:creator>Cloistered Monkey</dc:creator><description>&lt;div id="outline-container-org43bf5ae" class="outline-2"&gt;
+&lt;h2 id="org43bf5ae"&gt;Books on Natural Language Processing&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-org43bf5ae"&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgb8c94c4" class="outline-3"&gt;
-&lt;h3 id="orgb8c94c4"&gt;Rao D, McMahan B. Natural language processing with PyTorch: build intelligent language applications using deep learning. Sebastopol, CA: OReilly Media; 2019.&lt;/h3&gt;
+&lt;div id="outline-container-org57b2722" class="outline-3"&gt;
+&lt;h3 id="org57b2722"&gt;Rao D, McMahan B. Natural language processing with PyTorch: build intelligent language applications using deep learning. Sebastopol, CA: OReilly Media; 2019.&lt;/h3&gt;
 &lt;/div&gt;
 &lt;/div&gt;</description><category>list</category><category>reading</category><guid>https://necromuralist.github.io/Tip-of-the-Dnghu/posts/reference/reading-list/</guid><pubDate>Sun, 07 Apr 2019 23:34:53 GMT</pubDate></item></channel></rss>

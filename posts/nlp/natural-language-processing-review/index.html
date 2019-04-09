@@ -69,75 +69,83 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org6b5f17f">Departure</a>
+<li><a href="#orgcc27d61">Departure</a>
 <ul>
-<li><a href="#orgb082093">Imports</a></li>
-<li><a href="#org8d877d4">Set Up</a></li>
+<li><a href="#orge0610b5">Imports</a></li>
+<li><a href="#org5f45508">Set Up</a></li>
 </ul>
 </li>
-<li><a href="#org0c5f329">Initiation</a>
+<li><a href="#orgce62f97">Initiation</a>
 <ul>
-<li><a href="#org8c30572">Some Vocabulary</a></li>
+<li><a href="#org21553d7">Some Vocabulary</a></li>
 </ul>
 </li>
-<li><a href="#orga0e69c4">Return</a>
+<li><a href="#orgb0b3b0c">Return</a>
 <ul>
-<li><a href="#orgaa39cb8">Sources</a></li>
+<li><a href="#orgc39e16a">Sources</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
-<div class="outline-2" id="outline-container-org6b5f17f">
-<h2 id="org6b5f17f">Departure</h2>
-<div class="outline-text-2" id="text-org6b5f17f"></div>
-<div class="outline-3" id="outline-container-orgb082093">
-<h3 id="orgb082093">Imports</h3>
-<div class="outline-text-3" id="text-orgb082093">/home/athena/.virtualenvs/Tip-of-the-Dnghu/bin/python3: No module named virtualfish
+<div class="outline-2" id="outline-container-orgcc27d61">
+<h2 id="orgcc27d61">Departure</h2>
+<div class="outline-text-2" id="text-orgcc27d61"></div>
+<div class="outline-3" id="outline-container-orge0610b5">
+<h3 id="orge0610b5">Imports</h3>
+<div class="outline-text-3" id="text-orge0610b5">
 <div class="highlight">
-<pre><span></span>import spacy
+<pre><span></span>from pathlib import Path
+</pre></div>
+<div class="highlight">
+<pre><span></span>from spacy import displacy
+import spacy
 from nltk.tokenize import TweetTokenizer
 </pre></div>
 </div>
 </div>
-<div class="outline-3" id="outline-container-org8d877d4">
-<h3 id="org8d877d4">Set Up</h3>
-<div class="outline-text-3" id="text-org8d877d4">
+<div class="outline-3" id="outline-container-org5f45508">
+<h3 id="org5f45508">Set Up</h3>
+<div class="outline-text-3" id="text-org5f45508">
 <p>I'm using the <code>en</code> model. Even after you install spacy you have to tell it which model to download.</p>
-/home/athena/.virtualenvs/Tip-of-the-Dnghu/bin/python3: No module named virtualfish
-<div class="highlight">
-<pre><span></span>python -m spacy download en
-</pre></div>
-/home/athena/.virtualenvs/Tip-of-the-Dnghu/bin/python3: No module named virtualfish
+<pre class="example">
+python -m spacy download en
+</pre>
+<p>Once you run that this next block should work - otherwise you'll get an <code>OSError</code>.</p>
 <div class="highlight">
 <pre><span></span>processor = spacy.load("en")
 tokenizer = TweetTokenizer()
 </pre></div>
+<div class="highlight">
+<pre><span></span>SLUG = "natural-language-processing-review"
+OUTPUT_FOLDER = Path("../../files/posts/nlp/" + SLUG)
+if not OUTPUT_FOLDER.is_dir():
+    OUTPUT_FOLDER.mkdir(parents=True)
+</pre></div>
 </div>
 </div>
 </div>
-<div class="outline-2" id="outline-container-org0c5f329">
-<h2 id="org0c5f329">Initiation</h2>
-<div class="outline-text-2" id="text-org0c5f329"></div>
-<div class="outline-3" id="outline-container-org8c30572">
-<h3 id="org8c30572">Some Vocabulary</h3>
-<div class="outline-text-3" id="text-org8c30572"></div>
-<div class="outline-4" id="outline-container-org1b7c741">
-<h4 id="org1b7c741">Natural Language Processing</h4>
-<div class="outline-text-4" id="text-org1b7c741">
+<div class="outline-2" id="outline-container-orgce62f97">
+<h2 id="orgce62f97">Initiation</h2>
+<div class="outline-text-2" id="text-orgce62f97"></div>
+<div class="outline-3" id="outline-container-org21553d7">
+<h3 id="org21553d7">Some Vocabulary</h3>
+<div class="outline-text-3" id="text-org21553d7"></div>
+<div class="outline-4" id="outline-container-org3830116">
+<h4 id="org3830116">Natural Language Processing</h4>
+<div class="outline-text-4" id="text-org3830116">
 <p><a href="https://www.wikiwand.com/en/Natural_language_processing">Natural Language Processing</a> is the computational study of human language with the aim of solving practical problems involving language. There is a related field called <a href="https://www.wikiwand.com/en/Computational_linguistics">Computational Linguistics</a> which is concerned more with the modeling of human language but seems related.</p>
 </div>
 </div>
-<div class="outline-4" id="outline-container-org1db1f14">
-<h4 id="org1db1f14">Corpora</h4>
-<div class="outline-text-4" id="text-org1db1f14">
+<div class="outline-4" id="outline-container-orga0bf497">
+<h4 id="orga0bf497">Corpora</h4>
+<div class="outline-text-4" id="text-orga0bf497">
 <p>A text-dataset is called a <i>corpus</i>, usually made up of texts and metadata associated with each text. Texts are made up of characters grouped into units called <i>tokens</i>. In English a token is generally a word or number.</p>
 </div>
-<div class="outline-5" id="outline-container-org73e2a8a">
-<h5 id="org73e2a8a">Tokenization</h5>
-<div class="outline-text-5" id="text-org73e2a8a">
+<div class="outline-5" id="outline-container-orgf0d28e0">
+<h5 id="orgf0d28e0">Tokenization</h5>
+<div class="outline-text-5" id="text-orgf0d28e0">
 <p>The process of breaking a text up into <i>tokens</i> is called tokenization. Here's some examples of how to do it with <a href="https://spacy.io/usage/spacy-101">spacy</a> and the <a href="https://www.nltk.org">Natural Language Toolkit (NLTK)</a>.</p>
-/home/athena/.virtualenvs/Tip-of-the-Dnghu/bin/python3: No module named virtualfish
 <div class="highlight">
 <pre><span></span>text = "Those are my principles, and if you don't like them... well, I have others.".lower()
 print([str(token) for token in processor(text)])
@@ -146,7 +154,6 @@ print([str(token) for token in processor(text)])
 ['those', 'are', 'my', 'principles', ',', 'and', 'if', 'you', 'do', "n't", 'like', 'them', '...', 'well', ',', 'i', 'have', 'others', '.']
 
 </pre>
-/home/athena/.virtualenvs/Tip-of-the-Dnghu/bin/python3: No module named virtualfish
 <div class="highlight">
 <pre><span></span>print(tokenizer.tokenize(text))
 </pre></div>
@@ -155,7 +162,6 @@ print([str(token) for token in processor(text)])
 
 </pre>
 <p>Spacy prefers to break contractions up, while NLTK doesn't, otherwise they treated them pretty much the same way.</p>
-/home/athena/.virtualenvs/Tip-of-the-Dnghu/bin/python3: No module named virtualfish
 <div class="highlight">
 <pre><span></span>tweet = text + " #GrouchoSaid@morning:-J".lower()
 print([str(token) for token in processor(tweet)])
@@ -164,7 +170,6 @@ print([str(token) for token in processor(tweet)])
 ['those', 'are', 'my', 'principles', ',', 'and', 'if', 'you', 'do', "n't", 'like', 'them', '...', 'well', ',', 'i', 'have', 'others', '.', '#', 'grouchosaid@morning:-j']
 
 </pre>
-/home/athena/.virtualenvs/Tip-of-the-Dnghu/bin/python3: No module named virtualfish
 <div class="highlight">
 <pre><span></span>print(tokenizer.tokenize(tweet))
 </pre></div>
@@ -176,21 +181,21 @@ print([str(token) for token in processor(tweet)])
 </div>
 </div>
 </div>
-<div class="outline-4" id="outline-container-orgb96cff9">
-<h4 id="orgb96cff9">Types</h4>
-<div class="outline-text-4" id="text-orgb96cff9">
+<div class="outline-4" id="outline-container-org92338fa">
+<h4 id="org92338fa">Types</h4>
+<div class="outline-text-4" id="text-org92338fa">
 <p><i>Types</i> are the unique tokens in a corpus. The set of all the types in the corpus is its <i>vocabulary</i> or <i>lexicon</i>.</p>
 </div>
 </div>
-<div class="outline-4" id="outline-container-org48ab853">
-<h4 id="org48ab853">Word Classes</h4>
-<div class="outline-text-4" id="text-org48ab853">
+<div class="outline-4" id="outline-container-orgc4b09c3">
+<h4 id="orgc4b09c3">Word Classes</h4>
+<div class="outline-text-4" id="text-orgc4b09c3">
 <p>There are two classes of words <i>content words</i> and <i>stopwords</i>. Stopwords are there mostly to glue the content words together ("a", "an", "the", etc.) and provide more noise than information.</p>
 </div>
 </div>
-<div class="outline-4" id="outline-container-orgf4f43b4">
-<h4 id="orgf4f43b4">N-Grams</h4>
-<div class="outline-text-4" id="text-orgf4f43b4">
+<div class="outline-4" id="outline-container-orgb02130e">
+<h4 id="orgb02130e">N-Grams</h4>
+<div class="outline-text-4" id="text-orgb02130e">
 <p><i>N-grams</i> are consecutive token-sequences of a fixed length (<i>n</i>). Common special cases are:</p>
 <ul class="org-ul">
 <li>unigrams: <i>n</i> = 1</li>
@@ -200,11 +205,10 @@ print([str(token) for token in processor(tweet)])
 <p>Although n-grams are generally words in some cases they can be characters - if the suffixes are meaningful, for instance.</p>
 </div>
 </div>
-<div class="outline-4" id="outline-container-orga07b40a">
-<h4 id="orga07b40a">Lemma</h4>
-<div class="outline-text-4" id="text-orga07b40a">
+<div class="outline-4" id="outline-container-org9e20c2f">
+<h4 id="org9e20c2f">Lemma</h4>
+<div class="outline-text-4" id="text-org9e20c2f">
 <p><a href="https://www.wikiwand.com/en/Lemma_(morphology)">Lemmas</a> are root-forms for words that can have different forms. As an example - <i>go</i> is the lemma for <i>go</i>, <i>going</i>, <i>went</i>, and <i>gone</i>.</p>
-/home/athena/.virtualenvs/Tip-of-the-Dnghu/bin/python3: No module named virtualfish
 <div class="highlight">
 <pre><span></span>document = processor("an undefined problem has an infinite number of solutions")
 for token in document:
@@ -225,17 +229,31 @@ Token: solutions -&gt; Lemma: solution
 <p>There is a related method called <i>stemming</i> which strips the endings off of words instead of changing to their lemmas. lemmatization is probably preferable, but is a more difficult method compared to stemming.</p>
 </div>
 </div>
-<div class="outline-4" id="outline-container-org7513f9f">
-<h4 id="org7513f9f">Chunking</h4>
+<div class="outline-4" id="outline-container-org3862cdc">
+<h4 id="org3862cdc">Chunking</h4>
+<div class="outline-text-4" id="text-org3862cdc">
+<p>There are different ways of chunking text instead of just using <i>n-grams</i>, one way is called <i>chunking</i> which breaks the text up into phrases.</p>
+<div class="highlight">
+<pre><span></span>document = processor("Mary had a little lamb, its fleece was white as snow.")
+for chunk in document.noun_chunks:
+    print("{} - {}".format(chunk, chunk.label_))
+</pre></div>
+<pre class="example">
+Mary - NP
+a little lamb - NP
+its fleece - NP
+snow - NP
+
+</pre></div>
 </div>
 </div>
 </div>
-<div class="outline-2" id="outline-container-orga0e69c4">
-<h2 id="orga0e69c4">Return</h2>
-<div class="outline-text-2" id="text-orga0e69c4"></div>
-<div class="outline-3" id="outline-container-orgaa39cb8">
-<h3 id="orgaa39cb8">Sources</h3>
-<div class="outline-text-3" id="text-orgaa39cb8">
+<div class="outline-2" id="outline-container-orgb0b3b0c">
+<h2 id="orgb0b3b0c">Return</h2>
+<div class="outline-text-2" id="text-orgb0b3b0c"></div>
+<div class="outline-3" id="outline-container-orgc39e16a">
+<h3 id="orgc39e16a">Sources</h3>
+<div class="outline-text-3" id="text-orgc39e16a">
 <ul class="org-ul">
 <li>Rao D, McMahan B. Natural language processing with PyTorch: build intelligent language applications using deep learning. Sebastopol, CA: OReilly Media; 2019.</li>
 </ul>

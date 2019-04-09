@@ -1,4 +1,0 @@
-Sitemap: https://necromuralist.github.io/Tip-of-the-Dnghu/sitemapindex.xml
-
-User-Agent: *
-Host: necromuralist.github.io
