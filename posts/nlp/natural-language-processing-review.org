@@ -20,20 +20,34 @@
 * Departure
 ** Imports
 #+begin_src ipython :session nlp :results none
+from pathlib import Path
+#+end_src
+#+begin_src ipython :session nlp :results none
+from spacy import displacy
 import spacy
 from nltk.tokenize import TweetTokenizer
 #+end_src
 ** Set Up
    I'm using the =en= model. Even after you install spacy you have to tell it which model to download.
 
-#+begin_src ipython :session nlp :results none
+#+begin_example
 python -m spacy download en
-#+end_src
+#+end_example
+
+Once you run that this next block should work - otherwise you'll get an =OSError=.
 
 #+begin_src ipython :session nlp :results none
 processor = spacy.load("en")
 tokenizer = TweetTokenizer()
 #+end_src
+
+#+begin_src ipython :session nlp :results none
+SLUG = "natural-language-processing-review"
+OUTPUT_FOLDER = Path("../../files/posts/nlp/" + SLUG)
+if not OUTPUT_FOLDER.is_dir():
+    OUTPUT_FOLDER.mkdir(parents=True)
+#+end_src
+
 * Initiation
 ** Some Vocabulary
 *** Natural Language Processing
@@ -108,7 +122,20 @@ for token in document:
 
 There is a related method called /stemming/ which strips the endings off of words instead of changing to their lemmas. lemmatization is probably preferable, but is a more difficult method compared to stemming.
 *** Chunking
-    
+    There are different ways of chunking text instead of just using /n-grams/, one way is called /chunking/ which breaks the text up into phrases.
+#+begin_src ipython :session nlp :results output :exports both
+document = processor("Mary had a little lamb, its fleece was white as snow.")
+for chunk in document.noun_chunks:
+    print("{} - {}".format(chunk, chunk.label_))
+#+end_src
+
+#+RESULTS:
+: Mary - NP
+: a little lamb - NP
+: its fleece - NP
+: snow - NP
+
+
 * Return
 ** Sources
    - Rao D, McMahan B. Natural language processing with PyTorch: build intelligent language applications using deep learning. Sebastopol, CA: OReilly Media; 2019.
