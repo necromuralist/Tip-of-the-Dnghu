@@ -16,10 +16,10 @@
 <link href="../../../favicon-32x32.png" rel="icon" sizes="32x32" type="image/png">
 <link href="../../../favicon-16x16.png" rel="icon" sizes="16x16" type="image/png">
 <link href="../../../site.webmanifest" rel="manifest">
-<script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML" type="text/javascript">
-</script>
+<script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML" type="text/javascript"></script>
 <meta content="Cloistered Monkey" name="author">
 <link href="../../reference/reading-list/" rel="prev" title="Reading List" type="text/html">
+<link href="../../text_mining/link-page/" rel="next" title="Link Page" type="text/html">
 <meta content="Tip of the Dnghu" property="og:site_name">
 <meta content="Natural Language Processing Review" property="og:title">
 <meta content="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/" property="og:url">
@@ -69,31 +69,31 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orgcc27d61">Departure</a>
+<li><a href="#org135edfb">Departure</a>
 <ul>
-<li><a href="#orge0610b5">Imports</a></li>
-<li><a href="#org5f45508">Set Up</a></li>
+<li><a href="#org7e06a96">Imports</a></li>
+<li><a href="#orgdeba5b4">Set Up</a></li>
 </ul>
 </li>
-<li><a href="#orgce62f97">Initiation</a>
+<li><a href="#orgcb992f7">Initiation</a>
 <ul>
-<li><a href="#org21553d7">Some Vocabulary</a></li>
+<li><a href="#orge1766fa">Some Vocabulary</a></li>
 </ul>
 </li>
-<li><a href="#orgb0b3b0c">Return</a>
+<li><a href="#orgcab9b54">Return</a>
 <ul>
-<li><a href="#orgc39e16a">Sources</a></li>
+<li><a href="#org811932c">Sources</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
-<div class="outline-2" id="outline-container-orgcc27d61">
-<h2 id="orgcc27d61">Departure</h2>
-<div class="outline-text-2" id="text-orgcc27d61"></div>
-<div class="outline-3" id="outline-container-orge0610b5">
-<h3 id="orge0610b5">Imports</h3>
-<div class="outline-text-3" id="text-orge0610b5">
+<div class="outline-2" id="outline-container-org135edfb">
+<h2 id="org135edfb">Departure</h2>
+<div class="outline-text-2" id="text-org135edfb"></div>
+<div class="outline-3" id="outline-container-org7e06a96">
+<h3 id="org7e06a96">Imports</h3>
+<div class="outline-text-3" id="text-org7e06a96">
 <div class="highlight">
 <pre><span></span>from pathlib import Path
 </pre></div>
@@ -104,9 +104,9 @@ from nltk.tokenize import TweetTokenizer
 </pre></div>
 </div>
 </div>
-<div class="outline-3" id="outline-container-org5f45508">
-<h3 id="org5f45508">Set Up</h3>
-<div class="outline-text-3" id="text-org5f45508">
+<div class="outline-3" id="outline-container-orgdeba5b4">
+<h3 id="orgdeba5b4">Set Up</h3>
+<div class="outline-text-3" id="text-orgdeba5b4">
 <p>I'm using the <code>en</code> model. Even after you install spacy you have to tell it which model to download.</p>
 <pre class="example">
 python -m spacy download en
@@ -125,26 +125,26 @@ if not OUTPUT_FOLDER.is_dir():
 </div>
 </div>
 </div>
-<div class="outline-2" id="outline-container-orgce62f97">
-<h2 id="orgce62f97">Initiation</h2>
-<div class="outline-text-2" id="text-orgce62f97"></div>
-<div class="outline-3" id="outline-container-org21553d7">
-<h3 id="org21553d7">Some Vocabulary</h3>
-<div class="outline-text-3" id="text-org21553d7"></div>
-<div class="outline-4" id="outline-container-org3830116">
-<h4 id="org3830116">Natural Language Processing</h4>
-<div class="outline-text-4" id="text-org3830116">
+<div class="outline-2" id="outline-container-orgcb992f7">
+<h2 id="orgcb992f7">Initiation</h2>
+<div class="outline-text-2" id="text-orgcb992f7"></div>
+<div class="outline-3" id="outline-container-orge1766fa">
+<h3 id="orge1766fa">Some Vocabulary</h3>
+<div class="outline-text-3" id="text-orge1766fa"></div>
+<div class="outline-4" id="outline-container-org1e84389">
+<h4 id="org1e84389">Natural Language Processing</h4>
+<div class="outline-text-4" id="text-org1e84389">
 <p><a href="https://www.wikiwand.com/en/Natural_language_processing">Natural Language Processing</a> is the computational study of human language with the aim of solving practical problems involving language. There is a related field called <a href="https://www.wikiwand.com/en/Computational_linguistics">Computational Linguistics</a> which is concerned more with the modeling of human language but seems related.</p>
 </div>
 </div>
-<div class="outline-4" id="outline-container-orga0bf497">
-<h4 id="orga0bf497">Corpora</h4>
-<div class="outline-text-4" id="text-orga0bf497">
+<div class="outline-4" id="outline-container-org7d9cda9">
+<h4 id="org7d9cda9">Corpora</h4>
+<div class="outline-text-4" id="text-org7d9cda9">
 <p>A text-dataset is called a <i>corpus</i>, usually made up of texts and metadata associated with each text. Texts are made up of characters grouped into units called <i>tokens</i>. In English a token is generally a word or number.</p>
 </div>
-<div class="outline-5" id="outline-container-orgf0d28e0">
-<h5 id="orgf0d28e0">Tokenization</h5>
-<div class="outline-text-5" id="text-orgf0d28e0">
+<div class="outline-5" id="outline-container-org4148ec7">
+<h5 id="org4148ec7">Tokenization</h5>
+<div class="outline-text-5" id="text-org4148ec7">
 <p>The process of breaking a text up into <i>tokens</i> is called tokenization. Here's some examples of how to do it with <a href="https://spacy.io/usage/spacy-101">spacy</a> and the <a href="https://www.nltk.org">Natural Language Toolkit (NLTK)</a>.</p>
 <div class="highlight">
 <pre><span></span>text = "Those are my principles, and if you don't like them... well, I have others.".lower()
@@ -181,21 +181,21 @@ print([str(token) for token in processor(tweet)])
 </div>
 </div>
 </div>
-<div class="outline-4" id="outline-container-org92338fa">
-<h4 id="org92338fa">Types</h4>
-<div class="outline-text-4" id="text-org92338fa">
+<div class="outline-4" id="outline-container-org76982d9">
+<h4 id="org76982d9">Types</h4>
+<div class="outline-text-4" id="text-org76982d9">
 <p><i>Types</i> are the unique tokens in a corpus. The set of all the types in the corpus is its <i>vocabulary</i> or <i>lexicon</i>.</p>
 </div>
 </div>
-<div class="outline-4" id="outline-container-orgc4b09c3">
-<h4 id="orgc4b09c3">Word Classes</h4>
-<div class="outline-text-4" id="text-orgc4b09c3">
+<div class="outline-4" id="outline-container-org9a0347d">
+<h4 id="org9a0347d">Word Classes</h4>
+<div class="outline-text-4" id="text-org9a0347d">
 <p>There are two classes of words <i>content words</i> and <i>stopwords</i>. Stopwords are there mostly to glue the content words together ("a", "an", "the", etc.) and provide more noise than information.</p>
 </div>
 </div>
-<div class="outline-4" id="outline-container-orgb02130e">
-<h4 id="orgb02130e">N-Grams</h4>
-<div class="outline-text-4" id="text-orgb02130e">
+<div class="outline-4" id="outline-container-org23392d7">
+<h4 id="org23392d7">N-Grams</h4>
+<div class="outline-text-4" id="text-org23392d7">
 <p><i>N-grams</i> are consecutive token-sequences of a fixed length (<i>n</i>). Common special cases are:</p>
 <ul class="org-ul">
 <li>unigrams: <i>n</i> = 1</li>
@@ -205,9 +205,9 @@ print([str(token) for token in processor(tweet)])
 <p>Although n-grams are generally words in some cases they can be characters - if the suffixes are meaningful, for instance.</p>
 </div>
 </div>
-<div class="outline-4" id="outline-container-org9e20c2f">
-<h4 id="org9e20c2f">Lemma</h4>
-<div class="outline-text-4" id="text-org9e20c2f">
+<div class="outline-4" id="outline-container-org857d8a3">
+<h4 id="org857d8a3">Lemma</h4>
+<div class="outline-text-4" id="text-org857d8a3">
 <p><a href="https://www.wikiwand.com/en/Lemma_(morphology)">Lemmas</a> are root-forms for words that can have different forms. As an example - <i>go</i> is the lemma for <i>go</i>, <i>going</i>, <i>went</i>, and <i>gone</i>.</p>
 <div class="highlight">
 <pre><span></span>document = processor("an undefined problem has an infinite number of solutions")
@@ -229,9 +229,9 @@ Token: solutions -&gt; Lemma: solution
 <p>There is a related method called <i>stemming</i> which strips the endings off of words instead of changing to their lemmas. lemmatization is probably preferable, but is a more difficult method compared to stemming.</p>
 </div>
 </div>
-<div class="outline-4" id="outline-container-org3862cdc">
-<h4 id="org3862cdc">Chunking</h4>
-<div class="outline-text-4" id="text-org3862cdc">
+<div class="outline-4" id="outline-container-orgfe133dc">
+<h4 id="orgfe133dc">Chunking</h4>
+<div class="outline-text-4" id="text-orgfe133dc">
 <p>There are different ways of chunking text instead of just using <i>n-grams</i>, one way is called <i>chunking</i> which breaks the text up into phrases.</p>
 <div class="highlight">
 <pre><span></span>document = processor("Mary had a little lamb, its fleece was white as snow.")
@@ -248,12 +248,12 @@ snow - NP
 </div>
 </div>
 </div>
-<div class="outline-2" id="outline-container-orgb0b3b0c">
-<h2 id="orgb0b3b0c">Return</h2>
-<div class="outline-text-2" id="text-orgb0b3b0c"></div>
-<div class="outline-3" id="outline-container-orgc39e16a">
-<h3 id="orgc39e16a">Sources</h3>
-<div class="outline-text-3" id="text-orgc39e16a">
+<div class="outline-2" id="outline-container-orgcab9b54">
+<h2 id="orgcab9b54">Return</h2>
+<div class="outline-text-2" id="text-orgcab9b54"></div>
+<div class="outline-3" id="outline-container-org811932c">
+<h3 id="org811932c">Sources</h3>
+<div class="outline-text-3" id="text-org811932c">
 <ul class="org-ul">
 <li>Rao D, McMahan B. Natural language processing with PyTorch: build intelligent language applications using deep learning. Sebastopol, CA: OReilly Media; 2019.</li>
 </ul>
@@ -269,6 +269,7 @@ snow - NP
 </ul>
 <ul class="pager hidden-print">
 <li class="previous"><a href="../../reference/reading-list/" rel="prev" title="Reading List">Previous post</a></li>
+<li class="next"><a href="../../text_mining/link-page/" rel="next" title="Link Page">Next post</a></li>
 </ul>
 </nav>
 </aside>
@@ -277,9 +278,9 @@ snow - NP
 <footer id="footer">Contents © 2019 <a href="mailto:necromuralist@protonmail.com">Cloistered Monkey</a> - Powered by <a href="https://getnikola.com" rel="nofollow">Nikola</a></footer>
 </div>
 </div>
-<script src="../../../assets/js/all-nocdn.js">
-</script>
+<script src="../../../assets/js/all-nocdn.js"></script>
 <script>
+
     baguetteBox.run('div#content', {
         ignoreClass: 'islink',
         captions: function(element) {

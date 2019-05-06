@@ -1,0 +1,17 @@
+#+BEGIN_COMMENT
+.. title: Link Page
+.. slug: link-page
+.. date: 2019-05-04 15:08:18 UTC-07:00
+.. tags: links,reference
+.. category: Links
+.. link: 
+.. description: A collection of links.
+.. type: text
+.. status: 
+.. updated: 
+
+#+END_COMMENT
+#+OPTIONS: H:5
+#+TOC: headlines 4
+* Text Mining
+** [[http://sifaka.cs.uiuc.edu/ir/resources/mooctr.html][Text Retrieval MOOC Link Page]]

@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en" prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article#">
+<head>
+<meta charset="utf-8">
+<meta content="The Vector Space Model for document relevance." name="description">
+<meta content="width=device-width, initial-scale=1" name="viewport">
+<title>The Vector Space Model | Tip of the Dnghu</title>
+<link href="../../../assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
+<link href="../../../assets/css/ipython.min.css" rel="stylesheet" type="text/css">
+<link href="../../../assets/css/nikola_ipython.css" rel="stylesheet" type="text/css">
+<meta content="#5670d4" name="theme-color">
+<meta content="Nikola (getnikola.com)" name="generator">
+<link href="../../../rss.xml" rel="alternate" title="RSS" type="application/rss+xml">
+<link href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/" rel="canonical"><!--[if lt IE 9]><script src="../../../assets/js/html5.js"></script><![endif]-->
+<link href="../../../apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180">
+<link href="../../../favicon-32x32.png" rel="icon" sizes="32x32" type="image/png">
+<link href="../../../favicon-16x16.png" rel="icon" sizes="16x16" type="image/png">
+<link href="../../../site.webmanifest" rel="manifest">
+<script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML" type="text/javascript"></script>
+<meta content="Cloistered Monkey" name="author">
+<link href="../link-page/" rel="prev" title="Link Page" type="text/html">
+<meta content="Tip of the Dnghu" property="og:site_name">
+<meta content="The Vector Space Model" property="og:title">
+<meta content="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/" property="og:url">
+<meta content="The Vector Space Model for document relevance." property="og:description">
+<meta content="article" property="og:type">
+<meta content="2019-05-05T17:13:29-07:00" property="article:published_time">
+<meta content="lecture" property="article:tag">
+<meta content="nlp" property="article:tag">
+<meta content="search" property="article:tag">
+<meta content="text" property="article:tag">
+</head>
+<body>
+<a class="sr-only sr-only-focusable" href="#content">Skip to main content</a> <!-- Menubar -->
+<nav class="navbar navbar-expand-md static-top mb-4 navbar-light bg-light">
+<div class="container"><!-- This keeps the margins nice -->
+ <a class="navbar-brand" href="https://necromuralist.github.io/Tip-of-the-Dnghu/"><span id="blog-title">Tip of the Dnghu</span></a> <button aria-controls="bs-navbar" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#bs-navbar" data-toggle="collapse" type="button"><span class="navbar-toggler-icon"></span></button>
+<div class="collapse navbar-collapse" id="bs-navbar">
+<ul class="navbar-nav mr-auto">
+<li class="nav-item"><a class="nav-link" href="../../../archive.html">Archive</a></li>
+<li class="nav-item"><a class="nav-link" href="../../../categories/">Tags</a></li>
+<li class="nav-item"><a class="nav-link" href="../../../rss.xml">RSS feed</a></li>
+<li class="nav-item dropdown"><a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Pages</a>
+<div class="dropdown-menu"><a class="dropdown-item" href="https://necromuralist.github.io/">Cloistered Monkey</a></div>
+</li>
+</ul>
+<!-- DuckDuckGo custom search -->
+<form action="https://duckduckgo.com/" class="navbar-form pull-left" id="search" method="get" name="search"><input name="sites" type="hidden" value="https://necromuralist.github.io/Tip-of-the-Dnghu/"><input name="k8" type="hidden" value="#444444"><input name="k9" type="hidden" value="#D51920"><input name="kt" type="hidden" value="h"><input class="span2" maxlength="255" name="q" placeholder="Search…" type="text"><input style="visibility: hidden;display:none" type="submit" value="DuckDuckGo Search"></form>
+<!-- End of custom search -->
+<ul class="navbar-nav navbar-right">
+<li class="nav-item"><a class="nav-link" href="index.org" id="sourcelink">Source</a></li>
+</ul>
+</div>
+<!-- /.navbar-collapse --></div>
+<!-- /.container --></nav>
+<!-- End of Menubar -->
+<div class="container" id="content" role="main">
+<div class="body-content"><!--Body content-->
+<article class="post-text h-entry hentry postpage" itemscope="itemscope" itemtype="http://schema.org/Article">
+<header>
+<h1 class="p-name entry-title" itemprop="headline name"><a class="u-url" href=".">The Vector Space Model</a></h1>
+<div class="metadata">
+<p class="byline author vcard"><span class="byline-name fn" itemprop="author">Cloistered Monkey</span></p>
+<p class="dateline"><a href="." rel="bookmark"><time class="published dt-published" datetime="2019-05-05T17:13:29-07:00" itemprop="datePublished" title="2019-05-05 17:13">2019-05-05 17:13</time></a></p>
+<p class="sourceline"><a class="sourcelink" href="index.org">Source</a></p>
+</div>
+</header>
+<div class="e-content entry-content" itemprop="articleBody text">
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orgd884f51">Beginning</a>
+<ul>
+<li><a href="#org3ccc4df">Imports</a></li>
+<li><a href="#org511a87f">The Query</a></li>
+<li><a href="#org8da9dbe">The Document</a></li>
+</ul>
+</li>
+<li><a href="#org04e68bf">Middle</a>
+<ul>
+<li><a href="#org0d42060">The Bit Vector</a></li>
+<li><a href="#orgac7e556">Term Frequency Vector</a></li>
+<li><a href="#orge71620c">Inverse Document Frequency</a></li>
+<li><a href="#orgebad1de">Ranking with TF-IDF Weighting</a></li>
+</ul>
+</li>
+<li><a href="#org464d15a">End</a></li>
+</ul>
+</div>
+</div>
+<div class="outline-2" id="outline-container-orgd884f51">
+<h2 id="orgd884f51">Beginning</h2>
+<div class="outline-text-2" id="text-orgd884f51">
+<p>This is a brief write-up of some notes I took on the Vector Space Model (VSM) used to rank documents by relevancy to keywords in a query. The query is represented as a vector with a 1 for each of the search terms and, in the simplest case, the vector to determine relevance will hold a 1 in each place where the document has a word that matches a query term. This might be easier with an example.</p>
+</div>
+<div class="outline-3" id="outline-container-org3ccc4df">
+<h3 id="org3ccc4df">Imports</h3>
+<div class="outline-text-3" id="text-org3ccc4df">
+<div class="highlight">
+<pre><span></span># python
+from collections import Counter
+from functools import partial
+from pathlib import Path
+
+# pypi
+import holoviews
+import hvplot.pandas
+import numpy
+import pandas
+
+# my stuff
+from graeae.visualization import EmbedHoloview
+</pre></div>
+<p>For plotting.</p>
+<div class="highlight">
+<pre><span></span>holoviews.extension("bokeh")
+SLUG = "the-vector-space-model/"
+output = Path("../../files/posts/text_mining")/SLUG
+Embed = partial(EmbedHoloview, folder_path=output)
+</pre></div>
+</div>
+</div>
+<div class="outline-3" id="outline-container-org511a87f">
+<h3 id="org511a87f">The Query</h3>
+<div class="outline-text-3" id="text-org511a87f">
+<p>The user made a query with some key words which is normally represented by a vector with the count of each term as the values.</p>
+<div class="highlight">
+<pre><span></span>terms = set("movie horror blood".split())
+query = numpy.ones(len(terms))
+print(terms)
+</pre></div>
+<pre class="example">
+{'blood', 'horror', 'movie'}
+
+</pre></div>
+</div>
+<div class="outline-3" id="outline-container-org8da9dbe">
+<h3 id="org8da9dbe">The Document</h3>
+<div class="outline-text-3" id="text-org8da9dbe">
+<p>We want to retrieve the most relevant documents from a set of documents, which I'll represent as lists of words.</p>
+<div class="highlight">
+<pre><span></span>document_1 = "the movie was about workers at a blood bank".split()
+document_2 = "a movie about blood blood and more blood".split()
+</pre></div>
+</div>
+</div>
+</div>
+<div class="outline-2" id="outline-container-org04e68bf">
+<h2 id="org04e68bf">Middle</h2>
+<div class="outline-text-2" id="text-org04e68bf"></div>
+<div class="outline-3" id="outline-container-org0d42060">
+<h3 id="org0d42060">The Bit Vector</h3>
+<div class="outline-text-3" id="text-org0d42060">
+<p>To represent similarity I'll use a vector with ones where there is a word match in the document.</p>
+<div class="highlight">
+<pre><span></span>def check_document(document: list, terms: set) -&gt; None:
+    print(f"Document: {document}")
+    matches = []
+    matched_words = []
+    for word in terms:
+        matched = 1 if word in document else 0
+        if matched:
+            matched_words.append(word)
+        matches.append(matched)
+    matches = numpy.array(matches)
+    print(f"Matched Words: {matched_words}")
+    print(f"Relevance: {matches.dot(query)}")
+</pre></div>
+<div class="highlight">
+<pre><span></span>check_document(document_1, terms)
+</pre></div>
+<pre class="example">
+Document: ['the', 'movie', 'was', 'about', 'workers', 'at', 'a', 'blood', 'bank']
+Matched Words: ['blood', 'movie']
+Relevance: 2.0
+
+</pre>
+<div class="highlight">
+<pre><span></span>check_document(document_2, terms)
+</pre></div>
+<pre class="example">
+Document: ['a', 'movie', 'about', 'blood', 'blood', 'and', 'more', 'blood']
+Matched Words: ['blood', 'movie']
+Relevance: 2.0
+
+</pre>
+<p>So we con see one problem with our method right off the bat, in that repeated terms don't increase the relevance so both our documents have the same score, even though one mentioned blood more often.</p>
+</div>
+</div>
+<div class="outline-3" id="outline-container-orgac7e556">
+<h3 id="orgac7e556">Term Frequency Vector</h3>
+<div class="outline-text-3" id="text-orgac7e556">
+<p>One approach to fix our lack of giving weight to more occurences of a keyword is to use counts instead just a 0 or 1 in our vector.</p>
+<div class="highlight">
+<pre><span></span>def counts(document: list, terms: set) -&gt; None:
+    print(f"Document: {document}")
+    count = Counter()
+    for word in document:
+        if word in terms:
+            count[word] += 1
+
+    matches = numpy.array([count[term] for term in terms])
+    print(f"Matched Words: {count}")
+    print(f"Relevance: {matches.dot(query)}")
+</pre></div>
+<div class="highlight">
+<pre><span></span>counts(document_1, terms)
+</pre></div>
+<pre class="example">
+Document: ['the', 'movie', 'was', 'about', 'workers', 'at', 'a', 'blood', 'bank']
+Matched Words: Counter({'movie': 1, 'blood': 1})
+Relevance: 2.0
+
+</pre>
+<div class="highlight">
+<pre><span></span>counts(document_2, terms)
+</pre></div>
+<pre class="example">
+Document: ['a', 'movie', 'about', 'blood', 'blood', 'and', 'more', 'blood']
+Matched Words: Counter({'blood': 3, 'movie': 1})
+Relevance: 4.0
+
+</pre>
+<p>Now the extra mentions of 'blood' make it seem document 2 seem more relevant to us. What happens, though, if one of the terms is one that appears often in documents with different subjects?</p>
+<div class="highlight">
+<pre><span></span>terms = "movie about blood".split()
+document_3 = "This movie was not about running kites as the title implied but was rather about some kind of heart warming story meant to make the heart swoon but just about made my blood boil".split()
+</pre></div>
+<div class="highlight">
+<pre><span></span>counts(document_3, terms)
+</pre></div>
+<pre class="example">
+Document: ['This', 'movie', 'was', 'not', 'about', 'running', 'kites', 'as', 'the', 'title', 'implied', 'but', 'was', 'rather', 'about', 'some', 'kind', 'of', 'heart', 'warming', 'story', 'meant', 'to', 'make', 'the', 'heart', 'swoon', 'but', 'just', 'about', 'made', 'my', 'blood', 'boil']
+Matched Words: Counter({'about': 3, 'movie': 1, 'blood': 1})
+Relevance: 5.0
+
+</pre>
+<p>My example is a little convoluted, but the point is that the most common words aren't necessarily the most helpful ones.</p>
+</div>
+</div>
+<div class="outline-3" id="outline-container-orge71620c">
+<h3 id="orge71620c">Inverse Document Frequency</h3>
+<div class="outline-text-3" id="text-orge71620c">
+<p>This method seeks to overcome the problem of words that are too common by reducing the weight of a term the more common it is.</p>
+<p>\[ IDF(w) = \log(\frac{M + 1}{k}) \]</p>
+<p>Where <i>M</i> is the number of documents in the collection, <i>w</i> is the word (or term) that we are checking, and <i>k</i> is the number of documents containing <i>w</i>.</p>
+<div class="highlight">
+<pre><span></span>M = 1000
+k = numpy.linspace(1, M)
+idf = numpy.log((M + 1)/k)
+data = holoviews.Table((k, idf), "k", ("idf", "IDF(w)"))
+plot = holoviews.Curve(data).opts(
+    height=800,
+    width=1000,
+    title="Inverse Document Frequency (IDF) vs Document Frequency (k)")
+Embed(plot=plot, file_name="inverse_document_frequency")()
+</pre></div>
+<object data="inverse_document_frequency.html" height="800" style="width:100%" type="text/html">
+<p>Figure Missing</p>
+</object>
+<p>You can see that as the number of documents with the word in it goes up, the weight it gets (<i>IDF</i>) goes down until it reaches zero when all the documents have the word in it (<i>log(1)</i> equals 0). We have codified the notion that if a word is <i>too</i> common, then it is less important to relevance.</p>
+</div>
+</div>
+<div class="outline-3" id="outline-container-orgebad1de">
+<h3 id="orgebad1de">Ranking with TF-IDF Weighting</h3>
+<div class="outline-text-3" id="text-orgebad1de">
+<p>Okay, so we hav Term-Frequency as our basic measure of relevancy, and we have this notion that the more common a word is, the less important it is to relevancy, embodied by Inverse Document Frequency (IDF), how do we use them? Like this.</p>
+\begin{align} f(q,d) &amp;= \sum_{i=1}^N x_i y_i\\ &amp;= \sum_{w \in q \cap d} c(w,q) c(w, d) \log \frac{M+1}{df(w)}\\ \end{align}
+<p>So, let's unpack this a little.</p>
+<ul class="org-ul">
+<li>\(f(q, d)\) is the function to calculate the relevance of a document (<i>d</i>) to a query (<i>q</i>)</li>
+<li>\(w \in q \cap d\) means a word (\(w\)) in the intersection of the words in the query (\(q\)) and the words in this document (\(d\))</li>
+<li>\(c(w, q)\) is the count of the number of times this word is in the query</li>
+<li>\(c(w, d)\) is the count of the number of times this word is in the document</li>
+<li>\(M\) is the count of all documents</li>
+<li>\(df(w)\) is the number of documents with the word (document frequency of \(w\))</li>
+<li>\(\log \frac{M+1}{df(w)}\) is the <i>Inverse Document Frequency</i> of word \(w\)</li>
+<li>\(c(w, q) c(w, d)\) is the <i>Term Frequency</i></li>
+</ul>
+<p>So the relevance of a document is the sum of the products of the Term Frequency for times the Inverse Document Frequency for each word in the query. <i>Why is this useful?</i> If a term from the query appears in the document, then it is probably more relevant than a document where it doesn't appear, and if the term appears a second time, then it reinforces the idea of its relevance, but as the term keeps appearing we get less and less assurance that it means something - does the twenty-first occurence tell us much more of its relevance than the twentieth? So we still count all the occurences (\(c(w, d)\)) but multiply it by a discounting factor to offset repetitions (the Inverse Document Frequency weight).</p>
+</div>
+</div>
+</div>
+<div class="outline-2" id="outline-container-org464d15a">
+<h2 id="org464d15a">End</h2>
+</div>
+</div>
+<aside class="postpromonav">
+<nav>
+<ul class="tags" itemprop="keywords">
+<li><a class="tag p-category" href="../../../categories/lecture/" rel="tag">lecture</a></li>
+<li><a class="tag p-category" href="../../../categories/nlp/" rel="tag">nlp</a></li>
+<li><a class="tag p-category" href="../../../categories/search/" rel="tag">search</a></li>
+<li><a class="tag p-category" href="../../../categories/text/" rel="tag">text</a></li>
+</ul>
+<ul class="pager hidden-print">
+<li class="previous"><a href="../link-page/" rel="prev" title="Link Page">Previous post</a></li>
+</ul>
+</nav>
+</aside>
+</article>
+<!--End of body content-->
+<footer id="footer">Contents © 2019 <a href="mailto:necromuralist@protonmail.com">Cloistered Monkey</a> - Powered by <a href="https://getnikola.com" rel="nofollow">Nikola</a></footer>
+</div>
+</div>
+<script src="../../../assets/js/all-nocdn.js"></script>
+<script>
+
+    baguetteBox.run('div#content', {
+        ignoreClass: 'islink',
+        captions: function(element) {
+            return element.getElementsByTagName('img')[0].alt;
+    }});
+</script>
+</body>
+</html>
