@@ -1,0 +1,205 @@
+#+BEGIN_COMMENT
+.. title: The Vector Space Model
+.. slug: the-vector-space-model
+.. date: 2019-05-05 17:13:29 UTC-07:00
+.. tags: text,nlp,lecture,search
+.. category: NLP
+.. link: 
+.. description: The Vector Space Model for document relevance.
+.. type: text
+.. status: 
+.. updated: 
+
+#+END_COMMENT
+#+TOC: headlines 2
+#+BEGIN_SRC ipython :session nlp :results none :exports none
+%load_ext autoreload
+%autoreload 2
+#+END_SRC
+* Beginning
+  This is a brief write-up of some notes I took on the Vector Space Model (VSM) used to rank documents by relevancy to keywords in a query. The query is represented as a vector with a 1 for each of the search terms and, in the simplest case, the vector to determine relevance will hold a 1 in each place where the document has a word that matches a query term. This might be easier with an example.
+** Imports
+#+begin_src ipython :session nlp :results none
+# python
+from collections import Counter
+from functools import partial
+from pathlib import Path
+
+# pypi
+import holoviews
+import hvplot.pandas
+import numpy
+import pandas
+
+# my stuff
+from graeae.visualization import EmbedHoloview
+#+end_src
+
+For plotting.
+
+#+begin_src ipython :session nlp :results none
+holoviews.extension("bokeh")
+SLUG = "the-vector-space-model/"
+output = Path("../../files/posts/text_mining")/SLUG
+Embed = partial(EmbedHoloview, folder_path=output)
+#+end_src
+
+** The Query
+   The user made a query with some key words which is normally represented by a vector with the count of each term as the values.
+
+#+begin_src ipython :session nlp :results output :exports both
+terms = set("movie horror blood".split())
+query = numpy.ones(len(terms))
+print(terms)
+#+end_src
+
+#+RESULTS:
+: {'blood', 'horror', 'movie'}
+
+** The Document
+   We want to retrieve the most relevant documents from a set of documents, which I'll represent as lists of words.
+
+#+begin_src ipython :session nlp :results none
+document_1 = "the movie was about workers at a blood bank".split()
+document_2 = "a movie about blood blood and more blood".split()
+#+end_src
+
+* Middle
+** The Bit Vector
+To represent similarity I'll use a vector with ones where there is a word match in the document.
+
+#+begin_src ipython :session nlp :results none
+def check_document(document: list, terms: set) -> None:
+    print(f"Document: {document}")
+    matches = []
+    matched_words = []
+    for word in terms:
+        matched = 1 if word in document else 0
+        if matched:
+            matched_words.append(word)
+        matches.append(matched)
+    matches = numpy.array(matches)
+    print(f"Matched Words: {matched_words}")
+    print(f"Relevance: {matches.dot(query)}")
+#+end_src
+
+#+begin_src ipython :session nlp :results output :exports both
+check_document(document_1, terms)
+#+end_src
+
+#+RESULTS:
+: Document: ['the', 'movie', 'was', 'about', 'workers', 'at', 'a', 'blood', 'bank']
+: Matched Words: ['blood', 'movie']
+: Relevance: 2.0
+
+#+begin_src ipython :session nlp :results output :exports both
+check_document(document_2, terms)
+#+end_src
+
+#+RESULTS:
+: Document: ['a', 'movie', 'about', 'blood', 'blood', 'and', 'more', 'blood']
+: Matched Words: ['blood', 'movie']
+: Relevance: 2.0
+
+So we con see one problem with our method right off the bat, in that repeated terms don't increase the relevance so both our documents have the same score, even though one mentioned blood more often.
+** Term Frequency Vector
+   One approach to fix our lack of giving weight to more occurences of a keyword is to use counts instead just a 0 or 1 in our vector.
+
+#+begin_src ipython :session nlp :results none
+def counts(document: list, terms: set) -> None:
+    print(f"Document: {document}")
+    count = Counter()
+    for word in document:
+        if word in terms:
+            count[word] += 1
+
+    matches = numpy.array([count[term] for term in terms])
+    print(f"Matched Words: {count}")
+    print(f"Relevance: {matches.dot(query)}")
+#+end_src
+
+#+begin_src ipython :session nlp :results output :exports both
+counts(document_1, terms)
+#+end_src
+
+#+RESULTS:
+: Document: ['the', 'movie', 'was', 'about', 'workers', 'at', 'a', 'blood', 'bank']
+: Matched Words: Counter({'movie': 1, 'blood': 1})
+: Relevance: 2.0
+
+#+begin_src ipython :session nlp :results output :exports both
+counts(document_2, terms)
+#+end_src
+
+#+RESULTS:
+: Document: ['a', 'movie', 'about', 'blood', 'blood', 'and', 'more', 'blood']
+: Matched Words: Counter({'blood': 3, 'movie': 1})
+: Relevance: 4.0
+
+Now the extra mentions of 'blood' make it seem document 2 seem more relevant to us. What happens, though, if one of the terms is one that appears often in documents with different subjects?
+
+#+begin_src ipython :session nlp :results none
+terms = "movie about blood".split()
+document_3 = "This movie was not about running kites as the title implied but was rather about some kind of heart warming story meant to make the heart swoon but just about made my blood boil".split()
+#+end_src
+
+#+begin_src ipython :session nlp :results output :exports both
+counts(document_3, terms)
+#+end_src
+
+#+RESULTS:
+: Document: ['This', 'movie', 'was', 'not', 'about', 'running', 'kites', 'as', 'the', 'title', 'implied', 'but', 'was', 'rather', 'about', 'some', 'kind', 'of', 'heart', 'warming', 'story', 'meant', 'to', 'make', 'the', 'heart', 'swoon', 'but', 'just', 'about', 'made', 'my', 'blood', 'boil']
+: Matched Words: Counter({'about': 3, 'movie': 1, 'blood': 1})
+: Relevance: 5.0
+
+My example is a little convoluted, but the point is that the most common words aren't necessarily the most helpful ones.
+** Inverse Document Frequency
+   This method seeks to overcome the problem of words that are too common by reducing the weight of a term the more common it is.
+
+\[
+IDF(w) = \log(\frac{M + 1}{k})
+\]
+
+Where /M/ is the number of documents in the collection, /w/ is the word (or term) that we are checking, and /k/ is the number of documents containing /w/.
+
+
+#+begin_src ipython :session nlp :results output raw :exports both
+M = 1000
+k = numpy.linspace(1, M)
+idf = numpy.log((M + 1)/k)
+data = holoviews.Table((k, idf), "k", ("idf", "IDF(w)"))
+plot = holoviews.Curve(data).opts(
+    height=800,
+    width=1000,
+    title="Inverse Document Frequency (IDF) vs Document Frequency (k)")
+Embed(plot=plot, file_name="inverse_document_frequency")()
+#+end_src
+
+#+RESULTS:
+#+begin_export html
+<object type="text/html" data="inverse_document_frequency.html" style="width:100%" height=800>
+  <p>Figure Missing</p>
+</object>
+#+end_export
+
+You can see that as the number of documents with the word in it goes up, the weight it gets (/IDF/) goes down until it reaches zero when all the documents have the word in it (/log(1)/ equals 0). We have codified the notion that if a word is /too/ common, then it is less important to relevance.
+** Ranking with TF-IDF Weighting
+   Okay, so we hav Term-Frequency as our basic measure of relevancy, and we have this notion that the more common a word is, the less important it is to relevancy, embodied by Inverse Document Frequency (IDF), how do we use them? Like this.
+
+\begin{align}
+f(q,d) &= \sum_{i=1}^N x_i y_i\\
+       &= \sum_{w \in q \cap d} c(w,q) c(w, d) \log \frac{M+1}{df(w)}\\
+\end{align}
+
+So, let's unpack this a little.
+ - $f(q, d)$ is the function to calculate the relevance of a document (/d/) to a query (/q/)
+ - $w \in q \cap d$ means a word ($w$) in the intersection of the words in the query ($q$) and the words in this document ($d$)
+ - $c(w, q)$ is the count of the number of times this word is in the query
+ - $c(w, d)$ is the count of the number of times this word is in the document
+ - $M$ is the count of all documents
+ - $df(w)$ is the number of documents with the word (document frequency of $w$)
+ - $\log \frac{M+1}{df(w)}$ is the /Inverse Document Frequency/ of word $w$
+ - $c(w, q) c(w, d)$ is the /Term Frequency/
+
+So the relevance of a document is the sum of the products of the Term Frequency for times the Inverse Document Frequency for each word in the query. /Why is this useful?/ If a term from the query appears in the document, then it is probably more relevant than a document where it doesn't appear, and if the term appears a second time, then it reinforces the idea of its relevance, but as the term keeps appearing we get less and less assurance that it means something - does the twenty-first occurence tell us much more of its relevance than the twentieth? So we still count all the occurences ($c(w, d)$) but multiply it by a discounting factor to offset repetitions (the Inverse Document Frequency weight).
+* End
