@@ -54,7 +54,7 @@ print(terms)
 #+end_src
 
 #+RESULTS:
-: {'blood', 'horror', 'movie'}
+: {'horror', 'blood', 'movie'}
 
 ** The Document
    We want to retrieve the most relevant documents from a set of documents, which I'll represent as lists of words.
@@ -157,7 +157,7 @@ My example is a little convoluted, but the point is that the most common words a
    This method seeks to overcome the problem of words that are too common by reducing the weight of a term the more common it is.
 
 \[
-IDF(w) = \log(\frac{M + 1}{k})
+IDF(w) = \log \left(\frac{M + 1}{k} \right)
 \]
 
 Where /M/ is the number of documents in the collection, /w/ is the word (or term) that we are checking, and /k/ is the number of documents containing /w/.
@@ -168,7 +168,7 @@ M = 1000
 k = numpy.linspace(1, M)
 idf = numpy.log((M + 1)/k)
 data = holoviews.Table((k, idf), "k", ("idf", "IDF(w)"))
-plot = holoviews.Curve(data).opts(
+plot = holoviews.Curve(data, tools=["hover"]).opts(
     height=800,
     width=1000,
     title="Inverse Document Frequency (IDF) vs Document Frequency (k)")
@@ -176,19 +176,20 @@ Embed(plot=plot, file_name="inverse_document_frequency")()
 #+end_src
 
 #+RESULTS:
+WARNING:param.Curve01410: Setting non-parameter attribute tools=['hover'] using a mechanism intended only for parameters
 #+begin_export html
 <object type="text/html" data="inverse_document_frequency.html" style="width:100%" height=800>
   <p>Figure Missing</p>
 </object>
 #+end_export
 
-You can see that as the number of documents with the word in it goes up, the weight it gets (/IDF/) goes down until it reaches zero when all the documents have the word in it (/log(1)/ equals 0). We have codified the notion that if a word is /too/ common, then it is less important to relevance.
+You can see that as the number of documents with the word in it (/k/) goes up, the weight it gets (/IDF/) goes down until it reaches zero when all the documents have the word in it (/log(1)/ equals 0). We have codified the notion that if a word is /too/ common, then it is less important to relevance.
 ** Ranking with TF-IDF Weighting
    Okay, so we hav Term-Frequency as our basic measure of relevancy, and we have this notion that the more common a word is, the less important it is to relevancy, embodied by Inverse Document Frequency (IDF), how do we use them? Like this.
 
 \begin{align}
 f(q,d) &= \sum_{i=1}^N x_i y_i\\
-       &= \sum_{w \in q \cap d} c(w,q) c(w, d) \log \frac{M+1}{df(w)}\\
+       &= \sum_{w \in q \cap d} c(w,q) \cdot c(w, d) \log \frac{M+1}{df(w)}\\
 \end{align}
 
 So, let's unpack this a little.
@@ -199,7 +200,9 @@ So, let's unpack this a little.
  - $M$ is the count of all documents
  - $df(w)$ is the number of documents with the word (document frequency of $w$)
  - $\log \frac{M+1}{df(w)}$ is the /Inverse Document Frequency/ of word $w$
- - $c(w, q) c(w, d)$ is the /Term Frequency/
+ - $c(w, q) \cdot c(w, d)$ is the /Term Frequency/
 
 So the relevance of a document is the sum of the products of the Term Frequency for times the Inverse Document Frequency for each word in the query. /Why is this useful?/ If a term from the query appears in the document, then it is probably more relevant than a document where it doesn't appear, and if the term appears a second time, then it reinforces the idea of its relevance, but as the term keeps appearing we get less and less assurance that it means something - does the twenty-first occurence tell us much more of its relevance than the twentieth? So we still count all the occurences ($c(w, d)$) but multiply it by a discounting factor to offset repetitions (the Inverse Document Frequency weight).
+** Okapi BM25
+   
 * End
