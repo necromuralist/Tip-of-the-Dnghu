@@ -1,37 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tip of the Dnghu (Posts about lecture)</title><link>https://necromuralist.github.io/Tip-of-the-Dnghu/</link><description></description><atom:link href="https://necromuralist.github.io/Tip-of-the-Dnghu/categories/lecture.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2019 &lt;a href="mailto:necromuralist@protonmail.com"&gt;Cloistered Monkey&lt;/a&gt; </copyright><lastBuildDate>Mon, 06 May 2019 17:07:20 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>The Vector Space Model</title><link>https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/</link><dc:creator>Cloistered Monkey</dc:creator><description>&lt;div id="table-of-contents"&gt;
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tip of the Dnghu (Posts about lecture)</title><link>https://necromuralist.github.io/Tip-of-the-Dnghu/</link><description></description><atom:link href="https://necromuralist.github.io/Tip-of-the-Dnghu/categories/lecture.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2019 &lt;a href="mailto:necromuralist@protonmail.com"&gt;Cloistered Monkey&lt;/a&gt; </copyright><lastBuildDate>Tue, 07 May 2019 01:45:10 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>The Vector Space Model</title><link>https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/</link><dc:creator>Cloistered Monkey</dc:creator><description>&lt;div id="table-of-contents"&gt;
 &lt;h2&gt;Table of Contents&lt;/h2&gt;
 &lt;div id="text-table-of-contents"&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#orgd884f51"&gt;Beginning&lt;/a&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#org35f9936"&gt;Beginning&lt;/a&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#org3ccc4df"&gt;Imports&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#org511a87f"&gt;The Query&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#org8da9dbe"&gt;The Document&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#orgfdcbc7c"&gt;Imports&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#org985a9a4"&gt;The Query&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#org044499b"&gt;The Document&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#org04e68bf"&gt;Middle&lt;/a&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#org1b006d3"&gt;Middle&lt;/a&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#org0d42060"&gt;The Bit Vector&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#orgac7e556"&gt;Term Frequency Vector&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#orge71620c"&gt;Inverse Document Frequency&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#orgebad1de"&gt;Ranking with TF-IDF Weighting&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#org9ee70f0"&gt;The Bit Vector&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#org988979d"&gt;Term Frequency Vector&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#org1d4d2c2"&gt;Inverse Document Frequency&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#org1458eb1"&gt;Ranking with TF-IDF Weighting&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#orgbc8179d"&gt;Okapi BM25&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#org464d15a"&gt;End&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#org5f0ffa1"&gt;End&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgd884f51" class="outline-2"&gt;
-&lt;h2 id="orgd884f51"&gt;Beginning&lt;/h2&gt;
-&lt;div class="outline-text-2" id="text-orgd884f51"&gt;
+&lt;div id="outline-container-org35f9936" class="outline-2"&gt;
+&lt;h2 id="org35f9936"&gt;Beginning&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-org35f9936"&gt;
 &lt;p&gt;
 This is a brief write-up of some notes I took on the Vector Space Model (VSM) used to rank documents by relevancy to keywords in a query. The query is represented as a vector with a 1 for each of the search terms and, in the simplest case, the vector to determine relevance will hold a 1 in each place where the document has a word that matches a query term. This might be easier with an example.
 &lt;/p&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org3ccc4df" class="outline-3"&gt;
-&lt;h3 id="org3ccc4df"&gt;Imports&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org3ccc4df"&gt;
+&lt;div id="outline-container-orgfdcbc7c" class="outline-3"&gt;
+&lt;h3 id="orgfdcbc7c"&gt;Imports&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-orgfdcbc7c"&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;# python
 from collections import Counter
 from functools import partial
@@ -59,9 +60,9 @@ Embed = partial(EmbedHoloview, folder_path=output)
 &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-org511a87f" class="outline-3"&gt;
-&lt;h3 id="org511a87f"&gt;The Query&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org511a87f"&gt;
+&lt;div id="outline-container-org985a9a4" class="outline-3"&gt;
+&lt;h3 id="org985a9a4"&gt;The Query&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org985a9a4"&gt;
 &lt;p&gt;
 The user made a query with some key words which is normally represented by a vector with the count of each term as the values.
 &lt;/p&gt;
@@ -72,15 +73,15 @@ print(terms)
 &lt;/pre&gt;&lt;/div&gt;
 
 &lt;pre class="example"&gt;
-{'blood', 'horror', 'movie'}
+{'horror', 'blood', 'movie'}
 
 &lt;/pre&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-org8da9dbe" class="outline-3"&gt;
-&lt;h3 id="org8da9dbe"&gt;The Document&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org8da9dbe"&gt;
+&lt;div id="outline-container-org044499b" class="outline-3"&gt;
+&lt;h3 id="org044499b"&gt;The Document&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org044499b"&gt;
 &lt;p&gt;
 We want to retrieve the most relevant documents from a set of documents, which I'll represent as lists of words.
 &lt;/p&gt;
@@ -92,13 +93,13 @@ document_2 = "a movie about blood blood and more blood".split()
 &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-org04e68bf" class="outline-2"&gt;
-&lt;h2 id="org04e68bf"&gt;Middle&lt;/h2&gt;
-&lt;div class="outline-text-2" id="text-org04e68bf"&gt;
+&lt;div id="outline-container-org1b006d3" class="outline-2"&gt;
+&lt;h2 id="org1b006d3"&gt;Middle&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-org1b006d3"&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org0d42060" class="outline-3"&gt;
-&lt;h3 id="org0d42060"&gt;The Bit Vector&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org0d42060"&gt;
+&lt;div id="outline-container-org9ee70f0" class="outline-3"&gt;
+&lt;h3 id="org9ee70f0"&gt;The Bit Vector&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org9ee70f0"&gt;
 &lt;p&gt;
 To represent similarity I'll use a vector with ones where there is a word match in the document.
 &lt;/p&gt;
@@ -142,9 +143,9 @@ So we con see one problem with our method right off the bat, in that repeated te
 &lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgac7e556" class="outline-3"&gt;
-&lt;h3 id="orgac7e556"&gt;Term Frequency Vector&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-orgac7e556"&gt;
+&lt;div id="outline-container-org988979d" class="outline-3"&gt;
+&lt;h3 id="org988979d"&gt;Term Frequency Vector&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org988979d"&gt;
 &lt;p&gt;
 One approach to fix our lack of giving weight to more occurences of a keyword is to use counts instead just a 0 or 1 in our vector.
 &lt;/p&gt;
@@ -204,16 +205,16 @@ My example is a little convoluted, but the point is that the most common words a
 &lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orge71620c" class="outline-3"&gt;
-&lt;h3 id="orge71620c"&gt;Inverse Document Frequency&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-orge71620c"&gt;
+&lt;div id="outline-container-org1d4d2c2" class="outline-3"&gt;
+&lt;h3 id="org1d4d2c2"&gt;Inverse Document Frequency&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org1d4d2c2"&gt;
 &lt;p&gt;
 This method seeks to overcome the problem of words that are too common by reducing the weight of a term the more common it is.
 &lt;/p&gt;
 
 &lt;p&gt;
 \[
-IDF(w) = \log(\frac{M + 1}{k})
+IDF(w) = \log \left(\frac{M + 1}{k} \right)
 \]
 &lt;/p&gt;
 
@@ -226,32 +227,35 @@ Where &lt;i&gt;M&lt;/i&gt; is the number of documents in the collection, &lt;i&g
 k = numpy.linspace(1, M)
 idf = numpy.log((M + 1)/k)
 data = holoviews.Table((k, idf), "k", ("idf", "IDF(w)"))
-plot = holoviews.Curve(data).opts(
+plot = holoviews.Curve(data, tools=["hover"]).opts(
     height=800,
     width=1000,
     title="Inverse Document Frequency (IDF) vs Document Frequency (k)")
 Embed(plot=plot, file_name="inverse_document_frequency")()
 &lt;/pre&gt;&lt;/div&gt;
 
+&lt;p&gt;
+WARNING:param.Curve01410: Setting non-parameter attribute tools=['hover'] using a mechanism intended only for parameters
+&lt;/p&gt;
 &lt;object type="text/html" data="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/inverse_document_frequency.html" style="width:100%" height="800"&gt;
   &lt;p&gt;Figure Missing&lt;/p&gt;
 &lt;/object&gt;
 
 &lt;p&gt;
-You can see that as the number of documents with the word in it goes up, the weight it gets (&lt;i&gt;IDF&lt;/i&gt;) goes down until it reaches zero when all the documents have the word in it (&lt;i&gt;log(1)&lt;/i&gt; equals 0). We have codified the notion that if a word is &lt;i&gt;too&lt;/i&gt; common, then it is less important to relevance.
+You can see that as the number of documents with the word in it (&lt;i&gt;k&lt;/i&gt;) goes up, the weight it gets (&lt;i&gt;IDF&lt;/i&gt;) goes down until it reaches zero when all the documents have the word in it (&lt;i&gt;log(1)&lt;/i&gt; equals 0). We have codified the notion that if a word is &lt;i&gt;too&lt;/i&gt; common, then it is less important to relevance.
 &lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgebad1de" class="outline-3"&gt;
-&lt;h3 id="orgebad1de"&gt;Ranking with TF-IDF Weighting&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-orgebad1de"&gt;
+&lt;div id="outline-container-org1458eb1" class="outline-3"&gt;
+&lt;h3 id="org1458eb1"&gt;Ranking with TF-IDF Weighting&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org1458eb1"&gt;
 &lt;p&gt;
 Okay, so we hav Term-Frequency as our basic measure of relevancy, and we have this notion that the more common a word is, the less important it is to relevancy, embodied by Inverse Document Frequency (IDF), how do we use them? Like this.
 &lt;/p&gt;
 
 \begin{align}
 f(q,d) &amp;amp;= \sum_{i=1}^N x_i y_i\\
-       &amp;amp;= \sum_{w \in q \cap d} c(w,q) c(w, d) \log \frac{M+1}{df(w)}\\
+       &amp;amp;= \sum_{w \in q \cap d} c(w,q) \cdot c(w, d) \log \frac{M+1}{df(w)}\\
 \end{align}
 
 &lt;p&gt;
@@ -265,7 +269,7 @@ So, let's unpack this a little.
 &lt;li&gt;\(M\) is the count of all documents&lt;/li&gt;
 &lt;li&gt;\(df(w)\) is the number of documents with the word (document frequency of \(w\))&lt;/li&gt;
 &lt;li&gt;\(\log \frac{M+1}{df(w)}\) is the &lt;i&gt;Inverse Document Frequency&lt;/i&gt; of word \(w\)&lt;/li&gt;
-&lt;li&gt;\(c(w, q) c(w, d)\) is the &lt;i&gt;Term Frequency&lt;/i&gt;&lt;/li&gt;
+&lt;li&gt;\(c(w, q) \cdot c(w, d)\) is the &lt;i&gt;Term Frequency&lt;/i&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;
@@ -273,7 +277,11 @@ So the relevance of a document is the sum of the products of the Term Frequency 
 &lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
+&lt;div id="outline-container-orgbc8179d" class="outline-3"&gt;
+&lt;h3 id="orgbc8179d"&gt;Okapi BM25&lt;/h3&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org464d15a" class="outline-2"&gt;
-&lt;h2 id="org464d15a"&gt;End&lt;/h2&gt;
+&lt;/div&gt;
+
+&lt;div id="outline-container-org5f0ffa1" class="outline-2"&gt;
+&lt;h2 id="org5f0ffa1"&gt;End&lt;/h2&gt;
 &lt;/div&gt;</description><category>lecture</category><category>nlp</category><category>search</category><category>text</category><guid>https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/</guid><pubDate>Mon, 06 May 2019 00:13:29 GMT</pubDate></item></channel></rss>

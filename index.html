@@ -57,33 +57,34 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="posts/text_mining/the-vector-space-model/#orgd884f51">Beginning</a>
+<li><a href="posts/text_mining/the-vector-space-model/#org35f9936">Beginning</a>
 <ul>
-<li><a href="posts/text_mining/the-vector-space-model/#org3ccc4df">Imports</a></li>
-<li><a href="posts/text_mining/the-vector-space-model/#org511a87f">The Query</a></li>
-<li><a href="posts/text_mining/the-vector-space-model/#org8da9dbe">The Document</a></li>
+<li><a href="posts/text_mining/the-vector-space-model/#orgfdcbc7c">Imports</a></li>
+<li><a href="posts/text_mining/the-vector-space-model/#org985a9a4">The Query</a></li>
+<li><a href="posts/text_mining/the-vector-space-model/#org044499b">The Document</a></li>
 </ul>
 </li>
-<li><a href="posts/text_mining/the-vector-space-model/#org04e68bf">Middle</a>
+<li><a href="posts/text_mining/the-vector-space-model/#org1b006d3">Middle</a>
 <ul>
-<li><a href="posts/text_mining/the-vector-space-model/#org0d42060">The Bit Vector</a></li>
-<li><a href="posts/text_mining/the-vector-space-model/#orgac7e556">Term Frequency Vector</a></li>
-<li><a href="posts/text_mining/the-vector-space-model/#orge71620c">Inverse Document Frequency</a></li>
-<li><a href="posts/text_mining/the-vector-space-model/#orgebad1de">Ranking with TF-IDF Weighting</a></li>
+<li><a href="posts/text_mining/the-vector-space-model/#org9ee70f0">The Bit Vector</a></li>
+<li><a href="posts/text_mining/the-vector-space-model/#org988979d">Term Frequency Vector</a></li>
+<li><a href="posts/text_mining/the-vector-space-model/#org1d4d2c2">Inverse Document Frequency</a></li>
+<li><a href="posts/text_mining/the-vector-space-model/#org1458eb1">Ranking with TF-IDF Weighting</a></li>
+<li><a href="posts/text_mining/the-vector-space-model/#orgbc8179d">Okapi BM25</a></li>
 </ul>
 </li>
-<li><a href="posts/text_mining/the-vector-space-model/#org464d15a">End</a></li>
+<li><a href="posts/text_mining/the-vector-space-model/#org5f0ffa1">End</a></li>
 </ul>
 </div>
 </div>
-<div class="outline-2" id="outline-container-orgd884f51">
-<h2 id="orgd884f51">Beginning</h2>
-<div class="outline-text-2" id="text-orgd884f51">
+<div class="outline-2" id="outline-container-org35f9936">
+<h2 id="org35f9936">Beginning</h2>
+<div class="outline-text-2" id="text-org35f9936">
 <p>This is a brief write-up of some notes I took on the Vector Space Model (VSM) used to rank documents by relevancy to keywords in a query. The query is represented as a vector with a 1 for each of the search terms and, in the simplest case, the vector to determine relevance will hold a 1 in each place where the document has a word that matches a query term. This might be easier with an example.</p>
 </div>
-<div class="outline-3" id="outline-container-org3ccc4df">
-<h3 id="org3ccc4df">Imports</h3>
-<div class="outline-text-3" id="text-org3ccc4df">
+<div class="outline-3" id="outline-container-orgfdcbc7c">
+<h3 id="orgfdcbc7c">Imports</h3>
+<div class="outline-text-3" id="text-orgfdcbc7c">
 <div class="highlight">
 <pre><span></span># python
 from collections import Counter
@@ -108,9 +109,9 @@ Embed = partial(EmbedHoloview, folder_path=output)
 </pre></div>
 </div>
 </div>
-<div class="outline-3" id="outline-container-org511a87f">
-<h3 id="org511a87f">The Query</h3>
-<div class="outline-text-3" id="text-org511a87f">
+<div class="outline-3" id="outline-container-org985a9a4">
+<h3 id="org985a9a4">The Query</h3>
+<div class="outline-text-3" id="text-org985a9a4">
 <p>The user made a query with some key words which is normally represented by a vector with the count of each term as the values.</p>
 <div class="highlight">
 <pre><span></span>terms = set("movie horror blood".split())
@@ -118,13 +119,13 @@ query = numpy.ones(len(terms))
 print(terms)
 </pre></div>
 <pre class="example">
-{'blood', 'horror', 'movie'}
+{'horror', 'blood', 'movie'}
 
 </pre></div>
 </div>
-<div class="outline-3" id="outline-container-org8da9dbe">
-<h3 id="org8da9dbe">The Document</h3>
-<div class="outline-text-3" id="text-org8da9dbe">
+<div class="outline-3" id="outline-container-org044499b">
+<h3 id="org044499b">The Document</h3>
+<div class="outline-text-3" id="text-org044499b">
 <p>We want to retrieve the most relevant documents from a set of documents, which I'll represent as lists of words.</p>
 <div class="highlight">
 <pre><span></span>document_1 = "the movie was about workers at a blood bank".split()
@@ -133,12 +134,12 @@ document_2 = "a movie about blood blood and more blood".split()
 </div>
 </div>
 </div>
-<div class="outline-2" id="outline-container-org04e68bf">
-<h2 id="org04e68bf">Middle</h2>
-<div class="outline-text-2" id="text-org04e68bf"></div>
-<div class="outline-3" id="outline-container-org0d42060">
-<h3 id="org0d42060">The Bit Vector</h3>
-<div class="outline-text-3" id="text-org0d42060">
+<div class="outline-2" id="outline-container-org1b006d3">
+<h2 id="org1b006d3">Middle</h2>
+<div class="outline-text-2" id="text-org1b006d3"></div>
+<div class="outline-3" id="outline-container-org9ee70f0">
+<h3 id="org9ee70f0">The Bit Vector</h3>
+<div class="outline-text-3" id="text-org9ee70f0">
 <p>To represent similarity I'll use a vector with ones where there is a word match in the document.</p>
 <div class="highlight">
 <pre><span></span>def check_document(document: list, terms: set) -&gt; None:
@@ -175,9 +176,9 @@ Relevance: 2.0
 <p>So we con see one problem with our method right off the bat, in that repeated terms don't increase the relevance so both our documents have the same score, even though one mentioned blood more often.</p>
 </div>
 </div>
-<div class="outline-3" id="outline-container-orgac7e556">
-<h3 id="orgac7e556">Term Frequency Vector</h3>
-<div class="outline-text-3" id="text-orgac7e556">
+<div class="outline-3" id="outline-container-org988979d">
+<h3 id="org988979d">Term Frequency Vector</h3>
+<div class="outline-text-3" id="text-org988979d">
 <p>One approach to fix our lack of giving weight to more occurences of a keyword is to use counts instead just a 0 or 1 in our vector.</p>
 <div class="highlight">
 <pre><span></span>def counts(document: list, terms: set) -&gt; None:
@@ -226,34 +227,35 @@ Relevance: 5.0
 <p>My example is a little convoluted, but the point is that the most common words aren't necessarily the most helpful ones.</p>
 </div>
 </div>
-<div class="outline-3" id="outline-container-orge71620c">
-<h3 id="orge71620c">Inverse Document Frequency</h3>
-<div class="outline-text-3" id="text-orge71620c">
+<div class="outline-3" id="outline-container-org1d4d2c2">
+<h3 id="org1d4d2c2">Inverse Document Frequency</h3>
+<div class="outline-text-3" id="text-org1d4d2c2">
 <p>This method seeks to overcome the problem of words that are too common by reducing the weight of a term the more common it is.</p>
-<p>\[ IDF(w) = \log(\frac{M + 1}{k}) \]</p>
+<p>\[ IDF(w) = \log \left(\frac{M + 1}{k} \right) \]</p>
 <p>Where <i>M</i> is the number of documents in the collection, <i>w</i> is the word (or term) that we are checking, and <i>k</i> is the number of documents containing <i>w</i>.</p>
 <div class="highlight">
 <pre><span></span>M = 1000
 k = numpy.linspace(1, M)
 idf = numpy.log((M + 1)/k)
 data = holoviews.Table((k, idf), "k", ("idf", "IDF(w)"))
-plot = holoviews.Curve(data).opts(
+plot = holoviews.Curve(data, tools=["hover"]).opts(
     height=800,
     width=1000,
     title="Inverse Document Frequency (IDF) vs Document Frequency (k)")
 Embed(plot=plot, file_name="inverse_document_frequency")()
 </pre></div>
+<p>WARNING:param.Curve01410: Setting non-parameter attribute tools=['hover'] using a mechanism intended only for parameters</p>
 <object data="posts/text_mining/the-vector-space-model/inverse_document_frequency.html" height="800" style="width:100%" type="text/html">
 <p>Figure Missing</p>
 </object>
-<p>You can see that as the number of documents with the word in it goes up, the weight it gets (<i>IDF</i>) goes down until it reaches zero when all the documents have the word in it (<i>log(1)</i> equals 0). We have codified the notion that if a word is <i>too</i> common, then it is less important to relevance.</p>
+<p>You can see that as the number of documents with the word in it (<i>k</i>) goes up, the weight it gets (<i>IDF</i>) goes down until it reaches zero when all the documents have the word in it (<i>log(1)</i> equals 0). We have codified the notion that if a word is <i>too</i> common, then it is less important to relevance.</p>
 </div>
 </div>
-<div class="outline-3" id="outline-container-orgebad1de">
-<h3 id="orgebad1de">Ranking with TF-IDF Weighting</h3>
-<div class="outline-text-3" id="text-orgebad1de">
+<div class="outline-3" id="outline-container-org1458eb1">
+<h3 id="org1458eb1">Ranking with TF-IDF Weighting</h3>
+<div class="outline-text-3" id="text-org1458eb1">
 <p>Okay, so we hav Term-Frequency as our basic measure of relevancy, and we have this notion that the more common a word is, the less important it is to relevancy, embodied by Inverse Document Frequency (IDF), how do we use them? Like this.</p>
-\begin{align} f(q,d) &amp;= \sum_{i=1}^N x_i y_i\\ &amp;= \sum_{w \in q \cap d} c(w,q) c(w, d) \log \frac{M+1}{df(w)}\\ \end{align}
+\begin{align} f(q,d) &amp;= \sum_{i=1}^N x_i y_i\\ &amp;= \sum_{w \in q \cap d} c(w,q) \cdot c(w, d) \log \frac{M+1}{df(w)}\\ \end{align}
 <p>So, let's unpack this a little.</p>
 <ul class="org-ul">
 <li>\(f(q, d)\) is the function to calculate the relevance of a document (<i>d</i>) to a query (<i>q</i>)</li>
@@ -263,14 +265,17 @@ Embed(plot=plot, file_name="inverse_document_frequency")()
 <li>\(M\) is the count of all documents</li>
 <li>\(df(w)\) is the number of documents with the word (document frequency of \(w\))</li>
 <li>\(\log \frac{M+1}{df(w)}\) is the <i>Inverse Document Frequency</i> of word \(w\)</li>
-<li>\(c(w, q) c(w, d)\) is the <i>Term Frequency</i></li>
+<li>\(c(w, q) \cdot c(w, d)\) is the <i>Term Frequency</i></li>
 </ul>
 <p>So the relevance of a document is the sum of the products of the Term Frequency for times the Inverse Document Frequency for each word in the query. <i>Why is this useful?</i> If a term from the query appears in the document, then it is probably more relevant than a document where it doesn't appear, and if the term appears a second time, then it reinforces the idea of its relevance, but as the term keeps appearing we get less and less assurance that it means something - does the twenty-first occurence tell us much more of its relevance than the twentieth? So we still count all the occurences (\(c(w, d)\)) but multiply it by a discounting factor to offset repetitions (the Inverse Document Frequency weight).</p>
 </div>
 </div>
+<div class="outline-3" id="outline-container-orgbc8179d">
+<h3 id="orgbc8179d">Okapi BM25</h3>
 </div>
-<div class="outline-2" id="outline-container-org464d15a">
-<h2 id="org464d15a">End</h2>
+</div>
+<div class="outline-2" id="outline-container-org5f0ffa1">
+<h2 id="org5f0ffa1">End</h2>
 </div>
 </div>
 </article>
@@ -287,19 +292,19 @@ Embed(plot=plot, file_name="inverse_document_frequency")()
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="posts/text_mining/link-page/#orgc8819f1">Text Mining</a>
+<li><a href="posts/text_mining/link-page/#orge695bc7">Text Mining</a>
 <ul>
-<li><a href="posts/text_mining/link-page/#org518bb89">Text Retrieval MOOC Link Page</a></li>
+<li><a href="posts/text_mining/link-page/#org0605c54">Text Retrieval MOOC Link Page</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
-<div class="outline-2" id="outline-container-orgc8819f1">
-<h2 id="orgc8819f1">Text Mining</h2>
-<div class="outline-text-2" id="text-orgc8819f1"></div>
-<div class="outline-3" id="outline-container-org518bb89">
-<h3 id="org518bb89"><a href="http://sifaka.cs.uiuc.edu/ir/resources/mooctr.html">Text Retrieval MOOC Link Page</a></h3>
+<div class="outline-2" id="outline-container-orge695bc7">
+<h2 id="orge695bc7">Text Mining</h2>
+<div class="outline-text-2" id="text-orge695bc7"></div>
+<div class="outline-3" id="outline-container-org0605c54">
+<h3 id="org0605c54"><a href="http://sifaka.cs.uiuc.edu/ir/resources/mooctr.html">Text Retrieval MOOC Link Page</a></h3>
 </div>
 </div>
 </div>
@@ -317,31 +322,31 @@ Embed(plot=plot, file_name="inverse_document_frequency")()
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="posts/nlp/natural-language-processing-review/#org135edfb">Departure</a>
+<li><a href="posts/nlp/natural-language-processing-review/#org84661bb">Departure</a>
 <ul>
-<li><a href="posts/nlp/natural-language-processing-review/#org7e06a96">Imports</a></li>
-<li><a href="posts/nlp/natural-language-processing-review/#orgdeba5b4">Set Up</a></li>
+<li><a href="posts/nlp/natural-language-processing-review/#org73b470d">Imports</a></li>
+<li><a href="posts/nlp/natural-language-processing-review/#org42ae74b">Set Up</a></li>
 </ul>
 </li>
-<li><a href="posts/nlp/natural-language-processing-review/#orgcb992f7">Initiation</a>
+<li><a href="posts/nlp/natural-language-processing-review/#org3a3a2d8">Initiation</a>
 <ul>
-<li><a href="posts/nlp/natural-language-processing-review/#orge1766fa">Some Vocabulary</a></li>
+<li><a href="posts/nlp/natural-language-processing-review/#org7d9ec8f">Some Vocabulary</a></li>
 </ul>
 </li>
-<li><a href="posts/nlp/natural-language-processing-review/#orgcab9b54">Return</a>
+<li><a href="posts/nlp/natural-language-processing-review/#org5eedc76">Return</a>
 <ul>
-<li><a href="posts/nlp/natural-language-processing-review/#org811932c">Sources</a></li>
+<li><a href="posts/nlp/natural-language-processing-review/#org394b493">Sources</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
-<div class="outline-2" id="outline-container-org135edfb">
-<h2 id="org135edfb">Departure</h2>
-<div class="outline-text-2" id="text-org135edfb"></div>
-<div class="outline-3" id="outline-container-org7e06a96">
-<h3 id="org7e06a96">Imports</h3>
-<div class="outline-text-3" id="text-org7e06a96">
+<div class="outline-2" id="outline-container-org84661bb">
+<h2 id="org84661bb">Departure</h2>
+<div class="outline-text-2" id="text-org84661bb"></div>
+<div class="outline-3" id="outline-container-org73b470d">
+<h3 id="org73b470d">Imports</h3>
+<div class="outline-text-3" id="text-org73b470d">
 <div class="highlight">
 <pre><span></span>from pathlib import Path
 </pre></div>
@@ -352,9 +357,9 @@ from nltk.tokenize import TweetTokenizer
 </pre></div>
 </div>
 </div>
-<div class="outline-3" id="outline-container-orgdeba5b4">
-<h3 id="orgdeba5b4">Set Up</h3>
-<div class="outline-text-3" id="text-orgdeba5b4">
+<div class="outline-3" id="outline-container-org42ae74b">
+<h3 id="org42ae74b">Set Up</h3>
+<div class="outline-text-3" id="text-org42ae74b">
 <p>I'm using the <code>en</code> model. Even after you install spacy you have to tell it which model to download.</p>
 <pre class="example">
 python -m spacy download en
@@ -373,26 +378,26 @@ if not OUTPUT_FOLDER.is_dir():
 </div>
 </div>
 </div>
-<div class="outline-2" id="outline-container-orgcb992f7">
-<h2 id="orgcb992f7">Initiation</h2>
-<div class="outline-text-2" id="text-orgcb992f7"></div>
-<div class="outline-3" id="outline-container-orge1766fa">
-<h3 id="orge1766fa">Some Vocabulary</h3>
-<div class="outline-text-3" id="text-orge1766fa"></div>
-<div class="outline-4" id="outline-container-org1e84389">
-<h4 id="org1e84389">Natural Language Processing</h4>
-<div class="outline-text-4" id="text-org1e84389">
+<div class="outline-2" id="outline-container-org3a3a2d8">
+<h2 id="org3a3a2d8">Initiation</h2>
+<div class="outline-text-2" id="text-org3a3a2d8"></div>
+<div class="outline-3" id="outline-container-org7d9ec8f">
+<h3 id="org7d9ec8f">Some Vocabulary</h3>
+<div class="outline-text-3" id="text-org7d9ec8f"></div>
+<div class="outline-4" id="outline-container-org1418e2d">
+<h4 id="org1418e2d">Natural Language Processing</h4>
+<div class="outline-text-4" id="text-org1418e2d">
 <p><a href="https://www.wikiwand.com/en/Natural_language_processing">Natural Language Processing</a> is the computational study of human language with the aim of solving practical problems involving language. There is a related field called <a href="https://www.wikiwand.com/en/Computational_linguistics">Computational Linguistics</a> which is concerned more with the modeling of human language but seems related.</p>
 </div>
 </div>
-<div class="outline-4" id="outline-container-org7d9cda9">
-<h4 id="org7d9cda9">Corpora</h4>
-<div class="outline-text-4" id="text-org7d9cda9">
+<div class="outline-4" id="outline-container-org1f31c43">
+<h4 id="org1f31c43">Corpora</h4>
+<div class="outline-text-4" id="text-org1f31c43">
 <p>A text-dataset is called a <i>corpus</i>, usually made up of texts and metadata associated with each text. Texts are made up of characters grouped into units called <i>tokens</i>. In English a token is generally a word or number.</p>
 </div>
-<div class="outline-5" id="outline-container-org4148ec7">
-<h5 id="org4148ec7">Tokenization</h5>
-<div class="outline-text-5" id="text-org4148ec7">
+<div class="outline-5" id="outline-container-orgf1e23f4">
+<h5 id="orgf1e23f4">Tokenization</h5>
+<div class="outline-text-5" id="text-orgf1e23f4">
 <p>The process of breaking a text up into <i>tokens</i> is called tokenization. Here's some examples of how to do it with <a href="https://spacy.io/usage/spacy-101">spacy</a> and the <a href="https://www.nltk.org">Natural Language Toolkit (NLTK)</a>.</p>
 <div class="highlight">
 <pre><span></span>text = "Those are my principles, and if you don't like them... well, I have others.".lower()
@@ -429,21 +434,21 @@ print([str(token) for token in processor(tweet)])
 </div>
 </div>
 </div>
-<div class="outline-4" id="outline-container-org76982d9">
-<h4 id="org76982d9">Types</h4>
-<div class="outline-text-4" id="text-org76982d9">
+<div class="outline-4" id="outline-container-org1f1bfef">
+<h4 id="org1f1bfef">Types</h4>
+<div class="outline-text-4" id="text-org1f1bfef">
 <p><i>Types</i> are the unique tokens in a corpus. The set of all the types in the corpus is its <i>vocabulary</i> or <i>lexicon</i>.</p>
 </div>
 </div>
-<div class="outline-4" id="outline-container-org9a0347d">
-<h4 id="org9a0347d">Word Classes</h4>
-<div class="outline-text-4" id="text-org9a0347d">
+<div class="outline-4" id="outline-container-org13b0655">
+<h4 id="org13b0655">Word Classes</h4>
+<div class="outline-text-4" id="text-org13b0655">
 <p>There are two classes of words <i>content words</i> and <i>stopwords</i>. Stopwords are there mostly to glue the content words together ("a", "an", "the", etc.) and provide more noise than information.</p>
 </div>
 </div>
-<div class="outline-4" id="outline-container-org23392d7">
-<h4 id="org23392d7">N-Grams</h4>
-<div class="outline-text-4" id="text-org23392d7">
+<div class="outline-4" id="outline-container-orgfc21ad3">
+<h4 id="orgfc21ad3">N-Grams</h4>
+<div class="outline-text-4" id="text-orgfc21ad3">
 <p><i>N-grams</i> are consecutive token-sequences of a fixed length (<i>n</i>). Common special cases are:</p>
 <ul class="org-ul">
 <li>unigrams: <i>n</i> = 1</li>
@@ -453,9 +458,9 @@ print([str(token) for token in processor(tweet)])
 <p>Although n-grams are generally words in some cases they can be characters - if the suffixes are meaningful, for instance.</p>
 </div>
 </div>
-<div class="outline-4" id="outline-container-org857d8a3">
-<h4 id="org857d8a3">Lemma</h4>
-<div class="outline-text-4" id="text-org857d8a3">
+<div class="outline-4" id="outline-container-org8721d6d">
+<h4 id="org8721d6d">Lemma</h4>
+<div class="outline-text-4" id="text-org8721d6d">
 <p><a href="https://www.wikiwand.com/en/Lemma_(morphology)">Lemmas</a> are root-forms for words that can have different forms. As an example - <i>go</i> is the lemma for <i>go</i>, <i>going</i>, <i>went</i>, and <i>gone</i>.</p>
 <div class="highlight">
 <pre><span></span>document = processor("an undefined problem has an infinite number of solutions")
@@ -477,9 +482,9 @@ Token: solutions -&gt; Lemma: solution
 <p>There is a related method called <i>stemming</i> which strips the endings off of words instead of changing to their lemmas. lemmatization is probably preferable, but is a more difficult method compared to stemming.</p>
 </div>
 </div>
-<div class="outline-4" id="outline-container-orgfe133dc">
-<h4 id="orgfe133dc">Chunking</h4>
-<div class="outline-text-4" id="text-orgfe133dc">
+<div class="outline-4" id="outline-container-org7481552">
+<h4 id="org7481552">Chunking</h4>
+<div class="outline-text-4" id="text-org7481552">
 <p>There are different ways of chunking text instead of just using <i>n-grams</i>, one way is called <i>chunking</i> which breaks the text up into phrases.</p>
 <div class="highlight">
 <pre><span></span>document = processor("Mary had a little lamb, its fleece was white as snow.")
@@ -496,12 +501,12 @@ snow - NP
 </div>
 </div>
 </div>
-<div class="outline-2" id="outline-container-orgcab9b54">
-<h2 id="orgcab9b54">Return</h2>
-<div class="outline-text-2" id="text-orgcab9b54"></div>
-<div class="outline-3" id="outline-container-org811932c">
-<h3 id="org811932c">Sources</h3>
-<div class="outline-text-3" id="text-org811932c">
+<div class="outline-2" id="outline-container-org5eedc76">
+<h2 id="org5eedc76">Return</h2>
+<div class="outline-text-2" id="text-org5eedc76"></div>
+<div class="outline-3" id="outline-container-org394b493">
+<h3 id="org394b493">Sources</h3>
+<div class="outline-text-3" id="text-org394b493">
 <ul class="org-ul">
 <li>Rao D, McMahan B. Natural language processing with PyTorch: build intelligent language applications using deep learning. Sebastopol, CA: OReilly Media; 2019.</li>
 </ul>
@@ -519,11 +524,11 @@ snow - NP
 </div>
 </header>
 <div class="e-content entry-content">
-<div class="outline-2" id="outline-container-org973fd69">
-<h2 id="org973fd69">Books on Natural Language Processing</h2>
-<div class="outline-text-2" id="text-org973fd69"></div>
-<div class="outline-3" id="outline-container-orgf1f4540">
-<h3 id="orgf1f4540">Rao D, McMahan B. Natural language processing with PyTorch: build intelligent language applications using deep learning. Sebastopol, CA: OReilly Media; 2019.</h3>
+<div class="outline-2" id="outline-container-orgf0a9335">
+<h2 id="orgf0a9335">Books on Natural Language Processing</h2>
+<div class="outline-text-2" id="text-orgf0a9335"></div>
+<div class="outline-3" id="outline-container-org0f89b9a">
+<h3 id="org0f89b9a">Rao D, McMahan B. Natural language processing with PyTorch: build intelligent language applications using deep learning. Sebastopol, CA: OReilly Media; 2019.</h3>
 </div>
 </div>
 </div>

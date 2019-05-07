@@ -70,33 +70,34 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orgd884f51">Beginning</a>
+<li><a href="#org35f9936">Beginning</a>
 <ul>
-<li><a href="#org3ccc4df">Imports</a></li>
-<li><a href="#org511a87f">The Query</a></li>
-<li><a href="#org8da9dbe">The Document</a></li>
+<li><a href="#orgfdcbc7c">Imports</a></li>
+<li><a href="#org985a9a4">The Query</a></li>
+<li><a href="#org044499b">The Document</a></li>
 </ul>
 </li>
-<li><a href="#org04e68bf">Middle</a>
+<li><a href="#org1b006d3">Middle</a>
 <ul>
-<li><a href="#org0d42060">The Bit Vector</a></li>
-<li><a href="#orgac7e556">Term Frequency Vector</a></li>
-<li><a href="#orge71620c">Inverse Document Frequency</a></li>
-<li><a href="#orgebad1de">Ranking with TF-IDF Weighting</a></li>
+<li><a href="#org9ee70f0">The Bit Vector</a></li>
+<li><a href="#org988979d">Term Frequency Vector</a></li>
+<li><a href="#org1d4d2c2">Inverse Document Frequency</a></li>
+<li><a href="#org1458eb1">Ranking with TF-IDF Weighting</a></li>
+<li><a href="#orgbc8179d">Okapi BM25</a></li>
 </ul>
 </li>
-<li><a href="#org464d15a">End</a></li>
+<li><a href="#org5f0ffa1">End</a></li>
 </ul>
 </div>
 </div>
-<div class="outline-2" id="outline-container-orgd884f51">
-<h2 id="orgd884f51">Beginning</h2>
-<div class="outline-text-2" id="text-orgd884f51">
+<div class="outline-2" id="outline-container-org35f9936">
+<h2 id="org35f9936">Beginning</h2>
+<div class="outline-text-2" id="text-org35f9936">
 <p>This is a brief write-up of some notes I took on the Vector Space Model (VSM) used to rank documents by relevancy to keywords in a query. The query is represented as a vector with a 1 for each of the search terms and, in the simplest case, the vector to determine relevance will hold a 1 in each place where the document has a word that matches a query term. This might be easier with an example.</p>
 </div>
-<div class="outline-3" id="outline-container-org3ccc4df">
-<h3 id="org3ccc4df">Imports</h3>
-<div class="outline-text-3" id="text-org3ccc4df">
+<div class="outline-3" id="outline-container-orgfdcbc7c">
+<h3 id="orgfdcbc7c">Imports</h3>
+<div class="outline-text-3" id="text-orgfdcbc7c">
 <div class="highlight">
 <pre><span></span># python
 from collections import Counter
@@ -121,9 +122,9 @@ Embed = partial(EmbedHoloview, folder_path=output)
 </pre></div>
 </div>
 </div>
-<div class="outline-3" id="outline-container-org511a87f">
-<h3 id="org511a87f">The Query</h3>
-<div class="outline-text-3" id="text-org511a87f">
+<div class="outline-3" id="outline-container-org985a9a4">
+<h3 id="org985a9a4">The Query</h3>
+<div class="outline-text-3" id="text-org985a9a4">
 <p>The user made a query with some key words which is normally represented by a vector with the count of each term as the values.</p>
 <div class="highlight">
 <pre><span></span>terms = set("movie horror blood".split())
@@ -131,13 +132,13 @@ query = numpy.ones(len(terms))
 print(terms)
 </pre></div>
 <pre class="example">
-{'blood', 'horror', 'movie'}
+{'horror', 'blood', 'movie'}
 
 </pre></div>
 </div>
-<div class="outline-3" id="outline-container-org8da9dbe">
-<h3 id="org8da9dbe">The Document</h3>
-<div class="outline-text-3" id="text-org8da9dbe">
+<div class="outline-3" id="outline-container-org044499b">
+<h3 id="org044499b">The Document</h3>
+<div class="outline-text-3" id="text-org044499b">
 <p>We want to retrieve the most relevant documents from a set of documents, which I'll represent as lists of words.</p>
 <div class="highlight">
 <pre><span></span>document_1 = "the movie was about workers at a blood bank".split()
@@ -146,12 +147,12 @@ document_2 = "a movie about blood blood and more blood".split()
 </div>
 </div>
 </div>
-<div class="outline-2" id="outline-container-org04e68bf">
-<h2 id="org04e68bf">Middle</h2>
-<div class="outline-text-2" id="text-org04e68bf"></div>
-<div class="outline-3" id="outline-container-org0d42060">
-<h3 id="org0d42060">The Bit Vector</h3>
-<div class="outline-text-3" id="text-org0d42060">
+<div class="outline-2" id="outline-container-org1b006d3">
+<h2 id="org1b006d3">Middle</h2>
+<div class="outline-text-2" id="text-org1b006d3"></div>
+<div class="outline-3" id="outline-container-org9ee70f0">
+<h3 id="org9ee70f0">The Bit Vector</h3>
+<div class="outline-text-3" id="text-org9ee70f0">
 <p>To represent similarity I'll use a vector with ones where there is a word match in the document.</p>
 <div class="highlight">
 <pre><span></span>def check_document(document: list, terms: set) -&gt; None:
@@ -188,9 +189,9 @@ Relevance: 2.0
 <p>So we con see one problem with our method right off the bat, in that repeated terms don't increase the relevance so both our documents have the same score, even though one mentioned blood more often.</p>
 </div>
 </div>
-<div class="outline-3" id="outline-container-orgac7e556">
-<h3 id="orgac7e556">Term Frequency Vector</h3>
-<div class="outline-text-3" id="text-orgac7e556">
+<div class="outline-3" id="outline-container-org988979d">
+<h3 id="org988979d">Term Frequency Vector</h3>
+<div class="outline-text-3" id="text-org988979d">
 <p>One approach to fix our lack of giving weight to more occurences of a keyword is to use counts instead just a 0 or 1 in our vector.</p>
 <div class="highlight">
 <pre><span></span>def counts(document: list, terms: set) -&gt; None:
@@ -239,34 +240,35 @@ Relevance: 5.0
 <p>My example is a little convoluted, but the point is that the most common words aren't necessarily the most helpful ones.</p>
 </div>
 </div>
-<div class="outline-3" id="outline-container-orge71620c">
-<h3 id="orge71620c">Inverse Document Frequency</h3>
-<div class="outline-text-3" id="text-orge71620c">
+<div class="outline-3" id="outline-container-org1d4d2c2">
+<h3 id="org1d4d2c2">Inverse Document Frequency</h3>
+<div class="outline-text-3" id="text-org1d4d2c2">
 <p>This method seeks to overcome the problem of words that are too common by reducing the weight of a term the more common it is.</p>
-<p>\[ IDF(w) = \log(\frac{M + 1}{k}) \]</p>
+<p>\[ IDF(w) = \log \left(\frac{M + 1}{k} \right) \]</p>
 <p>Where <i>M</i> is the number of documents in the collection, <i>w</i> is the word (or term) that we are checking, and <i>k</i> is the number of documents containing <i>w</i>.</p>
 <div class="highlight">
 <pre><span></span>M = 1000
 k = numpy.linspace(1, M)
 idf = numpy.log((M + 1)/k)
 data = holoviews.Table((k, idf), "k", ("idf", "IDF(w)"))
-plot = holoviews.Curve(data).opts(
+plot = holoviews.Curve(data, tools=["hover"]).opts(
     height=800,
     width=1000,
     title="Inverse Document Frequency (IDF) vs Document Frequency (k)")
 Embed(plot=plot, file_name="inverse_document_frequency")()
 </pre></div>
+<p>WARNING:param.Curve01410: Setting non-parameter attribute tools=['hover'] using a mechanism intended only for parameters</p>
 <object data="inverse_document_frequency.html" height="800" style="width:100%" type="text/html">
 <p>Figure Missing</p>
 </object>
-<p>You can see that as the number of documents with the word in it goes up, the weight it gets (<i>IDF</i>) goes down until it reaches zero when all the documents have the word in it (<i>log(1)</i> equals 0). We have codified the notion that if a word is <i>too</i> common, then it is less important to relevance.</p>
+<p>You can see that as the number of documents with the word in it (<i>k</i>) goes up, the weight it gets (<i>IDF</i>) goes down until it reaches zero when all the documents have the word in it (<i>log(1)</i> equals 0). We have codified the notion that if a word is <i>too</i> common, then it is less important to relevance.</p>
 </div>
 </div>
-<div class="outline-3" id="outline-container-orgebad1de">
-<h3 id="orgebad1de">Ranking with TF-IDF Weighting</h3>
-<div class="outline-text-3" id="text-orgebad1de">
+<div class="outline-3" id="outline-container-org1458eb1">
+<h3 id="org1458eb1">Ranking with TF-IDF Weighting</h3>
+<div class="outline-text-3" id="text-org1458eb1">
 <p>Okay, so we hav Term-Frequency as our basic measure of relevancy, and we have this notion that the more common a word is, the less important it is to relevancy, embodied by Inverse Document Frequency (IDF), how do we use them? Like this.</p>
-\begin{align} f(q,d) &amp;= \sum_{i=1}^N x_i y_i\\ &amp;= \sum_{w \in q \cap d} c(w,q) c(w, d) \log \frac{M+1}{df(w)}\\ \end{align}
+\begin{align} f(q,d) &amp;= \sum_{i=1}^N x_i y_i\\ &amp;= \sum_{w \in q \cap d} c(w,q) \cdot c(w, d) \log \frac{M+1}{df(w)}\\ \end{align}
 <p>So, let's unpack this a little.</p>
 <ul class="org-ul">
 <li>\(f(q, d)\) is the function to calculate the relevance of a document (<i>d</i>) to a query (<i>q</i>)</li>
@@ -276,14 +278,17 @@ Embed(plot=plot, file_name="inverse_document_frequency")()
 <li>\(M\) is the count of all documents</li>
 <li>\(df(w)\) is the number of documents with the word (document frequency of \(w\))</li>
 <li>\(\log \frac{M+1}{df(w)}\) is the <i>Inverse Document Frequency</i> of word \(w\)</li>
-<li>\(c(w, q) c(w, d)\) is the <i>Term Frequency</i></li>
+<li>\(c(w, q) \cdot c(w, d)\) is the <i>Term Frequency</i></li>
 </ul>
 <p>So the relevance of a document is the sum of the products of the Term Frequency for times the Inverse Document Frequency for each word in the query. <i>Why is this useful?</i> If a term from the query appears in the document, then it is probably more relevant than a document where it doesn't appear, and if the term appears a second time, then it reinforces the idea of its relevance, but as the term keeps appearing we get less and less assurance that it means something - does the twenty-first occurence tell us much more of its relevance than the twentieth? So we still count all the occurences (\(c(w, d)\)) but multiply it by a discounting factor to offset repetitions (the Inverse Document Frequency weight).</p>
 </div>
 </div>
+<div class="outline-3" id="outline-container-orgbc8179d">
+<h3 id="orgbc8179d">Okapi BM25</h3>
 </div>
-<div class="outline-2" id="outline-container-org464d15a">
-<h2 id="org464d15a">End</h2>
+</div>
+<div class="outline-2" id="outline-container-org5f0ffa1">
+<h2 id="org5f0ffa1">End</h2>
 </div>
 </div>
 <aside class="postpromonav">
