@@ -293,9 +293,38 @@ Embed(plot=plot, file_name="pivoted_linear_transformation")()
 
 This term ends up in the denominator of the term-frequency equivalent calculations, so as the word-count goes up, the normalization grows larger, reducing the term-frequency measure, and when the word-count is low it makes the term-frequency measure larger.
 
-** BM25 With Document Length Normalization
+** The State of the Art
+   These are the two "best" Vector Space Model ranking functions.
+
 \[
-f(q, d) = \sum_{w \in q \cap d} c(w, d) \frac{(k+1) c(w, d)}{c(w, d) + k(1 - b + \frac{b \vert d \vert}{\textit{avg dl}})} \log \frac{M+1}{df(w)}
+b \in [0, 1]\\
+k \in [0, +\inf)
+\]
+*** Pivoted Length Normalization
+\[
+f(q, d) = \sum_{w \in q \cap d} c(w, q) \frac{\ln(1 + ln(1 + c(w, d)))}{1 -b + b\frac{\vert d \vert}{\textit{avg dl}}} \og \frac{M + 1}{df(w)}
+\]
+*** BM25 With Document Length Normalization
+\[
+f(q, d) = \sum_{w \in q \cap d} c(w, d) \frac{(k+1) c(w, d)}{c(w, d) + k(1 - b + b \frac{\vert d \vert}{\textit{avg dl}})} \log \frac{M+1}{df(w)}
 \]
 
 * End
+** VSM Improvements
+   These are variations that you can try to improve the effectiveness of Vector Space Model Ranking.
+
+*** Fix the "Dimension"
+  - Use stemmed words, remove stop-words, use ngrams...
+  - Language and domain-specific tokenization
+  - **In practice**: Using /Bag-of-Words/ with phrases is often the best
+*** Changing the Similarity Function
+    - Cosine Similarity
+    - Euclidean distance
+    - **In Practice**: the /Dot Product/ is still the best function
+*** Use BM25 Variations
+**** BM25F
+     This is for structured documents (the /F/ stands for "fields" within the document (e.g. title)).
+     - Uses the "fields", not just the main text
+     - Combines the counts from all the fields before applying BM25
+**** BM25+
+     This avoids over-penalizing long documents by adding a small constant to the term-frequencies. This has been shown (and proven analytically) to be better than BM25 alone.
