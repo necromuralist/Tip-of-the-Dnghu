@@ -57,36 +57,40 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="posts/text_mining/the-vector-space-model/#orgfe84764">Beginning</a>
+<li><a href="posts/text_mining/the-vector-space-model/#orgc1aefd5">Beginning</a>
 <ul>
-<li><a href="posts/text_mining/the-vector-space-model/#orgd696b32">Imports</a></li>
-<li><a href="posts/text_mining/the-vector-space-model/#orgbb5dec4">The Query</a></li>
-<li><a href="posts/text_mining/the-vector-space-model/#orgad2b7b9">The Document</a></li>
+<li><a href="posts/text_mining/the-vector-space-model/#orgb32e3f7">Imports</a></li>
+<li><a href="posts/text_mining/the-vector-space-model/#org4214af9">The Query</a></li>
+<li><a href="posts/text_mining/the-vector-space-model/#orga562cf5">The Document</a></li>
 </ul>
 </li>
-<li><a href="posts/text_mining/the-vector-space-model/#org87173f5">Middle</a>
+<li><a href="posts/text_mining/the-vector-space-model/#orgdd03b34">Middle</a>
 <ul>
-<li><a href="posts/text_mining/the-vector-space-model/#org13599da">The Bit Vector</a></li>
-<li><a href="posts/text_mining/the-vector-space-model/#org4dcc7df">Term Frequency Vector</a></li>
-<li><a href="posts/text_mining/the-vector-space-model/#orge815943">Inverse Document Frequency</a></li>
-<li><a href="posts/text_mining/the-vector-space-model/#org0171e7c">Ranking with TF-IDF Weighting</a></li>
-<li><a href="posts/text_mining/the-vector-space-model/#org0eae2a8">Okapi BM25</a></li>
-<li><a href="posts/text_mining/the-vector-space-model/#orgefa6e0b">Document Length Normalization</a></li>
-<li><a href="posts/text_mining/the-vector-space-model/#orgae69b49">BM25 With Document Length Normalization</a></li>
+<li><a href="posts/text_mining/the-vector-space-model/#org7a1c741">The Bit Vector</a></li>
+<li><a href="posts/text_mining/the-vector-space-model/#org76c95d6">Term Frequency Vector</a></li>
+<li><a href="posts/text_mining/the-vector-space-model/#orgf927758">Inverse Document Frequency</a></li>
+<li><a href="posts/text_mining/the-vector-space-model/#org6daf1f8">Ranking with TF-IDF Weighting</a></li>
+<li><a href="posts/text_mining/the-vector-space-model/#orgb61056b">Okapi BM25</a></li>
+<li><a href="posts/text_mining/the-vector-space-model/#org89a66c3">Document Length Normalization</a></li>
+<li><a href="posts/text_mining/the-vector-space-model/#org3dd934e">The State of the Art</a></li>
 </ul>
 </li>
-<li><a href="posts/text_mining/the-vector-space-model/#orgddd11ba">End</a></li>
+<li><a href="posts/text_mining/the-vector-space-model/#org5ef4ccd">End</a>
+<ul>
+<li><a href="posts/text_mining/the-vector-space-model/#orgb0efdd2">VSM Improvements</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
-<div class="outline-2" id="outline-container-orgfe84764">
-<h2 id="orgfe84764">Beginning</h2>
-<div class="outline-text-2" id="text-orgfe84764">
+<div class="outline-2" id="outline-container-orgc1aefd5">
+<h2 id="orgc1aefd5">Beginning</h2>
+<div class="outline-text-2" id="text-orgc1aefd5">
 <p>This is a brief write-up of some notes I took on the Vector Space Model (VSM) used to rank documents by relevancy to keywords in a query. The query is represented as a vector with a 1 for each of the search terms and, in the simplest case, the vector to determine relevance will hold a 1 in each place where the document has a word that matches a query term. This might be easier with an example.</p>
 </div>
-<div class="outline-3" id="outline-container-orgd696b32">
-<h3 id="orgd696b32">Imports</h3>
-<div class="outline-text-3" id="text-orgd696b32">
+<div class="outline-3" id="outline-container-orgb32e3f7">
+<h3 id="orgb32e3f7">Imports</h3>
+<div class="outline-text-3" id="text-orgb32e3f7">
 <div class="highlight">
 <pre><span></span># python
 from collections import Counter
@@ -112,9 +116,9 @@ Embed = partial(EmbedHoloview, folder_path=output)
 </pre></div>
 </div>
 </div>
-<div class="outline-3" id="outline-container-orgbb5dec4">
-<h3 id="orgbb5dec4">The Query</h3>
-<div class="outline-text-3" id="text-orgbb5dec4">
+<div class="outline-3" id="outline-container-org4214af9">
+<h3 id="org4214af9">The Query</h3>
+<div class="outline-text-3" id="text-org4214af9">
 <p>The user made a query with some key words which is normally represented by a vector with the count of each term as the values.</p>
 <div class="highlight">
 <pre><span></span>terms = set("movie horror blood".split())
@@ -126,9 +130,9 @@ print(terms)
 
 </pre></div>
 </div>
-<div class="outline-3" id="outline-container-orgad2b7b9">
-<h3 id="orgad2b7b9">The Document</h3>
-<div class="outline-text-3" id="text-orgad2b7b9">
+<div class="outline-3" id="outline-container-orga562cf5">
+<h3 id="orga562cf5">The Document</h3>
+<div class="outline-text-3" id="text-orga562cf5">
 <p>We want to retrieve the most relevant documents from a set of documents, which I'll represent as lists of words.</p>
 <div class="highlight">
 <pre><span></span>document_1 = "the movie was about workers at a blood bank".split()
@@ -137,12 +141,12 @@ document_2 = "a movie about blood blood and more blood".split()
 </div>
 </div>
 </div>
-<div class="outline-2" id="outline-container-org87173f5">
-<h2 id="org87173f5">Middle</h2>
-<div class="outline-text-2" id="text-org87173f5"></div>
-<div class="outline-3" id="outline-container-org13599da">
-<h3 id="org13599da">The Bit Vector</h3>
-<div class="outline-text-3" id="text-org13599da">
+<div class="outline-2" id="outline-container-orgdd03b34">
+<h2 id="orgdd03b34">Middle</h2>
+<div class="outline-text-2" id="text-orgdd03b34"></div>
+<div class="outline-3" id="outline-container-org7a1c741">
+<h3 id="org7a1c741">The Bit Vector</h3>
+<div class="outline-text-3" id="text-org7a1c741">
 <p>To represent similarity I'll use a vector with ones where there is a word match in the document.</p>
 <div class="highlight">
 <pre><span></span>def check_document(document: list, terms: set) -&gt; None:
@@ -179,9 +183,9 @@ Relevance: 2.0
 <p>So we con see one problem with our method right off the bat, in that repeated terms don't increase the relevance so both our documents have the same score, even though one mentioned blood more often.</p>
 </div>
 </div>
-<div class="outline-3" id="outline-container-org4dcc7df">
-<h3 id="org4dcc7df">Term Frequency Vector</h3>
-<div class="outline-text-3" id="text-org4dcc7df">
+<div class="outline-3" id="outline-container-org76c95d6">
+<h3 id="org76c95d6">Term Frequency Vector</h3>
+<div class="outline-text-3" id="text-org76c95d6">
 <p>One approach to fix our lack of giving weight to more occurences of a keyword is to use counts, Term Frequency (TF), instead just a 0 or 1 in our vector.</p>
 <div class="highlight">
 <pre><span></span>def counts(document: list, terms: set) -&gt; None:
@@ -230,9 +234,9 @@ Relevance: 5.0
 <p>My example is a little convoluted, but the point is that the most common words aren't necessarily the most helpful ones.</p>
 </div>
 </div>
-<div class="outline-3" id="outline-container-orge815943">
-<h3 id="orge815943">Inverse Document Frequency</h3>
-<div class="outline-text-3" id="text-orge815943">
+<div class="outline-3" id="outline-container-orgf927758">
+<h3 id="orgf927758">Inverse Document Frequency</h3>
+<div class="outline-text-3" id="text-orgf927758">
 <p>This method seeks to overcome the problem of words that are too common by reducing the weight of a term the more common it is.</p>
 <p>\[ IDF(w) = \log \left(\frac{M + 1}{k} \right) \]</p>
 <p>Where <i>M</i> is the number of documents in the collection, <i>w</i> is the word (or term) that we are checking, and <i>k</i> is the number of documents containing <i>w</i>.</p>
@@ -261,9 +265,9 @@ Embed(plot=plot, file_name="inverse_document_frequency")()
 <p>You can see that as the number of documents with the word in it (<i>k</i>) goes up, the weight it gets (<i>IDF</i>) goes down until it reaches zero when all the documents have the word in it (<i>log(1)</i> equals 0). We have codified the notion that if a word is <i>too</i> common, then it is less important to relevance.</p>
 </div>
 </div>
-<div class="outline-3" id="outline-container-org0171e7c">
-<h3 id="org0171e7c">Ranking with TF-IDF Weighting</h3>
-<div class="outline-text-3" id="text-org0171e7c">
+<div class="outline-3" id="outline-container-org6daf1f8">
+<h3 id="org6daf1f8">Ranking with TF-IDF Weighting</h3>
+<div class="outline-text-3" id="text-org6daf1f8">
 <p>Okay, so we hav Term-Frequency as our basic measure of relevancy, and we have this notion that the more common a word is, the less important it is to relevancy, embodied by Inverse Document Frequency (IDF), how do we use them? Like this.</p>
 \begin{align} f(q,d) &amp;= \sum_{i=1}^N x_i y_i\\ &amp;= \sum_{w \in q \cap d} c(w,q) \cdot c(w, d) \log \frac{M+1}{df(w)}\\ \end{align}
 <p>So, let's unpack this a little.</p>
@@ -280,9 +284,9 @@ Embed(plot=plot, file_name="inverse_document_frequency")()
 <p>So the relevance of a document is the sum of the products of the Term Frequency for times the Inverse Document Frequency for each word in the query. <i>Why is this useful?</i> If a term from the query appears in the document, then it is probably more relevant than a document where it doesn't appear, and if the term appears a second time, then it reinforces the idea of its relevance, but as the term keeps appearing we get less and less assurance that it means something - does the twenty-first occurence tell us much more of its relevance than the twentieth? So we still count all the occurences (\(c(w, d)\)) but multiply it by a discounting factor to offset repetitions (the Inverse Document Frequency weight).</p>
 </div>
 </div>
-<div class="outline-3" id="outline-container-org0eae2a8">
-<h3 id="org0eae2a8">Okapi BM25</h3>
-<div class="outline-text-3" id="text-org0eae2a8">
+<div class="outline-3" id="outline-container-orgb61056b">
+<h3 id="orgb61056b">Okapi BM25</h3>
+<div class="outline-text-3" id="text-orgb61056b">
 <p>The <a href="https://en.wikipedia.org/wiki/Okapi_BM25">Okapi BM25</a> ranking function works in a similar way to TF-IDF, but it uses a silghtly different method. Instead of just the count of the words in a document (<i>c(w, d)</i>), it also uses the number of documents that have the word (<i>k</i>). \[ y = \frac{(k + 1) c(w, d){c(w, d) + k} \]</p>
 <div class="highlight">
 <pre><span></span>hover = HoverTool(
@@ -312,14 +316,14 @@ Embed(plot=plot, file_name="bm25_transformation")()
 <p>Because of the way it's set up, <i>k + 1</i> acts as an upper bound on the output.</p>
 </div>
 </div>
-<div class="outline-3" id="outline-container-orgefa6e0b">
-<h3 id="orgefa6e0b">Document Length Normalization</h3>
-<div class="outline-text-3" id="text-orgefa6e0b">
+<div class="outline-3" id="outline-container-org89a66c3">
+<h3 id="org89a66c3">Document Length Normalization</h3>
+<div class="outline-text-3" id="text-org89a66c3">
 <p>We have another problem to deal with - longer documents have more words and so are more likely to have the query terms, even if they aren't necessarily relevant. So one thing to do might be do drop really long documents, but some documents are long because the author was logorrheic, and others are long because the have a lot of content and so might be useful if we match them, so we don't want to throw everything away. What we want to do instead is add a penalty for longer documents.</p>
 </div>
-<div class="outline-4" id="outline-container-orge542e38">
-<h4 id="orge542e38">Pivoted Length Normalization</h4>
-<div class="outline-text-4" id="text-orge542e38">
+<div class="outline-4" id="outline-container-org707be92">
+<h4 id="org707be92">Pivoted Length Normalization</h4>
+<div class="outline-text-4" id="text-org707be92">
 <p>This is a method to add a penalty to longer documents and a reward for shorter documents. Here's the equation.</p>
 <p>\[ normalizer = 1 -b + b \left( \frac{\textit{document length}}{\textit{average document length}} \right) \]</p>
 <div class="highlight">
@@ -356,15 +360,75 @@ Embed(plot=plot, file_name="pivoted_linear_transformation")()
 </div>
 </div>
 </div>
-<div class="outline-3" id="outline-container-orgae69b49">
-<h3 id="orgae69b49">BM25 With Document Length Normalization</h3>
-<div class="outline-text-3" id="text-orgae69b49">
-<p>\[ f(q, d) = \sum_{w \in q \cap d} c(w, d) \frac{(k+1) c(w, d)}{c(w, d) + k(1 - b + \frac{b \vert d \vert}{\textit{avg dl}})} \log \frac{M+1}{df(w)} \]</p>
+<div class="outline-3" id="outline-container-org3dd934e">
+<h3 id="org3dd934e">The State of the Art</h3>
+<div class="outline-text-3" id="text-org3dd934e">
+<p>These are the two "best" Vector Space Model ranking functions.</p>
+<p>\[ b \in [0, 1]\\ k \in [0, +\inf) \]</p>
+</div>
+<div class="outline-4" id="outline-container-org643919c">
+<h4 id="org643919c">Pivoted Length Normalization</h4>
+<div class="outline-text-4" id="text-org643919c">
+<p>\[ f(q, d) = \sum_{w \in q \cap d} c(w, q) \frac{\ln(1 + ln(1 + c(w, d)))}{1 -b + b\frac{\vert d \vert}{\textit{avg dl}}} \og \frac{M + 1}{df(w)} \]</p>
+</div>
+</div>
+<div class="outline-4" id="outline-container-org9a2b7d5">
+<h4 id="org9a2b7d5">BM25 With Document Length Normalization</h4>
+<div class="outline-text-4" id="text-org9a2b7d5">
+<p>\[ f(q, d) = \sum_{w \in q \cap d} c(w, d) \frac{(k+1) c(w, d)}{c(w, d) + k(1 - b + b \frac{\vert d \vert}{\textit{avg dl}})} \log \frac{M+1}{df(w)} \]</p>
 </div>
 </div>
 </div>
-<div class="outline-2" id="outline-container-orgddd11ba">
-<h2 id="orgddd11ba">End</h2>
+</div>
+<div class="outline-2" id="outline-container-org5ef4ccd">
+<h2 id="org5ef4ccd">End</h2>
+<div class="outline-text-2" id="text-org5ef4ccd"></div>
+<div class="outline-3" id="outline-container-orgb0efdd2">
+<h3 id="orgb0efdd2">VSM Improvements</h3>
+<div class="outline-text-3" id="text-orgb0efdd2">
+<p>These are variations that you can try to improve the effectiveness of Vector Space Model Ranking.</p>
+</div>
+<div class="outline-4" id="outline-container-org6bec97b">
+<h4 id="org6bec97b">Fix the "Dimension"</h4>
+<div class="outline-text-4" id="text-org6bec97b">
+<ul class="org-ul">
+<li>Use stemmed words, remove stop-words, use ngrams…</li>
+<li>Language and domain-specific tokenization</li>
+<li><b>In practice</b>: Using <i>Bag-of-Words</i> with phrases is often the best</li>
+</ul>
+</div>
+</div>
+<div class="outline-4" id="outline-container-org216597c">
+<h4 id="org216597c">Changing the Similarity Function</h4>
+<div class="outline-text-4" id="text-org216597c">
+<ul class="org-ul">
+<li>Cosine Similarity</li>
+<li>Euclidean distance</li>
+<li><b>In Practice</b>: the <i>Dot Product</i> is still the best function</li>
+</ul>
+</div>
+</div>
+<div class="outline-4" id="outline-container-orge7cd216">
+<h4 id="orge7cd216">Use BM25 Variations</h4>
+<div class="outline-text-4" id="text-orge7cd216"></div>
+<ul class="org-ul">
+<li><a id="orgc21ccd2"></a>BM25F<br>
+<div class="outline-text-5" id="text-orgc21ccd2">
+<p>This is for structured documents (the <i>F</i> stands for "fields" within the document (e.g. title)).</p>
+<ul class="org-ul">
+<li>Uses the "fields", not just the main text</li>
+<li>Combines the counts from all the fields before applying BM25</li>
+</ul>
+</div>
+</li>
+<li><a id="orgd6c094f"></a>BM25+<br>
+<div class="outline-text-5" id="text-orgd6c094f">
+<p>This avoids over-penalizing long documents by adding a small constant to the term-frequencies. This has been shown (and proven analytically) to be better than BM25 alone.</p>
+</div>
+</li>
+</ul>
+</div>
+</div>
 </div>
 </div>
 </article>
