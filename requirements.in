@@ -3,6 +3,9 @@ ghp-import2
 hvplot
 jupyter
 Nikola
+ptpython
+sklearn
+textblob
 virtualfish
 watchdog
 wheel

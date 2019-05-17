@@ -1,0 +1,192 @@
+#+BEGIN_COMMENT
+.. title: Newsgroups Example
+.. slug: newsgroups-example
+.. date: 2019-05-16 12:41:32 UTC-07:00
+.. tags: nlp,walk-through
+.. category: NLP
+.. link: 
+.. description: A quick walk-through of a Natural Language Processing work-flow.
+.. type: text
+.. status: 
+.. updated: 
+
+#+END_COMMENT
+#+OPTIONS: H:5
+#+TOC: headlines 2
+#+BEGIN_SRC ipython :session nlp :results none :exports none
+%load_ext autoreload
+%autoreload 2
+#+END_SRC
+* Beginning
+** Imports
+*** Python
+#+begin_src ipython :session nlp :results none
+from pathlib import Path
+import os
+import random
+#+end_src
+*** PyPi
+#+begin_src ipython :session nlp :results none
+from dotenv import load_dotenv
+from sklearn.datasets import fetch_20newsgroups
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.model_selection import train_test_split
+#+end_src
+*** My Stuff
+#+begin_src ipython :session nlp :results none
+from graeae.timers import Timer
+#+end_src
+** Set Up
+*** Load the Dotenv
+    This loads some extra environment variables, in particular the path to the sklearn-data folder.
+#+begin_src ipython :session nlp :results none
+dotenv_path = Path("~/.env").expanduser()
+load_dotenv(dotenv_path)
+#+end_src
+*** Setup the Timer
+#+begin_src ipython :session nlp :results none
+TIMER = Timer()
+#+end_src
+* Middle
+** Loading the Data
+   We're going to be using the [[https://scikit-learn.org/0.19/datasets/twenty_newsgroups.html][20 Newsgroups dataset]] that you can download using their [[https://scikit-learn.org/0.19/modules/generated/sklearn.datasets.fetch_20newsgroups.html#sklearn.datasets.fetch_20newsgroups][fetch_20newsgroups]] function. By default it downloads it to a folder named =scikit_learn_data= in your home directory, but since everybody seems to want something like this I prefer to put it in a hidden folder so I'm not always staring at all these folders. To make it more likely that I'll remember the right folder name I put it in an environment variable.
+#+begin_src ipython :session nlp :results output :exports both
+path = Path(os.environ.get("SKLEARN")).expanduser()
+
+with TIMER:
+    dataset = fetch_20newsgroups(data_home=path)
+#+end_src
+
+#+RESULTS:
+: 2019-05-16 14:10:57,501 graeae.timers.timer start: Started: 2019-05-16 14:10:57.501104
+: 2019-05-16 14:10:57,775 graeae.timers.timer end: Ended: 2019-05-16 14:10:57.775763
+: 2019-05-16 14:10:57,777 graeae.timers.timer end: Elapsed: 0:00:00.274659
+
+This didn't take long because I had downloaded it previously. Normally the output would show that it was downloading and the file size.
+
+The =dataset= is an sklearn bunch - a dictionary-like object.
+
+#+begin_src ipython :session nlp :results output raw :exports both
+for key in dataset.keys():
+    print(f" - {key}")
+#+end_src
+
+#+RESULTS:
+ - data
+ - filenames
+ - target_names
+ - target
+ - DESCR
+
+The =data= is the inputs and the =target= is the labels for each input.
+
+The description is really long, but we can look at part of it to get some idea of what's in the data-set.
+
+#+begin_src ipython :session nlp :results output raw :exports both
+print("#+begin_src rst")
+print(dataset["DESCR"][:1085])
+print("#+end_src")
+#+end_src
+
+#+RESULTS:
+#+begin_src rst
+.. _20newsgroups_dataset:
+
+The 20 newsgroups text dataset
+------------------------------
+
+The 20 newsgroups dataset comprises around 18000 newsgroups posts on
+20 topics split in two subsets: one for training (or development)
+and the other one for testing (or for performance evaluation). The split
+between the train and test set is based upon a messages posted before
+and after a specific date.
+
+This module contains two loaders. The first one,
+:func:`sklearn.datasets.fetch_20newsgroups`,
+returns a list of the raw texts that can be fed to text feature
+extractors such as :class:`sklearn.feature_extraction.text.CountVectorizer`
+with custom parameters so as to extract feature vectors.
+The second one, :func:`sklearn.datasets.fetch_20newsgroups_vectorized`,
+returns ready-to-use features, i.e., it is not necessary to use a feature
+extractor.
+
+**Data Set Characteristics:**
+
+    =================   ==========
+    Classes                     20
+    Samples total            18846
+    Dimensionality               1
+    Features                  text
+    =================   ==========
+#+end_src
+
+** Splitting the Testing and Training Data
+#+begin_src ipython :session nlp :results output :exports both
+x_train, x_test, y_train, y_test = train_test_split(dataset.data, dataset.target)
+print(len(x_train))
+print(len(x_test))
+#+end_src   
+
+#+RESULTS:
+: 8485
+: 2829
+
+What does an entry look like?
+
+#+begin_src ipython :session nlp :results output :exports both
+index = min((len(x_train[index]) for index in range(len(x_train))))
+print(x_train[index])
+#+end_src
+
+#+RESULTS:
+#+begin_example
+From: steve-b@access.digex.com (Steve Brinich)
+Subject: Re: text of White House announcement and Q&As on clipper chip encryption
+Organization: Express Access Online Communications, Greenbelt, MD USA
+Lines: 11
+Distribution: na
+NNTP-Posting-Host: access.digex.net
+
+  The dead giveaway is the repeated protestations that the new plan is aimed
+at "criminals", "drug dealers", "terrorists", etc.  You'd think the tactic
+would be too obvious to trot out yet again after a decade of Sarah and the
+rest of the Brady Bunch using it to destroy the Second Amendment, but evidently
+the control nuts feel it will serve them one more time.
+
+  As far as the export needs of American companies are concerned, I could
+almost believe that the plan to saddle the US industry with a hidden sabotaged
+algorithm was invented by a cabal of Japanese lobbyists.
+
+So the postings have some structured data followed by some free-form text.
+
+
+#+end_example
+
+** The Document Term Matrix
+   To work with the data-set we need to convert it to some kind of numeric value. In this case I'm going to use sklearn's [[https://scikit-learn.org/0.19/modules/generated/sklearn.feature_extraction.text.CountVectorizer.html#sklearn.feature_extraction.text.CountVectorizer][CountVectorizer]] to create a matrix where each row represents a document and each column is a term in the [[https://www.wikiwand.com/en/Text_corpus][corpus]] (creating a [[https://www.wikiwand.com/en/Bag-of-words_model][Bag of Words]]/[[https://www.wikiwand.com/en/Document-term_matrix][Document Term Matrix]]) The values are the count of the terms in each document. Sklearn has an alternative download function - [[https://scikit-learn.org/0.19/modules/generated/sklearn.datasets.fetch_20newsgroups_vectorized.html#sklearn.datasets.fetch_20newsgroups_vectorized][fetch_20newsgroups_vectorized]] that will download it already vectorized, but since you have to do the conversion yourself in most cases I thought it would be better not to use it.
+
+#+begin_src ipython :session nlp :results output :exports both
+vectorizer = CountVectorizer()
+with TIMER:
+    x_train_vectorized = vectorizer.fit_transform(x_train)
+#+end_src
+
+#+RESULTS:
+: 2019-05-16 17:15:44,863 graeae.timers.timer start: Started: 2019-05-16 17:15:44.863423
+: 2019-05-16 17:15:47,095 graeae.timers.timer end: Ended: 2019-05-16 17:15:47.095469
+: 2019-05-16 17:15:47,097 graeae.timers.timer end: Elapsed: 0:00:02.232046
+
+#+begin_src ipython :session nlp :results output :exports both
+print(type(x_train_vectorized))
+rows, columns = x_train_vectorized.shape
+print(f"Rows: {rows:,} Columns: {columns:,}")
+#+end_src
+
+#+RESULTS:
+: <class 'scipy.sparse.csr.csr_matrix'>
+: Rows: 8,485 Columns: 111,836
+
+So we have 8,485 documents and 111,836 terms in our training set.
+** Term-Frequency/Inverse Document Frequency
+   If we just use the counts, then the most common word per document will have the highest value, but if a word is spread across all or at least many documents, then even if it's common in a document it probably won't help us distinguish the documents from each other in a meaningful way. To deal with this we can add a penalty (the inverse-document-frequency weight) that lowers the value for a term the more common it is among all the documents.
+* End
