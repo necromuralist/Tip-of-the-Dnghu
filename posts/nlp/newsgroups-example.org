@@ -29,8 +29,10 @@ import random
 #+begin_src ipython :session nlp :results none
 from dotenv import load_dotenv
 from sklearn.datasets import fetch_20newsgroups
-from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
+from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
+from sklearn.pipeline import Pipeline
 #+end_src
 *** My Stuff
 #+begin_src ipython :session nlp :results none
@@ -189,4 +191,20 @@ print(f"Rows: {rows:,} Columns: {columns:,}")
 So we have 8,485 documents and 111,836 terms in our training set.
 ** Term-Frequency/Inverse Document Frequency
    If we just use the counts, then the most common word per document will have the highest value, but if a word is spread across all or at least many documents, then even if it's common in a document it probably won't help us distinguish the documents from each other in a meaningful way. To deal with this we can add a penalty (the inverse-document-frequency weight) that lowers the value for a term the more common it is among all the documents.
+
+#+begin_src ipython :session nlp :results output :exports both
+transformer = TfidfTransformer()
+x_train_tfidf = transformer.fit_transform(x_train_vectorized)
+rows, columns = x_train_tfidf.shape
+print(f"Rows: {rows:,} Columns: {columns:,}")
+#+end_src
+
+#+RESULTS:
+: Rows: 8,485 Columns: 111,836
+** A Logistic Regression Pipeline
+   To classify the documents we're going to use [[https://www.wikiwand.com/en/Logistic_regression][Logistic Regression]] (also from [[https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html][sklearn]]). In addition, instead of creating the Document Term Matrix in separate steps as above, I'm going to create a [[https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html][Pipeline]] so sklearn can do it in a single call. An sklearn Pipeline takes as it's constructor's argument a list of =(name, transform)= tuples, where the =transform= argument is an object that has a =fit_transform= method (like the =CountVectorizer= we saw earlier).
+
+#+begin_src ipython :session nlp :results none
+logistic_regression = Pipeline
+#+end_src
 * End
