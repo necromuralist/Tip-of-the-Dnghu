@@ -69,31 +69,31 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org84661bb">Departure</a>
+<li><a href="#org135edfb">Departure</a>
 <ul>
-<li><a href="#org73b470d">Imports</a></li>
-<li><a href="#org42ae74b">Set Up</a></li>
+<li><a href="#org7e06a96">Imports</a></li>
+<li><a href="#orgdeba5b4">Set Up</a></li>
 </ul>
 </li>
-<li><a href="#org3a3a2d8">Initiation</a>
+<li><a href="#orgcb992f7">Initiation</a>
 <ul>
-<li><a href="#org7d9ec8f">Some Vocabulary</a></li>
+<li><a href="#orge1766fa">Some Vocabulary</a></li>
 </ul>
 </li>
-<li><a href="#org5eedc76">Return</a>
+<li><a href="#orgcab9b54">Return</a>
 <ul>
-<li><a href="#org394b493">Sources</a></li>
+<li><a href="#org811932c">Sources</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
-<div class="outline-2" id="outline-container-org84661bb">
-<h2 id="org84661bb">Departure</h2>
-<div class="outline-text-2" id="text-org84661bb"></div>
-<div class="outline-3" id="outline-container-org73b470d">
-<h3 id="org73b470d">Imports</h3>
-<div class="outline-text-3" id="text-org73b470d">
+<div class="outline-2" id="outline-container-org135edfb">
+<h2 id="org135edfb">Departure</h2>
+<div class="outline-text-2" id="text-org135edfb"></div>
+<div class="outline-3" id="outline-container-org7e06a96">
+<h3 id="org7e06a96">Imports</h3>
+<div class="outline-text-3" id="text-org7e06a96">
 <div class="highlight">
 <pre><span></span>from pathlib import Path
 </pre></div>
@@ -104,9 +104,9 @@ from nltk.tokenize import TweetTokenizer
 </pre></div>
 </div>
 </div>
-<div class="outline-3" id="outline-container-org42ae74b">
-<h3 id="org42ae74b">Set Up</h3>
-<div class="outline-text-3" id="text-org42ae74b">
+<div class="outline-3" id="outline-container-orgdeba5b4">
+<h3 id="orgdeba5b4">Set Up</h3>
+<div class="outline-text-3" id="text-orgdeba5b4">
 <p>I'm using the <code>en</code> model. Even after you install spacy you have to tell it which model to download.</p>
 <pre class="example">
 python -m spacy download en
@@ -125,26 +125,26 @@ if not OUTPUT_FOLDER.is_dir():
 </div>
 </div>
 </div>
-<div class="outline-2" id="outline-container-org3a3a2d8">
-<h2 id="org3a3a2d8">Initiation</h2>
-<div class="outline-text-2" id="text-org3a3a2d8"></div>
-<div class="outline-3" id="outline-container-org7d9ec8f">
-<h3 id="org7d9ec8f">Some Vocabulary</h3>
-<div class="outline-text-3" id="text-org7d9ec8f"></div>
-<div class="outline-4" id="outline-container-org1418e2d">
-<h4 id="org1418e2d">Natural Language Processing</h4>
-<div class="outline-text-4" id="text-org1418e2d">
+<div class="outline-2" id="outline-container-orgcb992f7">
+<h2 id="orgcb992f7">Initiation</h2>
+<div class="outline-text-2" id="text-orgcb992f7"></div>
+<div class="outline-3" id="outline-container-orge1766fa">
+<h3 id="orge1766fa">Some Vocabulary</h3>
+<div class="outline-text-3" id="text-orge1766fa"></div>
+<div class="outline-4" id="outline-container-org1e84389">
+<h4 id="org1e84389">Natural Language Processing</h4>
+<div class="outline-text-4" id="text-org1e84389">
 <p><a href="https://www.wikiwand.com/en/Natural_language_processing">Natural Language Processing</a> is the computational study of human language with the aim of solving practical problems involving language. There is a related field called <a href="https://www.wikiwand.com/en/Computational_linguistics">Computational Linguistics</a> which is concerned more with the modeling of human language but seems related.</p>
 </div>
 </div>
-<div class="outline-4" id="outline-container-org1f31c43">
-<h4 id="org1f31c43">Corpora</h4>
-<div class="outline-text-4" id="text-org1f31c43">
+<div class="outline-4" id="outline-container-org7d9cda9">
+<h4 id="org7d9cda9">Corpora</h4>
+<div class="outline-text-4" id="text-org7d9cda9">
 <p>A text-dataset is called a <i>corpus</i>, usually made up of texts and metadata associated with each text. Texts are made up of characters grouped into units called <i>tokens</i>. In English a token is generally a word or number.</p>
 </div>
-<div class="outline-5" id="outline-container-orgf1e23f4">
-<h5 id="orgf1e23f4">Tokenization</h5>
-<div class="outline-text-5" id="text-orgf1e23f4">
+<div class="outline-5" id="outline-container-org4148ec7">
+<h5 id="org4148ec7">Tokenization</h5>
+<div class="outline-text-5" id="text-org4148ec7">
 <p>The process of breaking a text up into <i>tokens</i> is called tokenization. Here's some examples of how to do it with <a href="https://spacy.io/usage/spacy-101">spacy</a> and the <a href="https://www.nltk.org">Natural Language Toolkit (NLTK)</a>.</p>
 <div class="highlight">
 <pre><span></span>text = "Those are my principles, and if you don't like them... well, I have others.".lower()
@@ -181,21 +181,21 @@ print([str(token) for token in processor(tweet)])
 </div>
 </div>
 </div>
-<div class="outline-4" id="outline-container-org1f1bfef">
-<h4 id="org1f1bfef">Types</h4>
-<div class="outline-text-4" id="text-org1f1bfef">
+<div class="outline-4" id="outline-container-org76982d9">
+<h4 id="org76982d9">Types</h4>
+<div class="outline-text-4" id="text-org76982d9">
 <p><i>Types</i> are the unique tokens in a corpus. The set of all the types in the corpus is its <i>vocabulary</i> or <i>lexicon</i>.</p>
 </div>
 </div>
-<div class="outline-4" id="outline-container-org13b0655">
-<h4 id="org13b0655">Word Classes</h4>
-<div class="outline-text-4" id="text-org13b0655">
+<div class="outline-4" id="outline-container-org9a0347d">
+<h4 id="org9a0347d">Word Classes</h4>
+<div class="outline-text-4" id="text-org9a0347d">
 <p>There are two classes of words <i>content words</i> and <i>stopwords</i>. Stopwords are there mostly to glue the content words together ("a", "an", "the", etc.) and provide more noise than information.</p>
 </div>
 </div>
-<div class="outline-4" id="outline-container-orgfc21ad3">
-<h4 id="orgfc21ad3">N-Grams</h4>
-<div class="outline-text-4" id="text-orgfc21ad3">
+<div class="outline-4" id="outline-container-org23392d7">
+<h4 id="org23392d7">N-Grams</h4>
+<div class="outline-text-4" id="text-org23392d7">
 <p><i>N-grams</i> are consecutive token-sequences of a fixed length (<i>n</i>). Common special cases are:</p>
 <ul class="org-ul">
 <li>unigrams: <i>n</i> = 1</li>
@@ -205,9 +205,9 @@ print([str(token) for token in processor(tweet)])
 <p>Although n-grams are generally words in some cases they can be characters - if the suffixes are meaningful, for instance.</p>
 </div>
 </div>
-<div class="outline-4" id="outline-container-org8721d6d">
-<h4 id="org8721d6d">Lemma</h4>
-<div class="outline-text-4" id="text-org8721d6d">
+<div class="outline-4" id="outline-container-org857d8a3">
+<h4 id="org857d8a3">Lemma</h4>
+<div class="outline-text-4" id="text-org857d8a3">
 <p><a href="https://www.wikiwand.com/en/Lemma_(morphology)">Lemmas</a> are root-forms for words that can have different forms. As an example - <i>go</i> is the lemma for <i>go</i>, <i>going</i>, <i>went</i>, and <i>gone</i>.</p>
 <div class="highlight">
 <pre><span></span>document = processor("an undefined problem has an infinite number of solutions")
@@ -229,9 +229,9 @@ Token: solutions -&gt; Lemma: solution
 <p>There is a related method called <i>stemming</i> which strips the endings off of words instead of changing to their lemmas. lemmatization is probably preferable, but is a more difficult method compared to stemming.</p>
 </div>
 </div>
-<div class="outline-4" id="outline-container-org7481552">
-<h4 id="org7481552">Chunking</h4>
-<div class="outline-text-4" id="text-org7481552">
+<div class="outline-4" id="outline-container-orgfe133dc">
+<h4 id="orgfe133dc">Chunking</h4>
+<div class="outline-text-4" id="text-orgfe133dc">
 <p>There are different ways of chunking text instead of just using <i>n-grams</i>, one way is called <i>chunking</i> which breaks the text up into phrases.</p>
 <div class="highlight">
 <pre><span></span>document = processor("Mary had a little lamb, its fleece was white as snow.")
@@ -248,12 +248,12 @@ snow - NP
 </div>
 </div>
 </div>
-<div class="outline-2" id="outline-container-org5eedc76">
-<h2 id="org5eedc76">Return</h2>
-<div class="outline-text-2" id="text-org5eedc76"></div>
-<div class="outline-3" id="outline-container-org394b493">
-<h3 id="org394b493">Sources</h3>
-<div class="outline-text-3" id="text-org394b493">
+<div class="outline-2" id="outline-container-orgcab9b54">
+<h2 id="orgcab9b54">Return</h2>
+<div class="outline-text-2" id="text-orgcab9b54"></div>
+<div class="outline-3" id="outline-container-org811932c">
+<h3 id="org811932c">Sources</h3>
+<div class="outline-text-3" id="text-org811932c">
 <ul class="org-ul">
 <li>Rao D, McMahan B. Natural language processing with PyTorch: build intelligent language applications using deep learning. Sebastopol, CA: OReilly Media; 2019.</li>
 </ul>

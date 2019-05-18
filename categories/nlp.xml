@@ -1,44 +1,872 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tip of the Dnghu (Posts about nlp)</title><link>https://necromuralist.github.io/Tip-of-the-Dnghu/</link><description></description><atom:link href="https://necromuralist.github.io/Tip-of-the-Dnghu/categories/nlp.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2019 &lt;a href="mailto:necromuralist@protonmail.com"&gt;Cloistered Monkey&lt;/a&gt; </copyright><lastBuildDate>Thu, 09 May 2019 20:48:04 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>The Vector Space Model</title><link>https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/</link><dc:creator>Cloistered Monkey</dc:creator><description>&lt;div id="table-of-contents"&gt;
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tip of the Dnghu (Posts about nlp)</title><link>https://necromuralist.github.io/Tip-of-the-Dnghu/</link><description></description><atom:link href="https://necromuralist.github.io/Tip-of-the-Dnghu/categories/nlp.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2019 &lt;a href="mailto:necromuralist@protonmail.com"&gt;Cloistered Monkey&lt;/a&gt; </copyright><lastBuildDate>Sat, 18 May 2019 23:45:44 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Newsgroups Example</title><link>https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/</link><dc:creator>Cloistered Monkey</dc:creator><description>&lt;div id="table-of-contents"&gt;
 &lt;h2&gt;Table of Contents&lt;/h2&gt;
 &lt;div id="text-table-of-contents"&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#orgc1aefd5"&gt;Beginning&lt;/a&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#org3dc6ad1"&gt;Beginning&lt;/a&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#orgb32e3f7"&gt;Imports&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#org4214af9"&gt;The Query&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#orga562cf5"&gt;The Document&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#orgca01d55"&gt;Imports&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#org56859b4"&gt;Set Up&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#orgdd03b34"&gt;Middle&lt;/a&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#org38db32c"&gt;Middle&lt;/a&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#org7a1c741"&gt;The Bit Vector&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#org76c95d6"&gt;Term Frequency Vector&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#orgf927758"&gt;Inverse Document Frequency&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#org6daf1f8"&gt;Ranking with TF-IDF Weighting&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#orgb61056b"&gt;Okapi BM25&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#org89a66c3"&gt;Document Length Normalization&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#org3dd934e"&gt;The State of the Art&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#orga3d3ce8"&gt;Loading the Data&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#org28dbe84"&gt;Setting Up The Test Set&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#org3c0c5a6"&gt;The Document Term Matrix&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#org82b9184"&gt;Term-Frequency/Inverse Document Frequency&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#org17473d9"&gt;A Logistic Regression Pipeline&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#org1ce9dea"&gt;Cross Validation&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#org926b5f5"&gt;Testing&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#orgde6c361"&gt;A Confusion Matrix&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#org5ef4ccd"&gt;End&lt;/a&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#org7d45ad6"&gt;End&lt;/a&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#orgb0efdd2"&gt;VSM Improvements&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#orga2b6c8e"&gt;Original Source&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgc1aefd5" class="outline-2"&gt;
-&lt;h2 id="orgc1aefd5"&gt;Beginning&lt;/h2&gt;
-&lt;div class="outline-text-2" id="text-orgc1aefd5"&gt;
+&lt;div id="outline-container-org3dc6ad1" class="outline-2"&gt;
+&lt;h2 id="org3dc6ad1"&gt;Beginning&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-org3dc6ad1"&gt;
+&lt;p&gt;
+This is going to be a look at the &lt;a href="https://archive.ics.uci.edu/ml/datasets/twenty+newsgroups"&gt;Twenty Newsgroups&lt;/a&gt; dataset which has posts from twenty newsgroups classified by the newsgroup that they were in. It will be sort of a mad-dash through a simple pipeline to create a model that can classify them.
+&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;div id="outline-container-orgca01d55" class="outline-3"&gt;
+&lt;h3 id="orgca01d55"&gt;Imports&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-orgca01d55"&gt;
+&lt;/div&gt;
+&lt;div id="outline-container-orgc2f087b" class="outline-4"&gt;
+&lt;h4 id="orgc2f087b"&gt;Python&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-orgc2f087b"&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;functools&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;partial&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;pathlib&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;Path&lt;/span&gt;
+&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;os&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id="outline-container-orgd6b1d0e" class="outline-4"&gt;
+&lt;h4 id="orgd6b1d0e"&gt;PyPi&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-orgd6b1d0e"&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;dotenv&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;load_dotenv&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;sklearn.datasets&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;fetch_20newsgroups&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;sklearn.feature_extraction.text&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;
+    &lt;span class="n"&gt;CountVectorizer&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; 
+    &lt;span class="n"&gt;TfidfTransformer&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="n"&gt;TfidfVectorizer&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;sklearn.linear_model&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;LogisticRegression&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;sklearn.metrics&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;
+    &lt;span class="n"&gt;confusion_matrix&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; 
+    &lt;span class="n"&gt;f1_score&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; 
+    &lt;span class="n"&gt;precision_score&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; 
+    &lt;span class="n"&gt;recall_score&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;sklearn.model_selection&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;
+    &lt;span class="n"&gt;cross_val_score&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; 
+    &lt;span class="n"&gt;train_test_split&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;sklearn.pipeline&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;Pipeline&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;tabulate&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;tabulate&lt;/span&gt;
+&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;holoviews&lt;/span&gt;
+&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;hvplot.pandas&lt;/span&gt;
+&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;pandas&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id="outline-container-org5089e8e" class="outline-4"&gt;
+&lt;h4 id="org5089e8e"&gt;My Stuff&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org5089e8e"&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;graeae.tables&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;CountPercentage&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;graeae.timers&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;Timer&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;graeae.visualization&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;EmbedHoloview&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id="outline-container-org56859b4" class="outline-3"&gt;
+&lt;h3 id="org56859b4"&gt;Set Up&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org56859b4"&gt;
+&lt;/div&gt;
+&lt;div id="outline-container-org3136005" class="outline-4"&gt;
+&lt;h4 id="org3136005"&gt;Load the Dotenv&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org3136005"&gt;
+&lt;p&gt;
+This loads some extra environment variables, in particular the path to the sklearn-data folder.
+&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;dotenv_path&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Path&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"~/.env"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;expanduser&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="n"&gt;load_dotenv&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;dotenv_path&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id="outline-container-orgbf10836" class="outline-4"&gt;
+&lt;h4 id="orgbf10836"&gt;The Timer&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-orgbf10836"&gt;
+&lt;p&gt;
+This is an object to keep track of how long things take.
+&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;TIMER&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Timer&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id="outline-container-orge0b9b0c" class="outline-4"&gt;
+&lt;h4 id="orge0b9b0c"&gt;The Table&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-orge0b9b0c"&gt;
+&lt;p&gt;
+This is a helper to print org-tables from data-frames.
+&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;TABLE&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;partial&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;tabulate&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;tablefmt&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;"orgtbl"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;headers&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;"keys"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+		&lt;span class="n"&gt;showindex&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;"false"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id="outline-container-org191cf3e" class="outline-4"&gt;
+&lt;h4 id="org191cf3e"&gt;Plotting&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org191cf3e"&gt;
+&lt;p&gt;
+This helps save the plots to the right folder for nikola.
+&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;SLUG&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;"newsgroups-example"&lt;/span&gt;
+&lt;span class="n"&gt;Embed&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;partial&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;EmbedHoloview&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;folder_path&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;"../../files/posts/nlp/"&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;SLUG&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;holoviews&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;extension&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"bokeh"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id="outline-container-org38db32c" class="outline-2"&gt;
+&lt;h2 id="org38db32c"&gt;Middle&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-org38db32c"&gt;
+&lt;/div&gt;
+&lt;div id="outline-container-orga3d3ce8" class="outline-3"&gt;
+&lt;h3 id="orga3d3ce8"&gt;Loading the Data&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-orga3d3ce8"&gt;
+&lt;p&gt;
+We're going to be using the &lt;a href="https://scikit-learn.org/0.19/datasets/twenty_newsgroups.html"&gt;20 Newsgroups dataset&lt;/a&gt; that you can download using sklearn's &lt;a href="https://scikit-learn.org/0.19/modules/generated/sklearn.datasets.fetch_20newsgroups.html#sklearn.datasets.fetch_20newsgroups"&gt;fetch_20newsgroups&lt;/a&gt; function. By default it downloads it to a folder named &lt;code&gt;scikit_learn_data&lt;/code&gt; in your home directory, but since &lt;i&gt;everybody&lt;/i&gt; seems to want to add folders to my home directory I prefer to put it in a hidden folder so I'm not always staring at all these folders. To make it more likely that I'll remember the right folder name I put it in an environment variable.
+&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;path&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Path&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;os&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;environ&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;get&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"SKLEARN"&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;expanduser&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+
+&lt;span class="k"&gt;with&lt;/span&gt; &lt;span class="n"&gt;TIMER&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="n"&gt;dataset&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;fetch_20newsgroups&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;data_home&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;path&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;pre class="example"&gt;
+2019-05-18 10:39:58,412 graeae.timers.timer start: Started: 2019-05-18 10:39:58.412167
+Downloading 20news dataset. This may take a few minutes.
+Downloading dataset from https://ndownloader.figshare.com/files/5975967 (14 MB)
+2019-05-18 10:40:33,263 graeae.timers.timer end: Ended: 2019-05-18 10:40:33.263259
+2019-05-18 10:40:33,263 graeae.timers.timer end: Elapsed: 0:00:34.851092
+
+&lt;/pre&gt;
+
+&lt;p&gt;
+The &lt;code&gt;dataset&lt;/code&gt; is an sklearn bunch - a dictionary-like object (but like pandas you can also use dot-notation to access the values).
+&lt;/p&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;key&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;dataset&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;keys&lt;/span&gt;&lt;span class="p"&gt;():&lt;/span&gt;
+    &lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;f&lt;/span&gt;&lt;span class="s2"&gt;" - {key}"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;ul class="org-ul"&gt;
+&lt;li&gt;data&lt;/li&gt;
+&lt;li&gt;filenames&lt;/li&gt;
+&lt;li&gt;target_names&lt;/li&gt;
+&lt;li&gt;target&lt;/li&gt;
+&lt;li&gt;DESCR&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;
+The &lt;code&gt;data&lt;/code&gt; is the inputs and the &lt;code&gt;target&lt;/code&gt; is the labels for each input.
+&lt;/p&gt;
+
+&lt;p&gt;
+The description is really long, but we can look at part of it to get some idea of what's in the data-set.
+&lt;/p&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"#+begin_src rst"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;dataset&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;DESCR&lt;/span&gt;&lt;span class="p"&gt;[:&lt;/span&gt;&lt;span class="mi"&gt;1085&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+&lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"#+end_src"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;.. _20newsgroups_dataset:
+
+The 20 newsgroups text dataset
+------------------------------
+
+The 20 newsgroups dataset comprises around 18000 newsgroups posts on
+20 topics split in two subsets: one for training (or development)
+and the other one for testing (or for performance evaluation). The split
+between the train and test set is based upon a messages posted before
+and after a specific date.
+
+This module contains two loaders. The first one,
+:func:`sklearn.datasets.fetch_20newsgroups`,
+returns a list of the raw texts that can be fed to text feature
+extractors such as :class:`sklearn.feature_extraction.text.CountVectorizer`
+with custom parameters so as to extract feature vectors.
+The second one, :func:`sklearn.datasets.fetch_20newsgroups_vectorized`,
+returns ready-to-use features, i.e., it is not necessary to use a feature
+extractor.
+
+**Data Set Characteristics:**
+
+    =================   ==========
+    Classes                     20
+    Samples total            18846
+    Dimensionality               1
+    Features                  text
+    =================   ==========
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;
+So, reading the blob the first thing to notice is that they already split the dataset into training and testing sets - even though I didn't specify anything all I really got was the training set.
+&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div id="outline-container-org28dbe84" class="outline-3"&gt;
+&lt;h3 id="org28dbe84"&gt;Setting Up The Test Set&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org28dbe84"&gt;
+&lt;p&gt;
+Normally I would use sklearn's &lt;a href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html"&gt;train_test_split&lt;/a&gt; to split the data set up, but since they set it up so that you have to download the test set separately, I guess I'll go with that.
+&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;test_set&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;fetch_20newsgroups&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;data_home&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;path&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;subset&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;"test"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;x_train&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;dataset&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;data&lt;/span&gt;
+&lt;span class="n"&gt;y_train&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;dataset&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;target&lt;/span&gt;
+&lt;span class="n"&gt;x_test&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;test_set&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;data&lt;/span&gt;
+&lt;span class="n"&gt;y_test&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;test_set&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;target&lt;/span&gt;
+&lt;span class="n"&gt;train_count&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;len&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x_train&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;test_count&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;len&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x_test&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;total_count&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;len&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;dataset&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;data&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="nb"&gt;len&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;test_set&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;data&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;f&lt;/span&gt;&lt;span class="s2"&gt;"Training: {train_count:,} "&lt;/span&gt;
+      &lt;span class="n"&gt;f&lt;/span&gt;&lt;span class="s2"&gt;"({100 * train_count /total_count:.0f} %)"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;f&lt;/span&gt;&lt;span class="s2"&gt;"Testing: {test_count:,} ({100 * test_count/total_count:.0f} %)"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;pre class="example"&gt;
+Training: 11,314 (60 %)
+Testing: 7,532 (40 %)
+
+&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div id="outline-container-orgcb041e0" class="outline-4"&gt;
+&lt;h4 id="orgcb041e0"&gt;What does an entry look like?&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-orgcb041e0"&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;index&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;min&lt;/span&gt;&lt;span class="p"&gt;((&lt;/span&gt;&lt;span class="nb"&gt;len&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x_train&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;index&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt; &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;index&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="nb"&gt;range&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;len&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x_train&lt;/span&gt;&lt;span class="p"&gt;))))&lt;/span&gt;
+&lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x_train&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;index&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;pre class="example"&gt;
+From: joachim@kih.no (joachim lous)
+Subject: Re: TIFF: philosophical significance of 42
+Organization: Kongsberg Ingeniorhogskole
+Lines: 30
+NNTP-Posting-Host: samson.kih.no
+X-Newsreader: TIN [version 1.1 PL8]
+
+ulrich@galki.toppoint.de wrote:
+
+&amp;gt; According to the TIFF 5.0 Specification, the TIFF "version number"
+&amp;gt; (bytes 2-3) 42 has been chosen for its "deep philosophical 
+&amp;gt; significance".
+
+&amp;gt; When I first read this, I rotfl. Finally some philosphy in a technical
+&amp;gt; spec. But still I wondered what makes 42 so significant.
+
+&amp;gt; Last week, I read the Hitchhikers Guide To The Galaxy, and rotfl the
+&amp;gt; second time. (After millions of years of calculation, the second-best
+&amp;gt; computer of all time reveals that 42 is the answer to the question
+&amp;gt; about life, the universe and everything)
+
+&amp;gt; Is this actually how they picked the number 42?
+
+Yes.
+
+&amp;gt; Does anyone have any  other suggestions where the 42 came from?
+
+I don't know where Douglas Adams took it from, but I'm pretty sure he's
+the one who launched it (in the Guide). Since then it's been showing up 
+all over the place.
+
+    _______________________________
+   / _ L*   /  _  / .    /      _  /_  "One thing is for sure: The sheep
+  /  _)    /()(/(/)//)) /_ ()(/_) / /  Is NOT a creature of the earth."
+ / \_)~  (/ Joachim@kih.no       / /     
+/_______________________________/ / -The back-masking on 'Haaden II'
+ /_______________________________/  from 'Exposure' by Robert Fripp.
+
+&lt;/pre&gt;
+
+&lt;p&gt;
+Looks like there's a lot of noise in these things.
+&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div id="outline-container-org919a007" class="outline-4"&gt;
+&lt;h4 id="org919a007"&gt;How are the groups distributed?&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org919a007"&gt;
+&lt;p&gt;
+The labels are numbers representing which Newsgroup each of the documents came from, but they also give us a translation in the form of the &lt;code&gt;dataset.target_names&lt;/code&gt; list so we can take a look at how much of each group is represented.
+&lt;/p&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;labels&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="n"&gt;index&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;name&lt;/span&gt; &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;index&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;name&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="nb"&gt;enumerate&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;dataset&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;target_names&lt;/span&gt;&lt;span class="p"&gt;)}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;Y&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;pandas&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Series&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;y_train&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;map&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;labels&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;y_count&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;CountPercentage&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Y&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;value_label&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;"Newsgroup"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;y_count&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides"&gt;
+
+
+&lt;colgroup&gt;
+&lt;col class="org-left"&gt;
+
+&lt;col class="org-right"&gt;
+
+&lt;col class="org-right"&gt;
+&lt;/colgroup&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th scope="col" class="org-left"&gt;Newsgroup&lt;/th&gt;
+&lt;th scope="col" class="org-right"&gt;Count&lt;/th&gt;
+&lt;th scope="col" class="org-right"&gt;Percent (%)&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td class="org-left"&gt;rec.sport.hockey&lt;/td&gt;
+&lt;td class="org-right"&gt;600&lt;/td&gt;
+&lt;td class="org-right"&gt;5.30&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;soc.religion.christian&lt;/td&gt;
+&lt;td class="org-right"&gt;599&lt;/td&gt;
+&lt;td class="org-right"&gt;5.29&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;rec.motorcycles&lt;/td&gt;
+&lt;td class="org-right"&gt;598&lt;/td&gt;
+&lt;td class="org-right"&gt;5.29&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;rec.sport.baseball&lt;/td&gt;
+&lt;td class="org-right"&gt;597&lt;/td&gt;
+&lt;td class="org-right"&gt;5.28&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;sci.crypt&lt;/td&gt;
+&lt;td class="org-right"&gt;595&lt;/td&gt;
+&lt;td class="org-right"&gt;5.26&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;rec.autos&lt;/td&gt;
+&lt;td class="org-right"&gt;594&lt;/td&gt;
+&lt;td class="org-right"&gt;5.25&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;sci.med&lt;/td&gt;
+&lt;td class="org-right"&gt;594&lt;/td&gt;
+&lt;td class="org-right"&gt;5.25&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;comp.windows.x&lt;/td&gt;
+&lt;td class="org-right"&gt;593&lt;/td&gt;
+&lt;td class="org-right"&gt;5.24&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;sci.space&lt;/td&gt;
+&lt;td class="org-right"&gt;593&lt;/td&gt;
+&lt;td class="org-right"&gt;5.24&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;sci.electronics&lt;/td&gt;
+&lt;td class="org-right"&gt;591&lt;/td&gt;
+&lt;td class="org-right"&gt;5.22&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;comp.os.ms-windows.misc&lt;/td&gt;
+&lt;td class="org-right"&gt;591&lt;/td&gt;
+&lt;td class="org-right"&gt;5.22&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;comp.sys.ibm.pc.hardware&lt;/td&gt;
+&lt;td class="org-right"&gt;590&lt;/td&gt;
+&lt;td class="org-right"&gt;5.21&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;misc.forsale&lt;/td&gt;
+&lt;td class="org-right"&gt;585&lt;/td&gt;
+&lt;td class="org-right"&gt;5.17&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;comp.graphics&lt;/td&gt;
+&lt;td class="org-right"&gt;584&lt;/td&gt;
+&lt;td class="org-right"&gt;5.16&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;comp.sys.mac.hardware&lt;/td&gt;
+&lt;td class="org-right"&gt;578&lt;/td&gt;
+&lt;td class="org-right"&gt;5.11&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;talk.politics.mideast&lt;/td&gt;
+&lt;td class="org-right"&gt;564&lt;/td&gt;
+&lt;td class="org-right"&gt;4.98&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;talk.politics.guns&lt;/td&gt;
+&lt;td class="org-right"&gt;546&lt;/td&gt;
+&lt;td class="org-right"&gt;4.83&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;alt.atheism&lt;/td&gt;
+&lt;td class="org-right"&gt;480&lt;/td&gt;
+&lt;td class="org-right"&gt;4.24&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;talk.politics.misc&lt;/td&gt;
+&lt;td class="org-right"&gt;465&lt;/td&gt;
+&lt;td class="org-right"&gt;4.11&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;talk.religion.misc&lt;/td&gt;
+&lt;td class="org-right"&gt;377&lt;/td&gt;
+&lt;td class="org-right"&gt;3.33&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;
+So, there isn't too much of a spread, although religion (other than Christianity and Microsoft Windows) and politics are a little less represented.
+&lt;/p&gt;
+
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;plot&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;y_count&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;table&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;hvplot&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;bar&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;"Newsgroup"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;y&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;"Count"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;opts&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
+    &lt;span class="n"&gt;title&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;"Newsgroup Counts"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;xrotation&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;45&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;height&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;800&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;width&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;1000&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;tools&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;"crosshair"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;"hover"&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+&lt;span class="n"&gt;Embed&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;plot&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;plot&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;file_name&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;"newsgroups_count"&lt;/span&gt;&lt;span class="p"&gt;)()&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;object type="text/html" data="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/newsgroups_count.html" style="width:100%" height="800"&gt;
+  &lt;p&gt;Figure Missing&lt;/p&gt;
+&lt;/object&gt;
+
+&lt;p&gt;
+Actually, now that I plot it it looks like the last three are underepresented, especially when compared to hockey (some kind of Canadian bias?).
+&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id="outline-container-org3c0c5a6" class="outline-3"&gt;
+&lt;h3 id="org3c0c5a6"&gt;The Document Term Matrix&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org3c0c5a6"&gt;
+&lt;p&gt;
+To work with the data-set we need to convert it to some kind of numeric value. In this case I'm going to use sklearn's &lt;a href="https://scikit-learn.org/0.19/modules/generated/sklearn.feature_extraction.text.CountVectorizer.html#sklearn.feature_extraction.text.CountVectorizer"&gt;CountVectorizer&lt;/a&gt; to create a matrix where each row represents a document and each column is a term in the &lt;a href="https://www.wikiwand.com/en/Text_corpus"&gt;corpus&lt;/a&gt; (creating a &lt;a href="https://www.wikiwand.com/en/Bag-of-words_model"&gt;Bag of Words&lt;/a&gt;/&lt;a href="https://www.wikiwand.com/en/Document-term_matrix"&gt;Document Term Matrix&lt;/a&gt;) The values are the count of the terms in each document. Sklearn has an alternative download function - &lt;a href="https://scikit-learn.org/0.19/modules/generated/sklearn.datasets.fetch_20newsgroups_vectorized.html#sklearn.datasets.fetch_20newsgroups_vectorized"&gt;fetch_20newsgroups_vectorized&lt;/a&gt; that will download it already vectorized, but since you have to do the conversion yourself in most cases I thought it would be better not to use it.
+&lt;/p&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;vectorizer&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;CountVectorizer&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="k"&gt;with&lt;/span&gt; &lt;span class="n"&gt;TIMER&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="n"&gt;x_train_vectorized&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;vectorizer&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;fit_transform&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x_train&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;pre class="example"&gt;
+2019-05-18 16:17:56,875 graeae.timers.timer start: Started: 2019-05-18 16:17:56.875200
+2019-05-18 16:17:58,628 graeae.timers.timer end: Ended: 2019-05-18 16:17:58.628334
+2019-05-18 16:17:58,628 graeae.timers.timer end: Elapsed: 0:00:01.753134
+
+&lt;/pre&gt;
+
+&lt;p&gt;
+That was quicker than I thought it would be - I guess the data set isn't that large.
+&lt;/p&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;type&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x_train_vectorized&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;span class="n"&gt;rows&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;columns&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;x_train_vectorized&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;shape&lt;/span&gt;
+&lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;f&lt;/span&gt;&lt;span class="s2"&gt;"Documents: {rows:,} Terms: {columns:,}"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;pre class="example"&gt;
+&amp;lt;class 'scipy.sparse.csr.csr_matrix'&amp;gt;
+Documents: 11,314 Terms: 130,107
+
+&lt;/pre&gt;
+
+&lt;p&gt;
+I was going to inspect the matrix, but it's a sparse matrix so you have to convert it to another type to inspect it, and all it would be is a matrix of numbers (term counts) so I'll leave it for some other time.
+&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div id="outline-container-org82b9184" class="outline-3"&gt;
+&lt;h3 id="org82b9184"&gt;Term-Frequency/Inverse Document Frequency&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org82b9184"&gt;
+&lt;p&gt;
+If we just use the counts (the Term-Frequency (TF)), then the most common word per document will have the highest value, but if a word is spread across all or at least many documents, then even if it's common in a document it probably won't help us distinguish the documents from each other in a meaningful way. To deal with this we can add a penalty (the Inverse-Document-Frequency (IDF) weight) that lowers the value for a term the more common it is among all the documents. Together the two methods are knows as &lt;a href="https://www.wikiwand.com/en/Tf%E2%80%93idf"&gt;TF-IDF.&lt;/a&gt; Here sklearn's &lt;a href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfTransformer.html"&gt;TfidfTransformer&lt;/a&gt; does the transform for us.
+&lt;/p&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;transformer&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;TfidfTransformer&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="n"&gt;x_train_tfidf&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;transformer&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;fit_transform&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x_train_vectorized&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;rows&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;columns&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;x_train_tfidf&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;shape&lt;/span&gt;
+&lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;f&lt;/span&gt;&lt;span class="s2"&gt;"Documents: {rows:,} Terms: {columns:,}"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;pre class="example"&gt;
+Documents: 11,314 Terms: 130,107
+
+&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id="outline-container-org17473d9" class="outline-3"&gt;
+&lt;h3 id="org17473d9"&gt;A Logistic Regression Pipeline&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org17473d9"&gt;
+&lt;p&gt;
+To classify the documents we're going to use &lt;a href="https://www.wikiwand.com/en/Logistic_regression"&gt;Logistic Regression&lt;/a&gt; (also from &lt;a href="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html"&gt;sklearn&lt;/a&gt;). In addition, instead of creating the Document Term Matrix in separate steps as above, I'm going to create a &lt;a href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html"&gt;Pipeline&lt;/a&gt; so sklearn can do it in a single call. An sklearn Pipeline takes as all but the last of it's constructor's argument a list of &lt;code&gt;(name, transform)&lt;/code&gt; tuples, where the &lt;code&gt;transform&lt;/code&gt; argument is an object that has a &lt;code&gt;fit_transform&lt;/code&gt; method (like the &lt;code&gt;CountVectorizer&lt;/code&gt; we saw earlier). The last of argument of the constructor is the model that you are going to fit on the data that the pipeline has transformed. If you don't want to customize the names there's a &lt;a href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.make_pipeline.html#sklearn.pipeline.make_pipeline"&gt;make_pipeline&lt;/a&gt; function that just takes the transformer and model instances as arguments and automatically names them for you, returning the pipeline as its output.
+&lt;/p&gt;
+
+&lt;p&gt;
+I used the &lt;code&gt;CountVectorizer&lt;/code&gt; followed by the &lt;code&gt;TfidfTransformer&lt;/code&gt; to show them separately, but sklearn actually has a &lt;a href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfVectorizer.html"&gt;TfidfVectorizer&lt;/a&gt; class that does both of them for you so I'll use that here.
+&lt;/p&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;model&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Pipeline&lt;/span&gt;&lt;span class="p"&gt;([(&lt;/span&gt;&lt;span class="s2"&gt;"TF-IDF"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;TfidfVectorizer&lt;/span&gt;&lt;span class="p"&gt;()),&lt;/span&gt; 
+		  &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"Logistic Regression"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;LogisticRegression&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
+		      &lt;span class="n"&gt;solver&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;"lbfgs"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+		      &lt;span class="n"&gt;multi_class&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;"multinomial"&lt;/span&gt;&lt;span class="p"&gt;))])&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;
+I'm using the defaults for Logistic Regression in general, but it will output a lot of warnings if you don't set the solver and multi-class. I'm using the &lt;a href="https://www.wikiwand.com/en/Limited-memory_BFGS"&gt;Limited-Memory Broyden-Fletcher-Goldfarb-Shanno&lt;/a&gt; algorithm for the solver and setting the &lt;code&gt;multi_class&lt;/code&gt; to "multinomial" (setting it to "auto" would do the same thing since there is more than one document-classification, rather than being a binary classification problem).
+&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div id="outline-container-org1ce9dea" class="outline-3"&gt;
+&lt;h3 id="org1ce9dea"&gt;Cross Validation&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org1ce9dea"&gt;
+&lt;p&gt;
+Now we can do some cross validation.
+&lt;/p&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;with&lt;/span&gt; &lt;span class="n"&gt;TIMER&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="n"&gt;scores&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;cross_val_score&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;model&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;x_train&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;y_train&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;cv&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;7&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; 
+			     &lt;span class="n"&gt;scoring&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;"f1_macro"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;pre class="example"&gt;
+2019-05-18 16:18:23,392 graeae.timers.timer start: Started: 2019-05-18 16:18:23.392913
+2019-05-18 16:22:00,933 graeae.timers.timer end: Ended: 2019-05-18 16:22:00.933407
+2019-05-18 16:22:00,934 graeae.timers.timer end: Elapsed: 0:03:37.540494
+
+&lt;/pre&gt;
+
+&lt;p&gt;
+So this took a little bit longer than I thought it might, although it wasn't too long.
+&lt;/p&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;scores&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;pandas&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Series&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;scores&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;description&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;scores&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;describe&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;reset_index&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="n"&gt;description&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;columns&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;"Statistic"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;"Value"&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;TABLE&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;description&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides"&gt;
+
+
+&lt;colgroup&gt;
+&lt;col class="org-left"&gt;
+
+&lt;col class="org-right"&gt;
+&lt;/colgroup&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th scope="col" class="org-left"&gt;Statistic&lt;/th&gt;
+&lt;th scope="col" class="org-right"&gt;Value&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td class="org-left"&gt;count&lt;/td&gt;
+&lt;td class="org-right"&gt;7&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;mean&lt;/td&gt;
+&lt;td class="org-right"&gt;0.895705&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;std&lt;/td&gt;
+&lt;td class="org-right"&gt;0.00459816&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;min&lt;/td&gt;
+&lt;td class="org-right"&gt;0.88992&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;25%&lt;/td&gt;
+&lt;td class="org-right"&gt;0.892157&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;50%&lt;/td&gt;
+&lt;td class="org-right"&gt;0.89517&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;75%&lt;/td&gt;
+&lt;td class="org-right"&gt;0.900081&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;max&lt;/td&gt;
+&lt;td class="org-right"&gt;0.90037&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;
+It looks like even with the default parameters the model got a mean/median &lt;a href="https://www.wikiwand.com/en/F1_score"&gt;F1 Score&lt;/a&gt; of 90 %, with a standard deviation of 0.0046, so the variance is pretty low.
+&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div id="outline-container-org926b5f5" class="outline-3"&gt;
+&lt;h3 id="org926b5f5"&gt;Testing&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org926b5f5"&gt;
+&lt;p&gt;
+Let's try fitting it to the whole training set and see how it does.
+&lt;/p&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;with&lt;/span&gt; &lt;span class="n"&gt;TIMER&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="n"&gt;fitted&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;model&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;fit&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x_train&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;y_train&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;pre class="example"&gt;
+2019-05-18 16:23:58,703 graeae.timers.timer start: Started: 2019-05-18 16:23:58.703461
+2019-05-18 16:24:33,056 graeae.timers.timer end: Ended: 2019-05-18 16:24:33.056510
+2019-05-18 16:24:33,057 graeae.timers.timer end: Elapsed: 0:00:34.353049
+
+&lt;/pre&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;predictions&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;fitted&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;predict&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x_test&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;f&lt;/span&gt;&lt;span class="s2"&gt;"F1 Score: {f1_score(y_test, predictions, average='weighted'):.2f}"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;pre class="example"&gt;
+F1 Score: 0.83
+
+&lt;/pre&gt;
+
+&lt;p&gt;
+The F1 score in the test-set was lower than the maximum score for our cross-validation checks, so it may have over-fit the training set - or, since they used time to split the sets, the training set might not really represent the test set.
+&lt;/p&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
+    &lt;span class="s2"&gt;"Precision: "&lt;/span&gt;
+    &lt;span class="n"&gt;f&lt;/span&gt;&lt;span class="s2"&gt;"{precision_score(y_test, predictions, average='weighted'):.2f}"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
+    &lt;span class="s2"&gt;"Recall: "&lt;/span&gt;
+    &lt;span class="n"&gt;f&lt;/span&gt;&lt;span class="s2"&gt;"{recall_score(y_test, predictions, average='weighted'):.2f}"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;pre class="example"&gt;
+Precision: 0.83
+Recall: 0.83
+
+&lt;/pre&gt;
+
+&lt;p&gt;
+The precision and recall are the same as the F1 score, so it isn't better at either (or it's good at both, your pick).
+&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div id="outline-container-orgde6c361" class="outline-3"&gt;
+&lt;h3 id="orgde6c361"&gt;A Confusion Matrix&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-orgde6c361"&gt;
+&lt;p&gt;
+Having a single value like the F1 score helps us evaluate the model, but using a &lt;a href="https://www.wikiwand.com/en/Confusion_matrix"&gt;Confusion Matrix&lt;/a&gt; (via sklearn's &lt;a href="https://scikit-learn.org/stable/modules/generated/sklearn.metrics.confusion_matrix.html"&gt;confusion_matrix&lt;/a&gt; function) will help us understand how the model did a little more.
+&lt;/p&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;confusion&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;confusion_matrix&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;y_true&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;y_test&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;y_pred&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;predictions&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;confusion&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;shape&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;confusion&lt;/span&gt;&lt;span class="p"&gt;[:&lt;/span&gt;&lt;span class="mi"&gt;5&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;5&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;pre class="example"&gt;
+(20, 20)
+[[237   2   0   0   1]
+ [  1 307  14   8   8]
+ [  2  21 289  34  12]
+ [  0  13  23 284  21]
+ [  0   5   6  22 319]]
+
+&lt;/pre&gt;
+
+&lt;p&gt;
+The confusion matrix has twenty rows and columns. The rows represent what classification our model predicted and the columns what they actually were - the diagonal is the count of the correctly classified documents. We could just print out the twenty by twenty matrix, but why not plot it instead?
+&lt;/p&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;plot&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;holoviews&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;HeatMap&lt;/span&gt;&lt;span class="p"&gt;((&lt;/span&gt;&lt;span class="n"&gt;dataset&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;target_names&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; 
+			  &lt;span class="n"&gt;dataset&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;target_names&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; 
+			  &lt;span class="n"&gt;confusion&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;options&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;width&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;800&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;                                              
+					      &lt;span class="n"&gt;height&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;800&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+					      &lt;span class="n"&gt;xrotation&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;45&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+					      &lt;span class="n"&gt;tools&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;"hover"&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt;
+					      &lt;span class="n"&gt;colorbar&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;True&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+					      &lt;span class="n"&gt;title&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;"Confusion Matrix"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;Embed&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;plot&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;plot&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;file_name&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;"confusion_matrix"&lt;/span&gt;&lt;span class="p"&gt;)()&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;object type="text/html" data="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/confusion_matrix.html" style="width:100%" height="800"&gt;
+  &lt;p&gt;Figure Missing&lt;/p&gt;
+&lt;/object&gt;
+
+&lt;p&gt;
+&lt;b&gt;Note To Future Self:&lt;/b&gt; If you don't set the height and width holoviews will collapse the heatmap into an unviewable point, with only the axes visible (nice library but their documentation is &lt;i&gt;horrible&lt;/i&gt;).
+&lt;/p&gt;
+
+&lt;p&gt;
+Surprisingly, HoloViews rotated the matrix, but it looks like the values are the same.
+&lt;/p&gt;
+
+&lt;p&gt;
+As you might expect, &lt;i&gt;talk.religion.misc&lt;/i&gt;, &lt;i&gt;talk.politics.misc&lt;/i&gt;, and &lt;i&gt;alt.atheism&lt;/i&gt;, the three least represented groups in our training set have the least "heat". Surprisingly, &lt;i&gt;rec.sport.baseball&lt;/i&gt; is the deepest red (has the highest value) while it is eleventh in the training set, and hockey, which is the most represented in the training set is sort of light. Maybe I should have tried to match the distributions when I did the train-test set split.
+&lt;/p&gt;
+
+&lt;p&gt;
+Anyway, since the groups aren't equally represented, the matches probably aren't as interesting as the misses.
+&lt;/p&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;mask&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;numpy&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ones&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;confusion&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;shape&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;dtype&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nb"&gt;bool&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;numpy&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;fill_diagonal&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;mask&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;most_confused&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;confusion&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;mask&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;max&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;f&lt;/span&gt;&lt;span class="s2"&gt;"Largest Confusion: {most_confused}"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;pre class="example"&gt;
+Largest Confusion: 95
+
+&lt;/pre&gt;
+
+&lt;p&gt;
+The largest confusion was for &lt;i&gt;talk.political.guns&lt;/i&gt; being confused for &lt;i&gt;talk.political.misc&lt;/i&gt;, which doesn't seem that surprising, since guns are miscellaneously political. Let's try a top-five.
+&lt;/p&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;top_five&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;list&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;reversed&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;sorted&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;confusion&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;mask&lt;/span&gt;&lt;span class="p"&gt;])))[:&lt;/span&gt;&lt;span class="mi"&gt;5&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;value&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;top_five&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;f&lt;/span&gt;&lt;span class="s2"&gt;" - {value}"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;ul class="org-ul"&gt;
+&lt;li&gt;95&lt;/li&gt;
+&lt;li&gt;43&lt;/li&gt;
+&lt;li&gt;41&lt;/li&gt;
+&lt;li&gt;39&lt;/li&gt;
+&lt;li&gt;38&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;
+The remainders in the top five:
+&lt;/p&gt;
+
+&lt;ul class="org-ul"&gt;
+&lt;li&gt;&lt;i&gt;comp.graphics&lt;/i&gt; was mistaken for &lt;i&gt;comp.windows.x&lt;/i&gt; (43)&lt;/li&gt;
+&lt;li&gt;&lt;i&gt;soc.religion.christian&lt;/i&gt; was mistaken for &lt;i&gt;talk.religion.misc&lt;/i&gt; (41)&lt;/li&gt;
+&lt;li&gt;&lt;i&gt;talk.religion.misc&lt;/i&gt; was mistaken for &lt;i&gt;alt.atheism&lt;/i&gt; (39)&lt;/li&gt;
+&lt;li&gt;&lt;i&gt;comp.windows.x&lt;/i&gt; was mistaken for &lt;i&gt;comp.os.ms-windows.misc&lt;/i&gt; (38)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;
+In the dataset (as in life) the most confusisng seemed to be religion, politics, and computers, while the easiest to classify were sports and motorcycles (the rec categories). The &lt;i&gt;sci&lt;/i&gt; categories did all right as well, although not as well as &lt;i&gt;rec&lt;/i&gt; oddly (since I would have assumed they would have more identifying jargon).
+&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div id="outline-container-org7d45ad6" class="outline-2"&gt;
+&lt;h2 id="org7d45ad6"&gt;End&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-org7d45ad6"&gt;
+&lt;p&gt;
+So here we have a basic walk-through using sklearn to model a document classifier built with Logistic Regression. One of the nice things about logistic regression is that the weights tell you which variables are the most important, but I've never tried that with documents so I don't know how to do that here. There are many improvements that could be made (would have to be made) if this were an attempt to make a real model, but the simplicity of the steps shows how much you can do with off-the-shelf software. Eighty-three percent isn't perfect, but it's pretty good.
+&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;div id="outline-container-orga2b6c8e" class="outline-3"&gt;
+&lt;h3 id="orga2b6c8e"&gt;Original Source&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-orga2b6c8e"&gt;
+&lt;ol class="org-ol"&gt;
+&lt;li&gt;Kasliwal N. Natural language processing with Python quick start guide: going from a Python developer to an effective natural language processing engineer [Internet]. 2018 [cited 2019 May 18]. Available from: &lt;a href="http://proquest.safaribooksonline.com/?fpi=9781789130386"&gt;http://proquest.safaribooksonline.com/?fpi=9781789130386&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description><category>nlp</category><category>walk-through</category><guid>https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/</guid><pubDate>Thu, 16 May 2019 19:41:32 GMT</pubDate></item><item><title>The Vector Space Model</title><link>https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/</link><dc:creator>Cloistered Monkey</dc:creator><description>&lt;div id="table-of-contents"&gt;
+&lt;h2&gt;Table of Contents&lt;/h2&gt;
+&lt;div id="text-table-of-contents"&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#orgd28d8ed"&gt;Beginning&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#org6cf2550"&gt;Imports&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#org8147776"&gt;The Query&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#orgbb09d3a"&gt;The Document&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#orgf1a5025"&gt;Middle&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#org399e1fb"&gt;The Bit Vector&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#org458d05f"&gt;Term Frequency Vector&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#org341ab70"&gt;Inverse Document Frequency&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#org424e143"&gt;Ranking with TF-IDF Weighting&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#org5f93e74"&gt;Okapi BM25&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#org44d9854"&gt;Document Length Normalization&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#orgad9eec4"&gt;The State of the Art&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#org5209dc3"&gt;End&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#orgeb92dd5"&gt;VSM Improvements&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id="outline-container-orgd28d8ed" class="outline-2"&gt;
+&lt;h2 id="orgd28d8ed"&gt;Beginning&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-orgd28d8ed"&gt;
 &lt;p&gt;
 This is a brief write-up of some notes I took on the Vector Space Model (VSM) used to rank documents by relevancy to keywords in a query. The query is represented as a vector with a 1 for each of the search terms and, in the simplest case, the vector to determine relevance will hold a 1 in each place where the document has a word that matches a query term. This might be easier with an example.
 &lt;/p&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgb32e3f7" class="outline-3"&gt;
-&lt;h3 id="orgb32e3f7"&gt;Imports&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-orgb32e3f7"&gt;
+&lt;div id="outline-container-org6cf2550" class="outline-3"&gt;
+&lt;h3 id="org6cf2550"&gt;Imports&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org6cf2550"&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;# python
 from collections import Counter
 from functools import partial
@@ -67,9 +895,9 @@ Embed = partial(EmbedHoloview, folder_path=output)
 &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-org4214af9" class="outline-3"&gt;
-&lt;h3 id="org4214af9"&gt;The Query&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org4214af9"&gt;
+&lt;div id="outline-container-org8147776" class="outline-3"&gt;
+&lt;h3 id="org8147776"&gt;The Query&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org8147776"&gt;
 &lt;p&gt;
 The user made a query with some key words which is normally represented by a vector with the count of each term as the values.
 &lt;/p&gt;
@@ -86,9 +914,9 @@ print(terms)
 &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-orga562cf5" class="outline-3"&gt;
-&lt;h3 id="orga562cf5"&gt;The Document&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-orga562cf5"&gt;
+&lt;div id="outline-container-orgbb09d3a" class="outline-3"&gt;
+&lt;h3 id="orgbb09d3a"&gt;The Document&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-orgbb09d3a"&gt;
 &lt;p&gt;
 We want to retrieve the most relevant documents from a set of documents, which I'll represent as lists of words.
 &lt;/p&gt;
@@ -100,13 +928,13 @@ document_2 = "a movie about blood blood and more blood".split()
 &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-orgdd03b34" class="outline-2"&gt;
-&lt;h2 id="orgdd03b34"&gt;Middle&lt;/h2&gt;
-&lt;div class="outline-text-2" id="text-orgdd03b34"&gt;
+&lt;div id="outline-container-orgf1a5025" class="outline-2"&gt;
+&lt;h2 id="orgf1a5025"&gt;Middle&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-orgf1a5025"&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org7a1c741" class="outline-3"&gt;
-&lt;h3 id="org7a1c741"&gt;The Bit Vector&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org7a1c741"&gt;
+&lt;div id="outline-container-org399e1fb" class="outline-3"&gt;
+&lt;h3 id="org399e1fb"&gt;The Bit Vector&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org399e1fb"&gt;
 &lt;p&gt;
 To represent similarity I'll use a vector with ones where there is a word match in the document.
 &lt;/p&gt;
@@ -150,9 +978,9 @@ So we con see one problem with our method right off the bat, in that repeated te
 &lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org76c95d6" class="outline-3"&gt;
-&lt;h3 id="org76c95d6"&gt;Term Frequency Vector&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org76c95d6"&gt;
+&lt;div id="outline-container-org458d05f" class="outline-3"&gt;
+&lt;h3 id="org458d05f"&gt;Term Frequency Vector&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org458d05f"&gt;
 &lt;p&gt;
 One approach to fix our lack of giving weight to more occurences of a keyword is to use counts, Term Frequency (TF), instead just a 0 or 1 in our vector.
 &lt;/p&gt;
@@ -212,9 +1040,9 @@ My example is a little convoluted, but the point is that the most common words a
 &lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgf927758" class="outline-3"&gt;
-&lt;h3 id="orgf927758"&gt;Inverse Document Frequency&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-orgf927758"&gt;
+&lt;div id="outline-container-org341ab70" class="outline-3"&gt;
+&lt;h3 id="org341ab70"&gt;Inverse Document Frequency&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org341ab70"&gt;
 &lt;p&gt;
 This method seeks to overcome the problem of words that are too common by reducing the weight of a term the more common it is.
 &lt;/p&gt;
@@ -257,9 +1085,9 @@ You can see that as the number of documents with the word in it (&lt;i&gt;k&lt;/
 &lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org6daf1f8" class="outline-3"&gt;
-&lt;h3 id="org6daf1f8"&gt;Ranking with TF-IDF Weighting&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org6daf1f8"&gt;
+&lt;div id="outline-container-org424e143" class="outline-3"&gt;
+&lt;h3 id="org424e143"&gt;Ranking with TF-IDF Weighting&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org424e143"&gt;
 &lt;p&gt;
 Okay, so we hav Term-Frequency as our basic measure of relevancy, and we have this notion that the more common a word is, the less important it is to relevancy, embodied by Inverse Document Frequency (IDF), how do we use them? Like this.
 &lt;/p&gt;
@@ -288,9 +1116,9 @@ So the relevance of a document is the sum of the products of the Term Frequency 
 &lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgb61056b" class="outline-3"&gt;
-&lt;h3 id="orgb61056b"&gt;Okapi BM25&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-orgb61056b"&gt;
+&lt;div id="outline-container-org5f93e74" class="outline-3"&gt;
+&lt;h3 id="org5f93e74"&gt;Okapi BM25&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org5f93e74"&gt;
 &lt;p&gt;
 The &lt;a href="https://en.wikipedia.org/wiki/Okapi_BM25"&gt;Okapi BM25&lt;/a&gt; ranking function works in a similar way to TF-IDF, but it uses a silghtly different method. Instead of just the count of the words in a document (&lt;i&gt;c(w, d)&lt;/i&gt;), it also uses the number of documents that have the word (&lt;i&gt;k&lt;/i&gt;).
 \[
@@ -329,16 +1157,16 @@ Because of the way it's set up, &lt;i&gt;k + 1&lt;/i&gt; acts as an upper bound 
 &lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org89a66c3" class="outline-3"&gt;
-&lt;h3 id="org89a66c3"&gt;Document Length Normalization&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org89a66c3"&gt;
+&lt;div id="outline-container-org44d9854" class="outline-3"&gt;
+&lt;h3 id="org44d9854"&gt;Document Length Normalization&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org44d9854"&gt;
 &lt;p&gt;
 We have another problem to deal with - longer documents have more words and so are more likely to have the query terms, even if they aren't necessarily relevant. So one thing to do might be do drop really long documents, but some documents are long because the author was logorrheic, and others are long because the have a lot of content and so might be useful if we match them, so we don't want to throw everything away. What we want to do instead is add a penalty for longer documents.
 &lt;/p&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org707be92" class="outline-4"&gt;
-&lt;h4 id="org707be92"&gt;Pivoted Length Normalization&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org707be92"&gt;
+&lt;div id="outline-container-org9fb8e44" class="outline-4"&gt;
+&lt;h4 id="org9fb8e44"&gt;Pivoted Length Normalization&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org9fb8e44"&gt;
 &lt;p&gt;
 This is a method to add a penalty to longer documents and a reward for shorter documents. Here's the equation.
 &lt;/p&gt;
@@ -387,9 +1215,9 @@ This term ends up in the denominator of the term-frequency equivalent calculatio
 &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-org3dd934e" class="outline-3"&gt;
-&lt;h3 id="org3dd934e"&gt;The State of the Art&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org3dd934e"&gt;
+&lt;div id="outline-container-orgad9eec4" class="outline-3"&gt;
+&lt;h3 id="orgad9eec4"&gt;The State of the Art&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-orgad9eec4"&gt;
 &lt;p&gt;
 These are the two "best" Vector Space Model ranking functions.
 &lt;/p&gt;
@@ -401,9 +1229,9 @@ k \in [0, +\inf)
 \]
 &lt;/p&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org643919c" class="outline-4"&gt;
-&lt;h4 id="org643919c"&gt;Pivoted Length Normalization&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org643919c"&gt;
+&lt;div id="outline-container-org5a97432" class="outline-4"&gt;
+&lt;h4 id="org5a97432"&gt;Pivoted Length Normalization&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org5a97432"&gt;
 &lt;p&gt;
 \[
 f(q, d) = \sum_{w \in q \cap d} c(w, q) \frac{\ln(1 + ln(1 + c(w, d)))}{1 -b + b\frac{\vert d \vert}{\textit{avg dl}}} \og \frac{M + 1}{df(w)}
@@ -411,9 +1239,9 @@ f(q, d) = \sum_{w \in q \cap d} c(w, q) \frac{\ln(1 + ln(1 + c(w, d)))}{1 -b + b
 &lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org9a2b7d5" class="outline-4"&gt;
-&lt;h4 id="org9a2b7d5"&gt;BM25 With Document Length Normalization&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org9a2b7d5"&gt;
+&lt;div id="outline-container-org22e1949" class="outline-4"&gt;
+&lt;h4 id="org22e1949"&gt;BM25 With Document Length Normalization&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org22e1949"&gt;
 &lt;p&gt;
 \[
 f(q, d) = \sum_{w \in q \cap d} c(w, d) \frac{(k+1) c(w, d)}{c(w, d) + k(1 - b + b \frac{\vert d \vert}{\textit{avg dl}})} \log \frac{M+1}{df(w)}
@@ -424,21 +1252,21 @@ f(q, d) = \sum_{w \in q \cap d} c(w, d) \frac{(k+1) c(w, d)}{c(w, d) + k(1 - b +
 &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-org5ef4ccd" class="outline-2"&gt;
-&lt;h2 id="org5ef4ccd"&gt;End&lt;/h2&gt;
-&lt;div class="outline-text-2" id="text-org5ef4ccd"&gt;
+&lt;div id="outline-container-org5209dc3" class="outline-2"&gt;
+&lt;h2 id="org5209dc3"&gt;End&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-org5209dc3"&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgb0efdd2" class="outline-3"&gt;
-&lt;h3 id="orgb0efdd2"&gt;VSM Improvements&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-orgb0efdd2"&gt;
+&lt;div id="outline-container-orgeb92dd5" class="outline-3"&gt;
+&lt;h3 id="orgeb92dd5"&gt;VSM Improvements&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-orgeb92dd5"&gt;
 &lt;p&gt;
 These are variations that you can try to improve the effectiveness of Vector Space Model Ranking.
 &lt;/p&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-org6bec97b" class="outline-4"&gt;
-&lt;h4 id="org6bec97b"&gt;Fix the "Dimension"&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org6bec97b"&gt;
+&lt;div id="outline-container-orgebd928a" class="outline-4"&gt;
+&lt;h4 id="orgebd928a"&gt;Fix the "Dimension"&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-orgebd928a"&gt;
 &lt;ul class="org-ul"&gt;
 &lt;li&gt;Use stemmed words, remove stop-words, use ngrams…&lt;/li&gt;
 &lt;li&gt;Language and domain-specific tokenization&lt;/li&gt;
@@ -446,9 +1274,9 @@ These are variations that you can try to improve the effectiveness of Vector Spa
 &lt;/ul&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org216597c" class="outline-4"&gt;
-&lt;h4 id="org216597c"&gt;Changing the Similarity Function&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org216597c"&gt;
+&lt;div id="outline-container-org386a4f4" class="outline-4"&gt;
+&lt;h4 id="org386a4f4"&gt;Changing the Similarity Function&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org386a4f4"&gt;
 &lt;ul class="org-ul"&gt;
 &lt;li&gt;Cosine Similarity&lt;/li&gt;
 &lt;li&gt;Euclidean distance&lt;/li&gt;
@@ -456,13 +1284,13 @@ These are variations that you can try to improve the effectiveness of Vector Spa
 &lt;/ul&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orge7cd216" class="outline-4"&gt;
-&lt;h4 id="orge7cd216"&gt;Use BM25 Variations&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-orge7cd216"&gt;
+&lt;div id="outline-container-orgeb92466" class="outline-4"&gt;
+&lt;h4 id="orgeb92466"&gt;Use BM25 Variations&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-orgeb92466"&gt;
 &lt;/div&gt;
 &lt;ul class="org-ul"&gt;
-&lt;li&gt;&lt;a id="orgc21ccd2"&gt;&lt;/a&gt;BM25F&lt;br&gt;
-&lt;div class="outline-text-5" id="text-orgc21ccd2"&gt;
+&lt;li&gt;&lt;a id="orgb0d8db2"&gt;&lt;/a&gt;BM25F&lt;br&gt;
+&lt;div class="outline-text-5" id="text-orgb0d8db2"&gt;
 &lt;p&gt;
 This is for structured documents (the &lt;i&gt;F&lt;/i&gt; stands for "fields" within the document (e.g. title)).
 &lt;/p&gt;
@@ -472,8 +1300,8 @@ This is for structured documents (the &lt;i&gt;F&lt;/i&gt; stands for "fields" w
 &lt;/ul&gt;
 &lt;/div&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;a id="orgd6c094f"&gt;&lt;/a&gt;BM25+&lt;br&gt;
-&lt;div class="outline-text-5" id="text-orgd6c094f"&gt;
+&lt;li&gt;&lt;a id="orgda3920e"&gt;&lt;/a&gt;BM25+&lt;br&gt;
+&lt;div class="outline-text-5" id="text-orgda3920e"&gt;
 &lt;p&gt;
 This avoids over-penalizing long documents by adding a small constant to the term-frequencies. This has been shown (and proven analytically) to be better than BM25 alone.
 &lt;/p&gt;
@@ -486,32 +1314,32 @@ This avoids over-penalizing long documents by adding a small constant to the ter
 &lt;h2&gt;Table of Contents&lt;/h2&gt;
 &lt;div id="text-table-of-contents"&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/#org84661bb"&gt;Departure&lt;/a&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/#org135edfb"&gt;Departure&lt;/a&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/#org73b470d"&gt;Imports&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/#org42ae74b"&gt;Set Up&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/#org7e06a96"&gt;Imports&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/#orgdeba5b4"&gt;Set Up&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/#org3a3a2d8"&gt;Initiation&lt;/a&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/#orgcb992f7"&gt;Initiation&lt;/a&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/#org7d9ec8f"&gt;Some Vocabulary&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/#orge1766fa"&gt;Some Vocabulary&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/#org5eedc76"&gt;Return&lt;/a&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/#orgcab9b54"&gt;Return&lt;/a&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/#org394b493"&gt;Sources&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/#org811932c"&gt;Sources&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org84661bb" class="outline-2"&gt;
-&lt;h2 id="org84661bb"&gt;Departure&lt;/h2&gt;
-&lt;div class="outline-text-2" id="text-org84661bb"&gt;
+&lt;div id="outline-container-org135edfb" class="outline-2"&gt;
+&lt;h2 id="org135edfb"&gt;Departure&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-org135edfb"&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org73b470d" class="outline-3"&gt;
-&lt;h3 id="org73b470d"&gt;Imports&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org73b470d"&gt;
+&lt;div id="outline-container-org7e06a96" class="outline-3"&gt;
+&lt;h3 id="org7e06a96"&gt;Imports&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org7e06a96"&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;from pathlib import Path
 &lt;/pre&gt;&lt;/div&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;from spacy import displacy
@@ -520,9 +1348,9 @@ from nltk.tokenize import TweetTokenizer
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org42ae74b" class="outline-3"&gt;
-&lt;h3 id="org42ae74b"&gt;Set Up&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org42ae74b"&gt;
+&lt;div id="outline-container-orgdeba5b4" class="outline-3"&gt;
+&lt;h3 id="orgdeba5b4"&gt;Set Up&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-orgdeba5b4"&gt;
 &lt;p&gt;
 I'm using the &lt;code&gt;en&lt;/code&gt; model. Even after you install spacy you have to tell it which model to download.
 &lt;/p&gt;
@@ -548,32 +1376,32 @@ if not OUTPUT_FOLDER.is_dir():
 &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-org3a3a2d8" class="outline-2"&gt;
-&lt;h2 id="org3a3a2d8"&gt;Initiation&lt;/h2&gt;
-&lt;div class="outline-text-2" id="text-org3a3a2d8"&gt;
+&lt;div id="outline-container-orgcb992f7" class="outline-2"&gt;
+&lt;h2 id="orgcb992f7"&gt;Initiation&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-orgcb992f7"&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org7d9ec8f" class="outline-3"&gt;
-&lt;h3 id="org7d9ec8f"&gt;Some Vocabulary&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org7d9ec8f"&gt;
+&lt;div id="outline-container-orge1766fa" class="outline-3"&gt;
+&lt;h3 id="orge1766fa"&gt;Some Vocabulary&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-orge1766fa"&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org1418e2d" class="outline-4"&gt;
-&lt;h4 id="org1418e2d"&gt;Natural Language Processing&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org1418e2d"&gt;
+&lt;div id="outline-container-org1e84389" class="outline-4"&gt;
+&lt;h4 id="org1e84389"&gt;Natural Language Processing&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org1e84389"&gt;
 &lt;p&gt;
 &lt;a href="https://www.wikiwand.com/en/Natural_language_processing"&gt;Natural Language Processing&lt;/a&gt; is the computational study of human language with the aim of solving practical problems involving language. There is a related field called &lt;a href="https://www.wikiwand.com/en/Computational_linguistics"&gt;Computational Linguistics&lt;/a&gt; which is concerned more with the modeling of human language but seems related.
 &lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org1f31c43" class="outline-4"&gt;
-&lt;h4 id="org1f31c43"&gt;Corpora&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org1f31c43"&gt;
+&lt;div id="outline-container-org7d9cda9" class="outline-4"&gt;
+&lt;h4 id="org7d9cda9"&gt;Corpora&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org7d9cda9"&gt;
 &lt;p&gt;
 A text-dataset is called a &lt;i&gt;corpus&lt;/i&gt;, usually made up of texts and metadata associated with each text. Texts are made up of characters grouped into units called &lt;i&gt;tokens&lt;/i&gt;. In English a token is generally a word or number.
 &lt;/p&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgf1e23f4" class="outline-5"&gt;
-&lt;h5 id="orgf1e23f4"&gt;Tokenization&lt;/h5&gt;
-&lt;div class="outline-text-5" id="text-orgf1e23f4"&gt;
+&lt;div id="outline-container-org4148ec7" class="outline-5"&gt;
+&lt;h5 id="org4148ec7"&gt;Tokenization&lt;/h5&gt;
+&lt;div class="outline-text-5" id="text-org4148ec7"&gt;
 &lt;p&gt;
 The process of breaking a text up into &lt;i&gt;tokens&lt;/i&gt; is called tokenization. Here's some examples of how to do it with &lt;a href="https://spacy.io/usage/spacy-101"&gt;spacy&lt;/a&gt; and the &lt;a href="https://www.nltk.org"&gt;Natural Language Toolkit (NLTK)&lt;/a&gt;.
 &lt;/p&gt;
@@ -621,25 +1449,25 @@ In this case, the TweetTokenizer and spacy treated the hash-tag and smiley diffe
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org1f1bfef" class="outline-4"&gt;
-&lt;h4 id="org1f1bfef"&gt;Types&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org1f1bfef"&gt;
+&lt;div id="outline-container-org76982d9" class="outline-4"&gt;
+&lt;h4 id="org76982d9"&gt;Types&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org76982d9"&gt;
 &lt;p&gt;
 &lt;i&gt;Types&lt;/i&gt; are the unique tokens in a corpus. The set of all the types in the corpus is its &lt;i&gt;vocabulary&lt;/i&gt; or &lt;i&gt;lexicon&lt;/i&gt;. 
 &lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org13b0655" class="outline-4"&gt;
-&lt;h4 id="org13b0655"&gt;Word Classes&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org13b0655"&gt;
+&lt;div id="outline-container-org9a0347d" class="outline-4"&gt;
+&lt;h4 id="org9a0347d"&gt;Word Classes&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org9a0347d"&gt;
 &lt;p&gt;
 There are two classes of words &lt;i&gt;content words&lt;/i&gt; and &lt;i&gt;stopwords&lt;/i&gt;. Stopwords are there mostly to glue the content words together ("a", "an", "the", etc.) and provide more noise than information.
 &lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgfc21ad3" class="outline-4"&gt;
-&lt;h4 id="orgfc21ad3"&gt;N-Grams&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-orgfc21ad3"&gt;
+&lt;div id="outline-container-org23392d7" class="outline-4"&gt;
+&lt;h4 id="org23392d7"&gt;N-Grams&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org23392d7"&gt;
 &lt;p&gt;
 &lt;i&gt;N-grams&lt;/i&gt; are consecutive token-sequences of a fixed length (&lt;i&gt;n&lt;/i&gt;). Common special cases are:
 &lt;/p&gt;
@@ -654,9 +1482,9 @@ Although n-grams are generally words in some cases they can be characters - if t
 &lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org8721d6d" class="outline-4"&gt;
-&lt;h4 id="org8721d6d"&gt;Lemma&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org8721d6d"&gt;
+&lt;div id="outline-container-org857d8a3" class="outline-4"&gt;
+&lt;h4 id="org857d8a3"&gt;Lemma&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org857d8a3"&gt;
 &lt;p&gt;
 &lt;a href="https://www.wikiwand.com/en/Lemma_(morphology)"&gt;Lemmas&lt;/a&gt; are root-forms for words that can have different forms. As an example - &lt;i&gt;go&lt;/i&gt; is the lemma for &lt;i&gt;go&lt;/i&gt;, &lt;i&gt;going&lt;/i&gt;, &lt;i&gt;went&lt;/i&gt;, and &lt;i&gt;gone&lt;/i&gt;.
 &lt;/p&gt;
@@ -684,9 +1512,9 @@ There is a related method called &lt;i&gt;stemming&lt;/i&gt; which strips the en
 &lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org7481552" class="outline-4"&gt;
-&lt;h4 id="org7481552"&gt;Chunking&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org7481552"&gt;
+&lt;div id="outline-container-orgfe133dc" class="outline-4"&gt;
+&lt;h4 id="orgfe133dc"&gt;Chunking&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-orgfe133dc"&gt;
 &lt;p&gt;
 There are different ways of chunking text instead of just using &lt;i&gt;n-grams&lt;/i&gt;, one way is called &lt;i&gt;chunking&lt;/i&gt; which breaks the text up into phrases.
 &lt;/p&gt;
@@ -708,13 +1536,13 @@ snow - NP
 &lt;/div&gt;
 
 
-&lt;div id="outline-container-org5eedc76" class="outline-2"&gt;
-&lt;h2 id="org5eedc76"&gt;Return&lt;/h2&gt;
-&lt;div class="outline-text-2" id="text-org5eedc76"&gt;
+&lt;div id="outline-container-orgcab9b54" class="outline-2"&gt;
+&lt;h2 id="orgcab9b54"&gt;Return&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-orgcab9b54"&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org394b493" class="outline-3"&gt;
-&lt;h3 id="org394b493"&gt;Sources&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org394b493"&gt;
+&lt;div id="outline-container-org811932c" class="outline-3"&gt;
+&lt;h3 id="org811932c"&gt;Sources&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org811932c"&gt;
 &lt;ul class="org-ul"&gt;
 &lt;li&gt;Rao D, McMahan B. Natural language processing with PyTorch: build intelligent language applications using deep learning. Sebastopol, CA: OReilly Media; 2019.&lt;/li&gt;
 &lt;/ul&gt;

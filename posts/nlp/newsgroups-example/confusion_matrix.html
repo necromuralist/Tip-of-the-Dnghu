@@ -1,0 +1,835 @@
+
+<script src="https://cdn.pydata.org/bokeh/release/bokeh-1.1.0.min.js" type="text/javascript"></script>
+<script src="https://cdn.pydata.org/bokeh/release/bokeh-widgets-1.1.0.min.js" type="text/javascript"></script>
+<script src="https://cdn.pydata.org/bokeh/release/bokeh-tables-1.1.0.min.js" type="text/javascript"></script>
+<script src="https://cdn.pydata.org/bokeh/release/bokeh-gl-1.1.0.min.js" type="text/javascript"></script>
+<script src="https://code.jquery.com/jquery-2.1.4.min.js" type="text/javascript"></script>
+<script src="https://code.jquery.com/ui/1.10.4/jquery-ui.min.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.20/require.min.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js" type="text/javascript"></script>
+<script type="text/javascript">function HoloViewsWidget() {
+}
+
+HoloViewsWidget.prototype.init_slider = function(init_val){
+  if(this.load_json) {
+    this.from_json()
+  } else {
+    this.update_cache();
+  }
+}
+
+HoloViewsWidget.prototype.populate_cache = function(idx){
+  this.cache[idx].innerHTML = this.frames[idx];
+  if (this.embed) {
+    delete this.frames[idx];
+  }
+}
+
+HoloViewsWidget.prototype.process_error = function(msg){
+}
+
+HoloViewsWidget.prototype.from_json = function() {
+  var data_url = this.json_path + this.id + '.json';
+  $.getJSON(data_url, $.proxy(function(json_data) {
+    this.frames = json_data;
+    this.update_cache();
+    this.update(0);
+  }, this));
+}
+
+HoloViewsWidget.prototype.dynamic_update = function(current){
+  if (current === undefined) {
+    return
+  }
+  this.current = current;
+  if (this.comm) {
+    var msg = {comm_id: this.id+'_client', content: current}
+    this.comm.send(msg);
+  }
+}
+
+HoloViewsWidget.prototype.update_cache = function(force){
+  var frame_len = Object.keys(this.frames).length;
+  for (var i=0; i<frame_len; i++) {
+    if(!this.load_json || this.dynamic)  {
+      var frame = Object.keys(this.frames)[i];
+    } else {
+      var frame = i;
+    }
+    if(!(frame in this.cache) || force) {
+      if ((frame in this.cache) && force) { this.cache[frame].remove() }
+      var div = document.createElement("div");
+      var parent = document.getElementById("_anim_img"+this.id);
+      div.style.display = "none";
+      parent.appendChild(div)
+      this.cache[frame] = div;
+      var cache_id = "_anim_img"+this.id+"_"+frame;
+      this.populate_cache(frame);
+    }
+  }
+}
+
+HoloViewsWidget.prototype.update = function(current){
+  if(current in this.cache) {
+    for (var index in this.cache) {
+      this.cache[index].style.display = "none";
+    }
+    this.cache[current].style.display = "";
+    this.wait = false;
+  }
+}
+
+HoloViewsWidget.prototype.init_comms = function() {
+  var that = this
+  HoloViews.comm_manager.register_target(this.plot_id, this.id, function (msg) { that.msg_handler(msg) })
+  if (!this.cached || this.dynamic) {
+    function ack_callback(msg) {
+      var msg = msg.metadata;
+      var comm_id = msg.comm_id;
+      var comm_status = HoloViews.comm_status[comm_id];
+      if (that.queue.length > 0) {
+        that.time = Date.now();
+        that.dynamic_update(that.queue[that.queue.length-1]);
+        that.queue = [];
+      } else {
+        that.wait = false;
+      }
+      if ((msg.msg_type == "Ready") && msg.content) {
+        console.log("Python callback returned following output:", msg.content);
+      } else if (msg.msg_type == "Error") {
+        console.log("Python failed with the following traceback:", msg.traceback)
+      }
+    }
+    var comm = HoloViews.comm_manager.get_client_comm(this.plot_id, this.id+'_client', ack_callback);
+    return comm
+  }
+}
+
+HoloViewsWidget.prototype.msg_handler = function(msg) {
+  var metadata = msg.metadata;
+  if ((metadata.msg_type == "Ready")) {
+    if (metadata.content) {
+      console.log("Python callback returned following output:", metadata.content);
+    }
+	return;
+  } else if (metadata.msg_type == "Error") {
+    console.log("Python failed with the following traceback:", metadata.traceback)
+    return
+  }
+  this.process_msg(msg)
+}
+
+HoloViewsWidget.prototype.process_msg = function(msg) {
+}
+
+function SelectionWidget(frames, id, slider_ids, keyMap, dim_vals, notFound, load_json, mode, cached, json_path, dynamic, plot_id){
+  this.frames = frames;
+  this.id = id;
+  this.plot_id = plot_id;
+  this.slider_ids = slider_ids;
+  this.keyMap = keyMap
+  this.current_frame = 0;
+  this.current_vals = dim_vals;
+  this.load_json = load_json;
+  this.mode = mode;
+  this.notFound = notFound;
+  this.cached = cached;
+  this.dynamic = dynamic;
+  this.cache = {};
+  this.json_path = json_path;
+  this.init_slider(this.current_vals[0]);
+  this.queue = [];
+  this.wait = false;
+  if (!this.cached || this.dynamic) {
+    this.comm = this.init_comms();
+  }
+}
+
+SelectionWidget.prototype = new HoloViewsWidget;
+
+
+SelectionWidget.prototype.get_key = function(current_vals) {
+  var key = "(";
+  for (var i=0; i<this.slider_ids.length; i++)
+  {
+    var val = this.current_vals[i];
+    if (!(typeof val === 'string')) {
+      if (val % 1 === 0) { val = val.toFixed(1); }
+      else { val = val.toFixed(10); val = val.slice(0, val.length-1);}
+    }
+    key += "'" + val + "'";
+    if(i != this.slider_ids.length-1) { key += ', ';}
+    else if(this.slider_ids.length == 1) { key += ',';}
+  }
+  key += ")";
+  return this.keyMap[key];
+}
+
+SelectionWidget.prototype.set_frame = function(dim_val, dim_idx){
+  this.current_vals[dim_idx] = dim_val;
+  var key = this.current_vals;
+  if (!this.dynamic) {
+    key = this.get_key(key)
+  }
+  if (this.dynamic || !this.cached) {
+    if ((this.time !== undefined) && ((this.wait) && ((this.time + 10000) > Date.now()))) {
+      this.queue.push(key);
+      return
+    }
+    this.queue = [];
+    this.time = Date.now();
+    this.current_frame = key;
+    this.wait = true;
+    this.dynamic_update(key)
+  } else if (key !== undefined) {
+    this.update(key)
+  }
+}
+
+
+/* Define the ScrubberWidget class */
+function ScrubberWidget(frames, num_frames, id, interval, load_json, mode, cached, json_path, dynamic, plot_id){
+  this.slider_id = "_anim_slider" + id;
+  this.loop_select_id = "_anim_loop_select" + id;
+  this.id = id;
+  this.plot_id = plot_id;
+  this.interval = interval;
+  this.current_frame = 0;
+  this.direction = 0;
+  this.dynamic = dynamic;
+  this.timer = null;
+  this.load_json = load_json;
+  this.mode = mode;
+  this.cached = cached;
+  this.frames = frames;
+  this.cache = {};
+  this.length = num_frames;
+  this.json_path = json_path;
+  document.getElementById(this.slider_id).max = this.length - 1;
+  this.init_slider(0);
+  this.wait = false;
+  this.queue = [];
+  if (!this.cached || this.dynamic) {
+    this.comm = this.init_comms()
+  }
+}
+
+ScrubberWidget.prototype = new HoloViewsWidget;
+
+ScrubberWidget.prototype.set_frame = function(frame){
+  this.current_frame = frame;
+  var widget = document.getElementById(this.slider_id);
+  if (widget === null) {
+    this.pause_animation();
+    return
+  }
+  widget.value = this.current_frame;
+  if (this.dynamic || !this.cached) {
+    if ((this.time !== undefined) && ((this.wait) && ((this.time + 10000) > Date.now()))) {
+      this.queue.push(frame);
+      return
+    }
+    this.queue = [];
+    this.time = Date.now();
+    this.wait = true;
+    this.dynamic_update(frame)
+  } else {
+    this.update(frame)
+  }
+}
+
+ScrubberWidget.prototype.get_loop_state = function(){
+  var button_group = document[this.loop_select_id].state;
+  for (var i = 0; i < button_group.length; i++) {
+    var button = button_group[i];
+    if (button.checked) {
+      return button.value;
+    }
+  }
+  return undefined;
+}
+
+
+ScrubberWidget.prototype.next_frame = function() {
+  this.set_frame(Math.min(this.length - 1, this.current_frame + 1));
+}
+
+ScrubberWidget.prototype.previous_frame = function() {
+  this.set_frame(Math.max(0, this.current_frame - 1));
+}
+
+ScrubberWidget.prototype.first_frame = function() {
+  this.set_frame(0);
+}
+
+ScrubberWidget.prototype.last_frame = function() {
+  this.set_frame(this.length - 1);
+}
+
+ScrubberWidget.prototype.slower = function() {
+  this.interval /= 0.7;
+  if(this.direction > 0){this.play_animation();}
+  else if(this.direction < 0){this.reverse_animation();}
+}
+
+ScrubberWidget.prototype.faster = function() {
+  this.interval *= 0.7;
+  if(this.direction > 0){this.play_animation();}
+  else if(this.direction < 0){this.reverse_animation();}
+}
+
+ScrubberWidget.prototype.anim_step_forward = function() {
+  if(this.current_frame < this.length - 1){
+    this.next_frame();
+  }else{
+    var loop_state = this.get_loop_state();
+    if(loop_state == "loop"){
+      this.first_frame();
+    }else if(loop_state == "reflect"){
+      this.last_frame();
+      this.reverse_animation();
+    }else{
+      this.pause_animation();
+      this.last_frame();
+    }
+  }
+}
+
+ScrubberWidget.prototype.anim_step_reverse = function() {
+  if(this.current_frame > 0){
+    this.previous_frame();
+  } else {
+    var loop_state = this.get_loop_state();
+    if(loop_state == "loop"){
+      this.last_frame();
+    }else if(loop_state == "reflect"){
+      this.first_frame();
+      this.play_animation();
+    }else{
+      this.pause_animation();
+      this.first_frame();
+    }
+  }
+}
+
+ScrubberWidget.prototype.pause_animation = function() {
+  this.direction = 0;
+  if (this.timer){
+    clearInterval(this.timer);
+    this.timer = null;
+  }
+}
+
+ScrubberWidget.prototype.play_animation = function() {
+  this.pause_animation();
+  this.direction = 1;
+  var t = this;
+  if (!this.timer) this.timer = setInterval(function(){t.anim_step_forward();}, this.interval);
+}
+
+ScrubberWidget.prototype.reverse_animation = function() {
+  this.pause_animation();
+  this.direction = -1;
+  var t = this;
+  if (!this.timer) this.timer = setInterval(function(){t.anim_step_reverse();}, this.interval);
+}
+
+function extend(destination, source) {
+  for (var k in source) {
+    if (source.hasOwnProperty(k)) {
+      destination[k] = source[k];
+    }
+  }
+  return destination;
+}
+
+function update_widget(widget, values) {
+  if (widget.hasClass("ui-slider")) {
+    widget.slider('option', {
+      min: 0,
+      max: values.length-1,
+      dim_vals: values,
+      value: 0,
+      dim_labels: values
+    })
+    widget.slider('option', 'slide').call(widget, event, {value: 0})
+  } else {
+    widget.empty();
+    for (var i=0; i<values.length; i++){
+      widget.append($("<option>", {
+        value: i,
+        text: values[i]
+      }))
+    };
+    widget.data('values', values);
+    widget.data('value', 0);
+    widget.trigger("change");
+  };
+}
+
+function init_slider(id, plot_id, dim, values, next_vals, labels, dynamic, step, value, next_dim,
+                     dim_idx, delay, jQueryUI_CDN, UNDERSCORE_CDN) {
+  // Slider JS Block START
+  function loadcssfile(filename){
+    var fileref=document.createElement("link")
+    fileref.setAttribute("rel", "stylesheet")
+    fileref.setAttribute("type", "text/css")
+    fileref.setAttribute("href", filename)
+    document.getElementsByTagName("head")[0].appendChild(fileref)
+  }
+  loadcssfile("https://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css");
+  /* Check if jQuery and jQueryUI have been loaded
+     otherwise load with require.js */
+  var jQuery = window.jQuery,
+    // check for old versions of jQuery
+    oldjQuery = jQuery && !!jQuery.fn.jquery.match(/^1\.[0-4](\.|$)/),
+    jquery_path = '',
+    paths = {},
+    noConflict;
+  var jQueryUI = jQuery.ui;
+  // check for jQuery
+  if (!jQuery || oldjQuery) {
+    // load if it's not available or doesn't meet min standards
+    paths.jQuery = jQuery;
+    noConflict = !!oldjQuery;
+  } else {
+    // register the current jQuery
+    define('jquery', [], function() { return jQuery; });
+  }
+  if (!jQueryUI) {
+    paths.jQueryUI = jQueryUI_CDN.slice(null, -3);
+  } else {
+    define('jQueryUI', [], function() { return jQuery.ui; });
+  }
+  paths.underscore = UNDERSCORE_CDN.slice(null, -3);
+  var jquery_require = {
+    paths: paths,
+    shim: {
+      "jQueryUI": {
+        exports:"$",
+        deps: ['jquery']
+      },
+      "underscore": {
+        exports: '_'
+      }
+    }
+  }
+  require.config(jquery_require);
+  require(["jQueryUI", "underscore"], function(jUI, _){
+    if (noConflict) $.noConflict(true);
+    var vals = values;
+    if (dynamic && vals.constructor === Array) {
+      var default_value = parseFloat(value);
+      var min = parseFloat(vals[0]);
+      var max = parseFloat(vals[vals.length-1]);
+      var wstep = step;
+      var wlabels = [default_value];
+      var init_label = default_value;
+    } else {
+      var min = 0;
+      if (dynamic) {
+        var max = Object.keys(vals).length - 1;
+        var init_label = labels[value];
+        var default_value = values[value];
+      } else {
+        var max = vals.length - 1;
+        var init_label = labels[value];
+        var default_value = value;
+      }
+      var wstep = 1;
+      var wlabels = labels;
+    }
+    function adjustFontSize(text) {
+      var width_ratio = (text.parent().width()/8)/text.val().length;
+      var size = Math.min(0.9, Math.max(0.6, width_ratio))+'em';
+      text.css('font-size', size);
+    }
+    var slider = $('#_anim_widget'+id+'_'+dim);
+    slider.slider({
+      animate: "fast",
+      min: min,
+      max: max,
+      step: wstep,
+      value: default_value,
+      dim_vals: vals,
+      dim_labels: wlabels,
+      next_vals: next_vals,
+      slide: function(event, ui) {
+        var vals = slider.slider("option", "dim_vals");
+        var next_vals = slider.slider("option", "next_vals");
+        var dlabels = slider.slider("option", "dim_labels");
+        if (dynamic) {
+          var dim_val = ui.value;
+          if (vals.constructor === Array) {
+            var label = ui.value;
+          } else {
+            var label = dlabels[ui.value];
+          }
+        } else {
+          var dim_val = vals[ui.value];
+          var label = dlabels[ui.value];
+        }
+        var text = $('#textInput'+id+'_'+dim);
+        text.val(label);
+        adjustFontSize(text);
+        HoloViews.index[plot_id].set_frame(dim_val, dim_idx);
+        if (Object.keys(next_vals).length > 0) {
+          var new_vals = next_vals[dim_val];
+          var next_widget = $('#_anim_widget'+id+'_'+next_dim);
+          update_widget(next_widget, new_vals);
+        }
+      }
+    });
+    slider.keypress(function(event) {
+      if (event.which == 80 || event.which == 112) {
+        var start = slider.slider("option", "value");
+        var stop =  slider.slider("option", "max");
+        for (var i=start; i<=stop; i++) {
+          var delay = i*delay;
+          $.proxy(function doSetTimeout(i) { setTimeout($.proxy(function() {
+            var val = {value:i};
+            slider.slider('value',i);
+            slider.slider("option", "slide")(null, val);
+          }, slider), delay);}, slider)(i);
+        }
+      }
+      if (event.which == 82 || event.which == 114) {
+        var start = slider.slider("option", "value");
+        var stop =  slider.slider("option", "min");
+        var count = 0;
+        for (var i=start; i>=stop; i--) {
+          var delay = count*delay;
+          count = count + 1;
+          $.proxy(function doSetTimeout(i) { setTimeout($.proxy(function() {
+            var val = {value:i};
+            slider.slider('value',i);
+            slider.slider("option", "slide")(null, val);
+          }, slider), delay);}, slider)(i);
+        }
+      }
+    });
+    var textInput = $('#textInput'+id+'_'+dim)
+    textInput.val(init_label);
+    adjustFontSize(textInput);
+  });
+}
+
+function init_dropdown(id, plot_id, dim, vals, value, next_vals, labels, next_dim, dim_idx, dynamic) {
+  var widget = $("#_anim_widget"+id+'_'+dim);
+  widget.data('values', vals)
+  for (var i=0; i<vals.length; i++){
+    if (dynamic) {
+      var val = vals[i];
+    } else {
+      var val = i;
+    }
+    widget.append($("<option>", {
+      value: val,
+      text: labels[i]
+    }));
+  };
+  widget.data("next_vals", next_vals);
+  widget.val(value);
+  widget.on('change', function(event, ui) {
+    if (dynamic) {
+      var dim_val = parseInt(this.value);
+    } else {
+      var dim_val = $.data(this, 'values')[this.value];
+    }
+    var next_vals = $.data(this, "next_vals");
+    if (Object.keys(next_vals).length > 0) {
+      var new_vals = next_vals[dim_val];
+      var next_widget = $('#_anim_widget'+id+'_'+next_dim);
+      update_widget(next_widget, new_vals);
+    }
+    var widgets = HoloViews.index[plot_id]
+    if (widgets) {
+      widgets.set_frame(dim_val, dim_idx);
+    }
+  });
+}
+
+
+if (window.HoloViews === undefined) {
+  window.HoloViews = {}
+  window.PyViz = window.HoloViews
+} else if (window.PyViz === undefined) {
+  window.PyViz = window.HoloViews
+}
+
+
+var _namespace = {
+  init_slider: init_slider,
+  init_dropdown: init_dropdown,
+  comms: {},
+  comm_status: {},
+  index: {},
+  plot_index: {},
+  kernels: {},
+  receivers: {}
+}
+
+for (var k in _namespace) {
+  if (!(k in window.HoloViews)) {
+    window.HoloViews[k] = _namespace[k];
+  }
+}
+
+// Define Bokeh specific subclasses
+function BokehSelectionWidget() {
+  SelectionWidget.apply(this, arguments);
+}
+
+function BokehScrubberWidget() {
+  ScrubberWidget.apply(this, arguments);
+}
+
+// Let them inherit from the baseclasses
+BokehSelectionWidget.prototype = Object.create(SelectionWidget.prototype);
+BokehScrubberWidget.prototype = Object.create(ScrubberWidget.prototype);
+
+// Define methods to override on widgets
+var BokehMethods = {
+  update_cache : function(){
+    for (var index in this.frames) {
+      this.frames[index] = JSON.parse(this.frames[index]);
+    }
+  },
+  update : function(current){
+    if (current === undefined) {
+      return;
+    }
+    var data = this.frames[current];
+    if (data !== undefined) {
+      if (data.root in HoloViews.plot_index) {
+        var doc = HoloViews.plot_index[data.root].model.document;
+      } else {
+        var doc = Bokeh.index[data.root].model.document;
+      }
+      doc.apply_json_patch(data.content);
+    }
+  },
+  init_comms: function() {
+    if (Bokeh.protocol !== undefined) {
+      this.receiver = new Bokeh.protocol.Receiver()
+    } else {
+      this.receiver = null;
+    }
+    return HoloViewsWidget.prototype.init_comms.call(this);
+  },
+  process_msg : function(msg) {
+    if (this.plot_id in HoloViews.plot_index) {
+      var doc = HoloViews.plot_index[this.plot_id].model.document;
+    } else {
+      var doc = Bokeh.index[this.plot_id].model.document;
+    }
+    if (this.receiver === null) { return }
+    var receiver = this.receiver;
+    if (msg.buffers.length > 0) {
+      receiver.consume(msg.buffers[0].buffer)
+    } else {
+      receiver.consume(msg.content.data)
+    }
+    const comm_msg = receiver.message;
+    if ((comm_msg != null) && (doc != null)) {
+      doc.apply_json_patch(comm_msg.content, comm_msg.buffers)
+    }
+  }
+}
+
+// Extend Bokeh widgets with backend specific methods
+extend(BokehSelectionWidget.prototype, BokehMethods);
+extend(BokehScrubberWidget.prototype, BokehMethods);
+
+window.HoloViews.BokehSelectionWidget = BokehSelectionWidget
+window.HoloViews.BokehScrubberWidget = BokehScrubberWidget
+</script>
+<script type="text/javascript">
+    function JupyterCommManager() {
+    }
+
+    JupyterCommManager.prototype.register_target = function(plot_id, comm_id, msg_handler) {
+      if (window.comm_manager || ((window.Jupyter !== undefined) && (Jupyter.notebook.kernel != null))) {
+        var comm_manager = window.comm_manager || Jupyter.notebook.kernel.comm_manager;
+        comm_manager.register_target(comm_id, function(comm) {
+          comm.on_msg(msg_handler);
+        });
+      } else if ((plot_id in window.PyViz.kernels) && (window.PyViz.kernels[plot_id])) {
+        window.PyViz.kernels[plot_id].registerCommTarget(comm_id, function(comm) {
+          comm.onMsg = msg_handler;
+        });
+      }
+    }
+
+    JupyterCommManager.prototype.get_client_comm = function(plot_id, comm_id, msg_handler) {
+      if (comm_id in window.PyViz.comms) {
+        return window.PyViz.comms[comm_id];
+      } else if (window.comm_manager || ((window.Jupyter !== undefined) && (Jupyter.notebook.kernel != null))) {
+        var comm_manager = window.comm_manager || Jupyter.notebook.kernel.comm_manager;
+        var comm = comm_manager.new_comm(comm_id, {}, {}, {}, comm_id);
+        if (msg_handler) {
+          comm.on_msg(msg_handler);
+        }
+      } else if ((plot_id in window.PyViz.kernels) && (window.PyViz.kernels[plot_id])) {
+        var comm = window.PyViz.kernels[plot_id].connectToComm(comm_id);
+        comm.open();
+        if (msg_handler) {
+          comm.onMsg = msg_handler;
+        }
+      }
+
+      window.PyViz.comms[comm_id] = comm;
+      return comm;
+    }
+
+    window.PyViz.comm_manager = new JupyterCommManager();
+    </script>
+
+<link rel="stylesheet" href="https://cdn.pydata.org/bokeh/release/bokeh-1.1.0.min.css">
+<link rel="stylesheet" href="https://cdn.pydata.org/bokeh/release/bokeh-widgets-1.1.0.min.css">
+<link rel="stylesheet" href="https://cdn.pydata.org/bokeh/release/bokeh-tables-1.1.0.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+<style>div.hololayout {
+  display: flex;
+  align-items: center;
+  margin: 0;
+}
+
+div.holoframe {
+  width: 75%;
+}
+
+div.holowell {
+  display: flex;
+  align-items: center;
+}
+
+form.holoform {
+  background-color: #fafafa;
+  border-radius: 5px;
+  overflow: hidden;
+  padding-left: 0.8em;
+  padding-right: 0.8em;
+  padding-top: 0.4em;
+  padding-bottom: 0.4em;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+  margin-bottom: 20px;
+  border: 1px solid #e3e3e3;
+}
+
+div.holowidgets {
+  padding-right: 0;
+  width: 25%;
+}
+
+div.holoslider {
+  min-height: 0 !important;
+  height: 0.8em;
+  width: 100%;
+}
+
+div.holoformgroup {
+  padding-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+div.hologroup {
+  padding-left: 0;
+  padding-right: 0.8em;
+  width: 100%;
+}
+
+.holoselect {
+  width: 92%;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.holotext {
+  padding-left:  0.5em;
+  padding-right: 0;
+  width: 100%;
+}
+
+.holowidgets .ui-resizable-se {
+  visibility: hidden
+}
+
+.holoframe > .ui-resizable-se {
+  visibility: hidden
+}
+
+.holowidgets .ui-resizable-s {
+  visibility: hidden
+}
+
+
+/* CSS rules for noUISlider based slider used by JupyterLab extension  */
+
+.noUi-handle {
+  width: 20px !important;
+  height: 20px !important;
+  left: -5px !important;
+  top: -5px !important;
+}
+
+.noUi-handle:before, .noUi-handle:after {
+  visibility: hidden;
+  height: 0px;
+}
+
+.noUi-target {
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+}
+
+div.bk-hbox {
+    display: flex;
+    justify-content: center;
+}
+
+div.bk-hbox div.bk-plot {
+    padding: 8px;
+}
+
+div.bk-hbox div.bk-data-table {
+    padding: 20px;
+}
+</style><div style='display: table; margin: 0 auto;'>
+
+
+
+
+
+
+  <div class="bk-root" id="a2b8d5b6-5de9-4918-bf16-90b3dfc88b02" data-root-id="4121"></div>
+
+<script type="text/javascript">
+  (function(root) {
+  function embed_document(root) {
+    
+  var docs_json = {"a3c74123-7e0b-4836-84a8-83b409af7c15":{"roots":{"references":[{"attributes":{"below":[{"id":"4130","type":"CategoricalAxis"}],"center":[{"id":"4133","type":"Grid"},{"id":"4137","type":"Grid"}],"left":[{"id":"4134","type":"CategoricalAxis"}],"margin":null,"min_border_bottom":10,"min_border_left":10,"min_border_right":10,"min_border_top":10,"plot_height":800,"plot_width":800,"renderers":[{"id":"4156","type":"GlyphRenderer"}],"right":[{"id":"4159","type":"ColorBar"}],"sizing_mode":"fixed","title":{"id":"4122","type":"Title"},"toolbar":{"id":"4143","type":"Toolbar"},"x_range":{"id":"4118","type":"FactorRange"},"x_scale":{"id":"4126","type":"CategoricalScale"},"y_range":{"id":"4119","type":"FactorRange"},"y_scale":{"id":"4128","type":"CategoricalScale"}},"id":"4121","subtype":"Figure","type":"Plot"},{"attributes":{"source":{"id":"4151","type":"ColumnDataSource"}},"id":"4157","type":"CDSView"},{"attributes":{},"id":"4173","type":"UnionRenderers"},{"attributes":{},"id":"4163","type":"CategoricalTickFormatter"},{"attributes":{"callback":null,"data":{"x":["alt.atheism","alt.atheism","alt.atheism","alt.atheism","alt.atheism","alt.atheism","alt.atheism","alt.atheism","alt.atheism","alt.atheism","alt.atheism","alt.atheism","alt.atheism","alt.atheism","alt.atheism","alt.atheism","alt.atheism","alt.atheism","alt.atheism","alt.atheism","comp.graphics","comp.graphics","comp.graphics","comp.graphics","comp.graphics","comp.graphics","comp.graphics","comp.graphics","comp.graphics","comp.graphics","comp.graphics","comp.graphics","comp.graphics","comp.graphics","comp.graphics","comp.graphics","comp.graphics","comp.graphics","comp.graphics","comp.graphics","comp.os.ms-windows.misc","comp.os.ms-windows.misc","comp.os.ms-windows.misc","comp.os.ms-windows.misc","comp.os.ms-windows.misc","comp.os.ms-windows.misc","comp.os.ms-windows.misc","comp.os.ms-windows.misc","comp.os.ms-windows.misc","comp.os.ms-windows.misc","comp.os.ms-windows.misc","comp.os.ms-windows.misc","comp.os.ms-windows.misc","comp.os.ms-windows.misc","comp.os.ms-windows.misc","comp.os.ms-windows.misc","comp.os.ms-windows.misc","comp.os.ms-windows.misc","comp.os.ms-windows.misc","comp.os.ms-windows.misc","comp.sys.ibm.pc.hardware","comp.sys.ibm.pc.hardware","comp.sys.ibm.pc.hardware","comp.sys.ibm.pc.hardware","comp.sys.ibm.pc.hardware","comp.sys.ibm.pc.hardware","comp.sys.ibm.pc.hardware","comp.sys.ibm.pc.hardware","comp.sys.ibm.pc.hardware","comp.sys.ibm.pc.hardware","comp.sys.ibm.pc.hardware","comp.sys.ibm.pc.hardware","comp.sys.ibm.pc.hardware","comp.sys.ibm.pc.hardware","comp.sys.ibm.pc.hardware","comp.sys.ibm.pc.hardware","comp.sys.ibm.pc.hardware","comp.sys.ibm.pc.hardware","comp.sys.ibm.pc.hardware","comp.sys.ibm.pc.hardware","comp.sys.mac.hardware","comp.sys.mac.hardware","comp.sys.mac.hardware","comp.sys.mac.hardware","comp.sys.mac.hardware","comp.sys.mac.hardware","comp.sys.mac.hardware","comp.sys.mac.hardware","comp.sys.mac.hardware","comp.sys.mac.hardware","comp.sys.mac.hardware","comp.sys.mac.hardware","comp.sys.mac.hardware","comp.sys.mac.hardware","comp.sys.mac.hardware","comp.sys.mac.hardware","comp.sys.mac.hardware","comp.sys.mac.hardware","comp.sys.mac.hardware","comp.sys.mac.hardware","comp.windows.x","comp.windows.x","comp.windows.x","comp.windows.x","comp.windows.x","comp.windows.x","comp.windows.x","comp.windows.x","comp.windows.x","comp.windows.x","comp.windows.x","comp.windows.x","comp.windows.x","comp.windows.x","comp.windows.x","comp.windows.x","comp.windows.x","comp.windows.x","comp.windows.x","comp.windows.x","misc.forsale","misc.forsale","misc.forsale","misc.forsale","misc.forsale","misc.forsale","misc.forsale","misc.forsale","misc.forsale","misc.forsale","misc.forsale","misc.forsale","misc.forsale","misc.forsale","misc.forsale","misc.forsale","misc.forsale","misc.forsale","misc.forsale","misc.forsale","rec.autos","rec.autos","rec.autos","rec.autos","rec.autos","rec.autos","rec.autos","rec.autos","rec.autos","rec.autos","rec.autos","rec.autos","rec.autos","rec.autos","rec.autos","rec.autos","rec.autos","rec.autos","rec.autos","rec.autos","rec.motorcycles","rec.motorcycles","rec.motorcycles","rec.motorcycles","rec.motorcycles","rec.motorcycles","rec.motorcycles","rec.motorcycles","rec.motorcycles","rec.motorcycles","rec.motorcycles","rec.motorcycles","rec.motorcycles","rec.motorcycles","rec.motorcycles","rec.motorcycles","rec.motorcycles","rec.motorcycles","rec.motorcycles","rec.motorcycles","rec.sport.baseball","rec.sport.baseball","rec.sport.baseball","rec.sport.baseball","rec.sport.baseball","rec.sport.baseball","rec.sport.baseball","rec.sport.baseball","rec.sport.baseball","rec.sport.baseball","rec.sport.baseball","rec.sport.baseball","rec.sport.baseball","rec.sport.baseball","rec.sport.baseball","rec.sport.baseball","rec.sport.baseball","rec.sport.baseball","rec.sport.baseball","rec.sport.baseball","rec.sport.hockey","rec.sport.hockey","rec.sport.hockey","rec.sport.hockey","rec.sport.hockey","rec.sport.hockey","rec.sport.hockey","rec.sport.hockey","rec.sport.hockey","rec.sport.hockey","rec.sport.hockey","rec.sport.hockey","rec.sport.hockey","rec.sport.hockey","rec.sport.hockey","rec.sport.hockey","rec.sport.hockey","rec.sport.hockey","rec.sport.hockey","rec.sport.hockey","sci.crypt","sci.crypt","sci.crypt","sci.crypt","sci.crypt","sci.crypt","sci.crypt","sci.crypt","sci.crypt","sci.crypt","sci.crypt","sci.crypt","sci.crypt","sci.crypt","sci.crypt","sci.crypt","sci.crypt","sci.crypt","sci.crypt","sci.crypt","sci.electronics","sci.electronics","sci.electronics","sci.electronics","sci.electronics","sci.electronics","sci.electronics","sci.electronics","sci.electronics","sci.electronics","sci.electronics","sci.electronics","sci.electronics","sci.electronics","sci.electronics","sci.electronics","sci.electronics","sci.electronics","sci.electronics","sci.electronics","sci.med","sci.med","sci.med","sci.med","sci.med","sci.med","sci.med","sci.med","sci.med","sci.med","sci.med","sci.med","sci.med","sci.med","sci.med","sci.med","sci.med","sci.med","sci.med","sci.med","sci.space","sci.space","sci.space","sci.space","sci.space","sci.space","sci.space","sci.space","sci.space","sci.space","sci.space","sci.space","sci.space","sci.space","sci.space","sci.space","sci.space","sci.space","sci.space","sci.space","soc.religion.christian","soc.religion.christian","soc.religion.christian","soc.religion.christian","soc.religion.christian","soc.religion.christian","soc.religion.christian","soc.religion.christian","soc.religion.christian","soc.religion.christian","soc.religion.christian","soc.religion.christian","soc.religion.christian","soc.religion.christian","soc.religion.christian","soc.religion.christian","soc.religion.christian","soc.religion.christian","soc.religion.christian","soc.religion.christian","talk.politics.guns","talk.politics.guns","talk.politics.guns","talk.politics.guns","talk.politics.guns","talk.politics.guns","talk.politics.guns","talk.politics.guns","talk.politics.guns","talk.politics.guns","talk.politics.guns","talk.politics.guns","talk.politics.guns","talk.politics.guns","talk.politics.guns","talk.politics.guns","talk.politics.guns","talk.politics.guns","talk.politics.guns","talk.politics.guns","talk.politics.mideast","talk.politics.mideast","talk.politics.mideast","talk.politics.mideast","talk.politics.mideast","talk.politics.mideast","talk.politics.mideast","talk.politics.mideast","talk.politics.mideast","talk.politics.mideast","talk.politics.mideast","talk.politics.mideast","talk.politics.mideast","talk.politics.mideast","talk.politics.mideast","talk.politics.mideast","talk.politics.mideast","talk.politics.mideast","talk.politics.mideast","talk.politics.mideast","talk.politics.misc","talk.politics.misc","talk.politics.misc","talk.politics.misc","talk.politics.misc","talk.politics.misc","talk.politics.misc","talk.politics.misc","talk.politics.misc","talk.politics.misc","talk.politics.misc","talk.politics.misc","talk.politics.misc","talk.politics.misc","talk.politics.misc","talk.politics.misc","talk.politics.misc","talk.politics.misc","talk.politics.misc","talk.politics.misc","talk.religion.misc","talk.religion.misc","talk.religion.misc","talk.religion.misc","talk.religion.misc","talk.religion.misc","talk.religion.misc","talk.religion.misc","talk.religion.misc","talk.religion.misc","talk.religion.misc","talk.religion.misc","talk.religion.misc","talk.religion.misc","talk.religion.misc","talk.religion.misc","talk.religion.misc","talk.religion.misc","talk.religion.misc","talk.religion.misc"],"y":["alt.atheism","comp.graphics","comp.os.ms-windows.misc","comp.sys.ibm.pc.hardware","comp.sys.mac.hardware","comp.windows.x","misc.forsale","rec.autos","rec.motorcycles","rec.sport.baseball","rec.sport.hockey","sci.crypt","sci.electronics","sci.med","sci.space","soc.religion.christian","talk.politics.guns","talk.politics.mideast","talk.politics.misc","talk.religion.misc","alt.atheism","comp.graphics","comp.os.ms-windows.misc","comp.sys.ibm.pc.hardware","comp.sys.mac.hardware","comp.windows.x","misc.forsale","rec.autos","rec.motorcycles","rec.sport.baseball","rec.sport.hockey","sci.crypt","sci.electronics","sci.med","sci.space","soc.religion.christian","talk.politics.guns","talk.politics.mideast","talk.politics.misc","talk.religion.misc","alt.atheism","comp.graphics","comp.os.ms-windows.misc","comp.sys.ibm.pc.hardware","comp.sys.mac.hardware","comp.windows.x","misc.forsale","rec.autos","rec.motorcycles","rec.sport.baseball","rec.sport.hockey","sci.crypt","sci.electronics","sci.med","sci.space","soc.religion.christian","talk.politics.guns","talk.politics.mideast","talk.politics.misc","talk.religion.misc","alt.atheism","comp.graphics","comp.os.ms-windows.misc","comp.sys.ibm.pc.hardware","comp.sys.mac.hardware","comp.windows.x","misc.forsale","rec.autos","rec.motorcycles","rec.sport.baseball","rec.sport.hockey","sci.crypt","sci.electronics","sci.med","sci.space","soc.religion.christian","talk.politics.guns","talk.politics.mideast","talk.politics.misc","talk.religion.misc","alt.atheism","comp.graphics","comp.os.ms-windows.misc","comp.sys.ibm.pc.hardware","comp.sys.mac.hardware","comp.windows.x","misc.forsale","rec.autos","rec.motorcycles","rec.sport.baseball","rec.sport.hockey","sci.crypt","sci.electronics","sci.med","sci.space","soc.religion.christian","talk.politics.guns","talk.politics.mideast","talk.politics.misc","talk.religion.misc","alt.atheism","comp.graphics","comp.os.ms-windows.misc","comp.sys.ibm.pc.hardware","comp.sys.mac.hardware","comp.windows.x","misc.forsale","rec.autos","rec.motorcycles","rec.sport.baseball","rec.sport.hockey","sci.crypt","sci.electronics","sci.med","sci.space","soc.religion.christian","talk.politics.guns","talk.politics.mideast","talk.politics.misc","talk.religion.misc","alt.atheism","comp.graphics","comp.os.ms-windows.misc","comp.sys.ibm.pc.hardware","comp.sys.mac.hardware","comp.windows.x","misc.forsale","rec.autos","rec.motorcycles","rec.sport.baseball","rec.sport.hockey","sci.crypt","sci.electronics","sci.med","sci.space","soc.religion.christian","talk.politics.guns","talk.politics.mideast","talk.politics.misc","talk.religion.misc","alt.atheism","comp.graphics","comp.os.ms-windows.misc","comp.sys.ibm.pc.hardware","comp.sys.mac.hardware","comp.windows.x","misc.forsale","rec.autos","rec.motorcycles","rec.sport.baseball","rec.sport.hockey","sci.crypt","sci.electronics","sci.med","sci.space","soc.religion.christian","talk.politics.guns","talk.politics.mideast","talk.politics.misc","talk.religion.misc","alt.atheism","comp.graphics","comp.os.ms-windows.misc","comp.sys.ibm.pc.hardware","comp.sys.mac.hardware","comp.windows.x","misc.forsale","rec.autos","rec.motorcycles","rec.sport.baseball","rec.sport.hockey","sci.crypt","sci.electronics","sci.med","sci.space","soc.religion.christian","talk.politics.guns","talk.politics.mideast","talk.politics.misc","talk.religion.misc","alt.atheism","comp.graphics","comp.os.ms-windows.misc","comp.sys.ibm.pc.hardware","comp.sys.mac.hardware","comp.windows.x","misc.forsale","rec.autos","rec.motorcycles","rec.sport.baseball","rec.sport.hockey","sci.crypt","sci.electronics","sci.med","sci.space","soc.religion.christian","talk.politics.guns","talk.politics.mideast","talk.politics.misc","talk.religion.misc","alt.atheism","comp.graphics","comp.os.ms-windows.misc","comp.sys.ibm.pc.hardware","comp.sys.mac.hardware","comp.windows.x","misc.forsale","rec.autos","rec.motorcycles","rec.sport.baseball","rec.sport.hockey","sci.crypt","sci.electronics","sci.med","sci.space","soc.religion.christian","talk.politics.guns","talk.politics.mideast","talk.politics.misc","talk.religion.misc","alt.atheism","comp.graphics","comp.os.ms-windows.misc","comp.sys.ibm.pc.hardware","comp.sys.mac.hardware","comp.windows.x","misc.forsale","rec.autos","rec.motorcycles","rec.sport.baseball","rec.sport.hockey","sci.crypt","sci.electronics","sci.med","sci.space","soc.religion.christian","talk.politics.guns","talk.politics.mideast","talk.politics.misc","talk.religion.misc","alt.atheism","comp.graphics","comp.os.ms-windows.misc","comp.sys.ibm.pc.hardware","comp.sys.mac.hardware","comp.windows.x","misc.forsale","rec.autos","rec.motorcycles","rec.sport.baseball","rec.sport.hockey","sci.crypt","sci.electronics","sci.med","sci.space","soc.religion.christian","talk.politics.guns","talk.politics.mideast","talk.politics.misc","talk.religion.misc","alt.atheism","comp.graphics","comp.os.ms-windows.misc","comp.sys.ibm.pc.hardware","comp.sys.mac.hardware","comp.windows.x","misc.forsale","rec.autos","rec.motorcycles","rec.sport.baseball","rec.sport.hockey","sci.crypt","sci.electronics","sci.med","sci.space","soc.religion.christian","talk.politics.guns","talk.politics.mideast","talk.politics.misc","talk.religion.misc","alt.atheism","comp.graphics","comp.os.ms-windows.misc","comp.sys.ibm.pc.hardware","comp.sys.mac.hardware","comp.windows.x","misc.forsale","rec.autos","rec.motorcycles","rec.sport.baseball","rec.sport.hockey","sci.crypt","sci.electronics","sci.med","sci.space","soc.religion.christian","talk.politics.guns","talk.politics.mideast","talk.politics.misc","talk.religion.misc","alt.atheism","comp.graphics","comp.os.ms-windows.misc","comp.sys.ibm.pc.hardware","comp.sys.mac.hardware","comp.windows.x","misc.forsale","rec.autos","rec.motorcycles","rec.sport.baseball","rec.sport.hockey","sci.crypt","sci.electronics","sci.med","sci.space","soc.religion.christian","talk.politics.guns","talk.politics.mideast","talk.politics.misc","talk.religion.misc","alt.atheism","comp.graphics","comp.os.ms-windows.misc","comp.sys.ibm.pc.hardware","comp.sys.mac.hardware","comp.windows.x","misc.forsale","rec.autos","rec.motorcycles","rec.sport.baseball","rec.sport.hockey","sci.crypt","sci.electronics","sci.med","sci.space","soc.religion.christian","talk.politics.guns","talk.politics.mideast","talk.politics.misc","talk.religion.misc","alt.atheism","comp.graphics","comp.os.ms-windows.misc","comp.sys.ibm.pc.hardware","comp.sys.mac.hardware","comp.windows.x","misc.forsale","rec.autos","rec.motorcycles","rec.sport.baseball","rec.sport.hockey","sci.crypt","sci.electronics","sci.med","sci.space","soc.religion.christian","talk.politics.guns","talk.politics.mideast","talk.politics.misc","talk.religion.misc","alt.atheism","comp.graphics","comp.os.ms-windows.misc","comp.sys.ibm.pc.hardware","comp.sys.mac.hardware","comp.windows.x","misc.forsale","rec.autos","rec.motorcycles","rec.sport.baseball","rec.sport.hockey","sci.crypt","sci.electronics","sci.med","sci.space","soc.religion.christian","talk.politics.guns","talk.politics.mideast","talk.politics.misc","talk.religion.misc","alt.atheism","comp.graphics","comp.os.ms-windows.misc","comp.sys.ibm.pc.hardware","comp.sys.mac.hardware","comp.windows.x","misc.forsale","rec.autos","rec.motorcycles","rec.sport.baseball","rec.sport.hockey","sci.crypt","sci.electronics","sci.med","sci.space","soc.religion.christian","talk.politics.guns","talk.politics.mideast","talk.politics.misc","talk.religion.misc"],"z":["237","1","2","0","0","0","0","0","0","1","0","1","0","4","0","2","0","10","1","39","2","307","21","13","5","43","3","1","0","0","0","8","9","10","11","4","0","2","2","4","0","14","289","23","6","38","2","1","0","0","0","3","5","1","0","2","0","0","0","0","0","8","34","284","22","5","12","4","0","0","1","0","20","2","0","1","1","0","0","0","1","8","12","21","319","4","7","0","0","2","3","3","9","2","2","0","1","0","1","0","1","17","11","2","1","292","0","2","0","1","2","4","3","3","2","1","1","9","1","0","4","6","2","14","10","3","351","14","6","6","2","5","8","15","2","1","6","1","4","4","0","1","2","3","0","0","3","352","10","1","0","2","5","3","1","0","4","1","1","0","3","0","2","0","0","0","2","3","378","0","0","1","2","4","0","0","2","1","1","0","3","1","4","1","5","0","1","2","2","367","9","5","2","4","0","2","4","3","0","1","0","0","0","1","1","0","1","0","0","15","379","0","0","0","1","0","1","1","0","2","1","4","1","1","0","1","0","0","0","0","0","349","9","0","0","0","5","0","2","0","2","10","1","24","12","3","7","12","1","2","0","6","314","13","2","2","1","0","2","0","8","1","1","0","0","2","1","1","0","0","0","0","4","327","6","1","4","1","4","8","2","4","3","3","1","4","0","1","0","0","0","1","2","0","361","3","2","0","8","3","33","2","2","0","0","0","0","0","0","0","1","0","1","2","1","373","0","4","3","41","2","1","0","1","0","0","0","1","0","1","0","4","0","1","2","0","319","3","95","13","4","1","0","0","0","0","0","0","0","0","0","0","0","2","0","0","1","328","2","2","1","2","6","0","3","0","0","2","1","0","2","4","0","3","3","0","9","12","182","10","15","1","1","1","0","0","0","0","0","1","0","0","0","0","0","6","3","0","1","124"],"zvalues":[237,1,2,0,0,0,0,0,0,1,0,1,0,4,0,2,0,10,1,39,2,307,21,13,5,43,3,1,0,0,0,8,9,10,11,4,0,2,2,4,0,14,289,23,6,38,2,1,0,0,0,3,5,1,0,2,0,0,0,0,0,8,34,284,22,5,12,4,0,0,1,0,20,2,0,1,1,0,0,0,1,8,12,21,319,4,7,0,0,2,3,3,9,2,2,0,1,0,1,0,1,17,11,2,1,292,0,2,0,1,2,4,3,3,2,1,1,9,1,0,4,6,2,14,10,3,351,14,6,6,2,5,8,15,2,1,6,1,4,4,0,1,2,3,0,0,3,352,10,1,0,2,5,3,1,0,4,1,1,0,3,0,2,0,0,0,2,3,378,0,0,1,2,4,0,0,2,1,1,0,3,1,4,1,5,0,1,2,2,367,9,5,2,4,0,2,4,3,0,1,0,0,0,1,1,0,1,0,0,15,379,0,0,0,1,0,1,1,0,2,1,4,1,1,0,1,0,0,0,0,0,349,9,0,0,0,5,0,2,0,2,10,1,24,12,3,7,12,1,2,0,6,314,13,2,2,1,0,2,0,8,1,1,0,0,2,1,1,0,0,0,0,4,327,6,1,4,1,4,8,2,4,3,3,1,4,0,1,0,0,0,1,2,0,361,3,2,0,8,3,33,2,2,0,0,0,0,0,0,0,1,0,1,2,1,373,0,4,3,41,2,1,0,1,0,0,0,1,0,1,0,4,0,1,2,0,319,3,95,13,4,1,0,0,0,0,0,0,0,0,0,0,0,2,0,0,1,328,2,2,1,2,6,0,3,0,0,2,1,0,2,4,0,3,3,0,9,12,182,10,15,1,1,1,0,0,0,0,0,1,0,0,0,0,0,6,3,0,1,124]},"selected":{"id":"4152","type":"Selection"},"selection_policy":{"id":"4173","type":"UnionRenderers"}},"id":"4151","type":"ColumnDataSource"},{"attributes":{"bar_line_color":{"value":"black"},"color_mapper":{"id":"4150","type":"LinearColorMapper"},"formatter":{"id":"4170","type":"BasicTickFormatter"},"label_standoff":8,"location":[0,0],"major_tick_line_color":{"value":"black"},"ticker":{"id":"4158","type":"BasicTicker"}},"id":"4159","type":"ColorBar"},{"attributes":{"axis_label":"y","bounds":"auto","formatter":{"id":"4163","type":"CategoricalTickFormatter"},"major_label_orientation":"horizontal","ticker":{"id":"4135","type":"CategoricalTicker"}},"id":"4134","type":"CategoricalAxis"},{"attributes":{"callback":null,"factors":["alt.atheism","comp.graphics","comp.os.ms-windows.misc","comp.sys.ibm.pc.hardware","comp.sys.mac.hardware","comp.windows.x","misc.forsale","rec.autos","rec.motorcycles","rec.sport.baseball","rec.sport.hockey","sci.crypt","sci.electronics","sci.med","sci.space","soc.religion.christian","talk.politics.guns","talk.politics.mideast","talk.politics.misc","talk.religion.misc"],"tags":[[["y","y",null]]]},"id":"4119","type":"FactorRange"},{"attributes":{},"id":"4161","type":"CategoricalTickFormatter"},{"attributes":{"active_drag":"auto","active_inspect":"auto","active_multi":null,"active_scroll":"auto","active_tap":"auto","tools":[{"id":"4120","type":"HoverTool"},{"id":"4138","type":"SaveTool"},{"id":"4139","type":"PanTool"},{"id":"4140","type":"WheelZoomTool"},{"id":"4141","type":"BoxZoomTool"},{"id":"4142","type":"ResetTool"}]},"id":"4143","type":"Toolbar"},{"attributes":{"text":"Confusion Matrix","text_color":{"value":"black"},"text_font_size":{"value":"12pt"}},"id":"4122","type":"Title"},{"attributes":{},"id":"4128","type":"CategoricalScale"},{"attributes":{},"id":"4135","type":"CategoricalTicker"},{"attributes":{},"id":"4140","type":"WheelZoomTool"},{"attributes":{"callback":null,"renderers":[{"id":"4156","type":"GlyphRenderer"}],"tags":["hv_created"],"tooltips":[["x","@{x}"],["y","@{y}"],["z","@{z}"]]},"id":"4120","type":"HoverTool"},{"attributes":{"fill_color":{"field":"zvalues","transform":{"id":"4150","type":"LinearColorMapper"}},"height":{"units":"data","value":1},"line_alpha":{"value":0},"line_color":{"value":"#1f77b4"},"width":{"units":"data","value":1},"x":{"field":"x"},"y":{"field":"y"}},"id":"4154","type":"Rect"},{"attributes":{"axis_label":"x","bounds":"auto","formatter":{"id":"4161","type":"CategoricalTickFormatter"},"major_label_orientation":0.7853981633974483,"ticker":{"id":"4131","type":"CategoricalTicker"}},"id":"4130","type":"CategoricalAxis"},{"attributes":{},"id":"4126","type":"CategoricalScale"},{"attributes":{},"id":"4170","type":"BasicTickFormatter"},{"attributes":{},"id":"4158","type":"BasicTicker"},{"attributes":{"overlay":{"id":"4171","type":"BoxAnnotation"}},"id":"4141","type":"BoxZoomTool"},{"attributes":{},"id":"4142","type":"ResetTool"},{"attributes":{"data_source":{"id":"4151","type":"ColumnDataSource"},"glyph":{"id":"4154","type":"Rect"},"hover_glyph":null,"muted_glyph":null,"nonselection_glyph":{"id":"4155","type":"Rect"},"selection_glyph":null,"view":{"id":"4157","type":"CDSView"}},"id":"4156","type":"GlyphRenderer"},{"attributes":{"bottom_units":"screen","fill_alpha":{"value":0.5},"fill_color":{"value":"lightgrey"},"left_units":"screen","level":"overlay","line_alpha":{"value":1.0},"line_color":{"value":"black"},"line_dash":[4,4],"line_width":{"value":2},"render_mode":"css","right_units":"screen","top_units":"screen"},"id":"4171","type":"BoxAnnotation"},{"attributes":{"dimension":1,"grid_line_color":{"value":null},"ticker":{"id":"4135","type":"CategoricalTicker"}},"id":"4137","type":"Grid"},{"attributes":{},"id":"4152","type":"Selection"},{"attributes":{},"id":"4139","type":"PanTool"},{"attributes":{},"id":"4131","type":"CategoricalTicker"},{"attributes":{"high":379.0,"low":0.0,"nan_color":"white","palette":["#313695","#313695","#313896","#323b97","#333d98","#34409a","#35439b","#36459c","#36489e","#374b9f","#384da0","#3950a1","#3a52a3","#3b55a4","#3b58a5","#3c5aa7","#3d5da8","#3e60a9","#3f62aa","#4065ac","#4067ad","#416aae","#426db0","#436fb1","#4472b2","#4575b4","#4677b5","#4879b6","#4a7bb7","#4c7db8","#4e80b9","#5082ba","#5284bc","#5486bd","#5589be","#578bbf","#598dc0","#5b8fc1","#5d92c3","#5f94c4","#6196c5","#6398c6","#649bc7","#669dc8","#689fca","#6aa1cb","#6ca4cc","#6ea6cd","#70a8ce","#72aacf","#74add1","#74add1","#76aed1","#78b0d2","#7ab2d3","#7cb4d4","#7fb5d5","#81b7d6","#83b9d7","#85bbd8","#87bcd9","#8abeda","#8cc0db","#8ec2dc","#90c3dd","#92c5de","#95c7df","#97c9e0","#99cae1","#9bcce2","#9dcee3","#a0d0e4","#a2d1e5","#a4d3e6","#a6d5e7","#a8d7e8","#abd9e9","#addae9","#afdbea","#b1dcea","#b3ddeb","#b5deec","#b7dfec","#b9e0ed","#bbe1ed","#bee2ee","#c0e3ef","#c2e4ef","#c4e5f0","#c6e6f0","#c8e7f1","#cae8f2","#cce9f2","#cfeaf3","#d1ebf3","#d3ecf4","#d5edf5","#d7eef5","#d9eff6","#dbf0f6","#ddf1f7","#e0f3f8","#e0f3f8","#e1f3f5","#e2f3f3","#e3f4f1","#e4f4ee","#e6f5ec","#e7f5ea","#e8f6e8","#e9f6e5","#ebf7e3","#ecf7e1","#edf8de","#eef8dc","#f0f9da","#f1f9d8","#f2fad5","#f3fad3","#f5fbd1","#f6fbce","#f7fccc","#f8fcca","#fafdc8","#fbfdc5","#fcfec3","#fdfec1","#ffffbf","#fefdbd","#fefcbb","#fefbb9","#fefab7","#fef8b5","#fef7b3","#fef6b1","#fef5af","#fef3ae","#fef2ac","#fef1aa","#fef0a8","#feeea6","#feeda4","#feeca2","#feeba0","#fee99f","#fee89d","#fee79b","#fee699","#fee497","#fee395","#fee293","#fee191","#fee090","#fee090","#fdde8e","#fddc8c","#fdda8a","#fdd888","#fdd686","#fdd484","#fdd282","#fdd080","#fdce7f","#fdcc7d","#fdca7b","#fdc879","#fdc677","#fdc475","#fdc273","#fdc071","#fdbe70","#fdbc6e","#fdba6c","#fdb86a","#fdb668","#fdb466","#fdb264","#fdb062","#fdae61","#fcab5f","#fca85e","#fba65d","#fba35c","#fba15b","#fa9e59","#fa9b58","#fa9957","#f99656","#f99455","#f99153","#f88e52","#f88c51","#f78950","#f7874f","#f7844d","#f6814c","#f67f4b","#f67c4a","#f57a49","#f57747","#f57446","#f47245","#f46f44","#f46d43","#f46d43","#f26a41","#f16840","#f0653f","#ef633e","#ee603d","#ed5e3c","#eb5b3b","#ea593a","#e95738","#e85437","#e75236","#e64f35","#e44d34","#e34a33","#e24832","#e14531","#e0432f","#df412e","#dd3e2d","#dc3c2c","#db392b","#da372a","#d93429","#d83228","#d73027","#d52e26","#d32c26","#d12a26","#cf2826","#cd2626","#cb2426","#c92226","#c72026","#c51e26","#c31c26","#c11a26","#bf1826","#bd1726","#bb1526","#b91326","#b71126","#b50f26","#b30d26","#b10b26","#af0926","#ad0726","#ab0526","#a90326","#a70126","#a50026","#a50026"]},"id":"4150","type":"LinearColorMapper"},{"attributes":{"callback":null,"factors":["alt.atheism","comp.graphics","comp.os.ms-windows.misc","comp.sys.ibm.pc.hardware","comp.sys.mac.hardware","comp.windows.x","misc.forsale","rec.autos","rec.motorcycles","rec.sport.baseball","rec.sport.hockey","sci.crypt","sci.electronics","sci.med","sci.space","soc.religion.christian","talk.politics.guns","talk.politics.mideast","talk.politics.misc","talk.religion.misc"],"tags":[[["x","x",null]]]},"id":"4118","type":"FactorRange"},{"attributes":{"grid_line_color":{"value":null},"ticker":{"id":"4131","type":"CategoricalTicker"}},"id":"4133","type":"Grid"},{"attributes":{},"id":"4138","type":"SaveTool"},{"attributes":{"fill_alpha":{"value":0.1},"fill_color":{"field":"zvalues","transform":{"id":"4150","type":"LinearColorMapper"}},"height":{"units":"data","value":1},"line_alpha":{"value":0},"line_color":{"value":"#1f77b4"},"width":{"units":"data","value":1},"x":{"field":"x"},"y":{"field":"y"}},"id":"4155","type":"Rect"}],"root_ids":["4121"]},"title":"Bokeh Application","version":"1.1.0"}};
+  var render_items = [{"docid":"a3c74123-7e0b-4836-84a8-83b409af7c15","roots":{"4121":"a2b8d5b6-5de9-4918-bf16-90b3dfc88b02"}}];
+  root.Bokeh.embed.embed_items_notebook(docs_json, render_items);
+
+  }
+  if (root.Bokeh !== undefined) {
+    embed_document(root);
+  } else {
+    var attempts = 0;
+    var timer = setInterval(function(root) {
+      if (root.Bokeh !== undefined) {
+        embed_document(root);
+        clearInterval(timer);
+      }
+      attempts++;
+      if (attempts > 100) {
+        console.log("Bokeh: ERROR: Unable to run BokehJS code because BokehJS library is missing");
+        clearInterval(timer);
+      }
+    }, 10, root)
+  }
+})(window);
+</script>
+</div>

@@ -1,0 +1,502 @@
+#+BEGIN_COMMENT
+.. title: Newsgroups Example
+.. slug: newsgroups-example
+.. date: 2019-05-16 12:41:32 UTC-07:00
+.. tags: nlp,walk-through
+.. category: NLP
+.. link: 
+.. description: A quick walk-through of a Natural Language Processing work-flow.
+.. type: text
+.. status: 
+.. updated: 
+
+#+END_COMMENT
+#+OPTIONS: ^:{}
+#+OPTIONS: H:5
+#+TOC: headlines 2
+#+BEGIN_SRC python :session nlp :results none :exports none
+%load_ext autoreload
+%autoreload 2
+#+END_SRC
+* Beginning
+  This is going to be a look at the [[https://archive.ics.uci.edu/ml/datasets/twenty+newsgroups][Twenty Newsgroups]] dataset which has posts from twenty newsgroups classified by the newsgroup that they were in. It will be sort of a mad-dash through a simple pipeline to create a model that can classify them.
+
+** Imports
+*** Python
+#+begin_src python :session nlp :results none
+from functools import partial
+from pathlib import Path
+import os
+#+end_src
+*** PyPi
+#+begin_src python :session nlp :results none
+from dotenv import load_dotenv
+from sklearn.datasets import fetch_20newsgroups
+from sklearn.feature_extraction.text import (
+    CountVectorizer, 
+    TfidfTransformer,
+    TfidfVectorizer)
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import (
+    confusion_matrix, 
+    f1_score, 
+    precision_score, 
+    recall_score)
+from sklearn.model_selection import (
+    cross_val_score, 
+    train_test_split)
+from sklearn.pipeline import Pipeline
+from tabulate import tabulate
+import holoviews
+import hvplot.pandas
+import pandas
+#+end_src
+*** My Stuff
+#+begin_src python :session nlp :results none
+from graeae.tables import CountPercentage
+from graeae.timers import Timer
+from graeae.visualization import EmbedHoloview
+#+end_src
+** Set Up
+*** Load the Dotenv
+    This loads some extra environment variables, in particular the path to the sklearn-data folder.
+#+begin_src python :session nlp :results none
+dotenv_path = Path("~/.env").expanduser()
+load_dotenv(dotenv_path)
+#+end_src
+*** The Timer
+    This is an object to keep track of how long things take.
+#+begin_src python :session nlp :results none
+TIMER = Timer()
+#+end_src
+*** The Table
+    This is a helper to print org-tables from data-frames.
+#+begin_src python :session nlp :results none
+TABLE = partial(tabulate, tablefmt="orgtbl", headers="keys",
+                showindex="false")
+#+end_src
+*** Plotting
+    This helps save the plots to the right folder for nikola.
+#+begin_src python :session nlp :results none
+SLUG = "newsgroups-example"
+Embed = partial(EmbedHoloview, folder_path="../../files/posts/nlp/" + SLUG)
+holoviews.extension("bokeh")
+#+end_src
+* Middle
+** Loading the Data
+   We're going to be using the [[https://scikit-learn.org/0.19/datasets/twenty_newsgroups.html][20 Newsgroups dataset]] that you can download using sklearn's [[https://scikit-learn.org/0.19/modules/generated/sklearn.datasets.fetch_20newsgroups.html#sklearn.datasets.fetch_20newsgroups][fetch_20newsgroups]] function. By default it downloads it to a folder named =scikit_learn_data= in your home directory, but since /everybody/ seems to want to add folders to my home directory I prefer to put it in a hidden folder so I'm not always staring at all these folders. To make it more likely that I'll remember the right folder name I put it in an environment variable.
+#+begin_src python :session nlp :results output :exports both
+path = Path(os.environ.get("SKLEARN")).expanduser()
+
+with TIMER:
+    dataset = fetch_20newsgroups(data_home=path)
+#+end_src
+
+#+RESULTS:
+: 2019-05-18 10:39:58,412 graeae.timers.timer start: Started: 2019-05-18 10:39:58.412167
+: Downloading 20news dataset. This may take a few minutes.
+: Downloading dataset from https://ndownloader.figshare.com/files/5975967 (14 MB)
+: 2019-05-18 10:40:33,263 graeae.timers.timer end: Ended: 2019-05-18 10:40:33.263259
+: 2019-05-18 10:40:33,263 graeae.timers.timer end: Elapsed: 0:00:34.851092
+
+The =dataset= is an sklearn bunch - a dictionary-like object (but like pandas you can also use dot-notation to access the values).
+
+#+begin_src python :session nlp :results output raw :exports both
+for key in dataset.keys():
+    print(f" - {key}")
+#+end_src
+
+#+RESULTS:
+ - data
+ - filenames
+ - target_names
+ - target
+ - DESCR
+
+The =data= is the inputs and the =target= is the labels for each input.
+
+The description is really long, but we can look at part of it to get some idea of what's in the data-set.
+
+#+begin_src python :session nlp :results output raw :exports both
+print("#+begin_src rst")
+print(dataset.DESCR[:1085])
+print("#+end_src")
+#+end_src
+
+#+RESULTS:
+#+begin_src rst
+.. _20newsgroups_dataset:
+
+The 20 newsgroups text dataset
+------------------------------
+
+The 20 newsgroups dataset comprises around 18000 newsgroups posts on
+20 topics split in two subsets: one for training (or development)
+and the other one for testing (or for performance evaluation). The split
+between the train and test set is based upon a messages posted before
+and after a specific date.
+
+This module contains two loaders. The first one,
+:func:`sklearn.datasets.fetch_20newsgroups`,
+returns a list of the raw texts that can be fed to text feature
+extractors such as :class:`sklearn.feature_extraction.text.CountVectorizer`
+with custom parameters so as to extract feature vectors.
+The second one, :func:`sklearn.datasets.fetch_20newsgroups_vectorized`,
+returns ready-to-use features, i.e., it is not necessary to use a feature
+extractor.
+
+**Data Set Characteristics:**
+
+    =================   ==========
+    Classes                     20
+    Samples total            18846
+    Dimensionality               1
+    Features                  text
+    =================   ==========
+#+end_src
+
+So, reading the blob the first thing to notice is that they already split the dataset into training and testing sets - even though I didn't specify anything all I really got was the training set.
+
+** Setting Up The Test Set
+   Normally I would use sklearn's [[https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html][train_test_split]] to split the data set up, but since they set it up so that you have to download the test set separately, I guess I'll go with that.
+#+begin_src python :session nlp :results output :exports both
+test_set = fetch_20newsgroups(data_home=path, subset="test")
+x_train = dataset.data
+y_train = dataset.target
+x_test = test_set.data
+y_test = test_set.target
+train_count = len(x_train)
+test_count = len(x_test)
+total_count = len(dataset.data) + len(test_set.data)
+print(f"Training: {train_count:,} "
+      f"({100 * train_count /total_count:.0f} %)")
+print(f"Testing: {test_count:,} ({100 * test_count/total_count:.0f} %)")
+#+end_src   
+
+#+RESULTS:
+: Training: 11,314 (60 %)
+: Testing: 7,532 (40 %)
+
+*** What does an entry look like?
+
+#+begin_src python :session nlp :results output :exports both
+index = min((len(x_train[index]) for index in range(len(x_train))))
+print(x_train[index])
+#+end_src
+
+#+RESULTS:
+#+begin_example
+From: joachim@kih.no (joachim lous)
+Subject: Re: TIFF: philosophical significance of 42
+Organization: Kongsberg Ingeniorhogskole
+Lines: 30
+NNTP-Posting-Host: samson.kih.no
+X-Newsreader: TIN [version 1.1 PL8]
+
+ulrich@galki.toppoint.de wrote:
+
+> According to the TIFF 5.0 Specification, the TIFF "version number"
+> (bytes 2-3) 42 has been chosen for its "deep philosophical 
+> significance".
+
+> When I first read this, I rotfl. Finally some philosphy in a technical
+> spec. But still I wondered what makes 42 so significant.
+
+> Last week, I read the Hitchhikers Guide To The Galaxy, and rotfl the
+> second time. (After millions of years of calculation, the second-best
+> computer of all time reveals that 42 is the answer to the question
+> about life, the universe and everything)
+
+> Is this actually how they picked the number 42?
+
+Yes.
+
+> Does anyone have any  other suggestions where the 42 came from?
+
+I don't know where Douglas Adams took it from, but I'm pretty sure he's
+the one who launched it (in the Guide). Since then it's been showing up 
+all over the place.
+
+    _______________________________
+   / _ L*   /  _  / .    /      _  /_  "One thing is for sure: The sheep
+  /  _)    /()(/(/)//)) /_ ()(/_) / /  Is NOT a creature of the earth."
+ / \_)~  (/ Joachim@kih.no       / /     
+/_______________________________/ / -The back-masking on 'Haaden II'
+ /_______________________________/  from 'Exposure' by Robert Fripp.
+
+#+end_example
+
+Looks like there's a lot of noise in these things.
+
+*** How are the groups distributed?
+    The labels are numbers representing which Newsgroup each of the documents came from, but they also give us a translation in the form of the =dataset.target_names= list so we can take a look at how much of each group is represented.
+
+#+begin_src python :session nlp :results none
+labels = {index: name for index, name in enumerate(dataset.target_names)}
+#+end_src
+
+#+begin_src python :session nlp :results output raw :exports both
+Y = pandas.Series(y_train).map(labels)
+y_count = CountPercentage(Y, value_label="Newsgroup")
+y_count()
+#+end_src
+
+#+RESULTS:
+| Newsgroup                | Count | Percent (%) |
+|--------------------------+-------+-------------|
+| rec.sport.hockey         |   600 |        5.30 |
+| soc.religion.christian   |   599 |        5.29 |
+| rec.motorcycles          |   598 |        5.29 |
+| rec.sport.baseball       |   597 |        5.28 |
+| sci.crypt                |   595 |        5.26 |
+| rec.autos                |   594 |        5.25 |
+| sci.med                  |   594 |        5.25 |
+| comp.windows.x           |   593 |        5.24 |
+| sci.space                |   593 |        5.24 |
+| sci.electronics          |   591 |        5.22 |
+| comp.os.ms-windows.misc  |   591 |        5.22 |
+| comp.sys.ibm.pc.hardware |   590 |        5.21 |
+| misc.forsale             |   585 |        5.17 |
+| comp.graphics            |   584 |        5.16 |
+| comp.sys.mac.hardware    |   578 |        5.11 |
+| talk.politics.mideast    |   564 |        4.98 |
+| talk.politics.guns       |   546 |        4.83 |
+| alt.atheism              |   480 |        4.24 |
+| talk.politics.misc       |   465 |        4.11 |
+| talk.religion.misc       |   377 |        3.33 |
+
+So, there isn't too much of a spread, although religion (other than Christianity and Microsoft Windows) and politics are a little less represented.
+
+
+#+begin_src python :session nlp :results output raw :exports both
+plot = y_count.table.hvplot.bar(x="Newsgroup", y="Count").opts(
+    title="Newsgroup Counts", xrotation=45, height=800, width=1000, tools=["crosshair", "hover"])
+Embed(plot=plot, file_name="newsgroups_count")()
+#+end_src
+
+#+RESULTS:
+#+begin_export html
+<object type="text/html" data="newsgroups_count.html" style="width:100%" height=800>
+  <p>Figure Missing</p>
+</object>
+#+end_export
+
+Actually, now that I plot it it looks like the last three are underepresented, especially when compared to hockey (some kind of Canadian bias?).
+** The Document Term Matrix
+   To work with the data-set we need to convert it to some kind of numeric value. In this case I'm going to use sklearn's [[https://scikit-learn.org/0.19/modules/generated/sklearn.feature_extraction.text.CountVectorizer.html#sklearn.feature_extraction.text.CountVectorizer][CountVectorizer]] to create a matrix where each row represents a document and each column is a term in the [[https://www.wikiwand.com/en/Text_corpus][corpus]] (creating a [[https://www.wikiwand.com/en/Bag-of-words_model][Bag of Words]]/[[https://www.wikiwand.com/en/Document-term_matrix][Document Term Matrix]]) The values are the count of the terms in each document. Sklearn has an alternative download function - [[https://scikit-learn.org/0.19/modules/generated/sklearn.datasets.fetch_20newsgroups_vectorized.html#sklearn.datasets.fetch_20newsgroups_vectorized][fetch_20newsgroups_vectorized]] that will download it already vectorized, but since you have to do the conversion yourself in most cases I thought it would be better not to use it.
+
+#+begin_src python :session nlp :results output :exports both
+vectorizer = CountVectorizer()
+with TIMER:
+    x_train_vectorized = vectorizer.fit_transform(x_train)
+#+end_src
+
+#+RESULTS:
+: 2019-05-18 16:17:56,875 graeae.timers.timer start: Started: 2019-05-18 16:17:56.875200
+: 2019-05-18 16:17:58,628 graeae.timers.timer end: Ended: 2019-05-18 16:17:58.628334
+: 2019-05-18 16:17:58,628 graeae.timers.timer end: Elapsed: 0:00:01.753134
+
+That was quicker than I thought it would be - I guess the data set isn't that large.
+
+#+begin_src python :session nlp :results output :exports both
+print(type(x_train_vectorized))
+rows, columns = x_train_vectorized.shape
+print(f"Documents: {rows:,} Terms: {columns:,}")
+#+end_src
+
+#+RESULTS:
+: <class 'scipy.sparse.csr.csr_matrix'>
+: Documents: 11,314 Terms: 130,107
+
+I was going to inspect the matrix, but it's a sparse matrix so you have to convert it to another type to inspect it, and all it would be is a matrix of numbers (term counts) so I'll leave it for some other time.
+
+** Term-Frequency/Inverse Document Frequency
+   If we just use the counts (the Term-Frequency (TF)), then the most common word per document will have the highest value, but if a word is spread across all or at least many documents, then even if it's common in a document it probably won't help us distinguish the documents from each other in a meaningful way. To deal with this we can add a penalty (the Inverse-Document-Frequency (IDF) weight) that lowers the value for a term the more common it is among all the documents. Together the two methods are knows as [[https://www.wikiwand.com/en/Tf–idf][TF-IDF.]] Here sklearn's [[https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfTransformer.html][TfidfTransformer]] does the transform for us.
+
+#+begin_src python :session nlp :results output :exports both
+transformer = TfidfTransformer()
+x_train_tfidf = transformer.fit_transform(x_train_vectorized)
+rows, columns = x_train_tfidf.shape
+print(f"Documents: {rows:,} Terms: {columns:,}")
+#+end_src
+
+#+RESULTS:
+: Documents: 11,314 Terms: 130,107
+** A Logistic Regression Pipeline
+   To classify the documents we're going to use [[https://www.wikiwand.com/en/Logistic_regression][Logistic Regression]] (also from [[https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html][sklearn]]). In addition, instead of creating the Document Term Matrix in separate steps as above, I'm going to create a [[https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html][Pipeline]] so sklearn can do it in a single call. An sklearn Pipeline takes as all but the last of it's constructor's argument a list of =(name, transform)= tuples, where the =transform= argument is an object that has a =fit_transform= method (like the =CountVectorizer= we saw earlier). The last of argument of the constructor is the model that you are going to fit on the data that the pipeline has transformed. If you don't want to customize the names there's a [[https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.make_pipeline.html#sklearn.pipeline.make_pipeline][make_pipeline]] function that just takes the transformer and model instances as arguments and automatically names them for you, returning the pipeline as its output.
+
+I used the =CountVectorizer= followed by the =TfidfTransformer= to show them separately, but sklearn actually has a [[https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfVectorizer.html][TfidfVectorizer]] class that does both of them for you so I'll use that here.
+
+#+begin_src python :session nlp :results none
+model = Pipeline([("TF-IDF", TfidfVectorizer()), 
+                  ("Logistic Regression", LogisticRegression(
+                      solver="lbfgs",
+                      multi_class="multinomial"))])
+#+end_src
+
+I'm using the defaults for Logistic Regression in general, but it will output a lot of warnings if you don't set the solver and multi-class. I'm using the [[https://www.wikiwand.com/en/Limited-memory_BFGS][Limited-Memory Broyden-Fletcher-Goldfarb-Shanno]] algorithm for the solver and setting the =multi_class= to "multinomial" (setting it to "auto" would do the same thing since there is more than one document-classification, rather than being a binary classification problem).
+
+** Cross Validation
+Now we can do some cross validation.
+
+#+begin_src python :session nlp :results output :exports both
+with TIMER:
+    scores = cross_val_score(model, x_train, y_train, cv=7, 
+                             scoring="f1_macro")
+#+end_src
+
+#+RESULTS:
+: 2019-05-18 16:18:23,392 graeae.timers.timer start: Started: 2019-05-18 16:18:23.392913
+: 2019-05-18 16:22:00,933 graeae.timers.timer end: Ended: 2019-05-18 16:22:00.933407
+: 2019-05-18 16:22:00,934 graeae.timers.timer end: Elapsed: 0:03:37.540494
+
+So this took a little bit longer than I thought it might, although it wasn't too long.
+
+#+begin_src python :session nlp :results output raw :exports both
+scores = pandas.Series(scores)
+description = scores.describe().reset_index()
+description.columns = ["Statistic", "Value"]
+print(TABLE(description))
+#+end_src
+
+#+RESULTS:
+| Statistic |      Value |
+|-----------+------------|
+| count     |          7 |
+| mean      |   0.895705 |
+| std       | 0.00459816 |
+| min       |    0.88992 |
+| 25%       |   0.892157 |
+| 50%       |    0.89517 |
+| 75%       |   0.900081 |
+| max       |    0.90037 |
+
+It looks like even with the default parameters the model got a mean/median [[https://www.wikiwand.com/en/F1_score][F1 Score]] of 90 %, with a standard deviation of 0.0046, so the variance is pretty low.
+
+** Testing
+Let's try fitting it to the whole training set and see how it does.
+
+#+begin_src python :session nlp :results output :exports both
+with TIMER:
+    fitted = model.fit(x_train, y_train)
+#+end_src
+
+#+RESULTS:
+: 2019-05-18 16:23:58,703 graeae.timers.timer start: Started: 2019-05-18 16:23:58.703461
+: 2019-05-18 16:24:33,056 graeae.timers.timer end: Ended: 2019-05-18 16:24:33.056510
+: 2019-05-18 16:24:33,057 graeae.timers.timer end: Elapsed: 0:00:34.353049
+
+#+begin_src python :session nlp :results output :exports both
+predictions = fitted.predict(x_test)
+print(f"F1 Score: {f1_score(y_test, predictions, average='weighted'):.2f}")
+#+end_src
+
+#+RESULTS:
+: F1 Score: 0.83
+
+The F1 score in the test-set was lower than the maximum score for our cross-validation checks, so it may have over-fit the training set - or, since they used time to split the sets, the training set might not really represent the test set.
+
+#+begin_src python :session nlp :results output :exports both
+print(
+    "Precision: "
+    f"{precision_score(y_test, predictions, average='weighted'):.2f}")
+print(
+    "Recall: "
+    f"{recall_score(y_test, predictions, average='weighted'):.2f}")
+#+end_src
+
+#+RESULTS:
+: Precision: 0.83
+: Recall: 0.83
+
+The precision and recall are the same as the F1 score, so it isn't better at either (or it's good at both, your pick).
+
+** A Confusion Matrix
+   Having a single value like the F1 score helps us evaluate the model, but using a [[https://www.wikiwand.com/en/Confusion_matrix][Confusion Matrix]] (via sklearn's [[https://scikit-learn.org/stable/modules/generated/sklearn.metrics.confusion_matrix.html][confusion_matrix]] function) will help us understand how the model did a little more.
+
+#+begin_src python :session nlp :results none
+confusion = confusion_matrix(y_true=y_test, y_pred=predictions)
+#+end_src
+
+#+begin_src python :session nlp :results output :exports both
+print(confusion.shape)
+print(confusion[:5, :5])
+#+end_src
+
+#+RESULTS:
+: (20, 20)
+: [[237   2   0   0   1]
+:  [  1 307  14   8   8]
+:  [  2  21 289  34  12]
+:  [  0  13  23 284  21]
+:  [  0   5   6  22 319]]
+
+The confusion matrix has twenty rows and columns. The rows represent what classification our model predicted and the columns what they actually were - the diagonal is the count of the correctly classified documents. We could just print out the twenty by twenty matrix, but why not plot it instead?
+
+#+begin_src python :session nlp :results output raw :exports both
+plot = holoviews.HeatMap((dataset.target_names, 
+                          dataset.target_names, 
+                          confusion)).options(width=800,                                              
+                                              height=800,
+                                              xrotation=45,
+                                              tools=["hover"],
+                                              colorbar=True,
+                                              title="Confusion Matrix")
+Embed(plot=plot, file_name="confusion_matrix")()
+#+end_src
+
+#+RESULTS:
+#+begin_export html
+<object type="text/html" data="confusion_matrix.html" style="width:100%" height=800>
+  <p>Figure Missing</p>
+</object>
+#+end_export
+
+*Note To Future Self:* If you don't set the height and width holoviews will collapse the heatmap into an unviewable point, with only the axes visible (nice library but their documentation is /horrible/).
+
+Surprisingly, HoloViews rotated the matrix, but it looks like the values are the same.
+
+As you might expect, /talk.religion.misc/, /talk.politics.misc/, and /alt.atheism/, the three least represented groups in our training set have the least "heat". Surprisingly, /rec.sport.baseball/ is the deepest red (has the highest value) while it is eleventh in the training set, and hockey, which is the most represented in the training set is sort of light. Maybe I should have tried to match the distributions when I did the train-test set split.
+
+Anyway, since the groups aren't equally represented, the matches probably aren't as interesting as the misses.
+
+#+begin_src python :session nlp :results output :exports both
+mask = numpy.ones(confusion.shape, dtype=bool)
+numpy.fill_diagonal(mask, 0)
+most_confused = confusion[mask].max()
+print(f"Largest Confusion: {most_confused}")
+#+end_src
+
+#+RESULTS:
+: Largest Confusion: 95
+
+The largest confusion was for /talk.political.guns/ being confused for /talk.political.misc/, which doesn't seem that surprising, since guns are miscellaneously political. Let's try a top-five.
+
+#+begin_src python :session nlp :results output raw :exports both
+top_five = list(reversed(sorted(confusion[mask])))[:5]
+for value in top_five:
+    print(f" - {value}")
+#+end_src
+
+#+RESULTS:
+ - 95
+ - 43
+ - 41
+ - 39
+ - 38
+
+The remainders in the top five:
+
+ - /comp.graphics/ was mistaken for /comp.windows.x/ (43)
+ - /soc.religion.christian/ was mistaken for /talk.religion.misc/ (41)
+ - /talk.religion.misc/ was mistaken for /alt.atheism/ (39)
+ - /comp.windows.x/ was mistaken for /comp.os.ms-windows.misc/ (38)
+
+In the dataset (as in life) the most confusisng seemed to be religion, politics, and computers, while the easiest to classify were sports and motorcycles (the rec categories). The /sci/ categories did all right as well, although not as well as /rec/ oddly (since I would have assumed they would have more identifying jargon).
+
+* End
+So here we have a basic walk-through using sklearn to model a document classifier built with Logistic Regression. One of the nice things about logistic regression is that the weights tell you which variables are the most important, but I've never tried that with documents so I don't know how to do that here. There are many improvements that could be made (would have to be made) if this were an attempt to make a real model, but the simplicity of the steps shows how much you can do with off-the-shelf software. Eighty-three percent isn't perfect, but it's pretty good.
+
+** Original Source
+
+1. Kasliwal N. Natural language processing with Python quick start guide: going from a Python developer to an effective natural language processing engineer [Internet]. 2018 [cited 2019 May 18]. Available from: http://proquest.safaribooksonline.com/?fpi=9781789130386

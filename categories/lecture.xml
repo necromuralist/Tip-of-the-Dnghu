@@ -1,44 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tip of the Dnghu (Posts about lecture)</title><link>https://necromuralist.github.io/Tip-of-the-Dnghu/</link><description></description><atom:link href="https://necromuralist.github.io/Tip-of-the-Dnghu/categories/lecture.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2019 &lt;a href="mailto:necromuralist@protonmail.com"&gt;Cloistered Monkey&lt;/a&gt; </copyright><lastBuildDate>Thu, 09 May 2019 20:48:04 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>The Vector Space Model</title><link>https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/</link><dc:creator>Cloistered Monkey</dc:creator><description>&lt;div id="table-of-contents"&gt;
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tip of the Dnghu (Posts about lecture)</title><link>https://necromuralist.github.io/Tip-of-the-Dnghu/</link><description></description><atom:link href="https://necromuralist.github.io/Tip-of-the-Dnghu/categories/lecture.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2019 &lt;a href="mailto:necromuralist@protonmail.com"&gt;Cloistered Monkey&lt;/a&gt; </copyright><lastBuildDate>Sat, 18 May 2019 17:31:33 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>The Vector Space Model</title><link>https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/</link><dc:creator>Cloistered Monkey</dc:creator><description>&lt;div id="table-of-contents"&gt;
 &lt;h2&gt;Table of Contents&lt;/h2&gt;
 &lt;div id="text-table-of-contents"&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#orgc1aefd5"&gt;Beginning&lt;/a&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#orgd28d8ed"&gt;Beginning&lt;/a&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#orgb32e3f7"&gt;Imports&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#org4214af9"&gt;The Query&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#orga562cf5"&gt;The Document&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#org6cf2550"&gt;Imports&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#org8147776"&gt;The Query&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#orgbb09d3a"&gt;The Document&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#orgdd03b34"&gt;Middle&lt;/a&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#orgf1a5025"&gt;Middle&lt;/a&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#org7a1c741"&gt;The Bit Vector&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#org76c95d6"&gt;Term Frequency Vector&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#orgf927758"&gt;Inverse Document Frequency&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#org6daf1f8"&gt;Ranking with TF-IDF Weighting&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#orgb61056b"&gt;Okapi BM25&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#org89a66c3"&gt;Document Length Normalization&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#org3dd934e"&gt;The State of the Art&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#org399e1fb"&gt;The Bit Vector&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#org458d05f"&gt;Term Frequency Vector&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#org341ab70"&gt;Inverse Document Frequency&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#org424e143"&gt;Ranking with TF-IDF Weighting&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#org5f93e74"&gt;Okapi BM25&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#org44d9854"&gt;Document Length Normalization&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#orgad9eec4"&gt;The State of the Art&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#org5ef4ccd"&gt;End&lt;/a&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#org5209dc3"&gt;End&lt;/a&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#orgb0efdd2"&gt;VSM Improvements&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#orgeb92dd5"&gt;VSM Improvements&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgc1aefd5" class="outline-2"&gt;
-&lt;h2 id="orgc1aefd5"&gt;Beginning&lt;/h2&gt;
-&lt;div class="outline-text-2" id="text-orgc1aefd5"&gt;
+&lt;div id="outline-container-orgd28d8ed" class="outline-2"&gt;
+&lt;h2 id="orgd28d8ed"&gt;Beginning&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-orgd28d8ed"&gt;
 &lt;p&gt;
 This is a brief write-up of some notes I took on the Vector Space Model (VSM) used to rank documents by relevancy to keywords in a query. The query is represented as a vector with a 1 for each of the search terms and, in the simplest case, the vector to determine relevance will hold a 1 in each place where the document has a word that matches a query term. This might be easier with an example.
 &lt;/p&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgb32e3f7" class="outline-3"&gt;
-&lt;h3 id="orgb32e3f7"&gt;Imports&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-orgb32e3f7"&gt;
+&lt;div id="outline-container-org6cf2550" class="outline-3"&gt;
+&lt;h3 id="org6cf2550"&gt;Imports&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org6cf2550"&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;# python
 from collections import Counter
 from functools import partial
@@ -67,9 +67,9 @@ Embed = partial(EmbedHoloview, folder_path=output)
 &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-org4214af9" class="outline-3"&gt;
-&lt;h3 id="org4214af9"&gt;The Query&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org4214af9"&gt;
+&lt;div id="outline-container-org8147776" class="outline-3"&gt;
+&lt;h3 id="org8147776"&gt;The Query&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org8147776"&gt;
 &lt;p&gt;
 The user made a query with some key words which is normally represented by a vector with the count of each term as the values.
 &lt;/p&gt;
@@ -86,9 +86,9 @@ print(terms)
 &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-orga562cf5" class="outline-3"&gt;
-&lt;h3 id="orga562cf5"&gt;The Document&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-orga562cf5"&gt;
+&lt;div id="outline-container-orgbb09d3a" class="outline-3"&gt;
+&lt;h3 id="orgbb09d3a"&gt;The Document&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-orgbb09d3a"&gt;
 &lt;p&gt;
 We want to retrieve the most relevant documents from a set of documents, which I'll represent as lists of words.
 &lt;/p&gt;
@@ -100,13 +100,13 @@ document_2 = "a movie about blood blood and more blood".split()
 &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-orgdd03b34" class="outline-2"&gt;
-&lt;h2 id="orgdd03b34"&gt;Middle&lt;/h2&gt;
-&lt;div class="outline-text-2" id="text-orgdd03b34"&gt;
+&lt;div id="outline-container-orgf1a5025" class="outline-2"&gt;
+&lt;h2 id="orgf1a5025"&gt;Middle&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-orgf1a5025"&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org7a1c741" class="outline-3"&gt;
-&lt;h3 id="org7a1c741"&gt;The Bit Vector&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org7a1c741"&gt;
+&lt;div id="outline-container-org399e1fb" class="outline-3"&gt;
+&lt;h3 id="org399e1fb"&gt;The Bit Vector&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org399e1fb"&gt;
 &lt;p&gt;
 To represent similarity I'll use a vector with ones where there is a word match in the document.
 &lt;/p&gt;
@@ -150,9 +150,9 @@ So we con see one problem with our method right off the bat, in that repeated te
 &lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org76c95d6" class="outline-3"&gt;
-&lt;h3 id="org76c95d6"&gt;Term Frequency Vector&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org76c95d6"&gt;
+&lt;div id="outline-container-org458d05f" class="outline-3"&gt;
+&lt;h3 id="org458d05f"&gt;Term Frequency Vector&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org458d05f"&gt;
 &lt;p&gt;
 One approach to fix our lack of giving weight to more occurences of a keyword is to use counts, Term Frequency (TF), instead just a 0 or 1 in our vector.
 &lt;/p&gt;
@@ -212,9 +212,9 @@ My example is a little convoluted, but the point is that the most common words a
 &lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgf927758" class="outline-3"&gt;
-&lt;h3 id="orgf927758"&gt;Inverse Document Frequency&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-orgf927758"&gt;
+&lt;div id="outline-container-org341ab70" class="outline-3"&gt;
+&lt;h3 id="org341ab70"&gt;Inverse Document Frequency&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org341ab70"&gt;
 &lt;p&gt;
 This method seeks to overcome the problem of words that are too common by reducing the weight of a term the more common it is.
 &lt;/p&gt;
@@ -257,9 +257,9 @@ You can see that as the number of documents with the word in it (&lt;i&gt;k&lt;/
 &lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org6daf1f8" class="outline-3"&gt;
-&lt;h3 id="org6daf1f8"&gt;Ranking with TF-IDF Weighting&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org6daf1f8"&gt;
+&lt;div id="outline-container-org424e143" class="outline-3"&gt;
+&lt;h3 id="org424e143"&gt;Ranking with TF-IDF Weighting&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org424e143"&gt;
 &lt;p&gt;
 Okay, so we hav Term-Frequency as our basic measure of relevancy, and we have this notion that the more common a word is, the less important it is to relevancy, embodied by Inverse Document Frequency (IDF), how do we use them? Like this.
 &lt;/p&gt;
@@ -288,9 +288,9 @@ So the relevance of a document is the sum of the products of the Term Frequency 
 &lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgb61056b" class="outline-3"&gt;
-&lt;h3 id="orgb61056b"&gt;Okapi BM25&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-orgb61056b"&gt;
+&lt;div id="outline-container-org5f93e74" class="outline-3"&gt;
+&lt;h3 id="org5f93e74"&gt;Okapi BM25&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org5f93e74"&gt;
 &lt;p&gt;
 The &lt;a href="https://en.wikipedia.org/wiki/Okapi_BM25"&gt;Okapi BM25&lt;/a&gt; ranking function works in a similar way to TF-IDF, but it uses a silghtly different method. Instead of just the count of the words in a document (&lt;i&gt;c(w, d)&lt;/i&gt;), it also uses the number of documents that have the word (&lt;i&gt;k&lt;/i&gt;).
 \[
@@ -329,16 +329,16 @@ Because of the way it's set up, &lt;i&gt;k + 1&lt;/i&gt; acts as an upper bound 
 &lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org89a66c3" class="outline-3"&gt;
-&lt;h3 id="org89a66c3"&gt;Document Length Normalization&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org89a66c3"&gt;
+&lt;div id="outline-container-org44d9854" class="outline-3"&gt;
+&lt;h3 id="org44d9854"&gt;Document Length Normalization&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org44d9854"&gt;
 &lt;p&gt;
 We have another problem to deal with - longer documents have more words and so are more likely to have the query terms, even if they aren't necessarily relevant. So one thing to do might be do drop really long documents, but some documents are long because the author was logorrheic, and others are long because the have a lot of content and so might be useful if we match them, so we don't want to throw everything away. What we want to do instead is add a penalty for longer documents.
 &lt;/p&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org707be92" class="outline-4"&gt;
-&lt;h4 id="org707be92"&gt;Pivoted Length Normalization&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org707be92"&gt;
+&lt;div id="outline-container-org9fb8e44" class="outline-4"&gt;
+&lt;h4 id="org9fb8e44"&gt;Pivoted Length Normalization&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org9fb8e44"&gt;
 &lt;p&gt;
 This is a method to add a penalty to longer documents and a reward for shorter documents. Here's the equation.
 &lt;/p&gt;
@@ -387,9 +387,9 @@ This term ends up in the denominator of the term-frequency equivalent calculatio
 &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-org3dd934e" class="outline-3"&gt;
-&lt;h3 id="org3dd934e"&gt;The State of the Art&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org3dd934e"&gt;
+&lt;div id="outline-container-orgad9eec4" class="outline-3"&gt;
+&lt;h3 id="orgad9eec4"&gt;The State of the Art&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-orgad9eec4"&gt;
 &lt;p&gt;
 These are the two "best" Vector Space Model ranking functions.
 &lt;/p&gt;
@@ -401,9 +401,9 @@ k \in [0, +\inf)
 \]
 &lt;/p&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org643919c" class="outline-4"&gt;
-&lt;h4 id="org643919c"&gt;Pivoted Length Normalization&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org643919c"&gt;
+&lt;div id="outline-container-org5a97432" class="outline-4"&gt;
+&lt;h4 id="org5a97432"&gt;Pivoted Length Normalization&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org5a97432"&gt;
 &lt;p&gt;
 \[
 f(q, d) = \sum_{w \in q \cap d} c(w, q) \frac{\ln(1 + ln(1 + c(w, d)))}{1 -b + b\frac{\vert d \vert}{\textit{avg dl}}} \og \frac{M + 1}{df(w)}
@@ -411,9 +411,9 @@ f(q, d) = \sum_{w \in q \cap d} c(w, q) \frac{\ln(1 + ln(1 + c(w, d)))}{1 -b + b
 &lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org9a2b7d5" class="outline-4"&gt;
-&lt;h4 id="org9a2b7d5"&gt;BM25 With Document Length Normalization&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org9a2b7d5"&gt;
+&lt;div id="outline-container-org22e1949" class="outline-4"&gt;
+&lt;h4 id="org22e1949"&gt;BM25 With Document Length Normalization&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org22e1949"&gt;
 &lt;p&gt;
 \[
 f(q, d) = \sum_{w \in q \cap d} c(w, d) \frac{(k+1) c(w, d)}{c(w, d) + k(1 - b + b \frac{\vert d \vert}{\textit{avg dl}})} \log \frac{M+1}{df(w)}
@@ -424,21 +424,21 @@ f(q, d) = \sum_{w \in q \cap d} c(w, d) \frac{(k+1) c(w, d)}{c(w, d) + k(1 - b +
 &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-org5ef4ccd" class="outline-2"&gt;
-&lt;h2 id="org5ef4ccd"&gt;End&lt;/h2&gt;
-&lt;div class="outline-text-2" id="text-org5ef4ccd"&gt;
+&lt;div id="outline-container-org5209dc3" class="outline-2"&gt;
+&lt;h2 id="org5209dc3"&gt;End&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-org5209dc3"&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgb0efdd2" class="outline-3"&gt;
-&lt;h3 id="orgb0efdd2"&gt;VSM Improvements&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-orgb0efdd2"&gt;
+&lt;div id="outline-container-orgeb92dd5" class="outline-3"&gt;
+&lt;h3 id="orgeb92dd5"&gt;VSM Improvements&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-orgeb92dd5"&gt;
 &lt;p&gt;
 These are variations that you can try to improve the effectiveness of Vector Space Model Ranking.
 &lt;/p&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-org6bec97b" class="outline-4"&gt;
-&lt;h4 id="org6bec97b"&gt;Fix the "Dimension"&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org6bec97b"&gt;
+&lt;div id="outline-container-orgebd928a" class="outline-4"&gt;
+&lt;h4 id="orgebd928a"&gt;Fix the "Dimension"&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-orgebd928a"&gt;
 &lt;ul class="org-ul"&gt;
 &lt;li&gt;Use stemmed words, remove stop-words, use ngrams…&lt;/li&gt;
 &lt;li&gt;Language and domain-specific tokenization&lt;/li&gt;
@@ -446,9 +446,9 @@ These are variations that you can try to improve the effectiveness of Vector Spa
 &lt;/ul&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org216597c" class="outline-4"&gt;
-&lt;h4 id="org216597c"&gt;Changing the Similarity Function&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org216597c"&gt;
+&lt;div id="outline-container-org386a4f4" class="outline-4"&gt;
+&lt;h4 id="org386a4f4"&gt;Changing the Similarity Function&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org386a4f4"&gt;
 &lt;ul class="org-ul"&gt;
 &lt;li&gt;Cosine Similarity&lt;/li&gt;
 &lt;li&gt;Euclidean distance&lt;/li&gt;
@@ -456,13 +456,13 @@ These are variations that you can try to improve the effectiveness of Vector Spa
 &lt;/ul&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orge7cd216" class="outline-4"&gt;
-&lt;h4 id="orge7cd216"&gt;Use BM25 Variations&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-orge7cd216"&gt;
+&lt;div id="outline-container-orgeb92466" class="outline-4"&gt;
+&lt;h4 id="orgeb92466"&gt;Use BM25 Variations&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-orgeb92466"&gt;
 &lt;/div&gt;
 &lt;ul class="org-ul"&gt;
-&lt;li&gt;&lt;a id="orgc21ccd2"&gt;&lt;/a&gt;BM25F&lt;br&gt;
-&lt;div class="outline-text-5" id="text-orgc21ccd2"&gt;
+&lt;li&gt;&lt;a id="orgb0d8db2"&gt;&lt;/a&gt;BM25F&lt;br&gt;
+&lt;div class="outline-text-5" id="text-orgb0d8db2"&gt;
 &lt;p&gt;
 This is for structured documents (the &lt;i&gt;F&lt;/i&gt; stands for "fields" within the document (e.g. title)).
 &lt;/p&gt;
@@ -472,8 +472,8 @@ This is for structured documents (the &lt;i&gt;F&lt;/i&gt; stands for "fields" w
 &lt;/ul&gt;
 &lt;/div&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;a id="orgd6c094f"&gt;&lt;/a&gt;BM25+&lt;br&gt;
-&lt;div class="outline-text-5" id="text-orgd6c094f"&gt;
+&lt;li&gt;&lt;a id="orgda3920e"&gt;&lt;/a&gt;BM25+&lt;br&gt;
+&lt;div class="outline-text-5" id="text-orgda3920e"&gt;
 &lt;p&gt;
 This avoids over-penalizing long documents by adding a small constant to the term-frequencies. This has been shown (and proven analytically) to be better than BM25 alone.
 &lt;/p&gt;
