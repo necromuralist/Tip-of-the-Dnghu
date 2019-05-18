@@ -1,10 +1,15 @@
 aiohttp
 ghp-import2
 hvplot
+intake-parquet
 jupyter
+legit
+metapy
 Nikola
 ptpython
+python-dotenv
 sklearn
+tabulate
 textblob
 virtualfish
 watchdog
