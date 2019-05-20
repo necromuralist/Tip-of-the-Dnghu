@@ -68,43 +68,43 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org3dc6ad1">Beginning</a>
+<li><a href="#orgf6ec422">Beginning</a>
 <ul>
-<li><a href="#orgca01d55">Imports</a></li>
-<li><a href="#org56859b4">Set Up</a></li>
+<li><a href="#org044bc75">Imports</a></li>
+<li><a href="#orge9bccb4">Set Up</a></li>
 </ul>
 </li>
-<li><a href="#org38db32c">Middle</a>
+<li><a href="#orgcf1a3eb">Middle</a>
 <ul>
-<li><a href="#orga3d3ce8">Loading the Data</a></li>
-<li><a href="#org28dbe84">Setting Up The Test Set</a></li>
-<li><a href="#org3c0c5a6">The Document Term Matrix</a></li>
-<li><a href="#org82b9184">Term-Frequency/Inverse Document Frequency</a></li>
-<li><a href="#org17473d9">A Logistic Regression Pipeline</a></li>
-<li><a href="#org1ce9dea">Cross Validation</a></li>
-<li><a href="#org926b5f5">Testing</a></li>
-<li><a href="#orgde6c361">A Confusion Matrix</a></li>
+<li><a href="#org80cd3c6">Loading the Data</a></li>
+<li><a href="#org485e0a4">Setting Up The Test Set</a></li>
+<li><a href="#org38828f5">The Document Term Matrix</a></li>
+<li><a href="#orgb99565c">Term-Frequency/Inverse Document Frequency</a></li>
+<li><a href="#orgcadb35c">A Logistic Regression Pipeline</a></li>
+<li><a href="#org39d15c9">Cross Validation</a></li>
+<li><a href="#org3ce1c9e">Testing</a></li>
+<li><a href="#org1b272b8">A Confusion Matrix</a></li>
 </ul>
 </li>
-<li><a href="#org7d45ad6">End</a>
+<li><a href="#orgce571ee">End</a>
 <ul>
-<li><a href="#orga2b6c8e">Original Source</a></li>
+<li><a href="#org9723bb1">Original Source</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
-<div class="outline-2" id="outline-container-org3dc6ad1">
-<h2 id="org3dc6ad1">Beginning</h2>
-<div class="outline-text-2" id="text-org3dc6ad1">
+<div class="outline-2" id="outline-container-orgf6ec422">
+<h2 id="orgf6ec422">Beginning</h2>
+<div class="outline-text-2" id="text-orgf6ec422">
 <p>This is going to be a look at the <a href="https://archive.ics.uci.edu/ml/datasets/twenty+newsgroups">Twenty Newsgroups</a> dataset which has posts from twenty newsgroups classified by the newsgroup that they were in. It will be sort of a mad-dash through a simple pipeline to create a model that can classify them.</p>
 </div>
-<div class="outline-3" id="outline-container-orgca01d55">
-<h3 id="orgca01d55">Imports</h3>
-<div class="outline-text-3" id="text-orgca01d55"></div>
-<div class="outline-4" id="outline-container-orgc2f087b">
-<h4 id="orgc2f087b">Python</h4>
-<div class="outline-text-4" id="text-orgc2f087b">
+<div class="outline-3" id="outline-container-org044bc75">
+<h3 id="org044bc75">Imports</h3>
+<div class="outline-text-3" id="text-org044bc75"></div>
+<div class="outline-4" id="outline-container-orgd9f897b">
+<h4 id="orgd9f897b">Python</h4>
+<div class="outline-text-4" id="text-orgd9f897b">
 <div class="highlight">
 <pre><span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
@@ -112,9 +112,9 @@
 </pre></div>
 </div>
 </div>
-<div class="outline-4" id="outline-container-orgd6b1d0e">
-<h4 id="orgd6b1d0e">PyPi</h4>
-<div class="outline-text-4" id="text-orgd6b1d0e">
+<div class="outline-4" id="outline-container-orgf9d7031">
+<h4 id="orgf9d7031">PyPi</h4>
+<div class="outline-text-4" id="text-orgf9d7031">
 <div class="highlight">
 <pre><span></span><span class="kn">from</span> <span class="nn">dotenv</span> <span class="kn">import</span> <span class="n">load_dotenv</span>
 <span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">fetch_20newsgroups</span>
@@ -139,9 +139,9 @@
 </pre></div>
 </div>
 </div>
-<div class="outline-4" id="outline-container-org5089e8e">
-<h4 id="org5089e8e">My Stuff</h4>
-<div class="outline-text-4" id="text-org5089e8e">
+<div class="outline-4" id="outline-container-orge41a628">
+<h4 id="orge41a628">My Stuff</h4>
+<div class="outline-text-4" id="text-orge41a628">
 <div class="highlight">
 <pre><span></span><span class="kn">from</span> <span class="nn">graeae.tables</span> <span class="kn">import</span> <span class="n">CountPercentage</span>
 <span class="kn">from</span> <span class="nn">graeae.timers</span> <span class="kn">import</span> <span class="n">Timer</span>
@@ -150,12 +150,12 @@
 </div>
 </div>
 </div>
-<div class="outline-3" id="outline-container-org56859b4">
-<h3 id="org56859b4">Set Up</h3>
-<div class="outline-text-3" id="text-org56859b4"></div>
-<div class="outline-4" id="outline-container-org3136005">
-<h4 id="org3136005">Load the Dotenv</h4>
-<div class="outline-text-4" id="text-org3136005">
+<div class="outline-3" id="outline-container-orge9bccb4">
+<h3 id="orge9bccb4">Set Up</h3>
+<div class="outline-text-3" id="text-orge9bccb4"></div>
+<div class="outline-4" id="outline-container-org84348be">
+<h4 id="org84348be">Load the Dotenv</h4>
+<div class="outline-text-4" id="text-org84348be">
 <p>This loads some extra environment variables, in particular the path to the sklearn-data folder.</p>
 <div class="highlight">
 <pre><span></span><span class="n">dotenv_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">"~/.env"</span><span class="p">)</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span>
@@ -163,18 +163,18 @@
 </pre></div>
 </div>
 </div>
-<div class="outline-4" id="outline-container-orgbf10836">
-<h4 id="orgbf10836">The Timer</h4>
-<div class="outline-text-4" id="text-orgbf10836">
+<div class="outline-4" id="outline-container-orgf2ff858">
+<h4 id="orgf2ff858">The Timer</h4>
+<div class="outline-text-4" id="text-orgf2ff858">
 <p>This is an object to keep track of how long things take.</p>
 <div class="highlight">
 <pre><span></span><span class="n">TIMER</span> <span class="o">=</span> <span class="n">Timer</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
-<div class="outline-4" id="outline-container-orge0b9b0c">
-<h4 id="orge0b9b0c">The Table</h4>
-<div class="outline-text-4" id="text-orge0b9b0c">
+<div class="outline-4" id="outline-container-org4bc3234">
+<h4 id="org4bc3234">The Table</h4>
+<div class="outline-text-4" id="text-org4bc3234">
 <p>This is a helper to print org-tables from data-frames.</p>
 <div class="highlight">
 <pre><span></span><span class="n">TABLE</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">tabulate</span><span class="p">,</span> <span class="n">tablefmt</span><span class="o">=</span><span class="s2">"orgtbl"</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="s2">"keys"</span><span class="p">,</span>
@@ -182,9 +182,9 @@
 </pre></div>
 </div>
 </div>
-<div class="outline-4" id="outline-container-org191cf3e">
-<h4 id="org191cf3e">Plotting</h4>
-<div class="outline-text-4" id="text-org191cf3e">
+<div class="outline-4" id="outline-container-orgec6f328">
+<h4 id="orgec6f328">Plotting</h4>
+<div class="outline-text-4" id="text-orgec6f328">
 <p>This helps save the plots to the right folder for nikola.</p>
 <div class="highlight">
 <pre><span></span><span class="n">SLUG</span> <span class="o">=</span> <span class="s2">"newsgroups-example"</span>
@@ -195,12 +195,12 @@
 </div>
 </div>
 </div>
-<div class="outline-2" id="outline-container-org38db32c">
-<h2 id="org38db32c">Middle</h2>
-<div class="outline-text-2" id="text-org38db32c"></div>
-<div class="outline-3" id="outline-container-orga3d3ce8">
-<h3 id="orga3d3ce8">Loading the Data</h3>
-<div class="outline-text-3" id="text-orga3d3ce8">
+<div class="outline-2" id="outline-container-orgcf1a3eb">
+<h2 id="orgcf1a3eb">Middle</h2>
+<div class="outline-text-2" id="text-orgcf1a3eb"></div>
+<div class="outline-3" id="outline-container-org80cd3c6">
+<h3 id="org80cd3c6">Loading the Data</h3>
+<div class="outline-text-3" id="text-org80cd3c6">
 <p>We're going to be using the <a href="https://scikit-learn.org/0.19/datasets/twenty_newsgroups.html">20 Newsgroups dataset</a> that you can download using sklearn's <a href="https://scikit-learn.org/0.19/modules/generated/sklearn.datasets.fetch_20newsgroups.html#sklearn.datasets.fetch_20newsgroups">fetch_20newsgroups</a> function. By default it downloads it to a folder named <code>scikit_learn_data</code> in your home directory, but since <i>everybody</i> seems to want to add folders to my home directory I prefer to put it in a hidden folder so I'm not always staring at all these folders. To make it more likely that I'll remember the right folder name I put it in an environment variable.</p>
 <div class="highlight">
 <pre><span></span><span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"SKLEARN"</span><span class="p">))</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span>
@@ -268,9 +268,9 @@ extractor.
 <p>So, reading the blob the first thing to notice is that they already split the dataset into training and testing sets - even though I didn't specify anything all I really got was the training set.</p>
 </div>
 </div>
-<div class="outline-3" id="outline-container-org28dbe84">
-<h3 id="org28dbe84">Setting Up The Test Set</h3>
-<div class="outline-text-3" id="text-org28dbe84">
+<div class="outline-3" id="outline-container-org485e0a4">
+<h3 id="org485e0a4">Setting Up The Test Set</h3>
+<div class="outline-text-3" id="text-org485e0a4">
 <p>Normally I would use sklearn's <a href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html">train_test_split</a> to split the data set up, but since they set it up so that you have to download the test set separately, I guess I'll go with that.</p>
 <div class="highlight">
 <pre><span></span><span class="n">test_set</span> <span class="o">=</span> <span class="n">fetch_20newsgroups</span><span class="p">(</span><span class="n">data_home</span><span class="o">=</span><span class="n">path</span><span class="p">,</span> <span class="n">subset</span><span class="o">=</span><span class="s2">"test"</span><span class="p">)</span>
@@ -290,9 +290,9 @@ Training: 11,314 (60 %)
 Testing: 7,532 (40 %)
 
 </pre></div>
-<div class="outline-4" id="outline-container-orgcb041e0">
-<h4 id="orgcb041e0">What does an entry look like?</h4>
-<div class="outline-text-4" id="text-orgcb041e0">
+<div class="outline-4" id="outline-container-org1069c27">
+<h4 id="org1069c27">What does an entry look like?</h4>
+<div class="outline-text-4" id="text-org1069c27">
 <div class="highlight">
 <pre><span></span><span class="n">index</span> <span class="o">=</span> <span class="nb">min</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">x_train</span><span class="p">[</span><span class="n">index</span><span class="p">])</span> <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x_train</span><span class="p">))))</span>
 <span class="k">print</span><span class="p">(</span><span class="n">x_train</span><span class="p">[</span><span class="n">index</span><span class="p">])</span>
@@ -340,9 +340,9 @@ all over the place.
 <p>Looks like there's a lot of noise in these things.</p>
 </div>
 </div>
-<div class="outline-4" id="outline-container-org919a007">
-<h4 id="org919a007">How are the groups distributed?</h4>
-<div class="outline-text-4" id="text-org919a007">
+<div class="outline-4" id="outline-container-orgd2eff98">
+<h4 id="orgd2eff98">How are the groups distributed?</h4>
+<div class="outline-text-4" id="text-orgd2eff98">
 <p>The labels are numbers representing which Newsgroup each of the documents came from, but they also give us a translation in the form of the <code>dataset.target_names</code> list so we can take a look at how much of each group is represented.</p>
 <div class="highlight">
 <pre><span></span><span class="n">labels</span> <span class="o">=</span> <span class="p">{</span><span class="n">index</span><span class="p">:</span> <span class="n">name</span> <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">target_names</span><span class="p">)}</span>
@@ -480,9 +480,9 @@ all over the place.
 </div>
 </div>
 </div>
-<div class="outline-3" id="outline-container-org3c0c5a6">
-<h3 id="org3c0c5a6">The Document Term Matrix</h3>
-<div class="outline-text-3" id="text-org3c0c5a6">
+<div class="outline-3" id="outline-container-org38828f5">
+<h3 id="org38828f5">The Document Term Matrix</h3>
+<div class="outline-text-3" id="text-org38828f5">
 <p>To work with the data-set we need to convert it to some kind of numeric value. In this case I'm going to use sklearn's <a href="https://scikit-learn.org/0.19/modules/generated/sklearn.feature_extraction.text.CountVectorizer.html#sklearn.feature_extraction.text.CountVectorizer">CountVectorizer</a> to create a matrix where each row represents a document and each column is a term in the <a href="https://www.wikiwand.com/en/Text_corpus">corpus</a> (creating a <a href="https://www.wikiwand.com/en/Bag-of-words_model">Bag of Words</a>/<a href="https://www.wikiwand.com/en/Document-term_matrix">Document Term Matrix</a>) The values are the count of the terms in each document. Sklearn has an alternative download function - <a href="https://scikit-learn.org/0.19/modules/generated/sklearn.datasets.fetch_20newsgroups_vectorized.html#sklearn.datasets.fetch_20newsgroups_vectorized">fetch_20newsgroups_vectorized</a> that will download it already vectorized, but since you have to do the conversion yourself in most cases I thought it would be better not to use it.</p>
 <div class="highlight">
 <pre><span></span><span class="n">vectorizer</span> <span class="o">=</span> <span class="n">CountVectorizer</span><span class="p">()</span>
@@ -509,9 +509,9 @@ Documents: 11,314 Terms: 130,107
 <p>I was going to inspect the matrix, but it's a sparse matrix so you have to convert it to another type to inspect it, and all it would be is a matrix of numbers (term counts) so I'll leave it for some other time.</p>
 </div>
 </div>
-<div class="outline-3" id="outline-container-org82b9184">
-<h3 id="org82b9184">Term-Frequency/Inverse Document Frequency</h3>
-<div class="outline-text-3" id="text-org82b9184">
+<div class="outline-3" id="outline-container-orgb99565c">
+<h3 id="orgb99565c">Term-Frequency/Inverse Document Frequency</h3>
+<div class="outline-text-3" id="text-orgb99565c">
 <p>If we just use the counts (the Term-Frequency (TF)), then the most common word per document will have the highest value, but if a word is spread across all or at least many documents, then even if it's common in a document it probably won't help us distinguish the documents from each other in a meaningful way. To deal with this we can add a penalty (the Inverse-Document-Frequency (IDF) weight) that lowers the value for a term the more common it is among all the documents. Together the two methods are knows as <a href="https://www.wikiwand.com/en/Tf%E2%80%93idf">TF-IDF.</a> Here sklearn's <a href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfTransformer.html">TfidfTransformer</a> does the transform for us.</p>
 <div class="highlight">
 <pre><span></span><span class="n">transformer</span> <span class="o">=</span> <span class="n">TfidfTransformer</span><span class="p">()</span>
@@ -524,9 +524,9 @@ Documents: 11,314 Terms: 130,107
 
 </pre></div>
 </div>
-<div class="outline-3" id="outline-container-org17473d9">
-<h3 id="org17473d9">A Logistic Regression Pipeline</h3>
-<div class="outline-text-3" id="text-org17473d9">
+<div class="outline-3" id="outline-container-orgcadb35c">
+<h3 id="orgcadb35c">A Logistic Regression Pipeline</h3>
+<div class="outline-text-3" id="text-orgcadb35c">
 <p>To classify the documents we're going to use <a href="https://www.wikiwand.com/en/Logistic_regression">Logistic Regression</a> (also from <a href="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html">sklearn</a>). In addition, instead of creating the Document Term Matrix in separate steps as above, I'm going to create a <a href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html">Pipeline</a> so sklearn can do it in a single call. An sklearn Pipeline takes as all but the last of it's constructor's argument a list of <code>(name, transform)</code> tuples, where the <code>transform</code> argument is an object that has a <code>fit_transform</code> method (like the <code>CountVectorizer</code> we saw earlier). The last of argument of the constructor is the model that you are going to fit on the data that the pipeline has transformed. If you don't want to customize the names there's a <a href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.make_pipeline.html#sklearn.pipeline.make_pipeline">make_pipeline</a> function that just takes the transformer and model instances as arguments and automatically names them for you, returning the pipeline as its output.</p>
 <p>I used the <code>CountVectorizer</code> followed by the <code>TfidfTransformer</code> to show them separately, but sklearn actually has a <a href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfVectorizer.html">TfidfVectorizer</a> class that does both of them for you so I'll use that here.</p>
 <div class="highlight">
@@ -538,9 +538,9 @@ Documents: 11,314 Terms: 130,107
 <p>I'm using the defaults for Logistic Regression in general, but it will output a lot of warnings if you don't set the solver and multi-class. I'm using the <a href="https://www.wikiwand.com/en/Limited-memory_BFGS">Limited-Memory Broyden-Fletcher-Goldfarb-Shanno</a> algorithm for the solver and setting the <code>multi_class</code> to "multinomial" (setting it to "auto" would do the same thing since there is more than one document-classification, rather than being a binary classification problem).</p>
 </div>
 </div>
-<div class="outline-3" id="outline-container-org1ce9dea">
-<h3 id="org1ce9dea">Cross Validation</h3>
-<div class="outline-text-3" id="text-org1ce9dea">
+<div class="outline-3" id="outline-container-org39d15c9">
+<h3 id="org39d15c9">Cross Validation</h3>
+<div class="outline-text-3" id="text-org39d15c9">
 <p>Now we can do some cross validation.</p>
 <div class="highlight">
 <pre><span></span><span class="k">with</span> <span class="n">TIMER</span><span class="p">:</span>
@@ -608,9 +608,9 @@ Documents: 11,314 Terms: 130,107
 <p>It looks like even with the default parameters the model got a mean/median <a href="https://www.wikiwand.com/en/F1_score">F1 Score</a> of 90 %, with a standard deviation of 0.0046, so the variance is pretty low.</p>
 </div>
 </div>
-<div class="outline-3" id="outline-container-org926b5f5">
-<h3 id="org926b5f5">Testing</h3>
-<div class="outline-text-3" id="text-org926b5f5">
+<div class="outline-3" id="outline-container-org3ce1c9e">
+<h3 id="org3ce1c9e">Testing</h3>
+<div class="outline-text-3" id="text-org3ce1c9e">
 <p>Let's try fitting it to the whole training set and see how it does.</p>
 <div class="highlight">
 <pre><span></span><span class="k">with</span> <span class="n">TIMER</span><span class="p">:</span>
@@ -647,9 +647,9 @@ Recall: 0.83
 <p>The precision and recall are the same as the F1 score, so it isn't better at either (or it's good at both, your pick).</p>
 </div>
 </div>
-<div class="outline-3" id="outline-container-orgde6c361">
-<h3 id="orgde6c361">A Confusion Matrix</h3>
-<div class="outline-text-3" id="text-orgde6c361">
+<div class="outline-3" id="outline-container-org1b272b8">
+<h3 id="org1b272b8">A Confusion Matrix</h3>
+<div class="outline-text-3" id="text-org1b272b8">
 <p>Having a single value like the F1 score helps us evaluate the model, but using a <a href="https://www.wikiwand.com/en/Confusion_matrix">Confusion Matrix</a> (via sklearn's <a href="https://scikit-learn.org/stable/modules/generated/sklearn.metrics.confusion_matrix.html">confusion_matrix</a> function) will help us understand how the model did a little more.</p>
 <div class="highlight">
 <pre><span></span><span class="n">confusion</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">y_true</span><span class="o">=</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="o">=</span><span class="n">predictions</span><span class="p">)</span>
@@ -669,9 +669,9 @@ Recall: 0.83
 </pre>
 <p>The confusion matrix has twenty rows and columns. The rows represent what classification our model predicted and the columns what they actually were - the diagonal is the count of the correctly classified documents. We could just print out the twenty by twenty matrix, but why not plot it instead?</p>
 <div class="highlight">
-<pre><span></span><span class="n">plot</span> <span class="o">=</span> <span class="n">holoviews</span><span class="o">.</span><span class="n">HeatMap</span><span class="p">((</span><span class="n">dataset</span><span class="o">.</span><span class="n">target_names</span><span class="p">,</span> 
-                          <span class="n">dataset</span><span class="o">.</span><span class="n">target_names</span><span class="p">,</span> 
-                          <span class="n">confusion</span><span class="p">))</span><span class="o">.</span><span class="n">options</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">800</span><span class="p">,</span>                                              
+<pre><span></span><span class="n">plot</span> <span class="o">=</span> <span class="n">holoviews</span><span class="o">.</span><span class="n">HeatMap</span><span class="p">((</span><span class="n">dataset</span><span class="o">.</span><span class="n">target_names</span><span class="p">,</span>
+                          <span class="n">dataset</span><span class="o">.</span><span class="n">target_names</span><span class="p">,</span>
+                          <span class="n">confusion</span><span class="p">))</span><span class="o">.</span><span class="n">options</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">800</span><span class="p">,</span>
                                               <span class="n">height</span><span class="o">=</span><span class="mi">800</span><span class="p">,</span>
                                               <span class="n">xrotation</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span>
                                               <span class="n">tools</span><span class="o">=</span><span class="p">[</span><span class="s2">"hover"</span><span class="p">],</span>
@@ -720,14 +720,14 @@ Largest Confusion: 95
 </div>
 </div>
 </div>
-<div class="outline-2" id="outline-container-org7d45ad6">
-<h2 id="org7d45ad6">End</h2>
-<div class="outline-text-2" id="text-org7d45ad6">
+<div class="outline-2" id="outline-container-orgce571ee">
+<h2 id="orgce571ee">End</h2>
+<div class="outline-text-2" id="text-orgce571ee">
 <p>So here we have a basic walk-through using sklearn to model a document classifier built with Logistic Regression. One of the nice things about logistic regression is that the weights tell you which variables are the most important, but I've never tried that with documents so I don't know how to do that here. There are many improvements that could be made (would have to be made) if this were an attempt to make a real model, but the simplicity of the steps shows how much you can do with off-the-shelf software. Eighty-three percent isn't perfect, but it's pretty good.</p>
 </div>
-<div class="outline-3" id="outline-container-orga2b6c8e">
-<h3 id="orga2b6c8e">Original Source</h3>
-<div class="outline-text-3" id="text-orga2b6c8e">
+<div class="outline-3" id="outline-container-org9723bb1">
+<h3 id="org9723bb1">Original Source</h3>
+<div class="outline-text-3" id="text-org9723bb1">
 <ol class="org-ol">
 <li>Kasliwal N. Natural language processing with Python quick start guide: going from a Python developer to an effective natural language processing engineer [Internet]. 2018 [cited 2019 May 18]. Available from: <a href="http://proquest.safaribooksonline.com/?fpi=9781789130386">http://proquest.safaribooksonline.com/?fpi=9781789130386</a></li>
 </ol>
