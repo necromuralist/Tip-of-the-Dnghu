@@ -434,9 +434,9 @@ print(confusion[:5, :5])
 The confusion matrix has twenty rows and columns. The rows represent what classification our model predicted and the columns what they actually were - the diagonal is the count of the correctly classified documents. We could just print out the twenty by twenty matrix, but why not plot it instead?
 
 #+begin_src python :session nlp :results output raw :exports both
-plot = holoviews.HeatMap((dataset.target_names, 
-                          dataset.target_names, 
-                          confusion)).options(width=800,                                              
+plot = holoviews.HeatMap((dataset.target_names,
+                          dataset.target_names,
+                          confusion)).options(width=800,
                                               height=800,
                                               xrotation=45,
                                               tools=["hover"],
