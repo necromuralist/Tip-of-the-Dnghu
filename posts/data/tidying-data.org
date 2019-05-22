@@ -1,0 +1,234 @@
+#+BEGIN_COMMENT
+.. title: Tidying Data
+.. slug: tidying-data
+.. date: 2019-05-20 13:15:38 UTC-07:00
+.. tags: data,tidying
+.. category: Data
+.. link: 
+.. description: Some notes on tidying data.
+.. type: text
+.. status: 
+.. updated: 
+
+#+END_COMMENT
+#+OPTIONS: ^:{}
+#+OPTIONS: H:5
+#+TOC: headlines 2
+#+BEGIN_SRC ipython :session tidying :results none :exports none
+%load_ext autoreload
+%autoreload 2
+#+END_SRC
+* Beginning
+** Imports
+*** Python
+#+BEGIN_SRC ipython :session tidying :results none
+from pathlib import Path
+import os
+#+END_SRC
+*** PyPi
+#+BEGIN_SRC ipython :session tidying :results none
+import spacy
+#+END_SRC
+*** My Projects
+#+BEGIN_SRC ipython :session tidying :results none
+from graeae import EnvironmentLoader, TextDownloader
+from graeae.timers import Timer
+#+END_SRC
+** The Text File.
+This is the URL to Joseph Conrad's "The Secret Agent" from [[https://www.gutenberg.org/ebooks/974][Project Gutenberg]].
+#+BEGIN_SRC ipython :session tidying :results none
+URL = "https://www.gutenberg.org/files/974/974-0.txt"
+#+END_SRC
+
+#+BEGIN_SRC ipython :session tidying :results none
+environment = EnvironmentLoader()
+path = environment["GUTENBERG"]
+#+END_SRC
+** Setup Spacy
+#+BEGIN_SRC ipython :session tidying :results none
+nlp = spacy.load("en_core_web_md")
+#+END_SRC
+
+** The Timer
+   This just tracks how longs things take.
+#+BEGIN_SRC ipython :session tidying :results none
+TIMER = Timer()
+#+END_SRC
+* Middle
+** Load the File
+#+BEGIN_SRC ipython :session tidying :results output :exports both
+path = Path(path).expanduser()
+downloader = TextDownloader(url=URL, target=path/"conrad_joseph_secret_agent.txt")
+text = downloader.download
+#+END_SRC
+
+#+RESULTS:
+: 2019-05-21 17:03:36,484 [1mTextDownloader[0m download: Pulling file from https://www.gutenberg.org/files/974/974-0.txt
+
+#+BEGIN_SRC ipython :session tidying :results output :exports both
+print(text[:800])
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+﻿The Project Gutenberg eBook, The Secret Agent, by Joseph Conrad
+
+
+This eBook is for the use of anyone anywhere at no cost and with
+almost no restrictions whatsoever.  You may copy it, give it away or
+re-use it under the terms of the Project Gutenberg License included
+with this eBook or online at www.gutenberg.org
+
+
+
+
+
+Title: The Secret Agent
+       A Simple Tale
+
+
+Author: Joseph Conrad
+
+
+
+Release Date: December 24, 2010  [eBook #974]
+First released: June 28, 1997
+
+Language: English
+
+Character set encoding: UTF-8
+
+
+,***START OF THE PROJECT GUTENBERG EBOOK THE SECRET AGENT***
+
+
+Transcribed from the 1907 Methuen & Co edition by David Price, email
+ccx074@pglaf.org
+
+
+
+
+
+                                   THE
+                               SECRET AGENT
+   
+#+end_example
+
+So it looks like the actual start of our book comes after the transcription credit.
+
+#+BEGIN_SRC ipython :session tidying :results output :exports both
+lines = text.split("\n")
+end = False
+for index, line in enumerate(lines):
+    if 'ccx074@pglaf.org' in line:
+        print(f"The Credit line is {index}")
+        end = True
+    if "THE" in line and end:
+        print(f"The first line of our text is at {index}")
+        break
+#+END_SRC
+
+#+RESULTS:
+: The Credit line is 32
+: The first line of our text is at 38
+
+I'll get rid of the header.
+#+BEGIN_SRC ipython :session tidying :results output :exports both
+cleaned = lines[38:]
+print("".join(cleaned[0:2]))
+print(f"{len(cleaned):,}")
+#+END_SRC
+
+#+RESULTS:
+:                                    THE                               SECRET AGENT
+: 10,121
+
+So, there's 10,121 lines in the book (I don't know if that is long for a book, I don't think it is) and there are carriage returns (or whatever those marks are called) in the text. I'm going to save the file with the header removed and clean the file separately with =dos2unix=.
+
+#+BEGIN_SRC ipython :session tidying :results none
+with downloader.target.open('w') as writer:
+    writer.write("\n".join(cleaned))
+#+END_SRC
+
+** Reload
+   I ran =dos2unix= on the file, let's see if it's better.
+
+#+BEGIN_SRC ipython :session tidying :results output :exports both
+downloader._download = None
+text = downloader.download
+print(text[:700])
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+2019-05-22 16:06:52,206 [1mTextDownloader[0m download: /home/brunhilde/data/datasets/gutenberg/conrad_joseph_secret_agent.txt exists, opening it
+                                   THE
+                               SECRET AGENT
+                              A SIMPLE TALE
+
+
+                                    BY
+                              JOSEPH CONRAD
+
+                              SECOND EDITION
+
+                              METHUEN & CO.,
+                           36 ESSEX STREET W C.
+                                  LONDON
+
+                 _First Published_ . . . _September_ 1907
+
+                  _Second Edition_ . . . _October_ 1907
+
+                                    TO
+                               H. G. WELLS
+
+                   THE CHRONICLER OF MR LEWISHAM’S LOVE
+                     THE BIOGRAPHER OF KIPPS AND TH
+#+end_example
+
+How many unique characters are there?
+
+#+BEGIN_SRC ipython :session tidying :results output :exports both
+print(len(set(text)))
+#+END_SRC
+
+#+RESULTS:
+: 91
+
+According to [[https://www.wikiwand.com/en/ASCII][Wikipedia]], there are 95 printable ASCII characters so this doesn't use all of them, but comes close.
+
+** Tokenizing with Spacy
+#+BEGIN_SRC ipython :session tidying :results ouput :exports both
+with TIMER:
+    document = nlp(text)
+#+END_SRC
+
+#+RESULTS:
+: 2019-05-22 17:45:05,705 graeae.timers.timer start: Started: 2019-05-22 17:45:05.705527
+: 2019-05-22 17:45:32,401 graeae.timers.timer end: Ended: 2019-05-22 17:45:32.401531
+: 2019-05-22 17:45:32,403 graeae.timers.timer end: Elapsed: 0:00:26.696004
+
+Spacy pre-computes the linguistic features when you create the =document= instance so it takes a little longer to load than you might expect.
+
+#+BEGIN_SRC ipython :session tidying :results output :exports both
+print(type(document))
+#+END_SRC
+
+#+RESULTS:
+: <class 'spacy.tokens.doc.Doc'>
+
+Our document is a spacy [[https://spacy.io/api/doc][Doc]] instance which they describe as a container for accessing language annotations. They also describe it as a sequence of TokenCJ structs (whatever those are).
+
+#+BEGIN_SRC ipython :session tidying :results output :exports both
+d = document[0]
+print(type(d))
+#+END_SRC
+
+#+RESULTS:
+: <class 'spacy.tokens.token.Token'>
+
+So it looks like besides having its own methods, the Doc holds [[https://spacy.io/api/token][Token]] objects.
+
+* End
+
