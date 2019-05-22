@@ -1,0 +1,68 @@
+#+BEGIN_COMMENT
+.. title: Tidying Data
+.. slug: tidying-data
+.. date: 2019-05-20 13:15:38 UTC-07:00
+.. tags: data,tidying
+.. category: Data
+.. link: 
+.. description: Some notes on tidying data.
+.. type: text
+.. status: 
+.. updated: 
+
+#+END_COMMENT
+#+OPTIONS: ^:{}
+#+OPTIONS: H:5
+#+TOC: headlines 2
+#+BEGIN_SRC ipython :session tidying :results none :exports none
+%load_ext autoreload
+%autoreload 2
+#+END_SRC
+* Beginning
+** Imports
+*** Python
+#+BEGIN_SRC ipython :session tidying :results none
+from pathlib import Path
+import os
+#+END_SRC
+*** PyPi
+#+BEGIN_SRC ipython :session tidying :results none
+#+END_SRC
+*** My Projects
+#+BEGIN_SRC ipython :session tidying :results none
+from graeae import EnvironmentLoader, TextDownloader
+#+END_SRC
+** The Text File.
+This is the URL to Joseph Conrad's "The Secret Agent" from [[https://www.gutenberg.org/ebooks/974][Project Gutenberg]].
+#+BEGIN_SRC ipython :session tidying :results none
+URL = "https://www.gutenberg.org/files/974/974-0.txt"
+#+END_SRC
+
+#+BEGIN_SRC ipython :session tidying :results none
+environment = EnvironmentLoader()
+path = environment["GUTENBERG"]
+#+END_SRC
+* Middle
+** Load the File
+#+BEGIN_SRC ipython :session tidying :results output :exports both
+path = Path(path).expanduser()
+downloader = TextDownloader(url=URL, target=path/"conrad_joseph_secret_agent.txt")
+text = downloader.download
+#+END_SRC
+
+#+RESULTS:
+: 2019-05-21 17:03:36,484 [1mTextDownloader[0m download: Pulling file from https://www.gutenberg.org/files/974/974-0.txt
+
+#+BEGIN_SRC ipython :session tidying :results output :exports both
+print(text[:200])
+#+END_SRC
+
+#+RESULTS:
+: ﻿The Project Gutenberg eBook, The Secret Agent, by Joseph Conrad
+: 
+: 
+: This eBook is for the use of anyone anywhere at no cost and with
+: almost no restrictions whatsoever.  You may copy it, give it awa
+
+* End
+
