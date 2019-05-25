@@ -23,11 +23,14 @@
 *** Python
 #+BEGIN_SRC ipython :session tidying :results none
 from pathlib import Path
+from difflib import SequenceMatcher
 import os
 #+END_SRC
 *** PyPi
 #+BEGIN_SRC ipython :session tidying :results none
+from fuzzywuzzy import fuzz, process
 import spacy
+import jellyfish
 #+END_SRC
 *** My Projects
 #+BEGIN_SRC ipython :session tidying :results none
@@ -230,5 +233,300 @@ print(type(d))
 
 So it looks like besides having its own methods, the Doc holds [[https://spacy.io/api/token][Token]] objects.
 
+#+BEGIN_SRC ipython :session tidying :results output :exports both
+print(document[100])
+#+END_SRC
+
+#+RESULTS:
+: Verloc
+
+If you grab a span of tokens instead of a single token it renders them as a [[https://spacy.io/api/span][Span]] object.
+
+#+BEGIN_SRC ipython :session tidying :results output :exports both
+print(document[100:150])
+#+END_SRC
+
+#+RESULTS:
+: Verloc, going out in the morning, left his shop nominally in charge of
+: his brother-in-law.  It could be done, because there was very little
+: business at any time, and practically none at all before the evening.  
+
+Although the square brackets are token-based, the document also allows you to grab sentences.
+
+#+BEGIN_SRC ipython :session tidying :results output :exports both
+sentences = tuple(document.sents)
+sentence = sentences[100]
+print(sentence)
+print(type(sentence))
+#+END_SRC
+
+#+RESULTS:
+: She would have, he warned
+: her, to be very nice to his political friends.
+: 
+: 
+: <class 'spacy.tokens.span.Span'>
+
+I had to convert it to a tuple because =sents= is actually a generator, not a collection.
+
+*** Token Attributes
+
+#+BEGIN_SRC ipython :session tidying :results output :exports both
+for token in sentence:
+    print(token, token.is_stop, token.is_punct, token.is_space)
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+She True False False
+would True False False
+have True False False
+, False True False
+he True False False
+warned False False False
+
+ False False True
+her True False False
+, False True False
+to True False False
+be True False False
+very True False False
+nice False False False
+to True False False
+his True False False
+political False False False
+friends False False False
+. False True False
+
+
+ False False True
+#+end_example
+
+So spacy can help us identify different types of tokens, in this case stopwords, punctuation, and spaces, but it can do more. The stop-words it uses are kept in a dictionary that you can add to to make it more domain-specific. Here's what the sentence looks like if you filter out the stopword, punctuation, and spaces.
+
+#+BEGIN_SRC ipython :session tidying :results output :exports both
+print([token for token in sentence if not any((token.is_stop, 
+                                               token.is_punct, 
+                                               token.is_space))])
+#+END_SRC
+
+#+RESULTS:
+: [warned, nice, political, friends]
+*** Lemmatisation
+    Spacy implements [[https://www.wikiwand.com/en/Lemmatisation][Lemmatisation]], the "standard form" for a word.
+
+#+BEGIN_SRC ipython :session tidying :results output raw :exports both
+print("|Token| Lemma|Part of Speech|")
+print("|-+-+-|")
+for token in (token for token in sentence if not token.is_space):
+    print(f"|{token}| {token.lemma_} |{token.pos_}|")
+#+END_SRC
+
+#+RESULTS:
+| Token     | Lemma     | Part of Speech |
+|-----------+-----------+----------------|
+| She       | -PRON-    | PRON           |
+| would     | would     | VERB           |
+| have      | have      | VERB           |
+| ,         | ,         | PUNCT          |
+| he        | -PRON-    | PRON           |
+| warned    | warn      | VERB           |
+| her       | -PRON-    | PRON           |
+| ,         | ,         | PUNCT          |
+| to        | to        | PART           |
+| be        | be        | VERB           |
+| very      | very      | ADV            |
+| nice      | nice      | ADJ            |
+| to        | to        | ADP            |
+| his       | -PRON-    | DET            |
+| political | political | ADJ            |
+| friends   | friend    | NOUN           |
+| .         | .         | PUNCT          |
+
+I filtered out the spaces because it broke my table, but it's part-of-speech label was =SPACE=. The =-PRON-= lemma is a special one that spaCy uses for any [[https://www.wikiwand.com/en/Pronoun][pronoun]] (I, we she, etc.). According to the [[https://spacy.io/api/annotation][spaCy annotation documentation]], the space lemma is only included if there's more than one, which they include because multiple spaces might be significant.
+** A Detour Into Fuzzy Wuzyz
+   [[https://github.com/seatgeek/fuzzywuzzy][fuzzywuzzy]] is a library that does fuzzy string matching using the [[https://www.wikiwand.com/en/Levenshtein_distance][Levenshtein Distance]] between strings. There's a [[https://chairnerd.seatgeek.com/fuzzywuzzy-fuzzy-string-matching-in-python/][page]] showing more about how to use it based the example of finding concert information on the web.
+
+*** Ratio
+    The =ratio= function for fuzzywuzzy is an alias for the [[https://docs.python.org/3/library/difflib.html][difflib]] =SequenceMatcher.ratio= method (except they multiply by 100 and round off so it's a percentage rather than a fraction.
+#+BEGIN_SRC ipython :session tidying :results output :exports both
+sentence_a = "eat more meats"
+sentence_b = "eat more beats"
+sentence_c = "beat more beets"
+matcher = SequenceMatcher(None, sentence_a, sentence_b)
+print(matcher.ratio())
+print(fuzz.ratio(sentence_a, sentence_b))
+print(fuzz.ratio(sentence_b, sentence_c))
+#+END_SRC
+
+#+RESULTS:
+: 0.9285714285714286
+: 93
+: 90
+
+The fuzzywuzzy page I mentioned earlier states that this will work for very short (one word) text or very long text, but no so well for things in between.
+*** Partial Ratio
+    To get better matches for short-ish text, fuzzywuzzy has a =partial_ratio= function. 
+
+#+BEGIN_SRC ipython :session tidying :results output :exports both
+sentence_a = "meaty beaty big and bouncy"
+sentence_b = "meaty"
+print(fuzz.ratio(sentence_a, sentence_b))
+print(fuzz.partial_ratio(sentence_a, sentence_b))
+#+END_SRC
+
+#+RESULTS:
+: 32
+: 100
+
+The =ratio= doesn't handle sub-string matches as well as =partial_ratio= does.
+
+*** Token Sort and Token Set
+    Besides sub-strings, there might be cases where ordering doesn't matter, in which case you can try the =token_sort_ratio= or =token_set_ratio= functions.
+
+#+BEGIN_SRC ipython :session tidying :results output :exports both
+sentence_a = "totally tubular terry"
+sentence_b = "terry is totally tubular"
+print(fuzz.ratio(sentence_a, sentence_b))
+print(fuzz.partial_ratio(sentence_a, sentence_b))
+print(fuzz.token_sort_ratio(sentence_a, sentence_b))
+print(fuzz.token_set_ratio(sentence_a, sentence_b))
+#+END_SRC
+
+#+RESULTS:
+: 67
+: 83
+: 93
+: 100
+
+The =token_sort_ratio= sorts the tokens before comparing them, while the =token_set_ratio= sorts the intersection of the tokens first and then append the sorted tokens that aren't in both strings before calculating the similarity.
+
+*** Process
+    Finally, you can pass =process.extract= a string and a list of strings to compare to that string and it will return them in the order of similarity.
+
+By default this uses =fuzz.WRatio= to score the similarity.
+
+#+BEGIN_SRC ipython :session tidying :results output :exports both
+print(fuzz.WRatio.__doc__)
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+
+    Return a measure of the sequences' similarity between 0 and 100, using different algorithms.
+
+    ,**Steps in the order they occur**
+
+    #. Run full_process from utils on both strings
+    #. Short circuit if this makes either string empty
+    #. Take the ratio of the two processed strings (fuzz.ratio)
+    #. Run checks to compare the length of the strings
+        ,* If one of the strings is more than 1.5 times as long as the other
+          use partial_ratio comparisons - scale partial results by 0.9
+          (this makes sure only full results can return 100)
+        ,* If one of the strings is over 8 times as long as the other
+          instead scale by 0.6
+
+    #. Run the other ratio functions
+        ,* if using partial ratio functions call partial_ratio,
+          partial_token_sort_ratio and partial_token_set_ratio
+          scale all of these by the ratio based on length
+        ,* otherwise call token_sort_ratio and token_set_ratio
+        ,* all token based comparisons are scaled by 0.95
+          (on top of any partial scalars)
+
+    #. Take the highest value from these results
+       round it and return it as an integer.
+
+    :param s1:
+    :param s2:
+    :param force_ascii: Allow only ascii characters
+    :type force_ascii: bool
+    :full_process: Process inputs, used here to avoid double processing in extract functions (Default: True)
+    :return:
+#+end_example
+
+This one tries to figure out the best metric for you.
+
+#+BEGIN_SRC ipython :session tidying :results output :exports both
+choices = ["big bubba", "hubba bubba", "rubber baby buggy bubba", "bubba dubba", "chubba bubba"]
+print(process.extract('hubba hubba', choices))
+#+END_SRC
+
+#+RESULTS:
+: [('hubba bubba', 95), ('chubba bubba', 87), ('bubba dubba', 82), ('rubber baby buggy bubba', 68), ('big bubba', 60)]
+
+#+BEGIN_SRC ipython :session tidying :results output :exports both
+print(process.extract('hubba hubba', choices, limit=2))
+#+END_SRC
+
+#+RESULTS:
+: [('hubba bubba', 95), ('chubba bubba', 87)]
+
+*** Spell Check
+    Although the fuzzywuzzy page states that their use case was matching the names of shows on different web-sites, it can also be used as a simple spell-checker.
+
+#+BEGIN_SRC ipython :session tidying :results output raw :exports both
+dictionary = ["embarras", "inoculate", "misspell"]
+words = ["embaras", "mispel", "inocullate", "babaganoush"]
+print("|Word| Correction| Score|")
+print("|-+-+-|")
+for word in words:
+    output = process.extract(word, dictionary, limit=1)
+    guess, score = output[0]
+    print(f"|{word}|{guess}|{score}|")
+#+END_SRC
+
+#+RESULTS:
+| Word        | Correction | Score |
+|-------------+------------+-------|
+| embaras     | embarras   |    93 |
+| mispel      | misspell   |    86 |
+| inocullate  | inoculate  |    95 |
+| babaganoush | embarras   |    42 |
+
+So you probably should check the score when using it like this.
+
+** A Diversion Into JellyFish
+   [[https://jellyfish.readthedocs.io/en/latest][JellyFish]] is another python library that implements distance functions (like the Levenstein Distance that FuzzyWuzzy does) as well as stemming and phonetic encoding.
+*** Phonetic Encoding
+    Phonetic encoding transforms words into a form that is based on the pronounciaton of the words. Using this should make matching spelling variations using the distance function(s) better.
+**** American Soundex
+     [[https://www.wikiwand.com/en/Soundex][Soundex]] was originally patented in 1918 but the JellyFish uses a variation called /American Soundex/ which was created in 1930 by analyzing U.S. census reports. Each encoding consists of a letter followed by three digits. The letter is the first letter of the word and the digits represent an encoding of the remaining consonants (a, e, i, o, u, y, h, and w are removed if they aren't the first letter).
+
+The exact procedure is pretty straight-forward, but the main thing to note is that it always has the same form (you either pad or cut off the coded consonants to get three digits).
+
+#+BEGIN_SRC ipython :session tidying :results none
+def rupert_robert_rwanda(encoder) -> None:
+    print(encoder("Rupert"))
+    print(encoder("robert"))
+    print(encoder("rwanda"))
+#+END_SRC
+
+#+BEGIN_SRC ipython :session tidying :results output :exports both
+rupert_robert_rwanda(jellyfish.soundex)
+#+END_SRC
+
+#+RESULTS:
+: R163
+: R163
+: R530
+
+In this case it wasn't able to distinguish between /Rupert/ and /robert/, which might or might not be what you want.
+**** Metaphone
+     [[https://www.wikiwand.com/en/Metaphone][Metaphone]] was developed in 1990 and improves on Soundex to produce a more accurate encoding.
+
+#+BEGIN_SRC ipython :session tidying :results output :exports both
+rupert_robert_rwanda(jellyfish.metaphone)
+#+END_SRC
+
+#+RESULTS:
+: RPRT
+: RBRT
+: RWNT
+
+Besides being almost readable /metaphone/ was able to distinguish between /Rupert/ and /robert/.
+**** New York State Identification and Intelligence System (NYSIIS)
+The [[https://www.wikiwand.com/en/New_York_State_Identification_and_Intelligence_System][New York State Identification and Intelligence System]] is a slightly more accurate (compared to Soundex) encoder that was developed in 1970.
 * End
 
