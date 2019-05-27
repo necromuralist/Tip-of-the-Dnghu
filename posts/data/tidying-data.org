@@ -1,5 +1,5 @@
 #+BEGIN_COMMENT
-.. title: Tidying Data
+.. title: Some Tools For Tidying Data
 .. slug: tidying-data
 .. date: 2019-05-20 13:15:38 UTC-07:00
 .. tags: data,tidying
@@ -22,13 +22,16 @@
 ** Imports
 *** Python
 #+BEGIN_SRC ipython :session tidying :results none
-from pathlib import Path
 from difflib import SequenceMatcher
+from pathlib import Path
+from typing import Callable
 import os
 #+END_SRC
 *** PyPi
 #+BEGIN_SRC ipython :session tidying :results none
+from flashtext import KeywordProcessor
 from fuzzywuzzy import fuzz, process
+from tabulate import tabulate
 import spacy
 import jellyfish
 #+END_SRC
@@ -66,7 +69,7 @@ text = downloader.download
 #+END_SRC
 
 #+RESULTS:
-: 2019-05-21 17:03:36,484 [1mTextDownloader[0m download: Pulling file from https://www.gutenberg.org/files/974/974-0.txt
+: 2019-05-26 15:59:52,186 [1mTextDownloader[0m download: /home/athena/data/datasets/gutenberg/conrad_joseph_secret_agent.txt exists, opening it
 
 #+BEGIN_SRC ipython :session tidying :results output :exports both
 print(text[:800])
@@ -74,97 +77,6 @@ print(text[:800])
 
 #+RESULTS:
 #+begin_example
-﻿The Project Gutenberg eBook, The Secret Agent, by Joseph Conrad
-
-
-This eBook is for the use of anyone anywhere at no cost and with
-almost no restrictions whatsoever.  You may copy it, give it away or
-re-use it under the terms of the Project Gutenberg License included
-with this eBook or online at www.gutenberg.org
-
-
-
-
-
-Title: The Secret Agent
-       A Simple Tale
-
-
-Author: Joseph Conrad
-
-
-
-Release Date: December 24, 2010  [eBook #974]
-First released: June 28, 1997
-
-Language: English
-
-Character set encoding: UTF-8
-
-
-,***START OF THE PROJECT GUTENBERG EBOOK THE SECRET AGENT***
-
-
-Transcribed from the 1907 Methuen & Co edition by David Price, email
-ccx074@pglaf.org
-
-
-
-
-
-                                   THE
-                               SECRET AGENT
-   
-#+end_example
-
-So it looks like the actual start of our book comes after the transcription credit.
-
-#+BEGIN_SRC ipython :session tidying :results output :exports both
-lines = text.split("\n")
-end = False
-for index, line in enumerate(lines):
-    if 'ccx074@pglaf.org' in line:
-        print(f"The Credit line is {index}")
-        end = True
-    if "THE" in line and end:
-        print(f"The first line of our text is at {index}")
-        break
-#+END_SRC
-
-#+RESULTS:
-: The Credit line is 32
-: The first line of our text is at 38
-
-I'll get rid of the header.
-#+BEGIN_SRC ipython :session tidying :results output :exports both
-cleaned = lines[38:]
-print("".join(cleaned[0:2]))
-print(f"{len(cleaned):,}")
-#+END_SRC
-
-#+RESULTS:
-:                                    THE                               SECRET AGENT
-: 10,121
-
-So, there's 10,121 lines in the book (I don't know if that is long for a book, I don't think it is) and there are carriage returns (or whatever those marks are called) in the text. I'm going to save the file with the header removed and clean the file separately with =dos2unix=.
-
-#+BEGIN_SRC ipython :session tidying :results none
-with downloader.target.open('w') as writer:
-    writer.write("\n".join(cleaned))
-#+END_SRC
-
-** Reload
-   I ran =dos2unix= on the file, let's see if it's better.
-
-#+BEGIN_SRC ipython :session tidying :results output :exports both
-downloader._download = None
-text = downloader.download
-print(text[:700])
-#+END_SRC
-
-#+RESULTS:
-#+begin_example
-2019-05-22 16:06:52,206 [1mTextDownloader[0m download: /home/brunhilde/data/datasets/gutenberg/conrad_joseph_secret_agent.txt exists, opening it
                                    THE
                                SECRET AGENT
                               A SIMPLE TALE
@@ -187,7 +99,76 @@ print(text[:700])
                                H. G. WELLS
 
                    THE CHRONICLER OF MR LEWISHAM’S LOVE
-                     THE BIOGRAPHER OF KIPPS AND TH
+                     THE BIOGRAPHER OF KIPPS AND THE
+                      HISTORIAN OF THE AGES TO COME
+
+                   THIS SIMPLE TALE OF THE XI
+#+end_example
+
+So it looks like the actual start of our book comes after the transcription credit.
+
+#+BEGIN_SRC ipython :session tidying :results output :exports both
+lines = text.split("\n")
+end = False
+for index, line in enumerate(lines):
+    if 'ccx074@pglaf.org' in line:
+        print(f"The Credit line is {index}")
+        end = True
+    if "THE" in line and end:
+        print(f"The first line of our text is at {index}")
+        break
+#+END_SRC
+
+#+RESULTS:
+
+I'll get rid of the header.
+#+BEGIN_SRC ipython :session tidying :results output :exports both
+cleaned = lines[38:]
+print("".join(cleaned[0:2]))
+print(f"{len(cleaned):,}")
+#+END_SRC
+
+#+RESULTS:
+: his wife was in charge of his brother-in-law.
+: 10,083
+
+So, there's 10,121 lines in the book (I don't know if that is long for a book, I don't think it is) and there are carriage returns (or whatever those marks are called) in the text. I'm going to save the file with the header removed and clean the file separately with =dos2unix=.
+
+#+BEGIN_SRC ipython :session tidying :results none
+with downloader.target.open('w') as writer:
+    writer.write("\n".join(cleaned))
+#+END_SRC
+
+** Reload
+   I ran =dos2unix= on the file, let's see if it's better.
+
+#+BEGIN_SRC ipython :session tidying :results output :exports both
+downloader._download = None
+text = downloader.download
+#+END_SRC
+
+#+RESULTS:
+: 2019-05-26 15:59:56,659 [1mTextDownloader[0m download: /home/athena/data/datasets/gutenberg/conrad_joseph_secret_agent.txt exists, opening it
+
+#+BEGIN_SRC ipython :session tidying :results output :exports both
+print(text[:700])
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+his wife was in charge of his brother-in-law.
+
+The shop was small, and so was the house.  It was one of those grimy
+brick houses which existed in large quantities before the era of
+reconstruction dawned upon London.  The shop was a square box of a place,
+with the front glazed in small panes.  In the daytime the door remained
+closed; in the evening it stood discreetly but suspiciously ajar.
+
+The window contained photographs of more or less undressed dancing girls;
+nondescript packages in wrappers like patent medicines; closed yellow
+paper envelopes, very flimsy, and marked two-and-six in heavy black
+figures; a few numbers of ancient French comic publications hung across a
+string as if to dry;
 #+end_example
 
 How many unique characters are there?
@@ -197,20 +178,20 @@ print(len(set(text)))
 #+END_SRC
 
 #+RESULTS:
-: 91
+: 90
 
 According to [[https://www.wikiwand.com/en/ASCII][Wikipedia]], there are 95 printable ASCII characters so this doesn't use all of them, but comes close.
 
 ** Tokenizing with Spacy
-#+BEGIN_SRC ipython :session tidying :results ouput :exports both
+#+BEGIN_SRC ipython :session tidying :results output :exports both
 with TIMER:
     document = nlp(text)
 #+END_SRC
 
 #+RESULTS:
-: 2019-05-22 17:45:05,705 graeae.timers.timer start: Started: 2019-05-22 17:45:05.705527
-: 2019-05-22 17:45:32,401 graeae.timers.timer end: Ended: 2019-05-22 17:45:32.401531
-: 2019-05-22 17:45:32,403 graeae.timers.timer end: Elapsed: 0:00:26.696004
+: 2019-05-26 16:46:53,678 graeae.timers.timer start: Started: 2019-05-26 16:46:53.677998
+: 2019-05-26 16:47:05,602 graeae.timers.timer end: Ended: 2019-05-26 16:47:05.602303
+: 2019-05-26 16:47:05,602 graeae.timers.timer end: Elapsed: 0:00:11.924305
 
 Spacy pre-computes the linguistic features when you create the =document= instance so it takes a little longer to load than you might expect.
 
@@ -238,7 +219,7 @@ print(document[100])
 #+END_SRC
 
 #+RESULTS:
-: Verloc
+: dancing
 
 If you grab a span of tokens instead of a single token it renders them as a [[https://spacy.io/api/span][Span]] object.
 
@@ -247,9 +228,11 @@ print(document[100:150])
 #+END_SRC
 
 #+RESULTS:
-: Verloc, going out in the morning, left his shop nominally in charge of
-: his brother-in-law.  It could be done, because there was very little
-: business at any time, and practically none at all before the evening.  
+: dancing girls;
+: nondescript packages in wrappers like patent medicines; closed yellow
+: paper envelopes, very flimsy, and marked two-and-six in heavy black
+: figures; a few numbers of ancient French comic publications hung across a
+: string as if to
 
 Although the square brackets are token-based, the document also allows you to grab sentences.
 
@@ -261,59 +244,92 @@ print(type(sentence))
 #+END_SRC
 
 #+RESULTS:
-: She would have, he warned
-: her, to be very nice to his political friends.
-: 
-: 
+: the attractions of stray cats and dogs, which he followed down narrow
+: alleys into unsavoury courts; by the comedies of the streets, which he
+: contemplated open-mouthed, to the detriment of
 : <class 'spacy.tokens.span.Span'>
 
 I had to convert it to a tuple because =sents= is actually a generator, not a collection.
 
 *** Token Attributes
 
-#+BEGIN_SRC ipython :session tidying :results output :exports both
+#+BEGIN_SRC ipython :session tidying :results output raw :exports both
+print("|Token | Stop-Word| Punctuation |")
+print("|-+-+-+-|")
 for token in sentence:
-    print(token, token.is_stop, token.is_punct, token.is_space)
+    if token.is_space:
+        continue
+    print(f"|{token}| {token.is_stop}| {token.is_punct}|")
 #+END_SRC
 
 #+RESULTS:
-#+begin_example
-She True False False
-would True False False
-have True False False
-, False True False
-he True False False
-warned False False False
-
- False False True
-her True False False
-, False True False
-to True False False
-be True False False
-very True False False
-nice False False False
-to True False False
-his True False False
-political False False False
-friends False False False
-. False True False
-
-
- False False True
-#+end_example
+| Token        | Stop-Word | Punctuation |
+|--------------+-----------+-------------|
+| the          | True      | False       |
+| attractions  | False     | False       |
+| of           | True      | False       |
+| stray        | False     | False       |
+| cats         | False     | False       |
+| and          | True      | False       |
+| dogs         | False     | False       |
+| ,            | False     | True        |
+| which        | True      | False       |
+| he           | True      | False       |
+| followed     | False     | False       |
+| down         | True      | False       |
+| narrow       | False     | False       |
+| alleys       | False     | False       |
+| into         | True      | False       |
+| unsavoury    | False     | False       |
+| courts       | False     | False       |
+| ;            | False     | True        |
+| by           | True      | False       |
+| the          | True      | False       |
+| comedies     | False     | False       |
+| of           | True      | False       |
+| the          | True      | False       |
+| streets      | False     | False       |
+| ,            | False     | True        |
+| which        | True      | False       |
+| he           | True      | False       |
+| contemplated | False     | False       |
+| open         | False     | False       |
+|--------------+-----------+-------------|
+| mouthed      | False     | False       |
+| ,            | False     | True        |
+| to           | True      | False       |
+| the          | True      | False       |
+| detriment    | False     | False       |
+| of           | True      | False       |
 
 So spacy can help us identify different types of tokens, in this case stopwords, punctuation, and spaces, but it can do more. The stop-words it uses are kept in a dictionary that you can add to to make it more domain-specific. Here's what the sentence looks like if you filter out the stopword, punctuation, and spaces.
 
-#+BEGIN_SRC ipython :session tidying :results output :exports both
-print([token for token in sentence if not any((token.is_stop, 
-                                               token.is_punct, 
-                                               token.is_space))])
+#+BEGIN_SRC ipython :session tidying :results output raw :exports both
+for token in sentence:
+    if not any((token.is_stop,
+                token.is_punct,
+                token.is_space)):
+        print(f"- {token}")
 #+END_SRC
 
 #+RESULTS:
-: [warned, nice, political, friends]
+- attractions
+- stray
+- cats
+- dogs
+- followed
+- narrow
+- alleys
+- unsavoury
+- courts
+- comedies
+- streets
+- contemplated
+- open
+- mouthed
+- detriment
 *** Lemmatisation
-    Spacy implements [[https://www.wikiwand.com/en/Lemmatisation][Lemmatisation]], the "standard form" for a word.
+    Spacy implements [[https://www.wikiwand.com/en/Lemmatisation][Lemmatisation]], the conversion of a token to the "standard form" for a word.
 
 #+BEGIN_SRC ipython :session tidying :results output raw :exports both
 print("|Token| Lemma|Part of Speech|")
@@ -323,32 +339,60 @@ for token in (token for token in sentence if not token.is_space):
 #+END_SRC
 
 #+RESULTS:
-| Token     | Lemma     | Part of Speech |
-|-----------+-----------+----------------|
-| She       | -PRON-    | PRON           |
-| would     | would     | VERB           |
-| have      | have      | VERB           |
-| ,         | ,         | PUNCT          |
-| he        | -PRON-    | PRON           |
-| warned    | warn      | VERB           |
-| her       | -PRON-    | PRON           |
-| ,         | ,         | PUNCT          |
-| to        | to        | PART           |
-| be        | be        | VERB           |
-| very      | very      | ADV            |
-| nice      | nice      | ADJ            |
-| to        | to        | ADP            |
-| his       | -PRON-    | DET            |
-| political | political | ADJ            |
-| friends   | friend    | NOUN           |
-| .         | .         | PUNCT          |
+| Token        | Lemma       | Part of Speech |
+|--------------+-------------+----------------|
+| the          | the         | DET            |
+| attractions  | attraction  | NOUN           |
+| of           | of          | ADP            |
+| stray        | stray       | ADJ            |
+| cats         | cat         | NOUN           |
+| and          | and         | CCONJ          |
+| dogs         | dog         | NOUN           |
+| ,            | ,           | PUNCT          |
+| which        | which       | DET            |
+| he           | -PRON-      | PRON           |
+| followed     | follow      | VERB           |
+| down         | down        | PART           |
+| narrow       | narrow      | ADJ            |
+| alleys       | alley       | NOUN           |
+| into         | into        | ADP            |
+| unsavoury    | unsavoury   | ADJ            |
+| courts       | court       | NOUN           |
+| ;            | ;           | PUNCT          |
+| by           | by          | ADP            |
+| the          | the         | DET            |
+| comedies     | comedy      | NOUN           |
+| of           | of          | ADP            |
+| the          | the         | DET            |
+| streets      | street      | NOUN           |
+| ,            | ,           | PUNCT          |
+| which        | which       | DET            |
+| he           | -PRON-      | PRON           |
+| contemplated | contemplate | VERB           |
+| open         | open        | ADJ            |
+|--------------+-------------+----------------|
+| mouthed      | mouthed     | ADJ            |
+| ,            | ,           | PUNCT          |
+| to           | to          | ADP            |
+| the          | the         | DET            |
+| detriment    | detriment   | NOUN           |
+| of           | of          | ADP            |
+
+It doesn't look like there's a lot of conversion being done, other than reducing plural to single, but if you look at /comedies/ you can see that it was lemmatised as /comedy/, which is a little more sophisticated than just chopping off the last letter.
 
 I filtered out the spaces because it broke my table, but it's part-of-speech label was =SPACE=. The =-PRON-= lemma is a special one that spaCy uses for any [[https://www.wikiwand.com/en/Pronoun][pronoun]] (I, we she, etc.). According to the [[https://spacy.io/api/annotation][spaCy annotation documentation]], the space lemma is only included if there's more than one, which they include because multiple spaces might be significant.
-** A Detour Into Fuzzy Wuzyz
+** A Detour Into Fuzzy Wuzzy
    [[https://github.com/seatgeek/fuzzywuzzy][fuzzywuzzy]] is a library that does fuzzy string matching using the [[https://www.wikiwand.com/en/Levenshtein_distance][Levenshtein Distance]] between strings. There's a [[https://chairnerd.seatgeek.com/fuzzywuzzy-fuzzy-string-matching-in-python/][page]] showing more about how to use it based the example of finding concert information on the web.
 
 *** Ratio
-    The =ratio= function for fuzzywuzzy is an alias for the [[https://docs.python.org/3/library/difflib.html][difflib]] =SequenceMatcher.ratio= method (except they multiply by 100 and round off so it's a percentage rather than a fraction.
+    The =ratio= function for fuzzywuzzy is an alias for the [[https://docs.python.org/3/library/difflib.html][difflib]] =SequenceMatcher.ratio= method (except they multiply by 100 and round off so it's a percentage rather than a fraction. The ratio it's calculating is:
+
+\[
+ratio = \frac{2M}{T}
+\]
+
+Where /M/ is the number of matching elements and /T/ is the total number of elements in both sequences.
+
 #+BEGIN_SRC ipython :session tidying :results output :exports both
 sentence_a = "eat more meats"
 sentence_b = "eat more beats"
@@ -364,7 +408,7 @@ print(fuzz.ratio(sentence_b, sentence_c))
 : 93
 : 90
 
-The fuzzywuzzy page I mentioned earlier states that this will work for very short (one word) text or very long text, but no so well for things in between.
+The fuzzywuzzy page I mentioned earlier states that this will work for very short (one word) text or very long text, but not so well for things in between.
 *** Partial Ratio
     To get better matches for short-ish text, fuzzywuzzy has a =partial_ratio= function. 
 
@@ -444,9 +488,10 @@ print(fuzz.WRatio.__doc__)
     :type force_ascii: bool
     :full_process: Process inputs, used here to avoid double processing in extract functions (Default: True)
     :return:
+    
 #+end_example
 
-This one tries to figure out the best metric for you.
+Based on the doc-string, it looks like this one tries to figure out the best metric for you.
 
 #+BEGIN_SRC ipython :session tidying :results output :exports both
 choices = ["big bubba", "hubba bubba", "rubber baby buggy bubba", "bubba dubba", "chubba bubba"]
@@ -454,7 +499,7 @@ print(process.extract('hubba hubba', choices))
 #+END_SRC
 
 #+RESULTS:
-: [('hubba bubba', 95), ('chubba bubba', 87), ('bubba dubba', 82), ('rubber baby buggy bubba', 68), ('big bubba', 60)]
+: [('hubba bubba', 95), ('chubba bubba', 87), ('bubba dubba', 82), ('rubber baby buggy bubba', 68), ('big bubba', 54)]
 
 #+BEGIN_SRC ipython :session tidying :results output :exports both
 print(process.extract('hubba hubba', choices, limit=2))
@@ -485,48 +530,181 @@ for word in words:
 | inocullate  | inoculate  |    95 |
 | babaganoush | embarras   |    42 |
 
-So you probably should check the score when using it like this.
+Looking at the last row you can see one of the limitations of this kind of system - it always returns a match, even though there aren't any close matches, so you probably should check the score when using it.
 
 ** A Diversion Into JellyFish
-   [[https://jellyfish.readthedocs.io/en/latest][JellyFish]] is another python library that implements distance functions (like the Levenstein Distance that FuzzyWuzzy does) as well as stemming and phonetic encoding.
+   [[https://jellyfish.readthedocs.io/en/latest][JellyFish]] is another python library that implements distance functions (like the Levenstein Distance that FuzzyWuzzy does, but others as well) as well as [[https://www.wikiwand.com/en/Stemming][stemming]] and [[https://www.wikiwand.com/en/Phonetic_algorithm][phonetic encoding]].
 *** Phonetic Encoding
     Phonetic encoding transforms words into a form that is based on the pronounciaton of the words. Using this should make matching spelling variations using the distance function(s) better.
 **** American Soundex
-     [[https://www.wikiwand.com/en/Soundex][Soundex]] was originally patented in 1918 but the JellyFish uses a variation called /American Soundex/ which was created in 1930 by analyzing U.S. census reports. Each encoding consists of a letter followed by three digits. The letter is the first letter of the word and the digits represent an encoding of the remaining consonants (a, e, i, o, u, y, h, and w are removed if they aren't the first letter).
+     [[https://www.wikiwand.com/en/Soundex][Soundex]] was originally patented in 1918 but JellyFish uses a variation called /American Soundex/ which was created in 1930 by analyzing U.S. census reports. Each encoding consists of a letter followed by three digits. The letter is the first letter of the word and the digits represent an encoding of the remaining consonants (a, e, i, o, u, y, h, and w are removed if they aren't the first letter).
 
 The exact procedure is pretty straight-forward, but the main thing to note is that it always has the same form (you either pad or cut off the coded consonants to get three digits).
 
 #+BEGIN_SRC ipython :session tidying :results none
-def rupert_robert_rwanda(encoder) -> None:
-    print(encoder("Rupert"))
-    print(encoder("robert"))
-    print(encoder("rwanda"))
+def distance(token_1: str, token_2: str, encoder: Callable) -> None:
+    encoded_1 = encoder(token_1)
+    encoded_2 = encoder(token_2)
+    distance = fuzz.ratio(encoded_1, encoded_2)
+    return encoded_1, encoded_2, distance
 #+END_SRC
 
-#+BEGIN_SRC ipython :session tidying :results output :exports both
+#+BEGIN_SRC ipython :session tidying :results none
+def rupert_robert_rwanda(encoder) -> None:
+    guy, sky, score_1 =  distance("guy", "sky", encoder)
+    glove, love, score_2 = distance("glove", "love", encoder)
+    ate, eight, score_3 = distance("ate", "eight", encoder)
+    output = {
+        "Token 1": [f"guy ({guy})", f"glove ({glove})", f"ate ({ate})"],
+        "Token 2": [f"sky ({sky})", f"love ({love})", f"eight ({eight})"],
+        "Similarity": [score_1, score_2, score_3],
+        "Levenshtein Distance": [jellyfish.levenshtein_distance(guy, sky),
+                                 jellyfish.levenshtein_distance(glove, love),
+                                 jellyfish.levenshtein_distance(ate, eight),
+        ],
+    }
+    print(tabulate(output, headers="keys", tablefmt="orgtbl"))
+    return
+#+end_SRC
+
+#+BEGIN_SRC ipython :session tidying :results output raw :exports both
 rupert_robert_rwanda(jellyfish.soundex)
 #+END_SRC
 
 #+RESULTS:
-: R163
-: R163
-: R530
+| Token 1      | Token 2      | Similarity | Levenshtein Distance |
+|--------------+--------------+------------+----------------------|
+| guy (G000)   | sky (S000)   |         75 |                    1 |
+| glove (G410) | love (L100)  |         50 |                    3 |
+| ate (A300)   | eight (E230) |         50 |                    3 |
 
-In this case it wasn't able to distinguish between /Rupert/ and /robert/, which might or might not be what you want.
+It's a little hard to interpret these values, but it's interesting that /guy/ and /sky/ are so much more similar than /glove/ and /love/ and /eight/ and /ate/ are.
+
 **** Metaphone
      [[https://www.wikiwand.com/en/Metaphone][Metaphone]] was developed in 1990 and improves on Soundex to produce a more accurate encoding.
 
-#+BEGIN_SRC ipython :session tidying :results output :exports both
+#+BEGIN_SRC ipython :session tidying :results output raw :exports both
 rupert_robert_rwanda(jellyfish.metaphone)
 #+END_SRC
 
 #+RESULTS:
-: RPRT
-: RBRT
-: RWNT
+| Token 1     | Token 2    | Similarity | Levenshtein Distance |
+|-------------+------------+------------+----------------------|
+| guy (K)     | sky (SK)   |         67 |                    1 |
+| glove (KLF) | love (LF)  |         80 |                    1 |
+| ate (AT)    | eight (ET) |         50 |                    1 |
 
-Besides being almost readable /metaphone/ was able to distinguish between /Rupert/ and /robert/.
+One interesting thing is that /metaphone/ changes the letters to make match how it thinks something sounds, rather than using the first letter the way /soundex/ does.
+
+Metaphone is a /little/ more interpretable, but interestingly in this case the similarity flips and /love/ and /glove/ are rated more similar. Also, in this case they all had a Levenshtein Distance of 1, while their similarity-ratios where quite different (Levenstein Distance is the number of edits you need to transform one sequence to another).
 **** New York State Identification and Intelligence System (NYSIIS)
 The [[https://www.wikiwand.com/en/New_York_State_Identification_and_Intelligence_System][New York State Identification and Intelligence System]] is a slightly more accurate (compared to Soundex) encoder that was developed in 1970.
-* End
 
+#+BEGIN_SRC ipython :session tidying :results output raw :exports both
+rupert_robert_rwanda(jellyfish.nysiis)
+#+END_SRC
+
+#+RESULTS:
+| Token 1      | Token 2      | Similarity | Levenshtein Distance |
+|--------------+--------------+------------+----------------------|
+| guy (GY)     | sky (SCY)    |         40 |                    2 |
+| glove (GLAV) | love (LAV)   |         86 |                    1 |
+| ate (AT)     | eight (EAGT) |         67 |                    2 |
+
+This seems even more interpretable than the metaphone encodings, and the gap in the similarities is even greater.
+**** Match Rating Approach
+     The final phonetic encoding that jellyfish supports is the [[https://www.wikiwand.com/en/Match_rating_approach][Match Rating Approach]] which was developed in 1977 by Western Airlines.
+
+#+BEGIN_SRC ipython :session tidying :results output raw :exports both
+rupert_robert_rwanda(jellyfish.match_rating_codex)
+#+END_SRC
+
+#+RESULTS:
+| Token 1     | Token 2      | Similarity | Levenshtein Distance |
+|-------------+--------------+------------+----------------------|
+| guy (GY)    | sky (SKY)    |         40 |                    2 |
+| glove (GLV) | love (LV)    |         80 |                    1 |
+| ate (AT)    | eight (EGHT) |         33 |                    3 |
+
+This seems the easiest to read, but strangely it made /ate/ /eight/ the least similar out of all the encodings.
+
+Interestingly all the encodings except /soundex/ found that "glove" and "love" are more similar than "guy" and "sky" which are in turn more similar to each other than "ate" and "eight" are, which is not what I would have thought, given that they sound the same when spoken out loud.
+
+I think as with all things, you'd have to try them out to see how well each does with a particular data set.
+
+** A Short Diversion Into FlashText
+   [[https://flashtext.readthedocs.io/en/latest/][FlashText]] is a python module to help find and replace words in very large documents. It doesn't do all the interesting linguistic things that the other code we've been looking at does, but it was built specifically to be very fast so for cases where you have a lot of text you can use it to speed up searches.
+
+I don't really have any large text to test it on, but here's a quick look at how it works. You can search for matching words.
+
+#+BEGIN_SRC ipython :session tidying :results output :exports both
+processor = KeywordProcessor()
+name_to_replace = "secret agent"
+replacement = "Secret Agent"
+processor.add_keyword(name_to_replace, replacement)
+print(processor.extract_keywords(text))
+#+END_SRC
+
+#+RESULTS:
+: ['Secret Agent', 'Secret Agent', 'Secret Agent', 'Secret Agent', 'Secret Agent', 'Secret Agent', 'Secret Agent', 'Secret Agent', 'Secret Agent', 'Secret Agent', 'Secret Agent', 'Secret Agent', 'Secret Agent', 'Secret Agent', 'Secret Agent', 'Secret Agent', 'Secret Agent', 'Secret Agent', 'Secret Agent']
+
+You don't have to make a replacement, if you only pass in one term then that's what will be replaced.
+
+You can also make a new string with all the terms replaced.
+
+#+BEGIN_SRC ipython :session tidying :results output :exports both
+s = str(sentences[0:4])
+print(s)
+processor.add_keyword("shop", "store")
+processor.add_keyword("house", "hovel")
+replacement = processor.replace_keywords(s)
+print()
+print(replacement)
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+(his wife was in charge of his brother-in-law.
+
+, The shop was small, and so was the house.  , It was one of those grimy
+brick houses which existed in large quantities before the era of
+reconstruction dawned upon London.  , The shop was a square box of a place,
+with the front glazed in small panes.  )
+
+(his wife was in charge of his brother-in-law.
+
+, The store was small, and so was the hovel.  , It was one of those grimy
+brick houses which existed in large quantities before the era of
+reconstruction dawned upon London.  , The store was a square box of a place,
+with the front glazed in small panes.  )
+#+end_example
+
+Note that since it isn't fuzzy "houses" didn't get matched but "house" did.
+
+Instead of just searching for words you can get their indices in the string as well.
+
+#+BEGIN_SRC ipython :session tidying :results output :exports both
+processor = KeywordProcessor()
+processor.add_keyword("secret agent")
+print(processor.extract_keywords(text, span_info=True))
+#+END_SRC
+
+#+RESULTS:
+: [('secret agent', 41658, 41670), ('secret agent', 92721, 92733), ('secret agent', 218743, 218755), ('secret agent', 218989, 219001), ('secret agent', 221234, 221246), ('secret agent', 233831, 233843), ('secret agent', 236874, 236886), ('secret agent', 302412, 302424), ('secret agent', 303622, 303634), ('secret agent', 350862, 350874), ('secret agent', 383719, 383731), ('secret agent', 384291, 384303), ('secret agent', 393206, 393218), ('secret agent', 400450, 400462), ('secret agent', 414087, 414099), ('secret agent', 414319, 414331), ('secret agent', 440086, 440098), ('secret agent', 481986, 481998), ('secret agent', 520737, 520749)]
+
+#+BEGIN_SRC ipython :session tidying :results output :exports both
+start = 92721 - 31
+end = 92733 + 12
+print(text[start: end])
+#+END_SRC
+
+#+RESULTS:
+: more completely than that of a secret agent of police. 
+
+Note that the matching isn't case-sensitive, so the previous search mathches "SECRET AGENT", "Secret Agent", etc. although you can make it case-sensitive by passing in the ~case_sensitive=True~ argument to the constructor.
+
+* End
+  Despite the name this was really a look at three-ish libraries to help with tokenization, lemmatizing, fuzzy string matching, and quick string searching and replacin.g
+** Original Source
+
+1. Kasliwal N. Natural language processing with Python quick start guide: going from a Python developer to an effective natural language processing engineer [Internet]. 2018 [cited 2019 May 18]. Available from: http://proquest.safaribooksonline.com/?fpi=9781789130386
