@@ -14,21 +14,21 @@
 #+OPTIONS: ^:{}
 #+OPTIONS: H:5
 #+TOC: headlines 2
-#+BEGIN_SRC ipython :session tidying :results none :exports none
+#+BEGIN_SRC python :session tidying :results none :exports none
 %load_ext autoreload
 %autoreload 2
 #+END_SRC
 * Beginning
 ** Imports
 *** Python
-#+BEGIN_SRC ipython :session tidying :results none
+#+BEGIN_SRC python :session tidying :results none
 from difflib import SequenceMatcher
 from pathlib import Path
 from typing import Callable
 import os
 #+END_SRC
 *** PyPi
-#+BEGIN_SRC ipython :session tidying :results none
+#+BEGIN_SRC python :session tidying :results none
 from flashtext import KeywordProcessor
 from fuzzywuzzy import fuzz, process
 from tabulate import tabulate
@@ -36,33 +36,33 @@ import spacy
 import jellyfish
 #+END_SRC
 *** My Projects
-#+BEGIN_SRC ipython :session tidying :results none
+#+BEGIN_SRC python :session tidying :results none
 from graeae import EnvironmentLoader, TextDownloader
 from graeae.timers import Timer
 #+END_SRC
 ** The Text File.
 This is the URL to Joseph Conrad's "The Secret Agent" from [[https://www.gutenberg.org/ebooks/974][Project Gutenberg]].
-#+BEGIN_SRC ipython :session tidying :results none
+#+BEGIN_SRC python :session tidying :results none
 URL = "https://www.gutenberg.org/files/974/974-0.txt"
 #+END_SRC
 
-#+BEGIN_SRC ipython :session tidying :results none
+#+BEGIN_SRC python :session tidying :results none
 environment = EnvironmentLoader()
 path = environment["GUTENBERG"]
 #+END_SRC
 ** Setup Spacy
-#+BEGIN_SRC ipython :session tidying :results none
+#+BEGIN_SRC python :session tidying :results none
 nlp = spacy.load("en_core_web_md")
 #+END_SRC
 
 ** The Timer
    This just tracks how longs things take.
-#+BEGIN_SRC ipython :session tidying :results none
+#+BEGIN_SRC python :session tidying :results none
 TIMER = Timer()
 #+END_SRC
 * Middle
 ** Load the File
-#+BEGIN_SRC ipython :session tidying :results output :exports both
+#+BEGIN_SRC python :session tidying :results output :exports both
 path = Path(path).expanduser()
 downloader = TextDownloader(url=URL, target=path/"conrad_joseph_secret_agent.txt")
 text = downloader.download
@@ -71,7 +71,7 @@ text = downloader.download
 #+RESULTS:
 : 2019-05-26 15:59:52,186 [1mTextDownloader[0m download: /home/athena/data/datasets/gutenberg/conrad_joseph_secret_agent.txt exists, opening it
 
-#+BEGIN_SRC ipython :session tidying :results output :exports both
+#+BEGIN_SRC python :session tidying :results output :exports both
 print(text[:800])
 #+END_SRC
 
@@ -107,7 +107,7 @@ print(text[:800])
 
 So it looks like the actual start of our book comes after the transcription credit.
 
-#+BEGIN_SRC ipython :session tidying :results output :exports both
+#+BEGIN_SRC python :session tidying :results output :exports both
 lines = text.split("\n")
 end = False
 for index, line in enumerate(lines):
@@ -122,7 +122,7 @@ for index, line in enumerate(lines):
 #+RESULTS:
 
 I'll get rid of the header.
-#+BEGIN_SRC ipython :session tidying :results output :exports both
+#+BEGIN_SRC python :session tidying :results output :exports both
 cleaned = lines[38:]
 print("".join(cleaned[0:2]))
 print(f"{len(cleaned):,}")
@@ -134,7 +134,7 @@ print(f"{len(cleaned):,}")
 
 So, there's 10,121 lines in the book (I don't know if that is long for a book, I don't think it is) and there are carriage returns (or whatever those marks are called) in the text. I'm going to save the file with the header removed and clean the file separately with =dos2unix=.
 
-#+BEGIN_SRC ipython :session tidying :results none
+#+BEGIN_SRC python :session tidying :results none
 with downloader.target.open('w') as writer:
     writer.write("\n".join(cleaned))
 #+END_SRC
@@ -142,7 +142,7 @@ with downloader.target.open('w') as writer:
 ** Reload
    I ran =dos2unix= on the file, let's see if it's better.
 
-#+BEGIN_SRC ipython :session tidying :results output :exports both
+#+BEGIN_SRC python :session tidying :results output :exports both
 downloader._download = None
 text = downloader.download
 #+END_SRC
@@ -150,7 +150,7 @@ text = downloader.download
 #+RESULTS:
 : 2019-05-26 15:59:56,659 [1mTextDownloader[0m download: /home/athena/data/datasets/gutenberg/conrad_joseph_secret_agent.txt exists, opening it
 
-#+BEGIN_SRC ipython :session tidying :results output :exports both
+#+BEGIN_SRC python :session tidying :results output :exports both
 print(text[:700])
 #+END_SRC
 
@@ -173,7 +173,7 @@ string as if to dry;
 
 How many unique characters are there?
 
-#+BEGIN_SRC ipython :session tidying :results output :exports both
+#+BEGIN_SRC python :session tidying :results output :exports both
 print(len(set(text)))
 #+END_SRC
 
@@ -183,7 +183,7 @@ print(len(set(text)))
 According to [[https://www.wikiwand.com/en/ASCII][Wikipedia]], there are 95 printable ASCII characters so this doesn't use all of them, but comes close.
 
 ** Tokenizing with Spacy
-#+BEGIN_SRC ipython :session tidying :results output :exports both
+#+BEGIN_SRC python :session tidying :results output :exports both
 with TIMER:
     document = nlp(text)
 #+END_SRC
@@ -195,7 +195,7 @@ with TIMER:
 
 Spacy pre-computes the linguistic features when you create the =document= instance so it takes a little longer to load than you might expect.
 
-#+BEGIN_SRC ipython :session tidying :results output :exports both
+#+BEGIN_SRC python :session tidying :results output :exports both
 print(type(document))
 #+END_SRC
 
@@ -204,7 +204,7 @@ print(type(document))
 
 Our document is a spacy [[https://spacy.io/api/doc][Doc]] instance which they describe as a container for accessing language annotations. They also describe it as a sequence of TokenCJ structs (whatever those are).
 
-#+BEGIN_SRC ipython :session tidying :results output :exports both
+#+BEGIN_SRC python :session tidying :results output :exports both
 d = document[0]
 print(type(d))
 #+END_SRC
@@ -214,7 +214,7 @@ print(type(d))
 
 So it looks like besides having its own methods, the Doc holds [[https://spacy.io/api/token][Token]] objects.
 
-#+BEGIN_SRC ipython :session tidying :results output :exports both
+#+BEGIN_SRC python :session tidying :results output :exports both
 print(document[100])
 #+END_SRC
 
@@ -223,7 +223,7 @@ print(document[100])
 
 If you grab a span of tokens instead of a single token it renders them as a [[https://spacy.io/api/span][Span]] object.
 
-#+BEGIN_SRC ipython :session tidying :results output :exports both
+#+BEGIN_SRC python :session tidying :results output :exports both
 print(document[100:150])
 #+END_SRC
 
@@ -236,7 +236,7 @@ print(document[100:150])
 
 Although the square brackets are token-based, the document also allows you to grab sentences.
 
-#+BEGIN_SRC ipython :session tidying :results output :exports both
+#+BEGIN_SRC python :session tidying :results output :exports both
 sentences = tuple(document.sents)
 sentence = sentences[100]
 print(sentence)
@@ -253,7 +253,7 @@ I had to convert it to a tuple because =sents= is actually a generator, not a co
 
 *** Token Attributes
 
-#+BEGIN_SRC ipython :session tidying :results output raw :exports both
+#+BEGIN_SRC python :session tidying :results output raw :exports both
 print("|Token | Stop-Word| Punctuation |")
 print("|-+-+-+-|")
 for token in sentence:
@@ -304,7 +304,7 @@ for token in sentence:
 
 So spacy can help us identify different types of tokens, in this case stopwords, punctuation, and spaces, but it can do more. The stop-words it uses are kept in a dictionary that you can add to to make it more domain-specific. Here's what the sentence looks like if you filter out the stopword, punctuation, and spaces.
 
-#+BEGIN_SRC ipython :session tidying :results output raw :exports both
+#+BEGIN_SRC python :session tidying :results output raw :exports both
 for token in sentence:
     if not any((token.is_stop,
                 token.is_punct,
@@ -331,7 +331,7 @@ for token in sentence:
 *** Lemmatisation
     Spacy implements [[https://www.wikiwand.com/en/Lemmatisation][Lemmatisation]], the conversion of a token to the "standard form" for a word.
 
-#+BEGIN_SRC ipython :session tidying :results output raw :exports both
+#+BEGIN_SRC python :session tidying :results output raw :exports both
 print("|Token| Lemma|Part of Speech|")
 print("|-+-+-|")
 for token in (token for token in sentence if not token.is_space):
@@ -393,7 +393,7 @@ ratio = \frac{2M}{T}
 
 Where /M/ is the number of matching elements and /T/ is the total number of elements in both sequences.
 
-#+BEGIN_SRC ipython :session tidying :results output :exports both
+#+BEGIN_SRC python :session tidying :results output :exports both
 sentence_a = "eat more meats"
 sentence_b = "eat more beats"
 sentence_c = "beat more beets"
@@ -412,7 +412,7 @@ The fuzzywuzzy page I mentioned earlier states that this will work for very shor
 *** Partial Ratio
     To get better matches for short-ish text, fuzzywuzzy has a =partial_ratio= function. 
 
-#+BEGIN_SRC ipython :session tidying :results output :exports both
+#+BEGIN_SRC python :session tidying :results output :exports both
 sentence_a = "meaty beaty big and bouncy"
 sentence_b = "meaty"
 print(fuzz.ratio(sentence_a, sentence_b))
@@ -428,7 +428,7 @@ The =ratio= doesn't handle sub-string matches as well as =partial_ratio= does.
 *** Token Sort and Token Set
     Besides sub-strings, there might be cases where ordering doesn't matter, in which case you can try the =token_sort_ratio= or =token_set_ratio= functions.
 
-#+BEGIN_SRC ipython :session tidying :results output :exports both
+#+BEGIN_SRC python :session tidying :results output :exports both
 sentence_a = "totally tubular terry"
 sentence_b = "terry is totally tubular"
 print(fuzz.ratio(sentence_a, sentence_b))
@@ -450,7 +450,7 @@ The =token_sort_ratio= sorts the tokens before comparing them, while the =token_
 
 By default this uses =fuzz.WRatio= to score the similarity.
 
-#+BEGIN_SRC ipython :session tidying :results output :exports both
+#+BEGIN_SRC python :session tidying :results output :exports both
 print(fuzz.WRatio.__doc__)
 #+END_SRC
 
@@ -493,7 +493,7 @@ print(fuzz.WRatio.__doc__)
 
 Based on the doc-string, it looks like this one tries to figure out the best metric for you.
 
-#+BEGIN_SRC ipython :session tidying :results output :exports both
+#+BEGIN_SRC python :session tidying :results output :exports both
 choices = ["big bubba", "hubba bubba", "rubber baby buggy bubba", "bubba dubba", "chubba bubba"]
 print(process.extract('hubba hubba', choices))
 #+END_SRC
@@ -501,7 +501,7 @@ print(process.extract('hubba hubba', choices))
 #+RESULTS:
 : [('hubba bubba', 95), ('chubba bubba', 87), ('bubba dubba', 82), ('rubber baby buggy bubba', 68), ('big bubba', 54)]
 
-#+BEGIN_SRC ipython :session tidying :results output :exports both
+#+BEGIN_SRC python :session tidying :results output :exports both
 print(process.extract('hubba hubba', choices, limit=2))
 #+END_SRC
 
@@ -511,7 +511,7 @@ print(process.extract('hubba hubba', choices, limit=2))
 *** Spell Check
     Although the fuzzywuzzy page states that their use case was matching the names of shows on different web-sites, it can also be used as a simple spell-checker.
 
-#+BEGIN_SRC ipython :session tidying :results output raw :exports both
+#+BEGIN_SRC python :session tidying :results output raw :exports both
 dictionary = ["embarras", "inoculate", "misspell"]
 words = ["embaras", "mispel", "inocullate", "babaganoush"]
 print("|Word| Correction| Score|")
@@ -541,7 +541,7 @@ Looking at the last row you can see one of the limitations of this kind of syste
 
 The exact procedure is pretty straight-forward, but the main thing to note is that it always has the same form (you either pad or cut off the coded consonants to get three digits).
 
-#+BEGIN_SRC ipython :session tidying :results none
+#+BEGIN_SRC python :session tidying :results none
 def distance(token_1: str, token_2: str, encoder: Callable) -> None:
     encoded_1 = encoder(token_1)
     encoded_2 = encoder(token_2)
@@ -549,7 +549,7 @@ def distance(token_1: str, token_2: str, encoder: Callable) -> None:
     return encoded_1, encoded_2, distance
 #+END_SRC
 
-#+BEGIN_SRC ipython :session tidying :results none
+#+BEGIN_SRC python :session tidying :results none
 def rupert_robert_rwanda(encoder) -> None:
     guy, sky, score_1 =  distance("guy", "sky", encoder)
     glove, love, score_2 = distance("glove", "love", encoder)
@@ -567,7 +567,7 @@ def rupert_robert_rwanda(encoder) -> None:
     return
 #+end_SRC
 
-#+BEGIN_SRC ipython :session tidying :results output raw :exports both
+#+BEGIN_SRC python :session tidying :results output raw :exports both
 rupert_robert_rwanda(jellyfish.soundex)
 #+END_SRC
 
@@ -583,7 +583,7 @@ It's a little hard to interpret these values, but it's interesting that /guy/ an
 **** Metaphone
      [[https://www.wikiwand.com/en/Metaphone][Metaphone]] was developed in 1990 and improves on Soundex to produce a more accurate encoding.
 
-#+BEGIN_SRC ipython :session tidying :results output raw :exports both
+#+BEGIN_SRC python :session tidying :results output raw :exports both
 rupert_robert_rwanda(jellyfish.metaphone)
 #+END_SRC
 
@@ -600,7 +600,7 @@ Metaphone is a /little/ more interpretable, but interestingly in this case the s
 **** New York State Identification and Intelligence System (NYSIIS)
 The [[https://www.wikiwand.com/en/New_York_State_Identification_and_Intelligence_System][New York State Identification and Intelligence System]] is a slightly more accurate (compared to Soundex) encoder that was developed in 1970.
 
-#+BEGIN_SRC ipython :session tidying :results output raw :exports both
+#+BEGIN_SRC python :session tidying :results output raw :exports both
 rupert_robert_rwanda(jellyfish.nysiis)
 #+END_SRC
 
@@ -615,7 +615,7 @@ This seems even more interpretable than the metaphone encodings, and the gap in 
 **** Match Rating Approach
      The final phonetic encoding that jellyfish supports is the [[https://www.wikiwand.com/en/Match_rating_approach][Match Rating Approach]] which was developed in 1977 by Western Airlines.
 
-#+BEGIN_SRC ipython :session tidying :results output raw :exports both
+#+BEGIN_SRC python :session tidying :results output raw :exports both
 rupert_robert_rwanda(jellyfish.match_rating_codex)
 #+END_SRC
 
@@ -637,7 +637,7 @@ I think as with all things, you'd have to try them out to see how well each does
 
 I don't really have any large text to test it on, but here's a quick look at how it works. You can search for matching words.
 
-#+BEGIN_SRC ipython :session tidying :results output :exports both
+#+BEGIN_SRC python :session tidying :results output :exports both
 processor = KeywordProcessor()
 name_to_replace = "secret agent"
 replacement = "Secret Agent"
@@ -652,7 +652,7 @@ You don't have to make a replacement, if you only pass in one term then that's w
 
 You can also make a new string with all the terms replaced.
 
-#+BEGIN_SRC ipython :session tidying :results output :exports both
+#+BEGIN_SRC python :session tidying :results output :exports both
 s = str(sentences[0:4])
 print(s)
 processor.add_keyword("shop", "store")
@@ -683,7 +683,7 @@ Note that since it isn't fuzzy "houses" didn't get matched but "house" did.
 
 Instead of just searching for words you can get their indices in the string as well.
 
-#+BEGIN_SRC ipython :session tidying :results output :exports both
+#+BEGIN_SRC python :session tidying :results output :exports both
 processor = KeywordProcessor()
 processor.add_keyword("secret agent")
 print(processor.extract_keywords(text, span_info=True))
@@ -692,7 +692,7 @@ print(processor.extract_keywords(text, span_info=True))
 #+RESULTS:
 : [('secret agent', 41658, 41670), ('secret agent', 92721, 92733), ('secret agent', 218743, 218755), ('secret agent', 218989, 219001), ('secret agent', 221234, 221246), ('secret agent', 233831, 233843), ('secret agent', 236874, 236886), ('secret agent', 302412, 302424), ('secret agent', 303622, 303634), ('secret agent', 350862, 350874), ('secret agent', 383719, 383731), ('secret agent', 384291, 384303), ('secret agent', 393206, 393218), ('secret agent', 400450, 400462), ('secret agent', 414087, 414099), ('secret agent', 414319, 414331), ('secret agent', 440086, 440098), ('secret agent', 481986, 481998), ('secret agent', 520737, 520749)]
 
-#+BEGIN_SRC ipython :session tidying :results output :exports both
+#+BEGIN_SRC python :session tidying :results output :exports both
 start = 92721 - 31
 end = 92733 + 12
 print(text[start: end])
@@ -705,6 +705,6 @@ Note that the matching isn't case-sensitive, so the previous search mathches "SE
 
 * End
   Despite the name this was really a look at three-ish libraries to help with tokenization, lemmatizing, fuzzy string matching, and quick string searching and replacin.g
-** Original Source
+** Reference
 
 1. Kasliwal N. Natural language processing with Python quick start guide: going from a Python developer to an effective natural language processing engineer [Internet]. 2018 [cited 2019 May 18]. Available from: http://proquest.safaribooksonline.com/?fpi=9781789130386
