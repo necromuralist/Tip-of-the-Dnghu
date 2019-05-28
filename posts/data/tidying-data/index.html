@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="en" prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article#">
+<head>
+<meta charset="utf-8">
+<meta content="Some notes on tidying data." name="description">
+<meta content="width=device-width, initial-scale=1" name="viewport">
+<title>Some Tools For Tidying Data | Tip of the Dnghu</title>
+<link href="../../../assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
+<link href="../../../assets/css/ipython.min.css" rel="stylesheet" type="text/css">
+<link href="../../../assets/css/nikola_ipython.css" rel="stylesheet" type="text/css">
+<meta content="#5670d4" name="theme-color">
+<meta content="Nikola (getnikola.com)" name="generator">
+<link href="../../../rss.xml" rel="alternate" title="RSS" type="application/rss+xml">
+<link href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/" rel="canonical"><!--[if lt IE 9]><script src="../../../assets/js/html5.js"></script><![endif]-->
+<link href="../../../apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180">
+<link href="../../../favicon-32x32.png" rel="icon" sizes="32x32" type="image/png">
+<link href="../../../favicon-16x16.png" rel="icon" sizes="16x16" type="image/png">
+<link href="../../../site.webmanifest" rel="manifest">
+<script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML" type="text/javascript"></script>
+<meta content="Cloistered Monkey" name="author">
+<link href="../../nlp/newsgroups-example/" rel="prev" title="Newsgroups Example" type="text/html">
+<link href="../name-redaction/" rel="next" title="Name Redaction" type="text/html">
+<meta content="Tip of the Dnghu" property="og:site_name">
+<meta content="Some Tools For Tidying Data" property="og:title">
+<meta content="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/" property="og:url">
+<meta content="Some notes on tidying data." property="og:description">
+<meta content="article" property="og:type">
+<meta content="2019-05-20T13:15:38-07:00" property="article:published_time">
+<meta content="data" property="article:tag">
+<meta content="tidying" property="article:tag">
+</head>
+<body>
+<a class="sr-only sr-only-focusable" href="#content">Skip to main content</a> <!-- Menubar -->
+<nav class="navbar navbar-expand-md static-top mb-4 navbar-light bg-light">
+<div class="container"><!-- This keeps the margins nice -->
+ <a class="navbar-brand" href="https://necromuralist.github.io/Tip-of-the-Dnghu/"><span id="blog-title">Tip of the Dnghu</span></a> <button aria-controls="bs-navbar" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#bs-navbar" data-toggle="collapse" type="button"><span class="navbar-toggler-icon"></span></button>
+<div class="collapse navbar-collapse" id="bs-navbar">
+<ul class="navbar-nav mr-auto">
+<li class="nav-item"><a class="nav-link" href="../../../archive.html">Archive</a></li>
+<li class="nav-item"><a class="nav-link" href="../../../categories/">Tags</a></li>
+<li class="nav-item"><a class="nav-link" href="../../../rss.xml">RSS feed</a></li>
+<li class="nav-item dropdown"><a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Pages</a>
+<div class="dropdown-menu"><a class="dropdown-item" href="https://necromuralist.github.io/">Cloistered Monkey</a></div>
+</li>
+</ul>
+<!-- DuckDuckGo custom search -->
+<form action="https://duckduckgo.com/" class="navbar-form pull-left" id="search" method="get" name="search"><input name="sites" type="hidden" value="https://necromuralist.github.io/Tip-of-the-Dnghu/"><input name="k8" type="hidden" value="#444444"><input name="k9" type="hidden" value="#D51920"><input name="kt" type="hidden" value="h"><input class="span2" maxlength="255" name="q" placeholder="Search…" type="text"><input style="visibility: hidden;display:none" type="submit" value="DuckDuckGo Search"></form>
+<!-- End of custom search -->
+<ul class="navbar-nav navbar-right">
+<li class="nav-item"><a class="nav-link" href="index.org" id="sourcelink">Source</a></li>
+</ul>
+</div>
+<!-- /.navbar-collapse --></div>
+<!-- /.container --></nav>
+<!-- End of Menubar -->
+<div class="container" id="content" role="main">
+<div class="body-content"><!--Body content-->
+<article class="post-text h-entry hentry postpage" itemscope="itemscope" itemtype="http://schema.org/Article">
+<header>
+<h1 class="p-name entry-title" itemprop="headline name"><a class="u-url" href=".">Some Tools For Tidying Data</a></h1>
+<div class="metadata">
+<p class="byline author vcard"><span class="byline-name fn" itemprop="author">Cloistered Monkey</span></p>
+<p class="dateline"><a href="." rel="bookmark"><time class="published dt-published" datetime="2019-05-20T13:15:38-07:00" itemprop="datePublished" title="2019-05-20 13:15">2019-05-20 13:15</time></a></p>
+<p class="sourceline"><a class="sourcelink" href="index.org">Source</a></p>
+</div>
+</header>
+<div class="e-content entry-content" itemprop="articleBody text">
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orgffcf5db">Beginning</a>
+<ul>
+<li><a href="#org7cc60be">Imports</a></li>
+<li><a href="#org8ab9804">The Text File.</a></li>
+<li><a href="#org7172a8e">Setup Spacy</a></li>
+<li><a href="#org6679f1b">The Timer</a></li>
+</ul>
+</li>
+<li><a href="#orgdfd041e">Middle</a>
+<ul>
+<li><a href="#orgcdfd32c">Load the File</a></li>
+<li><a href="#orgdc59cb8">Reload</a></li>
+<li><a href="#orgb772bd5">Tokenizing with Spacy</a></li>
+<li><a href="#org767e34b">A Detour Into Fuzzy Wuzzy</a></li>
+<li><a href="#orgdcaa0b8">A Diversion Into JellyFish</a></li>
+<li><a href="#org185cb88">A Short Diversion Into FlashText</a></li>
+</ul>
+</li>
+<li><a href="#org6b2df69">End</a>
+<ul>
+<li><a href="#org76b0959">Reference</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="outline-2" id="outline-container-orgffcf5db">
+<h2 id="orgffcf5db">Beginning</h2>
+<div class="outline-text-2" id="text-orgffcf5db"></div>
+<div class="outline-3" id="outline-container-org7cc60be">
+<h3 id="org7cc60be">Imports</h3>
+<div class="outline-text-3" id="text-org7cc60be"></div>
+<div class="outline-4" id="outline-container-org9d9004c">
+<h4 id="org9d9004c">Python</h4>
+<div class="outline-text-4" id="text-org9d9004c">
+<div class="highlight">
+<pre><span></span><span class="kn">from</span> <span class="nn">difflib</span> <span class="kn">import</span> <span class="n">SequenceMatcher</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span>
+<span class="kn">import</span> <span class="nn">os</span>
+</pre></div>
+</div>
+</div>
+<div class="outline-4" id="outline-container-org5a355db">
+<h4 id="org5a355db">PyPi</h4>
+<div class="outline-text-4" id="text-org5a355db">
+<div class="highlight">
+<pre><span></span><span class="kn">from</span> <span class="nn">flashtext</span> <span class="kn">import</span> <span class="n">KeywordProcessor</span>
+<span class="kn">from</span> <span class="nn">fuzzywuzzy</span> <span class="kn">import</span> <span class="n">fuzz</span><span class="p">,</span> <span class="n">process</span>
+<span class="kn">from</span> <span class="nn">tabulate</span> <span class="kn">import</span> <span class="n">tabulate</span>
+<span class="kn">import</span> <span class="nn">spacy</span>
+<span class="kn">import</span> <span class="nn">jellyfish</span>
+</pre></div>
+</div>
+</div>
+<div class="outline-4" id="outline-container-org7fc4317">
+<h4 id="org7fc4317">My Projects</h4>
+<div class="outline-text-4" id="text-org7fc4317">
+<div class="highlight">
+<pre><span></span><span class="kn">from</span> <span class="nn">graeae</span> <span class="kn">import</span> <span class="n">EnvironmentLoader</span><span class="p">,</span> <span class="n">TextDownloader</span>
+<span class="kn">from</span> <span class="nn">graeae.timers</span> <span class="kn">import</span> <span class="n">Timer</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="outline-3" id="outline-container-org8ab9804">
+<h3 id="org8ab9804">The Text File.</h3>
+<div class="outline-text-3" id="text-org8ab9804">
+<p>This is the URL to Joseph Conrad's "The Secret Agent" from <a href="https://www.gutenberg.org/ebooks/974">Project Gutenberg</a>.</p>
+<div class="highlight">
+<pre><span></span><span class="n">URL</span> <span class="o">=</span> <span class="s2">"https://www.gutenberg.org/files/974/974-0.txt"</span>
+</pre></div>
+<div class="highlight">
+<pre><span></span><span class="n">environment</span> <span class="o">=</span> <span class="n">EnvironmentLoader</span><span class="p">()</span>
+<span class="n">path</span> <span class="o">=</span> <span class="n">environment</span><span class="p">[</span><span class="s2">"GUTENBERG"</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="outline-3" id="outline-container-org7172a8e">
+<h3 id="org7172a8e">Setup Spacy</h3>
+<div class="outline-text-3" id="text-org7172a8e">
+<div class="highlight">
+<pre><span></span><span class="n">nlp</span> <span class="o">=</span> <span class="n">spacy</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">"en_core_web_md"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="outline-3" id="outline-container-org6679f1b">
+<h3 id="org6679f1b">The Timer</h3>
+<div class="outline-text-3" id="text-org6679f1b">
+<p>This just tracks how longs things take.</p>
+<div class="highlight">
+<pre><span></span><span class="n">TIMER</span> <span class="o">=</span> <span class="n">Timer</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="outline-2" id="outline-container-orgdfd041e">
+<h2 id="orgdfd041e">Middle</h2>
+<div class="outline-text-2" id="text-orgdfd041e"></div>
+<div class="outline-3" id="outline-container-orgcdfd32c">
+<h3 id="orgcdfd32c">Load the File</h3>
+<div class="outline-text-3" id="text-orgcdfd32c">
+<div class="highlight">
+<pre><span></span><span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span>
+<span class="n">downloader</span> <span class="o">=</span> <span class="n">TextDownloader</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">URL</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">path</span><span class="o">/</span><span class="s2">"conrad_joseph_secret_agent.txt"</span><span class="p">)</span>
+<span class="n">text</span> <span class="o">=</span> <span class="n">downloader</span><span class="o">.</span><span class="n">download</span>
+</pre></div>
+<pre class="example">
+2019-05-26 15:59:52,186 [1mTextDownloader[0m download: /home/athena/data/datasets/gutenberg/conrad_joseph_secret_agent.txt exists, opening it
+
+</pre>
+<div class="highlight">
+<pre><span></span><span class="k">print</span><span class="p">(</span><span class="n">text</span><span class="p">[:</span><span class="mi">800</span><span class="p">])</span>
+</pre></div>
+<pre class="example">
+                  THE
+              SECRET AGENT
+             A SIMPLE TALE
+
+
+                   BY
+             JOSEPH CONRAD
+
+             SECOND EDITION
+
+             METHUEN & CO.,
+          36 ESSEX STREET W C.
+                 LONDON
+
+_First Published_ . . . _September_ 1907
+
+ _Second Edition_ . . . _October_ 1907
+
+                   TO
+              H. G. WELLS
+
+  THE CHRONICLER OF MR LEWISHAM’S LOVE
+    THE BIOGRAPHER OF KIPPS AND THE
+     HISTORIAN OF THE AGES TO COME
+
+  THIS SIMPLE TALE OF THE XI
+</pre>
+<p>So it looks like the actual start of our book comes after the transcription credit.</p>
+<div class="highlight">
+<pre><span></span><span class="n">lines</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+<span class="n">end</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">lines</span><span class="p">):</span>
+    <span class="k">if</span> <span class="s1">'ccx074@pglaf.org'</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s2">"The Credit line is {index}"</span><span class="p">)</span>
+        <span class="n">end</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="k">if</span> <span class="s2">"THE"</span> <span class="ow">in</span> <span class="n">line</span> <span class="ow">and</span> <span class="n">end</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s2">"The first line of our text is at {index}"</span><span class="p">)</span>
+        <span class="k">break</span>
+</pre></div>
+<p>I'll get rid of the header.</p>
+<div class="highlight">
+<pre><span></span><span class="n">cleaned</span> <span class="o">=</span> <span class="n">lines</span><span class="p">[</span><span class="mi">38</span><span class="p">:]</span>
+<span class="k">print</span><span class="p">(</span><span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cleaned</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]))</span>
+<span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s2">"{len(cleaned):,}"</span><span class="p">)</span>
+</pre></div>
+<pre class="example">
+his wife was in charge of his brother-in-law.
+10,083
+
+</pre>
+<p>So, there's 10,121 lines in the book (I don't know if that is long for a book, I don't think it is) and there are carriage returns (or whatever those marks are called) in the text. I'm going to save the file with the header removed and clean the file separately with <code>dos2unix</code>.</p>
+<div class="highlight">
+<pre><span></span><span class="k">with</span> <span class="n">downloader</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">'w'</span><span class="p">)</span> <span class="k">as</span> <span class="n">writer</span><span class="p">:</span>
+    <span class="n">writer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cleaned</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="outline-3" id="outline-container-orgdc59cb8">
+<h3 id="orgdc59cb8">Reload</h3>
+<div class="outline-text-3" id="text-orgdc59cb8">
+<p>I ran <code>dos2unix</code> on the file, let's see if it's better.</p>
+<div class="highlight">
+<pre><span></span><span class="n">downloader</span><span class="o">.</span><span class="n">_download</span> <span class="o">=</span> <span class="bp">None</span>
+<span class="n">text</span> <span class="o">=</span> <span class="n">downloader</span><span class="o">.</span><span class="n">download</span>
+</pre></div>
+<pre class="example">
+2019-05-26 15:59:56,659 [1mTextDownloader[0m download: /home/athena/data/datasets/gutenberg/conrad_joseph_secret_agent.txt exists, opening it
+
+</pre>
+<div class="highlight">
+<pre><span></span><span class="k">print</span><span class="p">(</span><span class="n">text</span><span class="p">[:</span><span class="mi">700</span><span class="p">])</span>
+</pre></div>
+<pre class="example">
+his wife was in charge of his brother-in-law.
+
+The shop was small, and so was the house.  It was one of those grimy
+brick houses which existed in large quantities before the era of
+reconstruction dawned upon London.  The shop was a square box of a place,
+with the front glazed in small panes.  In the daytime the door remained
+closed; in the evening it stood discreetly but suspiciously ajar.
+
+The window contained photographs of more or less undressed dancing girls;
+nondescript packages in wrappers like patent medicines; closed yellow
+paper envelopes, very flimsy, and marked two-and-six in heavy black
+figures; a few numbers of ancient French comic publications hung across a
+string as if to dry;
+</pre>
+<p>How many unique characters are there?</p>
+<div class="highlight">
+<pre><span></span><span class="k">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">text</span><span class="p">)))</span>
+</pre></div>
+<pre class="example">
+90
+
+</pre>
+<p>According to <a href="https://www.wikiwand.com/en/ASCII">Wikipedia</a>, there are 95 printable ASCII characters so this doesn't use all of them, but comes close.</p>
+</div>
+</div>
+<div class="outline-3" id="outline-container-orgb772bd5">
+<h3 id="orgb772bd5">Tokenizing with Spacy</h3>
+<div class="outline-text-3" id="text-orgb772bd5">
+<div class="highlight">
+<pre><span></span><span class="k">with</span> <span class="n">TIMER</span><span class="p">:</span>
+    <span class="n">document</span> <span class="o">=</span> <span class="n">nlp</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</pre></div>
+<pre class="example">
+2019-05-26 16:46:53,678 graeae.timers.timer start: Started: 2019-05-26 16:46:53.677998
+2019-05-26 16:47:05,602 graeae.timers.timer end: Ended: 2019-05-26 16:47:05.602303
+2019-05-26 16:47:05,602 graeae.timers.timer end: Elapsed: 0:00:11.924305
+
+</pre>
+<p>Spacy pre-computes the linguistic features when you create the <code>document</code> instance so it takes a little longer to load than you might expect.</p>
+<div class="highlight">
+<pre><span></span><span class="k">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">document</span><span class="p">))</span>
+</pre></div>
+<pre class="example">
+&lt;class 'spacy.tokens.doc.Doc'&gt;
+
+</pre>
+<p>Our document is a spacy <a href="https://spacy.io/api/doc">Doc</a> instance which they describe as a container for accessing language annotations. They also describe it as a sequence of TokenCJ structs (whatever those are).</p>
+<div class="highlight">
+<pre><span></span><span class="n">d</span> <span class="o">=</span> <span class="n">document</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="k">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">d</span><span class="p">))</span>
+</pre></div>
+<pre class="example">
+&lt;class 'spacy.tokens.token.Token'&gt;
+
+</pre>
+<p>So it looks like besides having its own methods, the Doc holds <a href="https://spacy.io/api/token">Token</a> objects.</p>
+<div class="highlight">
+<pre><span></span><span class="k">print</span><span class="p">(</span><span class="n">document</span><span class="p">[</span><span class="mi">100</span><span class="p">])</span>
+</pre></div>
+<pre class="example">
+dancing
+
+</pre>
+<p>If you grab a span of tokens instead of a single token it renders them as a <a href="https://spacy.io/api/span">Span</a> object.</p>
+<div class="highlight">
+<pre><span></span><span class="k">print</span><span class="p">(</span><span class="n">document</span><span class="p">[</span><span class="mi">100</span><span class="p">:</span><span class="mi">150</span><span class="p">])</span>
+</pre></div>
+<pre class="example">
+dancing girls;
+nondescript packages in wrappers like patent medicines; closed yellow
+paper envelopes, very flimsy, and marked two-and-six in heavy black
+figures; a few numbers of ancient French comic publications hung across a
+string as if to
+
+</pre>
+<p>Although the square brackets are token-based, the document also allows you to grab sentences.</p>
+<div class="highlight">
+<pre><span></span><span class="n">sentences</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">document</span><span class="o">.</span><span class="n">sents</span><span class="p">)</span>
+<span class="n">sentence</span> <span class="o">=</span> <span class="n">sentences</span><span class="p">[</span><span class="mi">100</span><span class="p">]</span>
+<span class="k">print</span><span class="p">(</span><span class="n">sentence</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">sentence</span><span class="p">))</span>
+</pre></div>
+<pre class="example">
+the attractions of stray cats and dogs, which he followed down narrow
+alleys into unsavoury courts; by the comedies of the streets, which he
+contemplated open-mouthed, to the detriment of
+&lt;class 'spacy.tokens.span.Span'&gt;
+
+</pre>
+<p>I had to convert it to a tuple because <code>sents</code> is actually a generator, not a collection.</p>
+</div>
+<div class="outline-4" id="outline-container-org4a97ffb">
+<h4 id="org4a97ffb">Token Attributes</h4>
+<div class="outline-text-4" id="text-org4a97ffb">
+<div class="highlight">
+<pre><span></span><span class="k">print</span><span class="p">(</span><span class="s2">"|Token | Stop-Word| Punctuation |"</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s2">"|-+-+-+-|"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">sentence</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">token</span><span class="o">.</span><span class="n">is_space</span><span class="p">:</span>
+        <span class="k">continue</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s2">"|{token}| {token.is_stop}| {token.is_punct}|"</span><span class="p">)</span>
+</pre></div>
+<table border="2" cellpadding="6" cellspacing="0" frame="hsides" rules="groups">
+<colgroup>
+<col class="org-left">
+<col class="org-left">
+<col class="org-left"></colgroup>
+<thead>
+<tr>
+<th class="org-left" scope="col">Token</th>
+<th class="org-left" scope="col">Stop-Word</th>
+<th class="org-left" scope="col">Punctuation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">the</td>
+<td class="org-left">True</td>
+<td class="org-left">False</td>
+</tr>
+<tr>
+<td class="org-left">attractions</td>
+<td class="org-left">False</td>
+<td class="org-left">False</td>
+</tr>
+<tr>
+<td class="org-left">of</td>
+<td class="org-left">True</td>
+<td class="org-left">False</td>
+</tr>
+<tr>
+<td class="org-left">stray</td>
+<td class="org-left">False</td>
+<td class="org-left">False</td>
+</tr>
+<tr>
+<td class="org-left">cats</td>
+<td class="org-left">False</td>
+<td class="org-left">False</td>
+</tr>
+<tr>
+<td class="org-left">and</td>
+<td class="org-left">True</td>
+<td class="org-left">False</td>
+</tr>
+<tr>
+<td class="org-left">dogs</td>
+<td class="org-left">False</td>
+<td class="org-left">False</td>
+</tr>
+<tr>
+<td class="org-left">,</td>
+<td class="org-left">False</td>
+<td class="org-left">True</td>
+</tr>
+<tr>
+<td class="org-left">which</td>
+<td class="org-left">True</td>
+<td class="org-left">False</td>
+</tr>
+<tr>
+<td class="org-left">he</td>
+<td class="org-left">True</td>
+<td class="org-left">False</td>
+</tr>
+<tr>
+<td class="org-left">followed</td>
+<td class="org-left">False</td>
+<td class="org-left">False</td>
+</tr>
+<tr>
+<td class="org-left">down</td>
+<td class="org-left">True</td>
+<td class="org-left">False</td>
+</tr>
+<tr>
+<td class="org-left">narrow</td>
+<td class="org-left">False</td>
+<td class="org-left">False</td>
+</tr>
+<tr>
+<td class="org-left">alleys</td>
+<td class="org-left">False</td>
+<td class="org-left">False</td>
+</tr>
+<tr>
+<td class="org-left">into</td>
+<td class="org-left">True</td>
+<td class="org-left">False</td>
+</tr>
+<tr>
+<td class="org-left">unsavoury</td>
+<td class="org-left">False</td>
+<td class="org-left">False</td>
+</tr>
+<tr>
+<td class="org-left">courts</td>
+<td class="org-left">False</td>
+<td class="org-left">False</td>
+</tr>
+<tr>
+<td class="org-left">;</td>
+<td class="org-left">False</td>
+<td class="org-left">True</td>
+</tr>
+<tr>
+<td class="org-left">by</td>
+<td class="org-left">True</td>
+<td class="org-left">False</td>
+</tr>
+<tr>
+<td class="org-left">the</td>
+<td class="org-left">True</td>
+<td class="org-left">False</td>
+</tr>
+<tr>
+<td class="org-left">comedies</td>
+<td class="org-left">False</td>
+<td class="org-left">False</td>
+</tr>
+<tr>
+<td class="org-left">of</td>
+<td class="org-left">True</td>
+<td class="org-left">False</td>
+</tr>
+<tr>
+<td class="org-left">the</td>
+<td class="org-left">True</td>
+<td class="org-left">False</td>
+</tr>
+<tr>
+<td class="org-left">streets</td>
+<td class="org-left">False</td>
+<td class="org-left">False</td>
+</tr>
+<tr>
+<td class="org-left">,</td>
+<td class="org-left">False</td>
+<td class="org-left">True</td>
+</tr>
+<tr>
+<td class="org-left">which</td>
+<td class="org-left">True</td>
+<td class="org-left">False</td>
+</tr>
+<tr>
+<td class="org-left">he</td>
+<td class="org-left">True</td>
+<td class="org-left">False</td>
+</tr>
+<tr>
+<td class="org-left">contemplated</td>
+<td class="org-left">False</td>
+<td class="org-left">False</td>
+</tr>
+<tr>
+<td class="org-left">open</td>
+<td class="org-left">False</td>
+<td class="org-left">False</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="org-left">mouthed</td>
+<td class="org-left">False</td>
+<td class="org-left">False</td>
+</tr>
+<tr>
+<td class="org-left">,</td>
+<td class="org-left">False</td>
+<td class="org-left">True</td>
+</tr>
+<tr>
+<td class="org-left">to</td>
+<td class="org-left">True</td>
+<td class="org-left">False</td>
+</tr>
+<tr>
+<td class="org-left">the</td>
+<td class="org-left">True</td>
+<td class="org-left">False</td>
+</tr>
+<tr>
+<td class="org-left">detriment</td>
+<td class="org-left">False</td>
+<td class="org-left">False</td>
+</tr>
+<tr>
+<td class="org-left">of</td>
+<td class="org-left">True</td>
+<td class="org-left">False</td>
+</tr>
+</tbody>
+</table>
+<p>So spacy can help us identify different types of tokens, in this case stopwords, punctuation, and spaces, but it can do more. The stop-words it uses are kept in a dictionary that you can add to to make it more domain-specific. Here's what the sentence looks like if you filter out the stopword, punctuation, and spaces.</p>
+<div class="highlight">
+<pre><span></span><span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">sentence</span><span class="p">:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">((</span><span class="n">token</span><span class="o">.</span><span class="n">is_stop</span><span class="p">,</span>
+                <span class="n">token</span><span class="o">.</span><span class="n">is_punct</span><span class="p">,</span>
+                <span class="n">token</span><span class="o">.</span><span class="n">is_space</span><span class="p">)):</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s2">"- {token}"</span><span class="p">)</span>
+</pre></div>
+<ul class="org-ul">
+<li>attractions</li>
+<li>stray</li>
+<li>cats</li>
+<li>dogs</li>
+<li>followed</li>
+<li>narrow</li>
+<li>alleys</li>
+<li>unsavoury</li>
+<li>courts</li>
+<li>comedies</li>
+<li>streets</li>
+<li>contemplated</li>
+<li>open</li>
+<li>mouthed</li>
+<li>detriment</li>
+</ul>
+</div>
+</div>
+<div class="outline-4" id="outline-container-org60e410b">
+<h4 id="org60e410b">Lemmatisation</h4>
+<div class="outline-text-4" id="text-org60e410b">
+<p>Spacy implements <a href="https://www.wikiwand.com/en/Lemmatisation">Lemmatisation</a>, the conversion of a token to the "standard form" for a word.</p>
+<div class="highlight">
+<pre><span></span><span class="k">print</span><span class="p">(</span><span class="s2">"|Token| Lemma|Part of Speech|"</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s2">"|-+-+-|"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="p">(</span><span class="n">token</span> <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">sentence</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">token</span><span class="o">.</span><span class="n">is_space</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s2">"|{token}| {token.lemma_} |{token.pos_}|"</span><span class="p">)</span>
+</pre></div>
+<table border="2" cellpadding="6" cellspacing="0" frame="hsides" rules="groups">
+<colgroup>
+<col class="org-left">
+<col class="org-left">
+<col class="org-left"></colgroup>
+<thead>
+<tr>
+<th class="org-left" scope="col">Token</th>
+<th class="org-left" scope="col">Lemma</th>
+<th class="org-left" scope="col">Part of Speech</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">the</td>
+<td class="org-left">the</td>
+<td class="org-left">DET</td>
+</tr>
+<tr>
+<td class="org-left">attractions</td>
+<td class="org-left">attraction</td>
+<td class="org-left">NOUN</td>
+</tr>
+<tr>
+<td class="org-left">of</td>
+<td class="org-left">of</td>
+<td class="org-left">ADP</td>
+</tr>
+<tr>
+<td class="org-left">stray</td>
+<td class="org-left">stray</td>
+<td class="org-left">ADJ</td>
+</tr>
+<tr>
+<td class="org-left">cats</td>
+<td class="org-left">cat</td>
+<td class="org-left">NOUN</td>
+</tr>
+<tr>
+<td class="org-left">and</td>
+<td class="org-left">and</td>
+<td class="org-left">CCONJ</td>
+</tr>
+<tr>
+<td class="org-left">dogs</td>
+<td class="org-left">dog</td>
+<td class="org-left">NOUN</td>
+</tr>
+<tr>
+<td class="org-left">,</td>
+<td class="org-left">,</td>
+<td class="org-left">PUNCT</td>
+</tr>
+<tr>
+<td class="org-left">which</td>
+<td class="org-left">which</td>
+<td class="org-left">DET</td>
+</tr>
+<tr>
+<td class="org-left">he</td>
+<td class="org-left">-PRON-</td>
+<td class="org-left">PRON</td>
+</tr>
+<tr>
+<td class="org-left">followed</td>
+<td class="org-left">follow</td>
+<td class="org-left">VERB</td>
+</tr>
+<tr>
+<td class="org-left">down</td>
+<td class="org-left">down</td>
+<td class="org-left">PART</td>
+</tr>
+<tr>
+<td class="org-left">narrow</td>
+<td class="org-left">narrow</td>
+<td class="org-left">ADJ</td>
+</tr>
+<tr>
+<td class="org-left">alleys</td>
+<td class="org-left">alley</td>
+<td class="org-left">NOUN</td>
+</tr>
+<tr>
+<td class="org-left">into</td>
+<td class="org-left">into</td>
+<td class="org-left">ADP</td>
+</tr>
+<tr>
+<td class="org-left">unsavoury</td>
+<td class="org-left">unsavoury</td>
+<td class="org-left">ADJ</td>
+</tr>
+<tr>
+<td class="org-left">courts</td>
+<td class="org-left">court</td>
+<td class="org-left">NOUN</td>
+</tr>
+<tr>
+<td class="org-left">;</td>
+<td class="org-left">;</td>
+<td class="org-left">PUNCT</td>
+</tr>
+<tr>
+<td class="org-left">by</td>
+<td class="org-left">by</td>
+<td class="org-left">ADP</td>
+</tr>
+<tr>
+<td class="org-left">the</td>
+<td class="org-left">the</td>
+<td class="org-left">DET</td>
+</tr>
+<tr>
+<td class="org-left">comedies</td>
+<td class="org-left">comedy</td>
+<td class="org-left">NOUN</td>
+</tr>
+<tr>
+<td class="org-left">of</td>
+<td class="org-left">of</td>
+<td class="org-left">ADP</td>
+</tr>
+<tr>
+<td class="org-left">the</td>
+<td class="org-left">the</td>
+<td class="org-left">DET</td>
+</tr>
+<tr>
+<td class="org-left">streets</td>
+<td class="org-left">street</td>
+<td class="org-left">NOUN</td>
+</tr>
+<tr>
+<td class="org-left">,</td>
+<td class="org-left">,</td>
+<td class="org-left">PUNCT</td>
+</tr>
+<tr>
+<td class="org-left">which</td>
+<td class="org-left">which</td>
+<td class="org-left">DET</td>
+</tr>
+<tr>
+<td class="org-left">he</td>
+<td class="org-left">-PRON-</td>
+<td class="org-left">PRON</td>
+</tr>
+<tr>
+<td class="org-left">contemplated</td>
+<td class="org-left">contemplate</td>
+<td class="org-left">VERB</td>
+</tr>
+<tr>
+<td class="org-left">open</td>
+<td class="org-left">open</td>
+<td class="org-left">ADJ</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="org-left">mouthed</td>
+<td class="org-left">mouthed</td>
+<td class="org-left">ADJ</td>
+</tr>
+<tr>
+<td class="org-left">,</td>
+<td class="org-left">,</td>
+<td class="org-left">PUNCT</td>
+</tr>
+<tr>
+<td class="org-left">to</td>
+<td class="org-left">to</td>
+<td class="org-left">ADP</td>
+</tr>
+<tr>
+<td class="org-left">the</td>
+<td class="org-left">the</td>
+<td class="org-left">DET</td>
+</tr>
+<tr>
+<td class="org-left">detriment</td>
+<td class="org-left">detriment</td>
+<td class="org-left">NOUN</td>
+</tr>
+<tr>
+<td class="org-left">of</td>
+<td class="org-left">of</td>
+<td class="org-left">ADP</td>
+</tr>
+</tbody>
+</table>
+<p>It doesn't look like there's a lot of conversion being done, other than reducing plural to single, but if you look at <i>comedies</i> you can see that it was lemmatised as <i>comedy</i>, which is a little more sophisticated than just chopping off the last letter.</p>
+<p>I filtered out the spaces because it broke my table, but it's part-of-speech label was <code>SPACE</code>. The <code>-PRON-</code> lemma is a special one that spaCy uses for any <a href="https://www.wikiwand.com/en/Pronoun">pronoun</a> (I, we she, etc.). According to the <a href="https://spacy.io/api/annotation">spaCy annotation documentation</a>, the space lemma is only included if there's more than one, which they include because multiple spaces might be significant.</p>
+</div>
+</div>
+</div>
+<div class="outline-3" id="outline-container-org767e34b">
+<h3 id="org767e34b">A Detour Into Fuzzy Wuzzy</h3>
+<div class="outline-text-3" id="text-org767e34b">
+<p><a href="https://github.com/seatgeek/fuzzywuzzy">fuzzywuzzy</a> is a library that does fuzzy string matching using the <a href="https://www.wikiwand.com/en/Levenshtein_distance">Levenshtein Distance</a> between strings. There's a <a href="https://chairnerd.seatgeek.com/fuzzywuzzy-fuzzy-string-matching-in-python/">page</a> showing more about how to use it based the example of finding concert information on the web.</p>
+</div>
+<div class="outline-4" id="outline-container-org53d06d0">
+<h4 id="org53d06d0">Ratio</h4>
+<div class="outline-text-4" id="text-org53d06d0">
+<p>The <code>ratio</code> function for fuzzywuzzy is an alias for the <a href="https://docs.python.org/3/library/difflib.html">difflib</a> <code>SequenceMatcher.ratio</code> method (except they multiply by 100 and round off so it's a percentage rather than a fraction. The ratio it's calculating is:</p>
+<p>\[ ratio = \frac{2M}{T} \]</p>
+<p>Where <i>M</i> is the number of matching elements and <i>T</i> is the total number of elements in both sequences.</p>
+<div class="highlight">
+<pre><span></span><span class="n">sentence_a</span> <span class="o">=</span> <span class="s2">"eat more meats"</span>
+<span class="n">sentence_b</span> <span class="o">=</span> <span class="s2">"eat more beats"</span>
+<span class="n">sentence_c</span> <span class="o">=</span> <span class="s2">"beat more beets"</span>
+<span class="n">matcher</span> <span class="o">=</span> <span class="n">SequenceMatcher</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">sentence_a</span><span class="p">,</span> <span class="n">sentence_b</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">matcher</span><span class="o">.</span><span class="n">ratio</span><span class="p">())</span>
+<span class="k">print</span><span class="p">(</span><span class="n">fuzz</span><span class="o">.</span><span class="n">ratio</span><span class="p">(</span><span class="n">sentence_a</span><span class="p">,</span> <span class="n">sentence_b</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="n">fuzz</span><span class="o">.</span><span class="n">ratio</span><span class="p">(</span><span class="n">sentence_b</span><span class="p">,</span> <span class="n">sentence_c</span><span class="p">))</span>
+</pre></div>
+<pre class="example">
+0.9285714285714286
+93
+90
+
+</pre>
+<p>The fuzzywuzzy page I mentioned earlier states that this will work for very short (one word) text or very long text, but not so well for things in between.</p>
+</div>
+</div>
+<div class="outline-4" id="outline-container-orgec43902">
+<h4 id="orgec43902">Partial Ratio</h4>
+<div class="outline-text-4" id="text-orgec43902">
+<p>To get better matches for short-ish text, fuzzywuzzy has a <code>partial_ratio</code> function.</p>
+<div class="highlight">
+<pre><span></span><span class="n">sentence_a</span> <span class="o">=</span> <span class="s2">"meaty beaty big and bouncy"</span>
+<span class="n">sentence_b</span> <span class="o">=</span> <span class="s2">"meaty"</span>
+<span class="k">print</span><span class="p">(</span><span class="n">fuzz</span><span class="o">.</span><span class="n">ratio</span><span class="p">(</span><span class="n">sentence_a</span><span class="p">,</span> <span class="n">sentence_b</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="n">fuzz</span><span class="o">.</span><span class="n">partial_ratio</span><span class="p">(</span><span class="n">sentence_a</span><span class="p">,</span> <span class="n">sentence_b</span><span class="p">))</span>
+</pre></div>
+<pre class="example">
+32
+100
+
+</pre>
+<p>The <code>ratio</code> doesn't handle sub-string matches as well as <code>partial_ratio</code> does.</p>
+</div>
+</div>
+<div class="outline-4" id="outline-container-orge07e173">
+<h4 id="orge07e173">Token Sort and Token Set</h4>
+<div class="outline-text-4" id="text-orge07e173">
+<p>Besides sub-strings, there might be cases where ordering doesn't matter, in which case you can try the <code>token_sort_ratio</code> or <code>token_set_ratio</code> functions.</p>
+<div class="highlight">
+<pre><span></span><span class="n">sentence_a</span> <span class="o">=</span> <span class="s2">"totally tubular terry"</span>
+<span class="n">sentence_b</span> <span class="o">=</span> <span class="s2">"terry is totally tubular"</span>
+<span class="k">print</span><span class="p">(</span><span class="n">fuzz</span><span class="o">.</span><span class="n">ratio</span><span class="p">(</span><span class="n">sentence_a</span><span class="p">,</span> <span class="n">sentence_b</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="n">fuzz</span><span class="o">.</span><span class="n">partial_ratio</span><span class="p">(</span><span class="n">sentence_a</span><span class="p">,</span> <span class="n">sentence_b</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="n">fuzz</span><span class="o">.</span><span class="n">token_sort_ratio</span><span class="p">(</span><span class="n">sentence_a</span><span class="p">,</span> <span class="n">sentence_b</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="n">fuzz</span><span class="o">.</span><span class="n">token_set_ratio</span><span class="p">(</span><span class="n">sentence_a</span><span class="p">,</span> <span class="n">sentence_b</span><span class="p">))</span>
+</pre></div>
+<pre class="example">
+67
+83
+93
+100
+
+</pre>
+<p>The <code>token_sort_ratio</code> sorts the tokens before comparing them, while the <code>token_set_ratio</code> sorts the intersection of the tokens first and then append the sorted tokens that aren't in both strings before calculating the similarity.</p>
+</div>
+</div>
+<div class="outline-4" id="outline-container-orgc3debd2">
+<h4 id="orgc3debd2">Process</h4>
+<div class="outline-text-4" id="text-orgc3debd2">
+<p>Finally, you can pass <code>process.extract</code> a string and a list of strings to compare to that string and it will return them in the order of similarity.</p>
+<p>By default this uses <code>fuzz.WRatio</code> to score the similarity.</p>
+<div class="highlight">
+<pre><span></span><span class="k">print</span><span class="p">(</span><span class="n">fuzz</span><span class="o">.</span><span class="n">WRatio</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">)</span>
+</pre></div>
+<pre class="example">
+
+Return a measure of the sequences' similarity between 0 and 100, using different algorithms.
+
+**Steps in the order they occur**
+
+#. Run full_process from utils on both strings
+#. Short circuit if this makes either string empty
+#. Take the ratio of the two processed strings (fuzz.ratio)
+#. Run checks to compare the length of the strings
+    * If one of the strings is more than 1.5 times as long as the other
+      use partial_ratio comparisons - scale partial results by 0.9
+      (this makes sure only full results can return 100)
+    * If one of the strings is over 8 times as long as the other
+      instead scale by 0.6
+
+#. Run the other ratio functions
+    * if using partial ratio functions call partial_ratio,
+      partial_token_sort_ratio and partial_token_set_ratio
+      scale all of these by the ratio based on length
+    * otherwise call token_sort_ratio and token_set_ratio
+    * all token based comparisons are scaled by 0.95
+      (on top of any partial scalars)
+
+#. Take the highest value from these results
+   round it and return it as an integer.
+
+:param s1:
+:param s2:
+:param force_ascii: Allow only ascii characters
+:type force_ascii: bool
+:full_process: Process inputs, used here to avoid double processing in extract functions (Default: True)
+:return:
+
+</pre>
+<p>Based on the doc-string, it looks like this one tries to figure out the best metric for you.</p>
+<div class="highlight">
+<pre><span></span><span class="n">choices</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"big bubba"</span><span class="p">,</span> <span class="s2">"hubba bubba"</span><span class="p">,</span> <span class="s2">"rubber baby buggy bubba"</span><span class="p">,</span> <span class="s2">"bubba dubba"</span><span class="p">,</span> <span class="s2">"chubba bubba"</span><span class="p">]</span>
+<span class="k">print</span><span class="p">(</span><span class="n">process</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="s1">'hubba hubba'</span><span class="p">,</span> <span class="n">choices</span><span class="p">))</span>
+</pre></div>
+<pre class="example">
+[('hubba bubba', 95), ('chubba bubba', 87), ('bubba dubba', 82), ('rubber baby buggy bubba', 68), ('big bubba', 54)]
+
+</pre>
+<div class="highlight">
+<pre><span></span><span class="k">print</span><span class="p">(</span><span class="n">process</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="s1">'hubba hubba'</span><span class="p">,</span> <span class="n">choices</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+</pre></div>
+<pre class="example">
+[('hubba bubba', 95), ('chubba bubba', 87)]
+
+</pre></div>
+</div>
+<div class="outline-4" id="outline-container-orgc4cc518">
+<h4 id="orgc4cc518">Spell Check</h4>
+<div class="outline-text-4" id="text-orgc4cc518">
+<p>Although the fuzzywuzzy page states that their use case was matching the names of shows on different web-sites, it can also be used as a simple spell-checker.</p>
+<div class="highlight">
+<pre><span></span><span class="n">dictionary</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"embarras"</span><span class="p">,</span> <span class="s2">"inoculate"</span><span class="p">,</span> <span class="s2">"misspell"</span><span class="p">]</span>
+<span class="n">words</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"embaras"</span><span class="p">,</span> <span class="s2">"mispel"</span><span class="p">,</span> <span class="s2">"inocullate"</span><span class="p">,</span> <span class="s2">"babaganoush"</span><span class="p">]</span>
+<span class="k">print</span><span class="p">(</span><span class="s2">"|Word| Correction| Score|"</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s2">"|-+-+-|"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="n">process</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">dictionary</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">guess</span><span class="p">,</span> <span class="n">score</span> <span class="o">=</span> <span class="n">output</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s2">"|{word}|{guess}|{score}|"</span><span class="p">)</span>
+</pre></div>
+<table border="2" cellpadding="6" cellspacing="0" frame="hsides" rules="groups">
+<colgroup>
+<col class="org-left">
+<col class="org-left">
+<col class="org-right"></colgroup>
+<thead>
+<tr>
+<th class="org-left" scope="col">Word</th>
+<th class="org-left" scope="col">Correction</th>
+<th class="org-right" scope="col">Score</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">embaras</td>
+<td class="org-left">embarras</td>
+<td class="org-right">93</td>
+</tr>
+<tr>
+<td class="org-left">mispel</td>
+<td class="org-left">misspell</td>
+<td class="org-right">86</td>
+</tr>
+<tr>
+<td class="org-left">inocullate</td>
+<td class="org-left">inoculate</td>
+<td class="org-right">95</td>
+</tr>
+<tr>
+<td class="org-left">babaganoush</td>
+<td class="org-left">embarras</td>
+<td class="org-right">42</td>
+</tr>
+</tbody>
+</table>
+<p>Looking at the last row you can see one of the limitations of this kind of system - it always returns a match, even though there aren't any close matches, so you probably should check the score when using it.</p>
+</div>
+</div>
+</div>
+<div class="outline-3" id="outline-container-orgdcaa0b8">
+<h3 id="orgdcaa0b8">A Diversion Into JellyFish</h3>
+<div class="outline-text-3" id="text-orgdcaa0b8">
+<p><a href="https://jellyfish.readthedocs.io/en/latest">JellyFish</a> is another python library that implements distance functions (like the Levenstein Distance that FuzzyWuzzy does, but others as well) as well as <a href="https://www.wikiwand.com/en/Stemming">stemming</a> and <a href="https://www.wikiwand.com/en/Phonetic_algorithm">phonetic encoding</a>.</p>
+</div>
+<div class="outline-4" id="outline-container-org66a4ba0">
+<h4 id="org66a4ba0">Phonetic Encoding</h4>
+<div class="outline-text-4" id="text-org66a4ba0">
+<p>Phonetic encoding transforms words into a form that is based on the pronounciaton of the words. Using this should make matching spelling variations using the distance function(s) better.</p>
+</div>
+<div class="outline-5" id="outline-container-org224bd83">
+<h5 id="org224bd83">American Soundex</h5>
+<div class="outline-text-5" id="text-org224bd83">
+<p><a href="https://www.wikiwand.com/en/Soundex">Soundex</a> was originally patented in 1918 but JellyFish uses a variation called <i>American Soundex</i> which was created in 1930 by analyzing U.S. census reports. Each encoding consists of a letter followed by three digits. The letter is the first letter of the word and the digits represent an encoding of the remaining consonants (a, e, i, o, u, y, h, and w are removed if they aren't the first letter).</p>
+<p>The exact procedure is pretty straight-forward, but the main thing to note is that it always has the same form (you either pad or cut off the coded consonants to get three digits).</p>
+<div class="highlight">
+<pre><span></span><span class="k">def</span> <span class="nf">distance</span><span class="p">(</span><span class="n">token_1</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">token_2</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">encoder</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="n">encoded_1</span> <span class="o">=</span> <span class="n">encoder</span><span class="p">(</span><span class="n">token_1</span><span class="p">)</span>
+    <span class="n">encoded_2</span> <span class="o">=</span> <span class="n">encoder</span><span class="p">(</span><span class="n">token_2</span><span class="p">)</span>
+    <span class="n">distance</span> <span class="o">=</span> <span class="n">fuzz</span><span class="o">.</span><span class="n">ratio</span><span class="p">(</span><span class="n">encoded_1</span><span class="p">,</span> <span class="n">encoded_2</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">encoded_1</span><span class="p">,</span> <span class="n">encoded_2</span><span class="p">,</span> <span class="n">distance</span>
+</pre></div>
+<div class="highlight">
+<pre><span></span><span class="k">def</span> <span class="nf">rupert_robert_rwanda</span><span class="p">(</span><span class="n">encoder</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="n">guy</span><span class="p">,</span> <span class="n">sky</span><span class="p">,</span> <span class="n">score_1</span> <span class="o">=</span>  <span class="n">distance</span><span class="p">(</span><span class="s2">"guy"</span><span class="p">,</span> <span class="s2">"sky"</span><span class="p">,</span> <span class="n">encoder</span><span class="p">)</span>
+    <span class="n">glove</span><span class="p">,</span> <span class="n">love</span><span class="p">,</span> <span class="n">score_2</span> <span class="o">=</span> <span class="n">distance</span><span class="p">(</span><span class="s2">"glove"</span><span class="p">,</span> <span class="s2">"love"</span><span class="p">,</span> <span class="n">encoder</span><span class="p">)</span>
+    <span class="n">ate</span><span class="p">,</span> <span class="n">eight</span><span class="p">,</span> <span class="n">score_3</span> <span class="o">=</span> <span class="n">distance</span><span class="p">(</span><span class="s2">"ate"</span><span class="p">,</span> <span class="s2">"eight"</span><span class="p">,</span> <span class="n">encoder</span><span class="p">)</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">"Token 1"</span><span class="p">:</span> <span class="p">[</span><span class="n">f</span><span class="s2">"guy ({guy})"</span><span class="p">,</span> <span class="n">f</span><span class="s2">"glove ({glove})"</span><span class="p">,</span> <span class="n">f</span><span class="s2">"ate ({ate})"</span><span class="p">],</span>
+        <span class="s2">"Token 2"</span><span class="p">:</span> <span class="p">[</span><span class="n">f</span><span class="s2">"sky ({sky})"</span><span class="p">,</span> <span class="n">f</span><span class="s2">"love ({love})"</span><span class="p">,</span> <span class="n">f</span><span class="s2">"eight ({eight})"</span><span class="p">],</span>
+        <span class="s2">"Similarity"</span><span class="p">:</span> <span class="p">[</span><span class="n">score_1</span><span class="p">,</span> <span class="n">score_2</span><span class="p">,</span> <span class="n">score_3</span><span class="p">],</span>
+        <span class="s2">"Levenshtein Distance"</span><span class="p">:</span> <span class="p">[</span><span class="n">jellyfish</span><span class="o">.</span><span class="n">levenshtein_distance</span><span class="p">(</span><span class="n">guy</span><span class="p">,</span> <span class="n">sky</span><span class="p">),</span>
+                                 <span class="n">jellyfish</span><span class="o">.</span><span class="n">levenshtein_distance</span><span class="p">(</span><span class="n">glove</span><span class="p">,</span> <span class="n">love</span><span class="p">),</span>
+                                 <span class="n">jellyfish</span><span class="o">.</span><span class="n">levenshtein_distance</span><span class="p">(</span><span class="n">ate</span><span class="p">,</span> <span class="n">eight</span><span class="p">),</span>
+        <span class="p">],</span>
+    <span class="p">}</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">tabulate</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="s2">"keys"</span><span class="p">,</span> <span class="n">tablefmt</span><span class="o">=</span><span class="s2">"orgtbl"</span><span class="p">))</span>
+    <span class="k">return</span>
+</pre></div>
+<div class="highlight">
+<pre><span></span><span class="n">rupert_robert_rwanda</span><span class="p">(</span><span class="n">jellyfish</span><span class="o">.</span><span class="n">soundex</span><span class="p">)</span>
+</pre></div>
+<table border="2" cellpadding="6" cellspacing="0" frame="hsides" rules="groups">
+<colgroup>
+<col class="org-left">
+<col class="org-left">
+<col class="org-right">
+<col class="org-right"></colgroup>
+<thead>
+<tr>
+<th class="org-left" scope="col">Token 1</th>
+<th class="org-left" scope="col">Token 2</th>
+<th class="org-right" scope="col">Similarity</th>
+<th class="org-right" scope="col">Levenshtein Distance</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">guy (G000)</td>
+<td class="org-left">sky (S000)</td>
+<td class="org-right">75</td>
+<td class="org-right">1</td>
+</tr>
+<tr>
+<td class="org-left">glove (G410)</td>
+<td class="org-left">love (L100)</td>
+<td class="org-right">50</td>
+<td class="org-right">3</td>
+</tr>
+<tr>
+<td class="org-left">ate (A300)</td>
+<td class="org-left">eight (E230)</td>
+<td class="org-right">50</td>
+<td class="org-right">3</td>
+</tr>
+</tbody>
+</table>
+<p>It's a little hard to interpret these values, but it's interesting that <i>guy</i> and <i>sky</i> are so much more similar than <i>glove</i> and <i>love</i> and <i>eight</i> and <i>ate</i> are.</p>
+</div>
+</div>
+<div class="outline-5" id="outline-container-org7f98def">
+<h5 id="org7f98def">Metaphone</h5>
+<div class="outline-text-5" id="text-org7f98def">
+<p><a href="https://www.wikiwand.com/en/Metaphone">Metaphone</a> was developed in 1990 and improves on Soundex to produce a more accurate encoding.</p>
+<div class="highlight">
+<pre><span></span><span class="n">rupert_robert_rwanda</span><span class="p">(</span><span class="n">jellyfish</span><span class="o">.</span><span class="n">metaphone</span><span class="p">)</span>
+</pre></div>
+<table border="2" cellpadding="6" cellspacing="0" frame="hsides" rules="groups">
+<colgroup>
+<col class="org-left">
+<col class="org-left">
+<col class="org-right">
+<col class="org-right"></colgroup>
+<thead>
+<tr>
+<th class="org-left" scope="col">Token 1</th>
+<th class="org-left" scope="col">Token 2</th>
+<th class="org-right" scope="col">Similarity</th>
+<th class="org-right" scope="col">Levenshtein Distance</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">guy (K)</td>
+<td class="org-left">sky (SK)</td>
+<td class="org-right">67</td>
+<td class="org-right">1</td>
+</tr>
+<tr>
+<td class="org-left">glove (KLF)</td>
+<td class="org-left">love (LF)</td>
+<td class="org-right">80</td>
+<td class="org-right">1</td>
+</tr>
+<tr>
+<td class="org-left">ate (AT)</td>
+<td class="org-left">eight (ET)</td>
+<td class="org-right">50</td>
+<td class="org-right">1</td>
+</tr>
+</tbody>
+</table>
+<p>One interesting thing is that <i>metaphone</i> changes the letters to make match how it thinks something sounds, rather than using the first letter the way <i>soundex</i> does.</p>
+<p>Metaphone is a <i>little</i> more interpretable, but interestingly in this case the similarity flips and <i>love</i> and <i>glove</i> are rated more similar. Also, in this case they all had a Levenshtein Distance of 1, while their similarity-ratios where quite different (Levenstein Distance is the number of edits you need to transform one sequence to another).</p>
+</div>
+</div>
+<div class="outline-5" id="outline-container-orgb1ff7fa">
+<h5 id="orgb1ff7fa">New York State Identification and Intelligence System (NYSIIS)</h5>
+<div class="outline-text-5" id="text-orgb1ff7fa">
+<p>The <a href="https://www.wikiwand.com/en/New_York_State_Identification_and_Intelligence_System">New York State Identification and Intelligence System</a> is a slightly more accurate (compared to Soundex) encoder that was developed in 1970.</p>
+<div class="highlight">
+<pre><span></span><span class="n">rupert_robert_rwanda</span><span class="p">(</span><span class="n">jellyfish</span><span class="o">.</span><span class="n">nysiis</span><span class="p">)</span>
+</pre></div>
+<table border="2" cellpadding="6" cellspacing="0" frame="hsides" rules="groups">
+<colgroup>
+<col class="org-left">
+<col class="org-left">
+<col class="org-right">
+<col class="org-right"></colgroup>
+<thead>
+<tr>
+<th class="org-left" scope="col">Token 1</th>
+<th class="org-left" scope="col">Token 2</th>
+<th class="org-right" scope="col">Similarity</th>
+<th class="org-right" scope="col">Levenshtein Distance</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">guy (GY)</td>
+<td class="org-left">sky (SCY)</td>
+<td class="org-right">40</td>
+<td class="org-right">2</td>
+</tr>
+<tr>
+<td class="org-left">glove (GLAV)</td>
+<td class="org-left">love (LAV)</td>
+<td class="org-right">86</td>
+<td class="org-right">1</td>
+</tr>
+<tr>
+<td class="org-left">ate (AT)</td>
+<td class="org-left">eight (EAGT)</td>
+<td class="org-right">67</td>
+<td class="org-right">2</td>
+</tr>
+</tbody>
+</table>
+<p>This seems even more interpretable than the metaphone encodings, and the gap in the similarities is even greater.</p>
+</div>
+</div>
+<div class="outline-5" id="outline-container-org78503e9">
+<h5 id="org78503e9">Match Rating Approach</h5>
+<div class="outline-text-5" id="text-org78503e9">
+<p>The final phonetic encoding that jellyfish supports is the <a href="https://www.wikiwand.com/en/Match_rating_approach">Match Rating Approach</a> which was developed in 1977 by Western Airlines.</p>
+<div class="highlight">
+<pre><span></span><span class="n">rupert_robert_rwanda</span><span class="p">(</span><span class="n">jellyfish</span><span class="o">.</span><span class="n">match_rating_codex</span><span class="p">)</span>
+</pre></div>
+<table border="2" cellpadding="6" cellspacing="0" frame="hsides" rules="groups">
+<colgroup>
+<col class="org-left">
+<col class="org-left">
+<col class="org-right">
+<col class="org-right"></colgroup>
+<thead>
+<tr>
+<th class="org-left" scope="col">Token 1</th>
+<th class="org-left" scope="col">Token 2</th>
+<th class="org-right" scope="col">Similarity</th>
+<th class="org-right" scope="col">Levenshtein Distance</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">guy (GY)</td>
+<td class="org-left">sky (SKY)</td>
+<td class="org-right">40</td>
+<td class="org-right">2</td>
+</tr>
+<tr>
+<td class="org-left">glove (GLV)</td>
+<td class="org-left">love (LV)</td>
+<td class="org-right">80</td>
+<td class="org-right">1</td>
+</tr>
+<tr>
+<td class="org-left">ate (AT)</td>
+<td class="org-left">eight (EGHT)</td>
+<td class="org-right">33</td>
+<td class="org-right">3</td>
+</tr>
+</tbody>
+</table>
+<p>This seems the easiest to read, but strangely it made <i>ate</i> <i>eight</i> the least similar out of all the encodings.</p>
+<p>Interestingly all the encodings except <i>soundex</i> found that "glove" and "love" are more similar than "guy" and "sky" which are in turn more similar to each other than "ate" and "eight" are, which is not what I would have thought, given that they sound the same when spoken out loud.</p>
+<p>I think as with all things, you'd have to try them out to see how well each does with a particular data set.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="outline-3" id="outline-container-org185cb88">
+<h3 id="org185cb88">A Short Diversion Into FlashText</h3>
+<div class="outline-text-3" id="text-org185cb88">
+<p><a href="https://flashtext.readthedocs.io/en/latest/">FlashText</a> is a python module to help find and replace words in very large documents. It doesn't do all the interesting linguistic things that the other code we've been looking at does, but it was built specifically to be very fast so for cases where you have a lot of text you can use it to speed up searches.</p>
+<p>I don't really have any large text to test it on, but here's a quick look at how it works. You can search for matching words.</p>
+<div class="highlight">
+<pre><span></span><span class="n">processor</span> <span class="o">=</span> <span class="n">KeywordProcessor</span><span class="p">()</span>
+<span class="n">name_to_replace</span> <span class="o">=</span> <span class="s2">"secret agent"</span>
+<span class="n">replacement</span> <span class="o">=</span> <span class="s2">"Secret Agent"</span>
+<span class="n">processor</span><span class="o">.</span><span class="n">add_keyword</span><span class="p">(</span><span class="n">name_to_replace</span><span class="p">,</span> <span class="n">replacement</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">processor</span><span class="o">.</span><span class="n">extract_keywords</span><span class="p">(</span><span class="n">text</span><span class="p">))</span>
+</pre></div>
+<pre class="example">
+['Secret Agent', 'Secret Agent', 'Secret Agent', 'Secret Agent', 'Secret Agent', 'Secret Agent', 'Secret Agent', 'Secret Agent', 'Secret Agent', 'Secret Agent', 'Secret Agent', 'Secret Agent', 'Secret Agent', 'Secret Agent', 'Secret Agent', 'Secret Agent', 'Secret Agent', 'Secret Agent', 'Secret Agent']
+
+</pre>
+<p>You don't have to make a replacement, if you only pass in one term then that's what will be replaced.</p>
+<p>You can also make a new string with all the terms replaced.</p>
+<div class="highlight">
+<pre><span></span><span class="n">s</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">sentences</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">])</span>
+<span class="k">print</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="n">processor</span><span class="o">.</span><span class="n">add_keyword</span><span class="p">(</span><span class="s2">"shop"</span><span class="p">,</span> <span class="s2">"store"</span><span class="p">)</span>
+<span class="n">processor</span><span class="o">.</span><span class="n">add_keyword</span><span class="p">(</span><span class="s2">"house"</span><span class="p">,</span> <span class="s2">"hovel"</span><span class="p">)</span>
+<span class="n">replacement</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">replace_keywords</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="k">print</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="n">replacement</span><span class="p">)</span>
+</pre></div>
+<pre class="example">
+(his wife was in charge of his brother-in-law.
+
+, The shop was small, and so was the house.  , It was one of those grimy
+brick houses which existed in large quantities before the era of
+reconstruction dawned upon London.  , The shop was a square box of a place,
+with the front glazed in small panes.  )
+
+(his wife was in charge of his brother-in-law.
+
+, The store was small, and so was the hovel.  , It was one of those grimy
+brick houses which existed in large quantities before the era of
+reconstruction dawned upon London.  , The store was a square box of a place,
+with the front glazed in small panes.  )
+</pre>
+<p>Note that since it isn't fuzzy "houses" didn't get matched but "house" did.</p>
+<p>Instead of just searching for words you can get their indices in the string as well.</p>
+<div class="highlight">
+<pre><span></span><span class="n">processor</span> <span class="o">=</span> <span class="n">KeywordProcessor</span><span class="p">()</span>
+<span class="n">processor</span><span class="o">.</span><span class="n">add_keyword</span><span class="p">(</span><span class="s2">"secret agent"</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">processor</span><span class="o">.</span><span class="n">extract_keywords</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">span_info</span><span class="o">=</span><span class="bp">True</span><span class="p">))</span>
+</pre></div>
+<pre class="example">
+[('secret agent', 41658, 41670), ('secret agent', 92721, 92733), ('secret agent', 218743, 218755), ('secret agent', 218989, 219001), ('secret agent', 221234, 221246), ('secret agent', 233831, 233843), ('secret agent', 236874, 236886), ('secret agent', 302412, 302424), ('secret agent', 303622, 303634), ('secret agent', 350862, 350874), ('secret agent', 383719, 383731), ('secret agent', 384291, 384303), ('secret agent', 393206, 393218), ('secret agent', 400450, 400462), ('secret agent', 414087, 414099), ('secret agent', 414319, 414331), ('secret agent', 440086, 440098), ('secret agent', 481986, 481998), ('secret agent', 520737, 520749)]
+
+</pre>
+<div class="highlight">
+<pre><span></span><span class="n">start</span> <span class="o">=</span> <span class="mi">92721</span> <span class="o">-</span> <span class="mi">31</span>
+<span class="n">end</span> <span class="o">=</span> <span class="mi">92733</span> <span class="o">+</span> <span class="mi">12</span>
+<span class="k">print</span><span class="p">(</span><span class="n">text</span><span class="p">[</span><span class="n">start</span><span class="p">:</span> <span class="n">end</span><span class="p">])</span>
+</pre></div>
+<pre class="example">
+more completely than that of a secret agent of police. 
+
+</pre>
+<p>Note that the matching isn't case-sensitive, so the previous search mathches "SECRET AGENT", "Secret Agent", etc. although you can make it case-sensitive by passing in the <code>case_sensitive=True</code> argument to the constructor.</p>
+</div>
+</div>
+</div>
+<div class="outline-2" id="outline-container-org6b2df69">
+<h2 id="org6b2df69">End</h2>
+<div class="outline-text-2" id="text-org6b2df69">
+<p>Despite the name this was really a look at three-ish libraries to help with tokenization, lemmatizing, fuzzy string matching, and quick string searching and replacin.g</p>
+</div>
+<div class="outline-3" id="outline-container-org76b0959">
+<h3 id="org76b0959">Reference</h3>
+<div class="outline-text-3" id="text-org76b0959">
+<ol class="org-ol">
+<li>Kasliwal N. Natural language processing with Python quick start guide: going from a Python developer to an effective natural language processing engineer [Internet]. 2018 [cited 2019 May 18]. Available from: <a href="http://proquest.safaribooksonline.com/?fpi=9781789130386">http://proquest.safaribooksonline.com/?fpi=9781789130386</a></li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<aside class="postpromonav">
+<nav>
+<ul class="tags" itemprop="keywords">
+<li><a class="tag p-category" href="../../../categories/data/" rel="tag">data</a></li>
+<li><a class="tag p-category" href="../../../categories/tidying/" rel="tag">tidying</a></li>
+</ul>
+<ul class="pager hidden-print">
+<li class="previous"><a href="../../nlp/newsgroups-example/" rel="prev" title="Newsgroups Example">Previous post</a></li>
+<li class="next"><a href="../name-redaction/" rel="next" title="Name Redaction">Next post</a></li>
+</ul>
+</nav>
+</aside>
+</article>
+<!--End of body content-->
+<footer id="footer">Contents © 2019 <a href="mailto:necromuralist@protonmail.com">Cloistered Monkey</a> - Powered by <a href="https://getnikola.com" rel="nofollow">Nikola</a></footer>
+</div>
+</div>
+<script src="../../../assets/js/all-nocdn.js"></script>
+<script>
+
+    baguetteBox.run('div#content', {
+        ignoreClass: 'islink',
+        captions: function(element) {
+            return element.getElementsByTagName('img')[0].alt;
+    }});
+</script>
+</body>
+</html>

@@ -15,11 +15,15 @@
  </url>
  <url>
   <loc>https://necromuralist.github.io/Tip-of-the-Dnghu/archive.html</loc>
-  <lastmod>2019-05-18T23:45:00Z</lastmod>
+  <lastmod>2019-05-27T23:17:00Z</lastmod>
  </url>
  <url>
   <loc>https://necromuralist.github.io/Tip-of-the-Dnghu/categories/</loc>
-  <lastmod>2019-05-18T17:31:00Z</lastmod>
+  <lastmod>2019-05-27T23:21:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://necromuralist.github.io/Tip-of-the-Dnghu/categories/cat_data/</loc>
+  <lastmod>2019-05-26T20:53:00Z</lastmod>
  </url>
  <url>
   <loc>https://necromuralist.github.io/Tip-of-the-Dnghu/categories/cat_links/</loc>
@@ -32,6 +36,14 @@
  <url>
   <loc>https://necromuralist.github.io/Tip-of-the-Dnghu/categories/cat_reading/</loc>
   <lastmod>2019-05-06T00:12:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://necromuralist.github.io/Tip-of-the-Dnghu/categories/cleaning/</loc>
+  <lastmod>2019-05-27T23:21:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://necromuralist.github.io/Tip-of-the-Dnghu/categories/data/</loc>
+  <lastmod>2019-05-26T20:53:00Z</lastmod>
  </url>
  <url>
   <loc>https://necromuralist.github.io/Tip-of-the-Dnghu/categories/lecture/</loc>
@@ -70,8 +82,24 @@
   <lastmod>2019-05-06T00:38:00Z</lastmod>
  </url>
  <url>
+  <loc>https://necromuralist.github.io/Tip-of-the-Dnghu/categories/tidying/</loc>
+  <lastmod>2019-05-26T20:53:00Z</lastmod>
+ </url>
+ <url>
   <loc>https://necromuralist.github.io/Tip-of-the-Dnghu/categories/walk-through/</loc>
   <lastmod>2019-05-18T17:31:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/name-redaction/</loc>
+  <lastmod>2019-05-27T23:17:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/</loc>
+  <lastmod>2019-05-26T20:53:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://necromuralist.github.io/Tip-of-the-Dnghu/posts/name-redaction/</loc>
+  <lastmod>2019-05-27T23:17:00Z</lastmod>
  </url>
  <url>
   <loc>https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/</loc>

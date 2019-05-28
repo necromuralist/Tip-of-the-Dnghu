@@ -1,0 +1,338 @@
+#+BEGIN_COMMENT
+.. title: Name Redaction
+.. slug: name-redaction
+.. date: 2019-05-27 16:17:18 UTC-07:00
+.. tags: data,cleaning
+.. category: Data
+.. link: 
+.. description: Redacting names from a document
+.. type: text
+.. status: 
+.. updated: 
+
+#+END_COMMENT
+#+OPTIONS: ^:{}
+#+OPTIONS: H:5
+#+TOC: headlines 2
+#+BEGIN_SRC ipython :session redaction :results none :exports none
+%load_ext autoreload
+%autoreload 2
+#+END_SRC
+* Beginning
+** Imports
+*** Python
+#+BEGIN_SRC ipython :session redaction :results none
+from pathlib import Path
+from typing import Collection
+#+END_SRC
+*** PyPi
+#+BEGIN_SRC ipython :session redaction :results none
+from spacy import displacy
+
+import spacy
+import textacy
+#+END_SRC
+*** My Stuff
+#+BEGIN_SRC ipython :session redaction :results none
+from graeae.timers import Timer
+from graeae import EnvironmentLoader, TextDownloader
+#+END_SRC
+** Set Up
+*** The Timer
+#+BEGIN_SRC ipython :session redaction :results none
+TIMER = Timer()
+#+END_SRC
+*** Spacy
+    This loads the large English model tha spacy provides.
+#+BEGIN_SRC ipython :session redaction :results output :exports both
+with TIMER:
+    nlp = spacy.load("en_core_web_lg")
+#+END_SRC
+
+#+RESULTS:
+: 2019-05-27 16:57:09,330 graeae.timers.timer start: Started: 2019-05-27 16:57:09.330711
+: 2019-05-27 16:57:15,562 graeae.timers.timer end: Ended: 2019-05-27 16:57:15.562439
+: 2019-05-27 16:57:15,563 graeae.timers.timer end: Elapsed: 0:00:06.231728
+
+Although it took a long time to download the model doesn't actually take a long time to load.
+** Load the File
+#+BEGIN_SRC ipython :session redaction :results output :exports both
+URL = "https://www.gutenberg.org/files/974/974-0.txt"
+environment = EnvironmentLoader()
+path = environment["GUTENBERG"]
+path = Path(path).expanduser()
+downloader = TextDownloader(url=URL, target=path/"conrad_joseph_secret_agent.txt")
+text = downloader.download
+#+END_SRC
+
+#+RESULTS:
+: 2019-05-27 17:10:07,016 [1mTextDownloader[0m download: /home/athena/data/datasets/gutenberg/conrad_joseph_secret_agent.txt exists, opening it
+
+
+* Middle
+** A Little spacy
+
+#+BEGIN_SRC ipython :session redaction :results none
+document = nlp(text)
+#+END_SRC
+
+We want to be able to block out all the names in documents to preserve people's anonimity. One way to do that is to use spaCy's [[https://spacy.io/usage/linguistic-features#named-entities][Named Entity Recognition]] which assigns labels to spans of tokens that it has identified to be a type of "entity". The main type of entity we're interested in here is a =PERSON=.
+
+Entities are objects that have been given names. spaCy identifies them using a statistical model, so our ability to accurately identify them is relying on our documents resembling the ones their model was trained on.
+
+#+BEGIN_SRC ipython :session redaction :results output :exports both
+names = set()
+for entity in document[:10000].ents:
+    if entity.label_=="PERSON" and not entity.text in names:
+        print(f"{entity.text}")
+        names.add(entity.text)
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+Verloc
+Mrs Verloc
+Winnie Verloc
+Mrs
+Verloc’s
+Mrs Verloc’s
+Winnie
+Winnie
+
+Stevie
+
+Stevie
+Verloc’s
+Verlocs
+Stephen
+Mr Verloc
+Chesham Square
+Wurmt
+Vladimir
+Mr Vladimir
+Cherchez
+Stott-Wartenheim
+Verloc
+
+Bosh
+Mr Verloc’s
+Romuald
+Vox
+Milan
+F. P.
+this F. P.?
+#+end_example
+
+You can see that it's pretty good at getting names, although it isn't perfect. There are other entity types besides "PERSON", and there's too many entities to to look at each of them:
+
+#+BEGIN_SRC ipython :session redaction :results output :exports both
+print(f"{len(document.ents):,}")
+#+END_SRC
+
+#+RESULTS:
+: 2,481
+
+But maybe we can look at the types.
+
+#+BEGIN_SRC ipython :session redaction :results output :exports both
+entity_types = {entity.label_ for entity in document.ents}
+print(len(entity_types))
+#+END_SRC
+
+#+RESULTS:
+: 18
+
+Only eighteen of them, that's not too bad. spaCy has a built-in function named =explain= that let's you look up a little more information about the entity types.
+
+#+BEGIN_SRC ipython :session redaction :results output raw :exports both
+print("|Entity Type| Explanation|")
+print("|-+-|")
+for entity_type in sorted(entity_types):
+    print(f"|{entity_type}| {spacy.explain(entity_type)}|")
+#+END_SRC
+
+#+RESULTS:
+| Entity Type | Explanation                                          |
+|-------------+------------------------------------------------------|
+| CARDINAL    | Numerals that do not fall under another type         |
+| DATE        | Absolute or relative dates or periods                |
+| EVENT       | Named hurricanes, battles, wars, sports events, etc. |
+| FAC         | Buildings, airports, highways, bridges, etc.         |
+| GPE         | Countries, cities, states                            |
+| LANGUAGE    | Any named language                                   |
+| LAW         | Named documents made into laws.                      |
+| LOC         | Non-GPE locations, mountain ranges, bodies of water  |
+| MONEY       | Monetary values, including unit                      |
+| NORP        | Nationalities or religious or political groups       |
+| ORDINAL     | "first", "second", etc.                              |
+| ORG         | Companies, agencies, institutions, etc.              |
+| PERCENT     | Percentage, including "%"                            |
+| PERSON      | People, including fictional                          |
+| PRODUCT     | Objects, vehicles, foods, etc. (not services)        |
+| QUANTITY    | Measurements, as of weight or distance               |
+| TIME        | Times smaller than a day                             |
+| WORK_OF_ART | Titles of books, songs, etc.                         |
+
+The categories seem kind of arbitrary, but perhaps that's because of the book that I chose. 
+** Redacting Names
+   It's getting a little unwieldy to handle the entire /Secret Agent/ novel so I'll switch to somet oy sentence fragments.
+
+#+BEGIN_SRC ipython :session redaction :results output :exports both
+fragment = "Mr. Jason Ottomatic and Tom Tuttle (of Tacoma) went to see Billy Buttman at Barney's."
+document = nlp(fragment)
+for entity in document.ents:
+    print(f"{entity.text}: {entity.label_}")
+#+END_SRC
+
+#+RESULTS:
+: Jason Ottomatic: PERSON
+: Tom Tuttle: PERSON
+: Tacoma: GPE
+: Billy Buttman: PERSON
+: Barney's: ORG
+
+Although this seems kind of slow, we can iterate over the entities and replace the ones that we identify as a person with a ~[REDACTED]~ symbol.
+
+#+BEGIN_SRC ipython :session redaction :results none
+def redact_names(sentence: str) -> str:
+    """Takes a sentence and redacts people's names
+
+    Args:
+     sentence: the text to redact
+    
+    Returns:
+     redacted sentence
+    """
+    document = nlp(sentence)
+    return " ".join(("[REDACTED]" if token.ent_type_=="PERSON" else token.text 
+                    for token in document))
+#+END_SRC
+
+How does that do?
+
+#+BEGIN_SRC ipython :session redaction :results output :exports both
+print(redact_names(fragment))
+#+END_SRC
+
+#+RESULTS:
+: Mr. [REDACTED] [REDACTED] and [REDACTED] [REDACTED] ( of Tacoma ) went to see [REDACTED] [REDACTED] at Barney 's .
+
+Well, that, surprisingly, didn't work the way I thought it would. Entities represent spans of tokens which it keeps together, but now that we're using tokens we end up with one =[REDACTED]= for each token in their names, which isn't what we want. What if we use entities?
+
+#+BEGIN_SRC ipython :session redaction :results output :exports both
+document = nlp(fragment)
+print(" ".join(("[REDACTED]" if entity.label_=="PERSON" else entity.text 
+                     for entity in document.ents)))
+#+END_SRC
+
+#+RESULTS:
+: [REDACTED] [REDACTED] Tacoma [REDACTED] Barney's
+
+No, because not all the tokens are entities (it cleans out things like stop-words and punctuation). The secret turns out to be to tell the entities to merge the tokens together before we pull out the tokens.
+
+#+BEGIN_SRC ipython :session redaction :results none
+def redact_name_3(sentence : str) -> str:
+    """Takes a sentence and redacts people's names
+
+    Args:
+     sentence: the text to redact
+    
+    Returns:
+     redacted sentence
+    """
+    document = nlp(sentence)
+    for entity in document.ents:
+        entity.merge()
+    return "".join(("[REDACTED] " if token.ent_type_=="PERSON" else token.string
+                    for token in document))
+#+END_SRC
+
+#+BEGIN_SRC ipython :session redaction :results output :exports both
+print(redact_name_3(fragment))
+#+END_SRC
+
+#+RESULTS:
+: Mr. [REDACTED] and [REDACTED] (of Tacoma) went to see [REDACTED] at Barney's.
+
+Besides the merge I switched to using =token.string= which (mostly) keeeps the whitespace.
+
+*** More Redaction
+    We've been told that our identification of where the second person is from, and where all three met might give out too much information as well. Looking at the list of [[https://spacy.io/usage/linguistic-features#named-entities][bulit-in named entities]] doesn't make it obvious what the two entity types would be, so I guess I'll brute-force it.
+
+#+BEGIN_SRC ipython :session redaction :results output raw :exports both
+document = nlp(fragment)
+print("|Token| Type|")
+print("|-+-|")
+for entity in document.ents:
+    print(f"|{entity.text}| {entity.label_}")
+#+END_SRC
+
+#+RESULTS:
+| Token           | Type   |
+|-----------------+--------|
+| Jason Ottomatic | PERSON |
+| Tom Tuttle      | PERSON |
+| Tacoma          | GPE    |
+| Billy Buttman   | PERSON |
+| Barney's        | ORG    |
+
+#+BEGIN_SRC ipython :session redaction :results none
+exclude = ("PERSON", "GPE", "ORG")
+
+def redact_name_4(sentence : str, exclude: Collection=exclude) -> str:
+    """Takes a sentence and redacts people's names
+
+    Args:
+     sentence: the text to redact
+     exclude: collection of entitiy types to exclude
+    
+    Returns:
+     redacted sentence
+    """
+    document = nlp(sentence)
+    for entity in document.ents:
+        entity.merge()
+    return "".join(("[REDACTED] " if token.ent_type_ in exclude else token.string
+                    for token in document))
+#+END_SRC
+
+#+BEGIN_SRC ipython :session redaction :results output :exports both
+print(redact_name_4(fragment))
+#+END_SRC
+
+#+RESULTS:
+: Mr. [REDACTED] and [REDACTED] (of [REDACTED] ) went to see [REDACTED] at [REDACTED] .
+
+#+BEGIN_SRC ipython :session redaction :results output :exports both
+fragment = "President Johnson called an emergency Congressional session to discuss the gathering clouds of war."
+redacted = redact_name_4(fragment)
+print(redacted)
+#+END_SRC
+
+#+RESULTS:
+: President [REDACTED] called an emergency [REDACTED] session to discuss the gathering clouds of war.
+
+Well, the fact that "President" got through might make it a little bit identifying. If you've got the president involved, though, you probably want to be a little more careful anyway.
+
+#+BEGIN_SRC ipython :session redaction :results output raw :exports both
+print("|Token | Type|")
+print("|-+-|")
+document = nlp(fragment)
+for entity in document.ents:
+    print(f"|{entity.text}| {entity.label_}|")
+#+END_SRC
+
+#+RESULTS:
+| Token         | Type   |
+|---------------+--------|
+| Johnson       | PERSON |
+| Congressional | ORG    |
+
+It looks like "President" isn't one of the entities spacy knows about. So perhaps in this case a regular expression might be in order.
+
+* End
+  This was a brief look at how you can use a slightly more informed approach to identify parts of a text without using regular expressions and things of that nature to match strings. By using identifiable named entities, spacy is able to help us identify entire classes of entities to match without knowing what they look like beforehand. Of course, it would be dangerous to do this too blindly, there might always be things that confuse the model, but spacy does fairly well right out of the box.
+** Reference
+   This was based on a chapter in this book.
+
+1. Kasliwal N. Natural language processing with Python quick start guide: going from a Python developer to an effective natural language processing engineer [Internet]. 2018 [cited 2019 May 18]. Available from: http://proquest.safaribooksonline.com/?fpi=9781789130386

@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en" prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article#">
+<head>
+<meta charset="utf-8">
+<meta content="Redacting names from a document" name="description">
+<meta content="width=device-width, initial-scale=1" name="viewport">
+<title>Name Redaction | Tip of the Dnghu</title>
+<link href="../../../assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
+<link href="../../../assets/css/ipython.min.css" rel="stylesheet" type="text/css">
+<link href="../../../assets/css/nikola_ipython.css" rel="stylesheet" type="text/css">
+<meta content="#5670d4" name="theme-color">
+<meta content="Nikola (getnikola.com)" name="generator">
+<link href="../../../rss.xml" rel="alternate" title="RSS" type="application/rss+xml">
+<link href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/name-redaction/" rel="canonical"><!--[if lt IE 9]><script src="../../../assets/js/html5.js"></script><![endif]-->
+<link href="../../../apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180">
+<link href="../../../favicon-32x32.png" rel="icon" sizes="32x32" type="image/png">
+<link href="../../../favicon-16x16.png" rel="icon" sizes="16x16" type="image/png">
+<link href="../../../site.webmanifest" rel="manifest">
+<script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML" type="text/javascript"></script>
+<meta content="Cloistered Monkey" name="author">
+<link href="../tidying-data/" rel="prev" title="Some Tools For Tidying Data" type="text/html">
+<meta content="Tip of the Dnghu" property="og:site_name">
+<meta content="Name Redaction" property="og:title">
+<meta content="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/name-redaction/" property="og:url">
+<meta content="Redacting names from a document" property="og:description">
+<meta content="article" property="og:type">
+<meta content="2019-05-27T16:17:18-07:00" property="article:published_time">
+<meta content="cleaning" property="article:tag">
+<meta content="data" property="article:tag">
+</head>
+<body>
+<a class="sr-only sr-only-focusable" href="#content">Skip to main content</a> <!-- Menubar -->
+<nav class="navbar navbar-expand-md static-top mb-4 navbar-light bg-light">
+<div class="container"><!-- This keeps the margins nice -->
+ <a class="navbar-brand" href="https://necromuralist.github.io/Tip-of-the-Dnghu/"><span id="blog-title">Tip of the Dnghu</span></a> <button aria-controls="bs-navbar" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#bs-navbar" data-toggle="collapse" type="button"><span class="navbar-toggler-icon"></span></button>
+<div class="collapse navbar-collapse" id="bs-navbar">
+<ul class="navbar-nav mr-auto">
+<li class="nav-item"><a class="nav-link" href="../../../archive.html">Archive</a></li>
+<li class="nav-item"><a class="nav-link" href="../../../categories/">Tags</a></li>
+<li class="nav-item"><a class="nav-link" href="../../../rss.xml">RSS feed</a></li>
+<li class="nav-item dropdown"><a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Pages</a>
+<div class="dropdown-menu"><a class="dropdown-item" href="https://necromuralist.github.io/">Cloistered Monkey</a></div>
+</li>
+</ul>
+<!-- DuckDuckGo custom search -->
+<form action="https://duckduckgo.com/" class="navbar-form pull-left" id="search" method="get" name="search"><input name="sites" type="hidden" value="https://necromuralist.github.io/Tip-of-the-Dnghu/"><input name="k8" type="hidden" value="#444444"><input name="k9" type="hidden" value="#D51920"><input name="kt" type="hidden" value="h"><input class="span2" maxlength="255" name="q" placeholder="Search…" type="text"><input style="visibility: hidden;display:none" type="submit" value="DuckDuckGo Search"></form>
+<!-- End of custom search -->
+<ul class="navbar-nav navbar-right">
+<li class="nav-item"><a class="nav-link" href="index.org" id="sourcelink">Source</a></li>
+</ul>
+</div>
+<!-- /.navbar-collapse --></div>
+<!-- /.container --></nav>
+<!-- End of Menubar -->
+<div class="container" id="content" role="main">
+<div class="body-content"><!--Body content-->
+<article class="post-text h-entry hentry postpage" itemscope="itemscope" itemtype="http://schema.org/Article">
+<header>
+<h1 class="p-name entry-title" itemprop="headline name"><a class="u-url" href=".">Name Redaction</a></h1>
+<div class="metadata">
+<p class="byline author vcard"><span class="byline-name fn" itemprop="author">Cloistered Monkey</span></p>
+<p class="dateline"><a href="." rel="bookmark"><time class="published dt-published" datetime="2019-05-27T16:17:18-07:00" itemprop="datePublished" title="2019-05-27 16:17">2019-05-27 16:17</time></a></p>
+<p class="sourceline"><a class="sourcelink" href="index.org">Source</a></p>
+</div>
+</header>
+<div class="e-content entry-content" itemprop="articleBody text">
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org30b9a88">Beginning</a>
+<ul>
+<li><a href="#orge6e9a8a">Imports</a></li>
+<li><a href="#orgf188059">Set Up</a></li>
+<li><a href="#org393993e">Load the File</a></li>
+</ul>
+</li>
+<li><a href="#org1a76e1f">Middle</a>
+<ul>
+<li><a href="#orgbd3216f">A Little spacy</a></li>
+<li><a href="#orgcd37d19">Redacting Names</a></li>
+</ul>
+</li>
+<li><a href="#orgaec543c">End</a>
+<ul>
+<li><a href="#orgbe440e6">Reference</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="outline-2" id="outline-container-org30b9a88">
+<h2 id="org30b9a88">Beginning</h2>
+<div class="outline-text-2" id="text-org30b9a88"></div>
+<div class="outline-3" id="outline-container-orge6e9a8a">
+<h3 id="orge6e9a8a">Imports</h3>
+<div class="outline-text-3" id="text-orge6e9a8a"></div>
+<div class="outline-4" id="outline-container-org1242ad2">
+<h4 id="org1242ad2">Python</h4>
+<div class="outline-text-4" id="text-org1242ad2">
+<div class="highlight">
+<pre><span></span>from pathlib import Path
+from typing import Collection
+</pre></div>
+</div>
+</div>
+<div class="outline-4" id="outline-container-orgd576b86">
+<h4 id="orgd576b86">PyPi</h4>
+<div class="outline-text-4" id="text-orgd576b86">
+<div class="highlight">
+<pre><span></span>from spacy import displacy
+
+import spacy
+import textacy
+</pre></div>
+</div>
+</div>
+<div class="outline-4" id="outline-container-org4fa87ec">
+<h4 id="org4fa87ec">My Stuff</h4>
+<div class="outline-text-4" id="text-org4fa87ec">
+<div class="highlight">
+<pre><span></span>from graeae.timers import Timer
+from graeae import EnvironmentLoader, TextDownloader
+</pre></div>
+</div>
+</div>
+</div>
+<div class="outline-3" id="outline-container-orgf188059">
+<h3 id="orgf188059">Set Up</h3>
+<div class="outline-text-3" id="text-orgf188059"></div>
+<div class="outline-4" id="outline-container-org210949a">
+<h4 id="org210949a">The Timer</h4>
+<div class="outline-text-4" id="text-org210949a">
+<div class="highlight">
+<pre><span></span>TIMER = Timer()
+</pre></div>
+</div>
+</div>
+<div class="outline-4" id="outline-container-org9c138b8">
+<h4 id="org9c138b8">Spacy</h4>
+<div class="outline-text-4" id="text-org9c138b8">
+<p>This loads the large English model tha spacy provides.</p>
+<div class="highlight">
+<pre><span></span>with TIMER:
+    nlp = spacy.load("en_core_web_lg")
+</pre></div>
+<pre class="example">
+2019-05-27 16:57:09,330 graeae.timers.timer start: Started: 2019-05-27 16:57:09.330711
+2019-05-27 16:57:15,562 graeae.timers.timer end: Ended: 2019-05-27 16:57:15.562439
+2019-05-27 16:57:15,563 graeae.timers.timer end: Elapsed: 0:00:06.231728
+
+</pre>
+<p>Although it took a long time to download the model doesn't actually take a long time to load.</p>
+</div>
+</div>
+</div>
+<div class="outline-3" id="outline-container-org393993e">
+<h3 id="org393993e">Load the File</h3>
+<div class="outline-text-3" id="text-org393993e">
+<div class="highlight">
+<pre><span></span>URL = "https://www.gutenberg.org/files/974/974-0.txt"
+environment = EnvironmentLoader()
+path = environment["GUTENBERG"]
+path = Path(path).expanduser()
+downloader = TextDownloader(url=URL, target=path/"conrad_joseph_secret_agent.txt")
+text = downloader.download
+</pre></div>
+<pre class="example">
+2019-05-27 17:10:07,016 [1mTextDownloader[0m download: /home/athena/data/datasets/gutenberg/conrad_joseph_secret_agent.txt exists, opening it
+
+</pre></div>
+</div>
+</div>
+<div class="outline-2" id="outline-container-org1a76e1f">
+<h2 id="org1a76e1f">Middle</h2>
+<div class="outline-text-2" id="text-org1a76e1f"></div>
+<div class="outline-3" id="outline-container-orgbd3216f">
+<h3 id="orgbd3216f">A Little spacy</h3>
+<div class="outline-text-3" id="text-orgbd3216f">
+<div class="highlight">
+<pre><span></span>document = nlp(text)
+</pre></div>
+<p>We want to be able to block out all the names in documents to preserve people's anonimity. One way to do that is to use spaCy's <a href="https://spacy.io/usage/linguistic-features#named-entities">Named Entity Recognition</a> which assigns labels to spans of tokens that it has identified to be a type of "entity". The main type of entity we're interested in here is a <code>PERSON</code>.</p>
+<p>Entities are objects that have been given names. spaCy identifies them using a statistical model, so our ability to accurately identify them is relying on our documents resembling the ones their model was trained on.</p>
+<div class="highlight">
+<pre><span></span>names = set()
+for entity in document[:10000].ents:
+    if entity.label_=="PERSON" and not entity.text in names:
+        print(f"{entity.text}")
+        names.add(entity.text)
+</pre></div>
+<pre class="example">
+Verloc
+Mrs Verloc
+Winnie Verloc
+Mrs
+Verloc’s
+Mrs Verloc’s
+Winnie
+Winnie
+
+Stevie
+
+Stevie
+Verloc’s
+Verlocs
+Stephen
+Mr Verloc
+Chesham Square
+Wurmt
+Vladimir
+Mr Vladimir
+Cherchez
+Stott-Wartenheim
+Verloc
+
+Bosh
+Mr Verloc’s
+Romuald
+Vox
+Milan
+F. P.
+this F. P.?
+</pre>
+<p>You can see that it's pretty good at getting names, although it isn't perfect. There are other entity types besides "PERSON", and there's too many entities to to look at each of them:</p>
+<div class="highlight">
+<pre><span></span>print(f"{len(document.ents):,}")
+</pre></div>
+<pre class="example">
+2,481
+
+</pre>
+<p>But maybe we can look at the types.</p>
+<div class="highlight">
+<pre><span></span>entity_types = {entity.label_ for entity in document.ents}
+print(len(entity_types))
+</pre></div>
+<pre class="example">
+18
+
+</pre>
+<p>Only eighteen of them, that's not too bad. spaCy has a built-in function named <code>explain</code> that let's you look up a little more information about the entity types.</p>
+<div class="highlight">
+<pre><span></span>print("|Entity Type| Explanation|")
+print("|-+-|")
+for entity_type in sorted(entity_types):
+    print(f"|{entity_type}| {spacy.explain(entity_type)}|")
+</pre></div>
+<table border="2" cellpadding="6" cellspacing="0" frame="hsides" rules="groups">
+<colgroup>
+<col class="org-left">
+<col class="org-left"></colgroup>
+<thead>
+<tr>
+<th class="org-left" scope="col">Entity Type</th>
+<th class="org-left" scope="col">Explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">CARDINAL</td>
+<td class="org-left">Numerals that do not fall under another type</td>
+</tr>
+<tr>
+<td class="org-left">DATE</td>
+<td class="org-left">Absolute or relative dates or periods</td>
+</tr>
+<tr>
+<td class="org-left">EVENT</td>
+<td class="org-left">Named hurricanes, battles, wars, sports events, etc.</td>
+</tr>
+<tr>
+<td class="org-left">FAC</td>
+<td class="org-left">Buildings, airports, highways, bridges, etc.</td>
+</tr>
+<tr>
+<td class="org-left">GPE</td>
+<td class="org-left">Countries, cities, states</td>
+</tr>
+<tr>
+<td class="org-left">LANGUAGE</td>
+<td class="org-left">Any named language</td>
+</tr>
+<tr>
+<td class="org-left">LAW</td>
+<td class="org-left">Named documents made into laws.</td>
+</tr>
+<tr>
+<td class="org-left">LOC</td>
+<td class="org-left">Non-GPE locations, mountain ranges, bodies of water</td>
+</tr>
+<tr>
+<td class="org-left">MONEY</td>
+<td class="org-left">Monetary values, including unit</td>
+</tr>
+<tr>
+<td class="org-left">NORP</td>
+<td class="org-left">Nationalities or religious or political groups</td>
+</tr>
+<tr>
+<td class="org-left">ORDINAL</td>
+<td class="org-left">"first", "second", etc.</td>
+</tr>
+<tr>
+<td class="org-left">ORG</td>
+<td class="org-left">Companies, agencies, institutions, etc.</td>
+</tr>
+<tr>
+<td class="org-left">PERCENT</td>
+<td class="org-left">Percentage, including "%"</td>
+</tr>
+<tr>
+<td class="org-left">PERSON</td>
+<td class="org-left">People, including fictional</td>
+</tr>
+<tr>
+<td class="org-left">PRODUCT</td>
+<td class="org-left">Objects, vehicles, foods, etc. (not services)</td>
+</tr>
+<tr>
+<td class="org-left">QUANTITY</td>
+<td class="org-left">Measurements, as of weight or distance</td>
+</tr>
+<tr>
+<td class="org-left">TIME</td>
+<td class="org-left">Times smaller than a day</td>
+</tr>
+<tr>
+<td class="org-left">WORK_OF_ART</td>
+<td class="org-left">Titles of books, songs, etc.</td>
+</tr>
+</tbody>
+</table>
+<p>The categories seem kind of arbitrary, but perhaps that's because of the book that I chose.</p>
+</div>
+</div>
+<div class="outline-3" id="outline-container-orgcd37d19">
+<h3 id="orgcd37d19">Redacting Names</h3>
+<div class="outline-text-3" id="text-orgcd37d19">
+<p>It's getting a little unwieldy to handle the entire <i>Secret Agent</i> novel so I'll switch to somet oy sentence fragments.</p>
+<div class="highlight">
+<pre><span></span>fragment = "Mr. Jason Ottomatic and Tom Tuttle (of Tacoma) went to see Billy Buttman at Barney's."
+document = nlp(fragment)
+for entity in document.ents:
+    print(f"{entity.text}: {entity.label_}")
+</pre></div>
+<pre class="example">
+Jason Ottomatic: PERSON
+Tom Tuttle: PERSON
+Tacoma: GPE
+Billy Buttman: PERSON
+Barney's: ORG
+
+</pre>
+<p>Although this seems kind of slow, we can iterate over the entities and replace the ones that we identify as a person with a <code>[REDACTED]</code> symbol.</p>
+<div class="highlight">
+<pre><span></span>def redact_names(sentence: str) -&gt; str:
+    """Takes a sentence and redacts people's names
+
+    Args:
+     sentence: the text to redact
+
+    Returns:
+     redacted sentence
+    """
+    document = nlp(sentence)
+    return " ".join(("[REDACTED]" if token.ent_type_=="PERSON" else token.text 
+                    for token in document))
+</pre></div>
+<p>How does that do?</p>
+<div class="highlight">
+<pre><span></span>print(redact_names(fragment))
+</pre></div>
+<pre class="example">
+Mr. [REDACTED] [REDACTED] and [REDACTED] [REDACTED] ( of Tacoma ) went to see [REDACTED] [REDACTED] at Barney 's .
+
+</pre>
+<p>Well, that, surprisingly, didn't work the way I thought it would. Entities represent spans of tokens which it keeps together, but now that we're using tokens we end up with one <code>[REDACTED]</code> for each token in their names, which isn't what we want. What if we use entities?</p>
+<div class="highlight">
+<pre><span></span>document = nlp(fragment)
+print(" ".join(("[REDACTED]" if entity.label_=="PERSON" else entity.text 
+                     for entity in document.ents)))
+</pre></div>
+<pre class="example">
+[REDACTED] [REDACTED] Tacoma [REDACTED] Barney's
+
+</pre>
+<p>No, because not all the tokens are entities (it cleans out things like stop-words and punctuation). The secret turns out to be to tell the entities to merge the tokens together before we pull out the tokens.</p>
+<div class="highlight">
+<pre><span></span>def redact_name_3(sentence : str) -&gt; str:
+    """Takes a sentence and redacts people's names
+
+    Args:
+     sentence: the text to redact
+
+    Returns:
+     redacted sentence
+    """
+    document = nlp(sentence)
+    for entity in document.ents:
+        entity.merge()
+    return "".join(("[REDACTED] " if token.ent_type_=="PERSON" else token.string
+                    for token in document))
+</pre></div>
+<div class="highlight">
+<pre><span></span>print(redact_name_3(fragment))
+</pre></div>
+<pre class="example">
+Mr. [REDACTED] and [REDACTED] (of Tacoma) went to see [REDACTED] at Barney's.
+
+</pre>
+<p>Besides the merge I switched to using <code>token.string</code> which (mostly) keeeps the whitespace.</p>
+</div>
+<div class="outline-4" id="outline-container-org11ecf25">
+<h4 id="org11ecf25">More Redaction</h4>
+<div class="outline-text-4" id="text-org11ecf25">
+<p>We've been told that our identification of where the second person is from, and where all three met might give out too much information as well. Looking at the list of <a href="https://spacy.io/usage/linguistic-features#named-entities">bulit-in named entities</a> doesn't make it obvious what the two entity types would be, so I guess I'll brute-force it.</p>
+<div class="highlight">
+<pre><span></span>document = nlp(fragment)
+print("|Token| Type|")
+print("|-+-|")
+for entity in document.ents:
+    print(f"|{entity.text}| {entity.label_}")
+</pre></div>
+<table border="2" cellpadding="6" cellspacing="0" frame="hsides" rules="groups">
+<colgroup>
+<col class="org-left">
+<col class="org-left"></colgroup>
+<thead>
+<tr>
+<th class="org-left" scope="col">Token</th>
+<th class="org-left" scope="col">Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">Jason Ottomatic</td>
+<td class="org-left">PERSON</td>
+</tr>
+<tr>
+<td class="org-left">Tom Tuttle</td>
+<td class="org-left">PERSON</td>
+</tr>
+<tr>
+<td class="org-left">Tacoma</td>
+<td class="org-left">GPE</td>
+</tr>
+<tr>
+<td class="org-left">Billy Buttman</td>
+<td class="org-left">PERSON</td>
+</tr>
+<tr>
+<td class="org-left">Barney's</td>
+<td class="org-left">ORG</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight">
+<pre><span></span>exclude = ("PERSON", "GPE", "ORG")
+
+def redact_name_4(sentence : str, exclude: Collection=exclude) -&gt; str:
+    """Takes a sentence and redacts people's names
+
+    Args:
+     sentence: the text to redact
+     exclude: collection of entitiy types to exclude
+
+    Returns:
+     redacted sentence
+    """
+    document = nlp(sentence)
+    for entity in document.ents:
+        entity.merge()
+    return "".join(("[REDACTED] " if token.ent_type_ in exclude else token.string
+                    for token in document))
+</pre></div>
+<div class="highlight">
+<pre><span></span>print(redact_name_4(fragment))
+</pre></div>
+<pre class="example">
+Mr. [REDACTED] and [REDACTED] (of [REDACTED] ) went to see [REDACTED] at [REDACTED] .
+
+</pre>
+<div class="highlight">
+<pre><span></span>fragment = "President Johnson called an emergency Congressional session to discuss the gathering clouds of war."
+redacted = redact_name_4(fragment)
+print(redacted)
+</pre></div>
+<pre class="example">
+President [REDACTED] called an emergency [REDACTED] session to discuss the gathering clouds of war.
+
+</pre>
+<p>Well, the fact that "President" got through might make it a little bit identifying. If you've got the president involved, though, you probably want to be a little more careful anyway.</p>
+<div class="highlight">
+<pre><span></span>print("|Token | Type|")
+print("|-+-|")
+document = nlp(fragment)
+for entity in document.ents:
+    print(f"|{entity.text}| {entity.label_}|")
+</pre></div>
+<table border="2" cellpadding="6" cellspacing="0" frame="hsides" rules="groups">
+<colgroup>
+<col class="org-left">
+<col class="org-left"></colgroup>
+<thead>
+<tr>
+<th class="org-left" scope="col">Token</th>
+<th class="org-left" scope="col">Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">Johnson</td>
+<td class="org-left">PERSON</td>
+</tr>
+<tr>
+<td class="org-left">Congressional</td>
+<td class="org-left">ORG</td>
+</tr>
+</tbody>
+</table>
+<p>It looks like "President" isn't one of the entities spacy knows about. So perhaps in this case a regular expression might be in order.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="outline-2" id="outline-container-orgaec543c">
+<h2 id="orgaec543c">End</h2>
+<div class="outline-text-2" id="text-orgaec543c">
+<p>This was a brief look at how you can use a slightly more informed approach to identify parts of a text without using regular expressions and things of that nature to match strings. By using identifiable named entities, spacy is able to help us identify entire classes of entities to match without knowing what they look like beforehand. Of course, it would be dangerous to do this too blindly, there might always be things that confuse the model, but spacy does fairly well right out of the box.</p>
+</div>
+<div class="outline-3" id="outline-container-orgbe440e6">
+<h3 id="orgbe440e6">Reference</h3>
+<div class="outline-text-3" id="text-orgbe440e6">
+<p>This was based on a chapter in this book.</p>
+<ol class="org-ol">
+<li>Kasliwal N. Natural language processing with Python quick start guide: going from a Python developer to an effective natural language processing engineer [Internet]. 2018 [cited 2019 May 18]. Available from: <a href="http://proquest.safaribooksonline.com/?fpi=9781789130386">http://proquest.safaribooksonline.com/?fpi=9781789130386</a></li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<aside class="postpromonav">
+<nav>
+<ul class="tags" itemprop="keywords">
+<li><a class="tag p-category" href="../../../categories/cleaning/" rel="tag">cleaning</a></li>
+<li><a class="tag p-category" href="../../../categories/data/" rel="tag">data</a></li>
+</ul>
+<ul class="pager hidden-print">
+<li class="previous"><a href="../tidying-data/" rel="prev" title="Some Tools For Tidying Data">Previous post</a></li>
+</ul>
+</nav>
+</aside>
+</article>
+<!--End of body content-->
+<footer id="footer">Contents © 2019 <a href="mailto:necromuralist@protonmail.com">Cloistered Monkey</a> - Powered by <a href="https://getnikola.com" rel="nofollow">Nikola</a></footer>
+</div>
+</div>
+<script src="../../../assets/js/all-nocdn.js"></script>
+<script>
+
+    baguetteBox.run('div#content', {
+        ignoreClass: 'islink',
+        captions: function(element) {
+            return element.getElementsByTagName('img')[0].alt;
+    }});
+</script>
+</body>
+</html>

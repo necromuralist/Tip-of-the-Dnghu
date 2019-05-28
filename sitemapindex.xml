@@ -6,6 +6,10 @@
     xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
                         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
  <sitemap>
+  <loc>https://necromuralist.github.io/Tip-of-the-Dnghu/categories/cat_data.xml</loc>
+  <lastmod>2019-05-27T23:21:00Z</lastmod>
+ </sitemap>
+ <sitemap>
   <loc>https://necromuralist.github.io/Tip-of-the-Dnghu/categories/cat_links.xml</loc>
   <lastmod>2019-05-06T00:12:00Z</lastmod>
  </sitemap>
@@ -16,6 +20,14 @@
  <sitemap>
   <loc>https://necromuralist.github.io/Tip-of-the-Dnghu/categories/cat_reading.xml</loc>
   <lastmod>2019-05-06T00:12:00Z</lastmod>
+ </sitemap>
+ <sitemap>
+  <loc>https://necromuralist.github.io/Tip-of-the-Dnghu/categories/cleaning.xml</loc>
+  <lastmod>2019-05-27T23:21:00Z</lastmod>
+ </sitemap>
+ <sitemap>
+  <loc>https://necromuralist.github.io/Tip-of-the-Dnghu/categories/data.xml</loc>
+  <lastmod>2019-05-27T23:21:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://necromuralist.github.io/Tip-of-the-Dnghu/categories/lecture.xml</loc>
@@ -54,15 +66,19 @@
   <lastmod>2019-05-18T17:31:00Z</lastmod>
  </sitemap>
  <sitemap>
+  <loc>https://necromuralist.github.io/Tip-of-the-Dnghu/categories/tidying.xml</loc>
+  <lastmod>2019-05-27T22:49:00Z</lastmod>
+ </sitemap>
+ <sitemap>
   <loc>https://necromuralist.github.io/Tip-of-the-Dnghu/categories/walk-through.xml</loc>
   <lastmod>2019-05-19T19:48:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://necromuralist.github.io/Tip-of-the-Dnghu/rss.xml</loc>
-  <lastmod>2019-05-19T19:48:00Z</lastmod>
+  <lastmod>2019-05-27T23:21:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://necromuralist.github.io/Tip-of-the-Dnghu/sitemap.xml</loc>
-  <lastmod>2019-05-19T19:48:00Z</lastmod>
+  <lastmod>2019-05-27T23:21:00Z</lastmod>
  </sitemap>
 </sitemapindex>

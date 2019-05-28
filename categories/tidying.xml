@@ -1,0 +1,1501 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tip of the Dnghu (Posts about tidying)</title><link>https://necromuralist.github.io/Tip-of-the-Dnghu/</link><description></description><atom:link href="https://necromuralist.github.io/Tip-of-the-Dnghu/categories/tidying.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2019 &lt;a href="mailto:necromuralist@protonmail.com"&gt;Cloistered Monkey&lt;/a&gt; </copyright><lastBuildDate>Tue, 28 May 2019 03:58:54 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Some Tools For Tidying Data</title><link>https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/</link><dc:creator>Cloistered Monkey</dc:creator><description>&lt;div id="table-of-contents"&gt;
+&lt;h2&gt;Table of Contents&lt;/h2&gt;
+&lt;div id="text-table-of-contents"&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#orgffcf5db"&gt;Beginning&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#org7cc60be"&gt;Imports&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#org8ab9804"&gt;The Text File.&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#org7172a8e"&gt;Setup Spacy&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#org6679f1b"&gt;The Timer&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#orgdfd041e"&gt;Middle&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#orgcdfd32c"&gt;Load the File&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#orgdc59cb8"&gt;Reload&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#orgb772bd5"&gt;Tokenizing with Spacy&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#org767e34b"&gt;A Detour Into Fuzzy Wuzzy&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#orgdcaa0b8"&gt;A Diversion Into JellyFish&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#org185cb88"&gt;A Short Diversion Into FlashText&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#org6b2df69"&gt;End&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#org76b0959"&gt;Reference&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id="outline-container-orgffcf5db" class="outline-2"&gt;
+&lt;h2 id="orgffcf5db"&gt;Beginning&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-orgffcf5db"&gt;
+&lt;/div&gt;
+&lt;div id="outline-container-org7cc60be" class="outline-3"&gt;
+&lt;h3 id="org7cc60be"&gt;Imports&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org7cc60be"&gt;
+&lt;/div&gt;
+&lt;div id="outline-container-org9d9004c" class="outline-4"&gt;
+&lt;h4 id="org9d9004c"&gt;Python&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org9d9004c"&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;difflib&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;SequenceMatcher&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;pathlib&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;Path&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;typing&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;Callable&lt;/span&gt;
+&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;os&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id="outline-container-org5a355db" class="outline-4"&gt;
+&lt;h4 id="org5a355db"&gt;PyPi&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org5a355db"&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;flashtext&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;KeywordProcessor&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;fuzzywuzzy&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;fuzz&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;process&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;tabulate&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;tabulate&lt;/span&gt;
+&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;spacy&lt;/span&gt;
+&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;jellyfish&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id="outline-container-org7fc4317" class="outline-4"&gt;
+&lt;h4 id="org7fc4317"&gt;My Projects&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org7fc4317"&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;graeae&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;EnvironmentLoader&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;TextDownloader&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;graeae.timers&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;Timer&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id="outline-container-org8ab9804" class="outline-3"&gt;
+&lt;h3 id="org8ab9804"&gt;The Text File.&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org8ab9804"&gt;
+&lt;p&gt;
+This is the URL to Joseph Conrad's "The Secret Agent" from &lt;a href="https://www.gutenberg.org/ebooks/974"&gt;Project Gutenberg&lt;/a&gt;.
+&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;URL&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;"https://www.gutenberg.org/files/974/974-0.txt"&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;environment&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;EnvironmentLoader&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="n"&gt;path&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;environment&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;"GUTENBERG"&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id="outline-container-org7172a8e" class="outline-3"&gt;
+&lt;h3 id="org7172a8e"&gt;Setup Spacy&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org7172a8e"&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;nlp&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;spacy&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;load&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"en_core_web_md"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div id="outline-container-org6679f1b" class="outline-3"&gt;
+&lt;h3 id="org6679f1b"&gt;The Timer&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org6679f1b"&gt;
+&lt;p&gt;
+This just tracks how longs things take.
+&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;TIMER&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Timer&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id="outline-container-orgdfd041e" class="outline-2"&gt;
+&lt;h2 id="orgdfd041e"&gt;Middle&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-orgdfd041e"&gt;
+&lt;/div&gt;
+&lt;div id="outline-container-orgcdfd32c" class="outline-3"&gt;
+&lt;h3 id="orgcdfd32c"&gt;Load the File&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-orgcdfd32c"&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;path&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Path&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;path&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;expanduser&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="n"&gt;downloader&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;TextDownloader&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;url&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;URL&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;target&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;path&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="s2"&gt;"conrad_joseph_secret_agent.txt"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;text&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;downloader&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;download&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;pre class="example"&gt;
+2019-05-26 15:59:52,186 [1mTextDownloader[0m download: /home/athena/data/datasets/gutenberg/conrad_joseph_secret_agent.txt exists, opening it
+
+&lt;/pre&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;text&lt;/span&gt;&lt;span class="p"&gt;[:&lt;/span&gt;&lt;span class="mi"&gt;800&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;pre class="example"&gt;
+                  THE
+              SECRET AGENT
+             A SIMPLE TALE
+
+
+                   BY
+             JOSEPH CONRAD
+
+             SECOND EDITION
+
+             METHUEN &amp;amp; CO.,
+          36 ESSEX STREET W C.
+                 LONDON
+
+_First Published_ . . . _September_ 1907
+
+ _Second Edition_ . . . _October_ 1907
+
+                   TO
+              H. G. WELLS
+
+  THE CHRONICLER OF MR LEWISHAM’S LOVE
+    THE BIOGRAPHER OF KIPPS AND THE
+     HISTORIAN OF THE AGES TO COME
+
+  THIS SIMPLE TALE OF THE XI
+&lt;/pre&gt;
+
+&lt;p&gt;
+So it looks like the actual start of our book comes after the transcription credit.
+&lt;/p&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;lines&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;text&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;split&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"&lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s2"&gt;"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;end&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;False&lt;/span&gt;
+&lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;index&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;line&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="nb"&gt;enumerate&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;lines&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="s1"&gt;'ccx074@pglaf.org'&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;line&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+	&lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;f&lt;/span&gt;&lt;span class="s2"&gt;"The Credit line is {index}"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+	&lt;span class="n"&gt;end&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;True&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="s2"&gt;"THE"&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;line&lt;/span&gt; &lt;span class="ow"&gt;and&lt;/span&gt; &lt;span class="n"&gt;end&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+	&lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;f&lt;/span&gt;&lt;span class="s2"&gt;"The first line of our text is at {index}"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+	&lt;span class="k"&gt;break&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;
+I'll get rid of the header.
+&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;cleaned&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;lines&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;38&lt;/span&gt;&lt;span class="p"&gt;:]&lt;/span&gt;
+&lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;""&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;join&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;cleaned&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;]))&lt;/span&gt;
+&lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;f&lt;/span&gt;&lt;span class="s2"&gt;"{len(cleaned):,}"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;pre class="example"&gt;
+his wife was in charge of his brother-in-law.
+10,083
+
+&lt;/pre&gt;
+
+&lt;p&gt;
+So, there's 10,121 lines in the book (I don't know if that is long for a book, I don't think it is) and there are carriage returns (or whatever those marks are called) in the text. I'm going to save the file with the header removed and clean the file separately with &lt;code&gt;dos2unix&lt;/code&gt;.
+&lt;/p&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;with&lt;/span&gt; &lt;span class="n"&gt;downloader&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;target&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;open&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'w'&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="n"&gt;writer&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="n"&gt;writer&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;write&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"&lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s2"&gt;"&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;join&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;cleaned&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div id="outline-container-orgdc59cb8" class="outline-3"&gt;
+&lt;h3 id="orgdc59cb8"&gt;Reload&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-orgdc59cb8"&gt;
+&lt;p&gt;
+I ran &lt;code&gt;dos2unix&lt;/code&gt; on the file, let's see if it's better.
+&lt;/p&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;downloader&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;_download&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;None&lt;/span&gt;
+&lt;span class="n"&gt;text&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;downloader&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;download&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;pre class="example"&gt;
+2019-05-26 15:59:56,659 [1mTextDownloader[0m download: /home/athena/data/datasets/gutenberg/conrad_joseph_secret_agent.txt exists, opening it
+
+&lt;/pre&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;text&lt;/span&gt;&lt;span class="p"&gt;[:&lt;/span&gt;&lt;span class="mi"&gt;700&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;pre class="example"&gt;
+his wife was in charge of his brother-in-law.
+
+The shop was small, and so was the house.  It was one of those grimy
+brick houses which existed in large quantities before the era of
+reconstruction dawned upon London.  The shop was a square box of a place,
+with the front glazed in small panes.  In the daytime the door remained
+closed; in the evening it stood discreetly but suspiciously ajar.
+
+The window contained photographs of more or less undressed dancing girls;
+nondescript packages in wrappers like patent medicines; closed yellow
+paper envelopes, very flimsy, and marked two-and-six in heavy black
+figures; a few numbers of ancient French comic publications hung across a
+string as if to dry;
+&lt;/pre&gt;
+
+&lt;p&gt;
+How many unique characters are there?
+&lt;/p&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;len&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;set&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;text&lt;/span&gt;&lt;span class="p"&gt;)))&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;pre class="example"&gt;
+90
+
+&lt;/pre&gt;
+
+&lt;p&gt;
+According to &lt;a href="https://www.wikiwand.com/en/ASCII"&gt;Wikipedia&lt;/a&gt;, there are 95 printable ASCII characters so this doesn't use all of them, but comes close.
+&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div id="outline-container-orgb772bd5" class="outline-3"&gt;
+&lt;h3 id="orgb772bd5"&gt;Tokenizing with Spacy&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-orgb772bd5"&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;with&lt;/span&gt; &lt;span class="n"&gt;TIMER&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="n"&gt;document&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;nlp&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;text&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;pre class="example"&gt;
+2019-05-26 16:46:53,678 graeae.timers.timer start: Started: 2019-05-26 16:46:53.677998
+2019-05-26 16:47:05,602 graeae.timers.timer end: Ended: 2019-05-26 16:47:05.602303
+2019-05-26 16:47:05,602 graeae.timers.timer end: Elapsed: 0:00:11.924305
+
+&lt;/pre&gt;
+
+&lt;p&gt;
+Spacy pre-computes the linguistic features when you create the &lt;code&gt;document&lt;/code&gt; instance so it takes a little longer to load than you might expect.
+&lt;/p&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;type&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;document&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;pre class="example"&gt;
+&amp;lt;class 'spacy.tokens.doc.Doc'&amp;gt;
+
+&lt;/pre&gt;
+
+&lt;p&gt;
+Our document is a spacy &lt;a href="https://spacy.io/api/doc"&gt;Doc&lt;/a&gt; instance which they describe as a container for accessing language annotations. They also describe it as a sequence of TokenCJ structs (whatever those are).
+&lt;/p&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;d&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;document&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;type&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;d&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;pre class="example"&gt;
+&amp;lt;class 'spacy.tokens.token.Token'&amp;gt;
+
+&lt;/pre&gt;
+
+&lt;p&gt;
+So it looks like besides having its own methods, the Doc holds &lt;a href="https://spacy.io/api/token"&gt;Token&lt;/a&gt; objects.
+&lt;/p&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;document&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;100&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;pre class="example"&gt;
+dancing
+
+&lt;/pre&gt;
+
+&lt;p&gt;
+If you grab a span of tokens instead of a single token it renders them as a &lt;a href="https://spacy.io/api/span"&gt;Span&lt;/a&gt; object.
+&lt;/p&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;document&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;100&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;150&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;pre class="example"&gt;
+dancing girls;
+nondescript packages in wrappers like patent medicines; closed yellow
+paper envelopes, very flimsy, and marked two-and-six in heavy black
+figures; a few numbers of ancient French comic publications hung across a
+string as if to
+
+&lt;/pre&gt;
+
+&lt;p&gt;
+Although the square brackets are token-based, the document also allows you to grab sentences.
+&lt;/p&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;sentences&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;tuple&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;document&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sents&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;sentence&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;sentences&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;100&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;sentence&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;type&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;sentence&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;pre class="example"&gt;
+the attractions of stray cats and dogs, which he followed down narrow
+alleys into unsavoury courts; by the comedies of the streets, which he
+contemplated open-mouthed, to the detriment of
+&amp;lt;class 'spacy.tokens.span.Span'&amp;gt;
+
+&lt;/pre&gt;
+
+&lt;p&gt;
+I had to convert it to a tuple because &lt;code&gt;sents&lt;/code&gt; is actually a generator, not a collection.
+&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;div id="outline-container-org4a97ffb" class="outline-4"&gt;
+&lt;h4 id="org4a97ffb"&gt;Token Attributes&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org4a97ffb"&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"|Token | Stop-Word| Punctuation |"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"|-+-+-+-|"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;token&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;sentence&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;token&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;is_space&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+	&lt;span class="k"&gt;continue&lt;/span&gt;
+    &lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;f&lt;/span&gt;&lt;span class="s2"&gt;"|{token}| {token.is_stop}| {token.is_punct}|"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides"&gt;
+
+
+&lt;colgroup&gt;
+&lt;col class="org-left"&gt;
+
+&lt;col class="org-left"&gt;
+
+&lt;col class="org-left"&gt;
+&lt;/colgroup&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th scope="col" class="org-left"&gt;Token&lt;/th&gt;
+&lt;th scope="col" class="org-left"&gt;Stop-Word&lt;/th&gt;
+&lt;th scope="col" class="org-left"&gt;Punctuation&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td class="org-left"&gt;the&lt;/td&gt;
+&lt;td class="org-left"&gt;True&lt;/td&gt;
+&lt;td class="org-left"&gt;False&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;attractions&lt;/td&gt;
+&lt;td class="org-left"&gt;False&lt;/td&gt;
+&lt;td class="org-left"&gt;False&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;of&lt;/td&gt;
+&lt;td class="org-left"&gt;True&lt;/td&gt;
+&lt;td class="org-left"&gt;False&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;stray&lt;/td&gt;
+&lt;td class="org-left"&gt;False&lt;/td&gt;
+&lt;td class="org-left"&gt;False&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;cats&lt;/td&gt;
+&lt;td class="org-left"&gt;False&lt;/td&gt;
+&lt;td class="org-left"&gt;False&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;and&lt;/td&gt;
+&lt;td class="org-left"&gt;True&lt;/td&gt;
+&lt;td class="org-left"&gt;False&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;dogs&lt;/td&gt;
+&lt;td class="org-left"&gt;False&lt;/td&gt;
+&lt;td class="org-left"&gt;False&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;,&lt;/td&gt;
+&lt;td class="org-left"&gt;False&lt;/td&gt;
+&lt;td class="org-left"&gt;True&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;which&lt;/td&gt;
+&lt;td class="org-left"&gt;True&lt;/td&gt;
+&lt;td class="org-left"&gt;False&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;he&lt;/td&gt;
+&lt;td class="org-left"&gt;True&lt;/td&gt;
+&lt;td class="org-left"&gt;False&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;followed&lt;/td&gt;
+&lt;td class="org-left"&gt;False&lt;/td&gt;
+&lt;td class="org-left"&gt;False&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;down&lt;/td&gt;
+&lt;td class="org-left"&gt;True&lt;/td&gt;
+&lt;td class="org-left"&gt;False&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;narrow&lt;/td&gt;
+&lt;td class="org-left"&gt;False&lt;/td&gt;
+&lt;td class="org-left"&gt;False&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;alleys&lt;/td&gt;
+&lt;td class="org-left"&gt;False&lt;/td&gt;
+&lt;td class="org-left"&gt;False&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;into&lt;/td&gt;
+&lt;td class="org-left"&gt;True&lt;/td&gt;
+&lt;td class="org-left"&gt;False&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;unsavoury&lt;/td&gt;
+&lt;td class="org-left"&gt;False&lt;/td&gt;
+&lt;td class="org-left"&gt;False&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;courts&lt;/td&gt;
+&lt;td class="org-left"&gt;False&lt;/td&gt;
+&lt;td class="org-left"&gt;False&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;;&lt;/td&gt;
+&lt;td class="org-left"&gt;False&lt;/td&gt;
+&lt;td class="org-left"&gt;True&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;by&lt;/td&gt;
+&lt;td class="org-left"&gt;True&lt;/td&gt;
+&lt;td class="org-left"&gt;False&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;the&lt;/td&gt;
+&lt;td class="org-left"&gt;True&lt;/td&gt;
+&lt;td class="org-left"&gt;False&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;comedies&lt;/td&gt;
+&lt;td class="org-left"&gt;False&lt;/td&gt;
+&lt;td class="org-left"&gt;False&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;of&lt;/td&gt;
+&lt;td class="org-left"&gt;True&lt;/td&gt;
+&lt;td class="org-left"&gt;False&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;the&lt;/td&gt;
+&lt;td class="org-left"&gt;True&lt;/td&gt;
+&lt;td class="org-left"&gt;False&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;streets&lt;/td&gt;
+&lt;td class="org-left"&gt;False&lt;/td&gt;
+&lt;td class="org-left"&gt;False&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;,&lt;/td&gt;
+&lt;td class="org-left"&gt;False&lt;/td&gt;
+&lt;td class="org-left"&gt;True&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;which&lt;/td&gt;
+&lt;td class="org-left"&gt;True&lt;/td&gt;
+&lt;td class="org-left"&gt;False&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;he&lt;/td&gt;
+&lt;td class="org-left"&gt;True&lt;/td&gt;
+&lt;td class="org-left"&gt;False&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;contemplated&lt;/td&gt;
+&lt;td class="org-left"&gt;False&lt;/td&gt;
+&lt;td class="org-left"&gt;False&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;open&lt;/td&gt;
+&lt;td class="org-left"&gt;False&lt;/td&gt;
+&lt;td class="org-left"&gt;False&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td class="org-left"&gt;mouthed&lt;/td&gt;
+&lt;td class="org-left"&gt;False&lt;/td&gt;
+&lt;td class="org-left"&gt;False&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;,&lt;/td&gt;
+&lt;td class="org-left"&gt;False&lt;/td&gt;
+&lt;td class="org-left"&gt;True&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;to&lt;/td&gt;
+&lt;td class="org-left"&gt;True&lt;/td&gt;
+&lt;td class="org-left"&gt;False&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;the&lt;/td&gt;
+&lt;td class="org-left"&gt;True&lt;/td&gt;
+&lt;td class="org-left"&gt;False&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;detriment&lt;/td&gt;
+&lt;td class="org-left"&gt;False&lt;/td&gt;
+&lt;td class="org-left"&gt;False&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;of&lt;/td&gt;
+&lt;td class="org-left"&gt;True&lt;/td&gt;
+&lt;td class="org-left"&gt;False&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;
+So spacy can help us identify different types of tokens, in this case stopwords, punctuation, and spaces, but it can do more. The stop-words it uses are kept in a dictionary that you can add to to make it more domain-specific. Here's what the sentence looks like if you filter out the stopword, punctuation, and spaces.
+&lt;/p&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;token&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;sentence&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="ow"&gt;not&lt;/span&gt; &lt;span class="nb"&gt;any&lt;/span&gt;&lt;span class="p"&gt;((&lt;/span&gt;&lt;span class="n"&gt;token&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;is_stop&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+		&lt;span class="n"&gt;token&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;is_punct&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+		&lt;span class="n"&gt;token&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;is_space&lt;/span&gt;&lt;span class="p"&gt;)):&lt;/span&gt;
+	&lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;f&lt;/span&gt;&lt;span class="s2"&gt;"- {token}"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;ul class="org-ul"&gt;
+&lt;li&gt;attractions&lt;/li&gt;
+&lt;li&gt;stray&lt;/li&gt;
+&lt;li&gt;cats&lt;/li&gt;
+&lt;li&gt;dogs&lt;/li&gt;
+&lt;li&gt;followed&lt;/li&gt;
+&lt;li&gt;narrow&lt;/li&gt;
+&lt;li&gt;alleys&lt;/li&gt;
+&lt;li&gt;unsavoury&lt;/li&gt;
+&lt;li&gt;courts&lt;/li&gt;
+&lt;li&gt;comedies&lt;/li&gt;
+&lt;li&gt;streets&lt;/li&gt;
+&lt;li&gt;contemplated&lt;/li&gt;
+&lt;li&gt;open&lt;/li&gt;
+&lt;li&gt;mouthed&lt;/li&gt;
+&lt;li&gt;detriment&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id="outline-container-org60e410b" class="outline-4"&gt;
+&lt;h4 id="org60e410b"&gt;Lemmatisation&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org60e410b"&gt;
+&lt;p&gt;
+Spacy implements &lt;a href="https://www.wikiwand.com/en/Lemmatisation"&gt;Lemmatisation&lt;/a&gt;, the conversion of a token to the "standard form" for a word.
+&lt;/p&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"|Token| Lemma|Part of Speech|"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"|-+-+-|"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;token&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;token&lt;/span&gt; &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;token&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;sentence&lt;/span&gt; &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="ow"&gt;not&lt;/span&gt; &lt;span class="n"&gt;token&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;is_space&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;f&lt;/span&gt;&lt;span class="s2"&gt;"|{token}| {token.lemma_} |{token.pos_}|"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides"&gt;
+
+
+&lt;colgroup&gt;
+&lt;col class="org-left"&gt;
+
+&lt;col class="org-left"&gt;
+
+&lt;col class="org-left"&gt;
+&lt;/colgroup&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th scope="col" class="org-left"&gt;Token&lt;/th&gt;
+&lt;th scope="col" class="org-left"&gt;Lemma&lt;/th&gt;
+&lt;th scope="col" class="org-left"&gt;Part of Speech&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td class="org-left"&gt;the&lt;/td&gt;
+&lt;td class="org-left"&gt;the&lt;/td&gt;
+&lt;td class="org-left"&gt;DET&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;attractions&lt;/td&gt;
+&lt;td class="org-left"&gt;attraction&lt;/td&gt;
+&lt;td class="org-left"&gt;NOUN&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;of&lt;/td&gt;
+&lt;td class="org-left"&gt;of&lt;/td&gt;
+&lt;td class="org-left"&gt;ADP&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;stray&lt;/td&gt;
+&lt;td class="org-left"&gt;stray&lt;/td&gt;
+&lt;td class="org-left"&gt;ADJ&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;cats&lt;/td&gt;
+&lt;td class="org-left"&gt;cat&lt;/td&gt;
+&lt;td class="org-left"&gt;NOUN&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;and&lt;/td&gt;
+&lt;td class="org-left"&gt;and&lt;/td&gt;
+&lt;td class="org-left"&gt;CCONJ&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;dogs&lt;/td&gt;
+&lt;td class="org-left"&gt;dog&lt;/td&gt;
+&lt;td class="org-left"&gt;NOUN&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;,&lt;/td&gt;
+&lt;td class="org-left"&gt;,&lt;/td&gt;
+&lt;td class="org-left"&gt;PUNCT&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;which&lt;/td&gt;
+&lt;td class="org-left"&gt;which&lt;/td&gt;
+&lt;td class="org-left"&gt;DET&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;he&lt;/td&gt;
+&lt;td class="org-left"&gt;-PRON-&lt;/td&gt;
+&lt;td class="org-left"&gt;PRON&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;followed&lt;/td&gt;
+&lt;td class="org-left"&gt;follow&lt;/td&gt;
+&lt;td class="org-left"&gt;VERB&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;down&lt;/td&gt;
+&lt;td class="org-left"&gt;down&lt;/td&gt;
+&lt;td class="org-left"&gt;PART&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;narrow&lt;/td&gt;
+&lt;td class="org-left"&gt;narrow&lt;/td&gt;
+&lt;td class="org-left"&gt;ADJ&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;alleys&lt;/td&gt;
+&lt;td class="org-left"&gt;alley&lt;/td&gt;
+&lt;td class="org-left"&gt;NOUN&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;into&lt;/td&gt;
+&lt;td class="org-left"&gt;into&lt;/td&gt;
+&lt;td class="org-left"&gt;ADP&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;unsavoury&lt;/td&gt;
+&lt;td class="org-left"&gt;unsavoury&lt;/td&gt;
+&lt;td class="org-left"&gt;ADJ&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;courts&lt;/td&gt;
+&lt;td class="org-left"&gt;court&lt;/td&gt;
+&lt;td class="org-left"&gt;NOUN&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;;&lt;/td&gt;
+&lt;td class="org-left"&gt;;&lt;/td&gt;
+&lt;td class="org-left"&gt;PUNCT&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;by&lt;/td&gt;
+&lt;td class="org-left"&gt;by&lt;/td&gt;
+&lt;td class="org-left"&gt;ADP&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;the&lt;/td&gt;
+&lt;td class="org-left"&gt;the&lt;/td&gt;
+&lt;td class="org-left"&gt;DET&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;comedies&lt;/td&gt;
+&lt;td class="org-left"&gt;comedy&lt;/td&gt;
+&lt;td class="org-left"&gt;NOUN&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;of&lt;/td&gt;
+&lt;td class="org-left"&gt;of&lt;/td&gt;
+&lt;td class="org-left"&gt;ADP&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;the&lt;/td&gt;
+&lt;td class="org-left"&gt;the&lt;/td&gt;
+&lt;td class="org-left"&gt;DET&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;streets&lt;/td&gt;
+&lt;td class="org-left"&gt;street&lt;/td&gt;
+&lt;td class="org-left"&gt;NOUN&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;,&lt;/td&gt;
+&lt;td class="org-left"&gt;,&lt;/td&gt;
+&lt;td class="org-left"&gt;PUNCT&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;which&lt;/td&gt;
+&lt;td class="org-left"&gt;which&lt;/td&gt;
+&lt;td class="org-left"&gt;DET&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;he&lt;/td&gt;
+&lt;td class="org-left"&gt;-PRON-&lt;/td&gt;
+&lt;td class="org-left"&gt;PRON&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;contemplated&lt;/td&gt;
+&lt;td class="org-left"&gt;contemplate&lt;/td&gt;
+&lt;td class="org-left"&gt;VERB&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;open&lt;/td&gt;
+&lt;td class="org-left"&gt;open&lt;/td&gt;
+&lt;td class="org-left"&gt;ADJ&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td class="org-left"&gt;mouthed&lt;/td&gt;
+&lt;td class="org-left"&gt;mouthed&lt;/td&gt;
+&lt;td class="org-left"&gt;ADJ&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;,&lt;/td&gt;
+&lt;td class="org-left"&gt;,&lt;/td&gt;
+&lt;td class="org-left"&gt;PUNCT&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;to&lt;/td&gt;
+&lt;td class="org-left"&gt;to&lt;/td&gt;
+&lt;td class="org-left"&gt;ADP&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;the&lt;/td&gt;
+&lt;td class="org-left"&gt;the&lt;/td&gt;
+&lt;td class="org-left"&gt;DET&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;detriment&lt;/td&gt;
+&lt;td class="org-left"&gt;detriment&lt;/td&gt;
+&lt;td class="org-left"&gt;NOUN&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;of&lt;/td&gt;
+&lt;td class="org-left"&gt;of&lt;/td&gt;
+&lt;td class="org-left"&gt;ADP&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;
+It doesn't look like there's a lot of conversion being done, other than reducing plural to single, but if you look at &lt;i&gt;comedies&lt;/i&gt; you can see that it was lemmatised as &lt;i&gt;comedy&lt;/i&gt;, which is a little more sophisticated than just chopping off the last letter.
+&lt;/p&gt;
+
+&lt;p&gt;
+I filtered out the spaces because it broke my table, but it's part-of-speech label was &lt;code&gt;SPACE&lt;/code&gt;. The &lt;code&gt;-PRON-&lt;/code&gt; lemma is a special one that spaCy uses for any &lt;a href="https://www.wikiwand.com/en/Pronoun"&gt;pronoun&lt;/a&gt; (I, we she, etc.). According to the &lt;a href="https://spacy.io/api/annotation"&gt;spaCy annotation documentation&lt;/a&gt;, the space lemma is only included if there's more than one, which they include because multiple spaces might be significant.
+&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id="outline-container-org767e34b" class="outline-3"&gt;
+&lt;h3 id="org767e34b"&gt;A Detour Into Fuzzy Wuzzy&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org767e34b"&gt;
+&lt;p&gt;
+&lt;a href="https://github.com/seatgeek/fuzzywuzzy"&gt;fuzzywuzzy&lt;/a&gt; is a library that does fuzzy string matching using the &lt;a href="https://www.wikiwand.com/en/Levenshtein_distance"&gt;Levenshtein Distance&lt;/a&gt; between strings. There's a &lt;a href="https://chairnerd.seatgeek.com/fuzzywuzzy-fuzzy-string-matching-in-python/"&gt;page&lt;/a&gt; showing more about how to use it based the example of finding concert information on the web.
+&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;div id="outline-container-org53d06d0" class="outline-4"&gt;
+&lt;h4 id="org53d06d0"&gt;Ratio&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org53d06d0"&gt;
+&lt;p&gt;
+The &lt;code&gt;ratio&lt;/code&gt; function for fuzzywuzzy is an alias for the &lt;a href="https://docs.python.org/3/library/difflib.html"&gt;difflib&lt;/a&gt; &lt;code&gt;SequenceMatcher.ratio&lt;/code&gt; method (except they multiply by 100 and round off so it's a percentage rather than a fraction. The ratio it's calculating is:
+&lt;/p&gt;
+
+&lt;p&gt;
+\[
+ratio = \frac{2M}{T}
+\]
+&lt;/p&gt;
+
+&lt;p&gt;
+Where &lt;i&gt;M&lt;/i&gt; is the number of matching elements and &lt;i&gt;T&lt;/i&gt; is the total number of elements in both sequences.
+&lt;/p&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;sentence_a&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;"eat more meats"&lt;/span&gt;
+&lt;span class="n"&gt;sentence_b&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;"eat more beats"&lt;/span&gt;
+&lt;span class="n"&gt;sentence_c&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;"beat more beets"&lt;/span&gt;
+&lt;span class="n"&gt;matcher&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;SequenceMatcher&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;None&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;sentence_a&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;sentence_b&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;matcher&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ratio&lt;/span&gt;&lt;span class="p"&gt;())&lt;/span&gt;
+&lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;fuzz&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ratio&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;sentence_a&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;sentence_b&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;fuzz&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ratio&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;sentence_b&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;sentence_c&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;pre class="example"&gt;
+0.9285714285714286
+93
+90
+
+&lt;/pre&gt;
+
+&lt;p&gt;
+The fuzzywuzzy page I mentioned earlier states that this will work for very short (one word) text or very long text, but not so well for things in between.
+&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id="outline-container-orgec43902" class="outline-4"&gt;
+&lt;h4 id="orgec43902"&gt;Partial Ratio&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-orgec43902"&gt;
+&lt;p&gt;
+To get better matches for short-ish text, fuzzywuzzy has a &lt;code&gt;partial_ratio&lt;/code&gt; function. 
+&lt;/p&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;sentence_a&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;"meaty beaty big and bouncy"&lt;/span&gt;
+&lt;span class="n"&gt;sentence_b&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;"meaty"&lt;/span&gt;
+&lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;fuzz&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ratio&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;sentence_a&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;sentence_b&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;fuzz&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;partial_ratio&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;sentence_a&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;sentence_b&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;pre class="example"&gt;
+32
+100
+
+&lt;/pre&gt;
+
+&lt;p&gt;
+The &lt;code&gt;ratio&lt;/code&gt; doesn't handle sub-string matches as well as &lt;code&gt;partial_ratio&lt;/code&gt; does.
+&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div id="outline-container-orge07e173" class="outline-4"&gt;
+&lt;h4 id="orge07e173"&gt;Token Sort and Token Set&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-orge07e173"&gt;
+&lt;p&gt;
+Besides sub-strings, there might be cases where ordering doesn't matter, in which case you can try the &lt;code&gt;token_sort_ratio&lt;/code&gt; or &lt;code&gt;token_set_ratio&lt;/code&gt; functions.
+&lt;/p&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;sentence_a&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;"totally tubular terry"&lt;/span&gt;
+&lt;span class="n"&gt;sentence_b&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;"terry is totally tubular"&lt;/span&gt;
+&lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;fuzz&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ratio&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;sentence_a&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;sentence_b&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;fuzz&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;partial_ratio&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;sentence_a&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;sentence_b&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;fuzz&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;token_sort_ratio&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;sentence_a&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;sentence_b&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;fuzz&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;token_set_ratio&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;sentence_a&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;sentence_b&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;pre class="example"&gt;
+67
+83
+93
+100
+
+&lt;/pre&gt;
+
+&lt;p&gt;
+The &lt;code&gt;token_sort_ratio&lt;/code&gt; sorts the tokens before comparing them, while the &lt;code&gt;token_set_ratio&lt;/code&gt; sorts the intersection of the tokens first and then append the sorted tokens that aren't in both strings before calculating the similarity.
+&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div id="outline-container-orgc3debd2" class="outline-4"&gt;
+&lt;h4 id="orgc3debd2"&gt;Process&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-orgc3debd2"&gt;
+&lt;p&gt;
+Finally, you can pass &lt;code&gt;process.extract&lt;/code&gt; a string and a list of strings to compare to that string and it will return them in the order of similarity.
+&lt;/p&gt;
+
+&lt;p&gt;
+By default this uses &lt;code&gt;fuzz.WRatio&lt;/code&gt; to score the similarity.
+&lt;/p&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;fuzz&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;WRatio&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="vm"&gt;__doc__&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;pre class="example"&gt;
+
+Return a measure of the sequences' similarity between 0 and 100, using different algorithms.
+
+**Steps in the order they occur**
+
+#. Run full_process from utils on both strings
+#. Short circuit if this makes either string empty
+#. Take the ratio of the two processed strings (fuzz.ratio)
+#. Run checks to compare the length of the strings
+    * If one of the strings is more than 1.5 times as long as the other
+      use partial_ratio comparisons - scale partial results by 0.9
+      (this makes sure only full results can return 100)
+    * If one of the strings is over 8 times as long as the other
+      instead scale by 0.6
+
+#. Run the other ratio functions
+    * if using partial ratio functions call partial_ratio,
+      partial_token_sort_ratio and partial_token_set_ratio
+      scale all of these by the ratio based on length
+    * otherwise call token_sort_ratio and token_set_ratio
+    * all token based comparisons are scaled by 0.95
+      (on top of any partial scalars)
+
+#. Take the highest value from these results
+   round it and return it as an integer.
+
+:param s1:
+:param s2:
+:param force_ascii: Allow only ascii characters
+:type force_ascii: bool
+:full_process: Process inputs, used here to avoid double processing in extract functions (Default: True)
+:return:
+
+&lt;/pre&gt;
+
+&lt;p&gt;
+Based on the doc-string, it looks like this one tries to figure out the best metric for you.
+&lt;/p&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;choices&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;"big bubba"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;"hubba bubba"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;"rubber baby buggy bubba"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;"bubba dubba"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;"chubba bubba"&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;process&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;extract&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'hubba hubba'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;choices&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;pre class="example"&gt;
+[('hubba bubba', 95), ('chubba bubba', 87), ('bubba dubba', 82), ('rubber baby buggy bubba', 68), ('big bubba', 54)]
+
+&lt;/pre&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;process&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;extract&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'hubba hubba'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;choices&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;limit&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;pre class="example"&gt;
+[('hubba bubba', 95), ('chubba bubba', 87)]
+
+&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div id="outline-container-orgc4cc518" class="outline-4"&gt;
+&lt;h4 id="orgc4cc518"&gt;Spell Check&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-orgc4cc518"&gt;
+&lt;p&gt;
+Although the fuzzywuzzy page states that their use case was matching the names of shows on different web-sites, it can also be used as a simple spell-checker.
+&lt;/p&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;dictionary&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;"embarras"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;"inoculate"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;"misspell"&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;span class="n"&gt;words&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;"embaras"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;"mispel"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;"inocullate"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;"babaganoush"&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"|Word| Correction| Score|"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"|-+-+-|"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;word&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;words&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="n"&gt;output&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;process&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;extract&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;word&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;dictionary&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;limit&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;guess&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;score&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;output&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+    &lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;f&lt;/span&gt;&lt;span class="s2"&gt;"|{word}|{guess}|{score}|"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides"&gt;
+
+
+&lt;colgroup&gt;
+&lt;col class="org-left"&gt;
+
+&lt;col class="org-left"&gt;
+
+&lt;col class="org-right"&gt;
+&lt;/colgroup&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th scope="col" class="org-left"&gt;Word&lt;/th&gt;
+&lt;th scope="col" class="org-left"&gt;Correction&lt;/th&gt;
+&lt;th scope="col" class="org-right"&gt;Score&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td class="org-left"&gt;embaras&lt;/td&gt;
+&lt;td class="org-left"&gt;embarras&lt;/td&gt;
+&lt;td class="org-right"&gt;93&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;mispel&lt;/td&gt;
+&lt;td class="org-left"&gt;misspell&lt;/td&gt;
+&lt;td class="org-right"&gt;86&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;inocullate&lt;/td&gt;
+&lt;td class="org-left"&gt;inoculate&lt;/td&gt;
+&lt;td class="org-right"&gt;95&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;babaganoush&lt;/td&gt;
+&lt;td class="org-left"&gt;embarras&lt;/td&gt;
+&lt;td class="org-right"&gt;42&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;
+Looking at the last row you can see one of the limitations of this kind of system - it always returns a match, even though there aren't any close matches, so you probably should check the score when using it.
+&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div id="outline-container-orgdcaa0b8" class="outline-3"&gt;
+&lt;h3 id="orgdcaa0b8"&gt;A Diversion Into JellyFish&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-orgdcaa0b8"&gt;
+&lt;p&gt;
+&lt;a href="https://jellyfish.readthedocs.io/en/latest"&gt;JellyFish&lt;/a&gt; is another python library that implements distance functions (like the Levenstein Distance that FuzzyWuzzy does, but others as well) as well as &lt;a href="https://www.wikiwand.com/en/Stemming"&gt;stemming&lt;/a&gt; and &lt;a href="https://www.wikiwand.com/en/Phonetic_algorithm"&gt;phonetic encoding&lt;/a&gt;.
+&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id="outline-container-org66a4ba0" class="outline-4"&gt;
+&lt;h4 id="org66a4ba0"&gt;Phonetic Encoding&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org66a4ba0"&gt;
+&lt;p&gt;
+Phonetic encoding transforms words into a form that is based on the pronounciaton of the words. Using this should make matching spelling variations using the distance function(s) better.
+&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id="outline-container-org224bd83" class="outline-5"&gt;
+&lt;h5 id="org224bd83"&gt;American Soundex&lt;/h5&gt;
+&lt;div class="outline-text-5" id="text-org224bd83"&gt;
+&lt;p&gt;
+&lt;a href="https://www.wikiwand.com/en/Soundex"&gt;Soundex&lt;/a&gt; was originally patented in 1918 but JellyFish uses a variation called &lt;i&gt;American Soundex&lt;/i&gt; which was created in 1930 by analyzing U.S. census reports. Each encoding consists of a letter followed by three digits. The letter is the first letter of the word and the digits represent an encoding of the remaining consonants (a, e, i, o, u, y, h, and w are removed if they aren't the first letter).
+&lt;/p&gt;
+
+&lt;p&gt;
+The exact procedure is pretty straight-forward, but the main thing to note is that it always has the same form (you either pad or cut off the coded consonants to get three digits).
+&lt;/p&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;distance&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;token_1&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nb"&gt;str&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;token_2&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nb"&gt;str&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;encoder&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Callable&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;-&amp;gt;&lt;/span&gt; &lt;span class="bp"&gt;None&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="n"&gt;encoded_1&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;encoder&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;token_1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;encoded_2&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;encoder&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;token_2&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;distance&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;fuzz&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ratio&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;encoded_1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;encoded_2&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;encoded_1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;encoded_2&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;distance&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;rupert_robert_rwanda&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;encoder&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;-&amp;gt;&lt;/span&gt; &lt;span class="bp"&gt;None&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="n"&gt;guy&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;sky&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;score_1&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt;  &lt;span class="n"&gt;distance&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"guy"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;"sky"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;encoder&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;glove&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;love&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;score_2&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;distance&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"glove"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;"love"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;encoder&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;ate&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;eight&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;score_3&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;distance&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"ate"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;"eight"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;encoder&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;output&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+	&lt;span class="s2"&gt;"Token 1"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;f&lt;/span&gt;&lt;span class="s2"&gt;"guy ({guy})"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;f&lt;/span&gt;&lt;span class="s2"&gt;"glove ({glove})"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;f&lt;/span&gt;&lt;span class="s2"&gt;"ate ({ate})"&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt;
+	&lt;span class="s2"&gt;"Token 2"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;f&lt;/span&gt;&lt;span class="s2"&gt;"sky ({sky})"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;f&lt;/span&gt;&lt;span class="s2"&gt;"love ({love})"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;f&lt;/span&gt;&lt;span class="s2"&gt;"eight ({eight})"&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt;
+	&lt;span class="s2"&gt;"Similarity"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;score_1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;score_2&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;score_3&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt;
+	&lt;span class="s2"&gt;"Levenshtein Distance"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;jellyfish&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;levenshtein_distance&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;guy&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;sky&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;
+				 &lt;span class="n"&gt;jellyfish&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;levenshtein_distance&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;glove&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;love&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;
+				 &lt;span class="n"&gt;jellyfish&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;levenshtein_distance&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;ate&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;eight&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;
+	&lt;span class="p"&gt;],&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+    &lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;tabulate&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;output&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;headers&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;"keys"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;tablefmt&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;"orgtbl"&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+    &lt;span class="k"&gt;return&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;rupert_robert_rwanda&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;jellyfish&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;soundex&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides"&gt;
+
+
+&lt;colgroup&gt;
+&lt;col class="org-left"&gt;
+
+&lt;col class="org-left"&gt;
+
+&lt;col class="org-right"&gt;
+
+&lt;col class="org-right"&gt;
+&lt;/colgroup&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th scope="col" class="org-left"&gt;Token 1&lt;/th&gt;
+&lt;th scope="col" class="org-left"&gt;Token 2&lt;/th&gt;
+&lt;th scope="col" class="org-right"&gt;Similarity&lt;/th&gt;
+&lt;th scope="col" class="org-right"&gt;Levenshtein Distance&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td class="org-left"&gt;guy (G000)&lt;/td&gt;
+&lt;td class="org-left"&gt;sky (S000)&lt;/td&gt;
+&lt;td class="org-right"&gt;75&lt;/td&gt;
+&lt;td class="org-right"&gt;1&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;glove (G410)&lt;/td&gt;
+&lt;td class="org-left"&gt;love (L100)&lt;/td&gt;
+&lt;td class="org-right"&gt;50&lt;/td&gt;
+&lt;td class="org-right"&gt;3&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;ate (A300)&lt;/td&gt;
+&lt;td class="org-left"&gt;eight (E230)&lt;/td&gt;
+&lt;td class="org-right"&gt;50&lt;/td&gt;
+&lt;td class="org-right"&gt;3&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;
+It's a little hard to interpret these values, but it's interesting that &lt;i&gt;guy&lt;/i&gt; and &lt;i&gt;sky&lt;/i&gt; are so much more similar than &lt;i&gt;glove&lt;/i&gt; and &lt;i&gt;love&lt;/i&gt; and &lt;i&gt;eight&lt;/i&gt; and &lt;i&gt;ate&lt;/i&gt; are.
+&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div id="outline-container-org7f98def" class="outline-5"&gt;
+&lt;h5 id="org7f98def"&gt;Metaphone&lt;/h5&gt;
+&lt;div class="outline-text-5" id="text-org7f98def"&gt;
+&lt;p&gt;
+&lt;a href="https://www.wikiwand.com/en/Metaphone"&gt;Metaphone&lt;/a&gt; was developed in 1990 and improves on Soundex to produce a more accurate encoding.
+&lt;/p&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;rupert_robert_rwanda&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;jellyfish&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;metaphone&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides"&gt;
+
+
+&lt;colgroup&gt;
+&lt;col class="org-left"&gt;
+
+&lt;col class="org-left"&gt;
+
+&lt;col class="org-right"&gt;
+
+&lt;col class="org-right"&gt;
+&lt;/colgroup&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th scope="col" class="org-left"&gt;Token 1&lt;/th&gt;
+&lt;th scope="col" class="org-left"&gt;Token 2&lt;/th&gt;
+&lt;th scope="col" class="org-right"&gt;Similarity&lt;/th&gt;
+&lt;th scope="col" class="org-right"&gt;Levenshtein Distance&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td class="org-left"&gt;guy (K)&lt;/td&gt;
+&lt;td class="org-left"&gt;sky (SK)&lt;/td&gt;
+&lt;td class="org-right"&gt;67&lt;/td&gt;
+&lt;td class="org-right"&gt;1&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;glove (KLF)&lt;/td&gt;
+&lt;td class="org-left"&gt;love (LF)&lt;/td&gt;
+&lt;td class="org-right"&gt;80&lt;/td&gt;
+&lt;td class="org-right"&gt;1&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;ate (AT)&lt;/td&gt;
+&lt;td class="org-left"&gt;eight (ET)&lt;/td&gt;
+&lt;td class="org-right"&gt;50&lt;/td&gt;
+&lt;td class="org-right"&gt;1&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;
+One interesting thing is that &lt;i&gt;metaphone&lt;/i&gt; changes the letters to make match how it thinks something sounds, rather than using the first letter the way &lt;i&gt;soundex&lt;/i&gt; does.
+&lt;/p&gt;
+
+&lt;p&gt;
+Metaphone is a &lt;i&gt;little&lt;/i&gt; more interpretable, but interestingly in this case the similarity flips and &lt;i&gt;love&lt;/i&gt; and &lt;i&gt;glove&lt;/i&gt; are rated more similar. Also, in this case they all had a Levenshtein Distance of 1, while their similarity-ratios where quite different (Levenstein Distance is the number of edits you need to transform one sequence to another).
+&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id="outline-container-orgb1ff7fa" class="outline-5"&gt;
+&lt;h5 id="orgb1ff7fa"&gt;New York State Identification and Intelligence System (NYSIIS)&lt;/h5&gt;
+&lt;div class="outline-text-5" id="text-orgb1ff7fa"&gt;
+&lt;p&gt;
+The &lt;a href="https://www.wikiwand.com/en/New_York_State_Identification_and_Intelligence_System"&gt;New York State Identification and Intelligence System&lt;/a&gt; is a slightly more accurate (compared to Soundex) encoder that was developed in 1970.
+&lt;/p&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;rupert_robert_rwanda&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;jellyfish&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;nysiis&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides"&gt;
+
+
+&lt;colgroup&gt;
+&lt;col class="org-left"&gt;
+
+&lt;col class="org-left"&gt;
+
+&lt;col class="org-right"&gt;
+
+&lt;col class="org-right"&gt;
+&lt;/colgroup&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th scope="col" class="org-left"&gt;Token 1&lt;/th&gt;
+&lt;th scope="col" class="org-left"&gt;Token 2&lt;/th&gt;
+&lt;th scope="col" class="org-right"&gt;Similarity&lt;/th&gt;
+&lt;th scope="col" class="org-right"&gt;Levenshtein Distance&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td class="org-left"&gt;guy (GY)&lt;/td&gt;
+&lt;td class="org-left"&gt;sky (SCY)&lt;/td&gt;
+&lt;td class="org-right"&gt;40&lt;/td&gt;
+&lt;td class="org-right"&gt;2&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;glove (GLAV)&lt;/td&gt;
+&lt;td class="org-left"&gt;love (LAV)&lt;/td&gt;
+&lt;td class="org-right"&gt;86&lt;/td&gt;
+&lt;td class="org-right"&gt;1&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;ate (AT)&lt;/td&gt;
+&lt;td class="org-left"&gt;eight (EAGT)&lt;/td&gt;
+&lt;td class="org-right"&gt;67&lt;/td&gt;
+&lt;td class="org-right"&gt;2&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;
+This seems even more interpretable than the metaphone encodings, and the gap in the similarities is even greater.
+&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id="outline-container-org78503e9" class="outline-5"&gt;
+&lt;h5 id="org78503e9"&gt;Match Rating Approach&lt;/h5&gt;
+&lt;div class="outline-text-5" id="text-org78503e9"&gt;
+&lt;p&gt;
+The final phonetic encoding that jellyfish supports is the &lt;a href="https://www.wikiwand.com/en/Match_rating_approach"&gt;Match Rating Approach&lt;/a&gt; which was developed in 1977 by Western Airlines.
+&lt;/p&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;rupert_robert_rwanda&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;jellyfish&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;match_rating_codex&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides"&gt;
+
+
+&lt;colgroup&gt;
+&lt;col class="org-left"&gt;
+
+&lt;col class="org-left"&gt;
+
+&lt;col class="org-right"&gt;
+
+&lt;col class="org-right"&gt;
+&lt;/colgroup&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th scope="col" class="org-left"&gt;Token 1&lt;/th&gt;
+&lt;th scope="col" class="org-left"&gt;Token 2&lt;/th&gt;
+&lt;th scope="col" class="org-right"&gt;Similarity&lt;/th&gt;
+&lt;th scope="col" class="org-right"&gt;Levenshtein Distance&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td class="org-left"&gt;guy (GY)&lt;/td&gt;
+&lt;td class="org-left"&gt;sky (SKY)&lt;/td&gt;
+&lt;td class="org-right"&gt;40&lt;/td&gt;
+&lt;td class="org-right"&gt;2&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;glove (GLV)&lt;/td&gt;
+&lt;td class="org-left"&gt;love (LV)&lt;/td&gt;
+&lt;td class="org-right"&gt;80&lt;/td&gt;
+&lt;td class="org-right"&gt;1&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td class="org-left"&gt;ate (AT)&lt;/td&gt;
+&lt;td class="org-left"&gt;eight (EGHT)&lt;/td&gt;
+&lt;td class="org-right"&gt;33&lt;/td&gt;
+&lt;td class="org-right"&gt;3&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;
+This seems the easiest to read, but strangely it made &lt;i&gt;ate&lt;/i&gt; &lt;i&gt;eight&lt;/i&gt; the least similar out of all the encodings.
+&lt;/p&gt;
+
+&lt;p&gt;
+Interestingly all the encodings except &lt;i&gt;soundex&lt;/i&gt; found that "glove" and "love" are more similar than "guy" and "sky" which are in turn more similar to each other than "ate" and "eight" are, which is not what I would have thought, given that they sound the same when spoken out loud.
+&lt;/p&gt;
+
+&lt;p&gt;
+I think as with all things, you'd have to try them out to see how well each does with a particular data set.
+&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div id="outline-container-org185cb88" class="outline-3"&gt;
+&lt;h3 id="org185cb88"&gt;A Short Diversion Into FlashText&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org185cb88"&gt;
+&lt;p&gt;
+&lt;a href="https://flashtext.readthedocs.io/en/latest/"&gt;FlashText&lt;/a&gt; is a python module to help find and replace words in very large documents. It doesn't do all the interesting linguistic things that the other code we've been looking at does, but it was built specifically to be very fast so for cases where you have a lot of text you can use it to speed up searches.
+&lt;/p&gt;
+
+&lt;p&gt;
+I don't really have any large text to test it on, but here's a quick look at how it works. You can search for matching words.
+&lt;/p&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;processor&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;KeywordProcessor&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="n"&gt;name_to_replace&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;"secret agent"&lt;/span&gt;
+&lt;span class="n"&gt;replacement&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;"Secret Agent"&lt;/span&gt;
+&lt;span class="n"&gt;processor&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;add_keyword&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;name_to_replace&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;replacement&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;processor&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;extract_keywords&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;text&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;pre class="example"&gt;
+['Secret Agent', 'Secret Agent', 'Secret Agent', 'Secret Agent', 'Secret Agent', 'Secret Agent', 'Secret Agent', 'Secret Agent', 'Secret Agent', 'Secret Agent', 'Secret Agent', 'Secret Agent', 'Secret Agent', 'Secret Agent', 'Secret Agent', 'Secret Agent', 'Secret Agent', 'Secret Agent', 'Secret Agent']
+
+&lt;/pre&gt;
+
+&lt;p&gt;
+You don't have to make a replacement, if you only pass in one term then that's what will be replaced.
+&lt;/p&gt;
+
+&lt;p&gt;
+You can also make a new string with all the terms replaced.
+&lt;/p&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;s&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;str&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;sentences&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;4&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+&lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;s&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;processor&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;add_keyword&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"shop"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;"store"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;processor&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;add_keyword&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"house"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;"hovel"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;replacement&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;processor&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;replace_keywords&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;s&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;replacement&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;pre class="example"&gt;
+(his wife was in charge of his brother-in-law.
+
+, The shop was small, and so was the house.  , It was one of those grimy
+brick houses which existed in large quantities before the era of
+reconstruction dawned upon London.  , The shop was a square box of a place,
+with the front glazed in small panes.  )
+
+(his wife was in charge of his brother-in-law.
+
+, The store was small, and so was the hovel.  , It was one of those grimy
+brick houses which existed in large quantities before the era of
+reconstruction dawned upon London.  , The store was a square box of a place,
+with the front glazed in small panes.  )
+&lt;/pre&gt;
+
+&lt;p&gt;
+Note that since it isn't fuzzy "houses" didn't get matched but "house" did.
+&lt;/p&gt;
+
+&lt;p&gt;
+Instead of just searching for words you can get their indices in the string as well.
+&lt;/p&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;processor&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;KeywordProcessor&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="n"&gt;processor&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;add_keyword&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"secret agent"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;processor&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;extract_keywords&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;text&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;span_info&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;True&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;pre class="example"&gt;
+[('secret agent', 41658, 41670), ('secret agent', 92721, 92733), ('secret agent', 218743, 218755), ('secret agent', 218989, 219001), ('secret agent', 221234, 221246), ('secret agent', 233831, 233843), ('secret agent', 236874, 236886), ('secret agent', 302412, 302424), ('secret agent', 303622, 303634), ('secret agent', 350862, 350874), ('secret agent', 383719, 383731), ('secret agent', 384291, 384303), ('secret agent', 393206, 393218), ('secret agent', 400450, 400462), ('secret agent', 414087, 414099), ('secret agent', 414319, 414331), ('secret agent', 440086, 440098), ('secret agent', 481986, 481998), ('secret agent', 520737, 520749)]
+
+&lt;/pre&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;start&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;92721&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="mi"&gt;31&lt;/span&gt;
+&lt;span class="n"&gt;end&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;92733&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="mi"&gt;12&lt;/span&gt;
+&lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;text&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;start&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;end&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;pre class="example"&gt;
+more completely than that of a secret agent of police. 
+
+&lt;/pre&gt;
+
+&lt;p&gt;
+Note that the matching isn't case-sensitive, so the previous search mathches "SECRET AGENT", "Secret Agent", etc. although you can make it case-sensitive by passing in the &lt;code&gt;case_sensitive=True&lt;/code&gt; argument to the constructor.
+&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div id="outline-container-org6b2df69" class="outline-2"&gt;
+&lt;h2 id="org6b2df69"&gt;End&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-org6b2df69"&gt;
+&lt;p&gt;
+Despite the name this was really a look at three-ish libraries to help with tokenization, lemmatizing, fuzzy string matching, and quick string searching and replacin.g
+&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id="outline-container-org76b0959" class="outline-3"&gt;
+&lt;h3 id="org76b0959"&gt;Reference&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org76b0959"&gt;
+&lt;ol class="org-ol"&gt;
+&lt;li&gt;Kasliwal N. Natural language processing with Python quick start guide: going from a Python developer to an effective natural language processing engineer [Internet]. 2018 [cited 2019 May 18]. Available from: &lt;a href="http://proquest.safaribooksonline.com/?fpi=9781789130386"&gt;http://proquest.safaribooksonline.com/?fpi=9781789130386&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description><category>data</category><category>tidying</category><guid>https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/</guid><pubDate>Mon, 20 May 2019 20:15:38 GMT</pubDate></item></channel></rss>
