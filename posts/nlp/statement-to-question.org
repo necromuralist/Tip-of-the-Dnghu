@@ -1,0 +1,63 @@
+#+BEGIN_COMMENT
+.. title: Statement to Question
+.. slug: statement-to-question
+.. date: 2019-05-28 15:33:15 UTC-07:00
+.. tags: nlp,parts-of-speech
+.. category: NLP
+.. link: 
+.. description: Converting a statement to a question with Natural-Language-Processing
+.. type: text
+.. status: 
+.. updated: 
+
+#+END_COMMENT
+#+OPTIONS: ^:{}
+#+OPTIONS: H:5
+#+TOC: headlines 2
+#+BEGIN_SRC ipython :session nlp :results none :exports none
+%load_ext autoreload
+%autoreload 2
+#+END_SRC
+* Beginning
+** Imports
+*** Python
+#+BEGIN_SRC ipython :session nlp :results none
+from pathlib import Path
+#+END_SRC
+*** PyPi
+#+BEGIN_SRC ipython :session nlp :results none
+import spacy
+#+END_SRC
+*** My Projects
+#+BEGIN_SRC ipython :session nlp :results none
+from graeae import EnvironmentLoader, TextDownloader
+from graeae.timers import Timer
+#+END_SRC
+
+** The Text File.
+This is the URL to Joseph Conrad's "The Secret Agent" from [[https://www.gutenberg.org/ebooks/974][Project Gutenberg]].
+#+BEGIN_SRC ipython :session nlp :results none
+URL = "https://www.gutenberg.org/files/974/974-0.txt"
+environment = EnvironmentLoader()
+path = environment["GUTENBERG"]
+#+END_SRC
+
+#+BEGIN_SRC ipython :session nlp :results output :exports both
+path = Path(path).expanduser()
+downloader = TextDownloader(url=URL, target=path/"conrad_joseph_secret_agent.txt")
+text = downloader.download
+#+END_SRC
+
+#+RESULTS:
+: 2019-05-28 17:06:11,698 [1mTextDownloader[0m download: /home/brunhilde/data/datasets/gutenberg/conrad_joseph_secret_agent.txt exists, opening it
+** The spaCy Model
+#+BEGIN_SRC ipython :session nlp :results none
+nlp = spacy.load("en_core_web_lg")
+#+END_SRC
+* Middle
+** Chunking Express
+
+#+BEGIN_SRC ipython :session nlp :results none
+document = nlp(text)
+#+END_SRC
+* End
