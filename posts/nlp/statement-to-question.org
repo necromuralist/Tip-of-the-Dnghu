@@ -26,6 +26,7 @@ from pathlib import Path
 #+END_SRC
 *** PyPi
 #+BEGIN_SRC ipython :session nlp :results none
+from spacy import displacy
 import spacy
 #+END_SRC
 *** My Projects
@@ -53,6 +54,13 @@ text = downloader.download
 ** The spaCy Model
 #+BEGIN_SRC ipython :session nlp :results none
 nlp = spacy.load("en_core_web_lg")
+#+END_SRC
+** The Output Path
+#+BEGIN_SRC ipython :session nlp :results none
+SLUG = "statement-to-question"
+OUTPUT_PATH = Path("../../files/posts/nlp/" + SLUG)
+if not OUTPUT_PATH.is_dir():
+    OUTPUT_PATH.mkdir()
 #+END_SRC
 * Middle
 ** Chunking Express
@@ -139,6 +147,14 @@ Soho - POS: PROPN Tag: NNP
 
 The =pos_= is the [[https://universaldependencies.org/u/pos/][Universal Part-of-Speech tag]] while the =tag_= is the [[https://catalog.ldc.upenn.edu/LDC2013T19][OntoNotes]] English-specific tag.
 
-** The Question Maker
-   To make a sentence transformer we're going to make up a set of rules to match sentences based on their parts of speech.
+** Visualizing Dependencies
+#+BEGIN_SRC ipython :session nlp :results none
+svg = displacy.render(sentence, style="dep", jupyter=False)
+save_path = OUTPUT_PATH/"dependency_plot.svg"
+with save_path.open("w") as writer:
+    writer.write(svg)
+#+END_SRC
+
+[[file:dependency_plot.svg]]
+
 * End
