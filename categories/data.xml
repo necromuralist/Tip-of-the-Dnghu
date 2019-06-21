@@ -1,48 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tip of the Dnghu (Posts about data)</title><link>https://necromuralist.github.io/Tip-of-the-Dnghu/</link><description></description><atom:link href="https://necromuralist.github.io/Tip-of-the-Dnghu/categories/data.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2019 &lt;a href="mailto:necromuralist@protonmail.com"&gt;Cloistered Monkey&lt;/a&gt; </copyright><lastBuildDate>Tue, 28 May 2019 03:58:54 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Name Redaction</title><link>https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/name-redaction/</link><dc:creator>Cloistered Monkey</dc:creator><description>&lt;div id="table-of-contents"&gt;
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tip of the Dnghu (Posts about data)</title><link>https://necromuralist.github.io/Tip-of-the-Dnghu/</link><description></description><atom:link href="https://necromuralist.github.io/Tip-of-the-Dnghu/categories/data.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2019 &lt;a href="mailto:necromuralist@protonmail.com"&gt;Cloistered Monkey&lt;/a&gt; </copyright><lastBuildDate>Thu, 30 May 2019 02:56:38 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Name Redaction</title><link>https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/name-redaction/</link><dc:creator>Cloistered Monkey</dc:creator><description>&lt;div id="table-of-contents"&gt;
 &lt;h2&gt;Table of Contents&lt;/h2&gt;
 &lt;div id="text-table-of-contents"&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/name-redaction/#org30b9a88"&gt;Beginning&lt;/a&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/name-redaction/#org5485fbf"&gt;Beginning&lt;/a&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/name-redaction/#orge6e9a8a"&gt;Imports&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/name-redaction/#orgf188059"&gt;Set Up&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/name-redaction/#org393993e"&gt;Load the File&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/name-redaction/#orgbee770d"&gt;Imports&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/name-redaction/#orgd5666d0"&gt;Set Up&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/name-redaction/#org21c410b"&gt;Load the File&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/name-redaction/#org1a76e1f"&gt;Middle&lt;/a&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/name-redaction/#org62abcee"&gt;Middle&lt;/a&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/name-redaction/#orgbd3216f"&gt;A Little spacy&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/name-redaction/#orgcd37d19"&gt;Redacting Names&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/name-redaction/#org1d02e2f"&gt;A Little spacy&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/name-redaction/#orge7f16da"&gt;Redacting Names&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/name-redaction/#orgaec543c"&gt;End&lt;/a&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/name-redaction/#org8dbbaee"&gt;End&lt;/a&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/name-redaction/#orgbe440e6"&gt;Reference&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/name-redaction/#org85568b9"&gt;Reference&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org30b9a88" class="outline-2"&gt;
-&lt;h2 id="org30b9a88"&gt;Beginning&lt;/h2&gt;
-&lt;div class="outline-text-2" id="text-org30b9a88"&gt;
+&lt;div id="outline-container-org5485fbf" class="outline-2"&gt;
+&lt;h2 id="org5485fbf"&gt;Beginning&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-org5485fbf"&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orge6e9a8a" class="outline-3"&gt;
-&lt;h3 id="orge6e9a8a"&gt;Imports&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-orge6e9a8a"&gt;
+&lt;div id="outline-container-orgbee770d" class="outline-3"&gt;
+&lt;h3 id="orgbee770d"&gt;Imports&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-orgbee770d"&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org1242ad2" class="outline-4"&gt;
-&lt;h4 id="org1242ad2"&gt;Python&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org1242ad2"&gt;
+&lt;div id="outline-container-org18df4e1" class="outline-4"&gt;
+&lt;h4 id="org18df4e1"&gt;Python&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org18df4e1"&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;from pathlib import Path
 from typing import Collection
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgd576b86" class="outline-4"&gt;
-&lt;h4 id="orgd576b86"&gt;PyPi&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-orgd576b86"&gt;
+&lt;div id="outline-container-org99afbfe" class="outline-4"&gt;
+&lt;h4 id="org99afbfe"&gt;PyPi&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org99afbfe"&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;from spacy import displacy
 
 import spacy
@@ -50,29 +50,29 @@ import textacy
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org4fa87ec" class="outline-4"&gt;
-&lt;h4 id="org4fa87ec"&gt;My Stuff&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org4fa87ec"&gt;
+&lt;div id="outline-container-orgb86812e" class="outline-4"&gt;
+&lt;h4 id="orgb86812e"&gt;My Stuff&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-orgb86812e"&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;from graeae.timers import Timer
 from graeae import EnvironmentLoader, TextDownloader
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgf188059" class="outline-3"&gt;
-&lt;h3 id="orgf188059"&gt;Set Up&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-orgf188059"&gt;
+&lt;div id="outline-container-orgd5666d0" class="outline-3"&gt;
+&lt;h3 id="orgd5666d0"&gt;Set Up&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-orgd5666d0"&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org210949a" class="outline-4"&gt;
-&lt;h4 id="org210949a"&gt;The Timer&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org210949a"&gt;
+&lt;div id="outline-container-org97e3320" class="outline-4"&gt;
+&lt;h4 id="org97e3320"&gt;The Timer&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org97e3320"&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;TIMER = Timer()
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org9c138b8" class="outline-4"&gt;
-&lt;h4 id="org9c138b8"&gt;Spacy&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org9c138b8"&gt;
+&lt;div id="outline-container-org43d1495" class="outline-4"&gt;
+&lt;h4 id="org43d1495"&gt;Spacy&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org43d1495"&gt;
 &lt;p&gt;
 This loads the large English model tha spacy provides.
 &lt;/p&gt;
@@ -93,9 +93,9 @@ Although it took a long time to download the model doesn't actually take a long 
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org393993e" class="outline-3"&gt;
-&lt;h3 id="org393993e"&gt;Load the File&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org393993e"&gt;
+&lt;div id="outline-container-org21c410b" class="outline-3"&gt;
+&lt;h3 id="org21c410b"&gt;Load the File&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org21c410b"&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;URL = "https://www.gutenberg.org/files/974/974-0.txt"
 environment = EnvironmentLoader()
 path = environment["GUTENBERG"]
@@ -113,13 +113,13 @@ text = downloader.download
 &lt;/div&gt;
 
 
-&lt;div id="outline-container-org1a76e1f" class="outline-2"&gt;
-&lt;h2 id="org1a76e1f"&gt;Middle&lt;/h2&gt;
-&lt;div class="outline-text-2" id="text-org1a76e1f"&gt;
+&lt;div id="outline-container-org62abcee" class="outline-2"&gt;
+&lt;h2 id="org62abcee"&gt;Middle&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-org62abcee"&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgbd3216f" class="outline-3"&gt;
-&lt;h3 id="orgbd3216f"&gt;A Little spacy&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-orgbd3216f"&gt;
+&lt;div id="outline-container-org1d02e2f" class="outline-3"&gt;
+&lt;h3 id="org1d02e2f"&gt;A Little spacy&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org1d02e2f"&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;document = nlp(text)
 &lt;/pre&gt;&lt;/div&gt;
 
@@ -319,9 +319,9 @@ The categories seem kind of arbitrary, but perhaps that's because of the book th
 &lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgcd37d19" class="outline-3"&gt;
-&lt;h3 id="orgcd37d19"&gt;Redacting Names&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-orgcd37d19"&gt;
+&lt;div id="outline-container-orge7f16da" class="outline-3"&gt;
+&lt;h3 id="orge7f16da"&gt;Redacting Names&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-orge7f16da"&gt;
 &lt;p&gt;
 It's getting a little unwieldy to handle the entire &lt;i&gt;Secret Agent&lt;/i&gt; novel so I'll switch to somet oy sentence fragments.
 &lt;/p&gt;
@@ -418,9 +418,9 @@ Besides the merge I switched to using &lt;code&gt;token.string&lt;/code&gt; whic
 &lt;/p&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-org11ecf25" class="outline-4"&gt;
-&lt;h4 id="org11ecf25"&gt;More Redaction&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org11ecf25"&gt;
+&lt;div id="outline-container-orged3a213" class="outline-4"&gt;
+&lt;h4 id="orged3a213"&gt;More Redaction&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-orged3a213"&gt;
 &lt;p&gt;
 We've been told that our identification of where the second person is from, and where all three met might give out too much information as well. Looking at the list of &lt;a href="https://spacy.io/usage/linguistic-features#named-entities"&gt;bulit-in named entities&lt;/a&gt; doesn't make it obvious what the two entity types would be, so I guess I'll brute-force it.
 &lt;/p&gt;
@@ -557,16 +557,16 @@ It looks like "President" isn't one of the entities spacy knows about. So perhap
 &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-orgaec543c" class="outline-2"&gt;
-&lt;h2 id="orgaec543c"&gt;End&lt;/h2&gt;
-&lt;div class="outline-text-2" id="text-orgaec543c"&gt;
+&lt;div id="outline-container-org8dbbaee" class="outline-2"&gt;
+&lt;h2 id="org8dbbaee"&gt;End&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-org8dbbaee"&gt;
 &lt;p&gt;
 This was a brief look at how you can use a slightly more informed approach to identify parts of a text without using regular expressions and things of that nature to match strings. By using identifiable named entities, spacy is able to help us identify entire classes of entities to match without knowing what they look like beforehand. Of course, it would be dangerous to do this too blindly, there might always be things that confuse the model, but spacy does fairly well right out of the box.
 &lt;/p&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgbe440e6" class="outline-3"&gt;
-&lt;h3 id="orgbe440e6"&gt;Reference&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-orgbe440e6"&gt;
+&lt;div id="outline-container-org85568b9" class="outline-3"&gt;
+&lt;h3 id="org85568b9"&gt;Reference&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org85568b9"&gt;
 &lt;p&gt;
 This was based on a chapter in this book.
 &lt;/p&gt;
@@ -580,43 +580,43 @@ This was based on a chapter in this book.
 &lt;h2&gt;Table of Contents&lt;/h2&gt;
 &lt;div id="text-table-of-contents"&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#orgffcf5db"&gt;Beginning&lt;/a&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#orgf68fcc7"&gt;Beginning&lt;/a&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#org7cc60be"&gt;Imports&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#org8ab9804"&gt;The Text File.&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#org7172a8e"&gt;Setup Spacy&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#org6679f1b"&gt;The Timer&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#org0ad31f0"&gt;Imports&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#org7278fda"&gt;The Text File.&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#orgd4351b6"&gt;Setup Spacy&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#orge99aa54"&gt;The Timer&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#orgdfd041e"&gt;Middle&lt;/a&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#orge67f3c5"&gt;Middle&lt;/a&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#orgcdfd32c"&gt;Load the File&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#orgdc59cb8"&gt;Reload&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#orgb772bd5"&gt;Tokenizing with Spacy&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#org767e34b"&gt;A Detour Into Fuzzy Wuzzy&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#orgdcaa0b8"&gt;A Diversion Into JellyFish&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#org185cb88"&gt;A Short Diversion Into FlashText&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#orgae79d5d"&gt;Load the File&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#org82a4d79"&gt;Reload&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#org2c788b8"&gt;Tokenizing with Spacy&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#org7112614"&gt;A Detour Into Fuzzy Wuzzy&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#org1604c14"&gt;A Diversion Into JellyFish&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#org9f8571f"&gt;A Short Diversion Into FlashText&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#org6b2df69"&gt;End&lt;/a&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#org515abb4"&gt;End&lt;/a&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#org76b0959"&gt;Reference&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#org08a394e"&gt;Reference&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgffcf5db" class="outline-2"&gt;
-&lt;h2 id="orgffcf5db"&gt;Beginning&lt;/h2&gt;
-&lt;div class="outline-text-2" id="text-orgffcf5db"&gt;
+&lt;div id="outline-container-orgf68fcc7" class="outline-2"&gt;
+&lt;h2 id="orgf68fcc7"&gt;Beginning&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-orgf68fcc7"&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org7cc60be" class="outline-3"&gt;
-&lt;h3 id="org7cc60be"&gt;Imports&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org7cc60be"&gt;
+&lt;div id="outline-container-org0ad31f0" class="outline-3"&gt;
+&lt;h3 id="org0ad31f0"&gt;Imports&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org0ad31f0"&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org9d9004c" class="outline-4"&gt;
-&lt;h4 id="org9d9004c"&gt;Python&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org9d9004c"&gt;
+&lt;div id="outline-container-org6e0de13" class="outline-4"&gt;
+&lt;h4 id="org6e0de13"&gt;Python&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org6e0de13"&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;difflib&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;SequenceMatcher&lt;/span&gt;
 &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;pathlib&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;Path&lt;/span&gt;
 &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;typing&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;Callable&lt;/span&gt;
@@ -624,9 +624,9 @@ This was based on a chapter in this book.
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org5a355db" class="outline-4"&gt;
-&lt;h4 id="org5a355db"&gt;PyPi&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org5a355db"&gt;
+&lt;div id="outline-container-org937d237" class="outline-4"&gt;
+&lt;h4 id="org937d237"&gt;PyPi&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org937d237"&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;flashtext&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;KeywordProcessor&lt;/span&gt;
 &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;fuzzywuzzy&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;fuzz&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;process&lt;/span&gt;
 &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;tabulate&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;tabulate&lt;/span&gt;
@@ -635,18 +635,18 @@ This was based on a chapter in this book.
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org7fc4317" class="outline-4"&gt;
-&lt;h4 id="org7fc4317"&gt;My Projects&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org7fc4317"&gt;
+&lt;div id="outline-container-orgff01f9d" class="outline-4"&gt;
+&lt;h4 id="orgff01f9d"&gt;My Projects&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-orgff01f9d"&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;graeae&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;EnvironmentLoader&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;TextDownloader&lt;/span&gt;
 &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;graeae.timers&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;Timer&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org8ab9804" class="outline-3"&gt;
-&lt;h3 id="org8ab9804"&gt;The Text File.&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org8ab9804"&gt;
+&lt;div id="outline-container-org7278fda" class="outline-3"&gt;
+&lt;h3 id="org7278fda"&gt;The Text File.&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org7278fda"&gt;
 &lt;p&gt;
 This is the URL to Joseph Conrad's "The Secret Agent" from &lt;a href="https://www.gutenberg.org/ebooks/974"&gt;Project Gutenberg&lt;/a&gt;.
 &lt;/p&gt;
@@ -658,17 +658,17 @@ This is the URL to Joseph Conrad's "The Secret Agent" from &lt;a href="https://w
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org7172a8e" class="outline-3"&gt;
-&lt;h3 id="org7172a8e"&gt;Setup Spacy&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org7172a8e"&gt;
+&lt;div id="outline-container-orgd4351b6" class="outline-3"&gt;
+&lt;h3 id="orgd4351b6"&gt;Setup Spacy&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-orgd4351b6"&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;nlp&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;spacy&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;load&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"en_core_web_md"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-org6679f1b" class="outline-3"&gt;
-&lt;h3 id="org6679f1b"&gt;The Timer&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org6679f1b"&gt;
+&lt;div id="outline-container-orge99aa54" class="outline-3"&gt;
+&lt;h3 id="orge99aa54"&gt;The Timer&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-orge99aa54"&gt;
 &lt;p&gt;
 This just tracks how longs things take.
 &lt;/p&gt;
@@ -677,13 +677,13 @@ This just tracks how longs things take.
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgdfd041e" class="outline-2"&gt;
-&lt;h2 id="orgdfd041e"&gt;Middle&lt;/h2&gt;
-&lt;div class="outline-text-2" id="text-orgdfd041e"&gt;
+&lt;div id="outline-container-orge67f3c5" class="outline-2"&gt;
+&lt;h2 id="orge67f3c5"&gt;Middle&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-orge67f3c5"&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgcdfd32c" class="outline-3"&gt;
-&lt;h3 id="orgcdfd32c"&gt;Load the File&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-orgcdfd32c"&gt;
+&lt;div id="outline-container-orgae79d5d" class="outline-3"&gt;
+&lt;h3 id="orgae79d5d"&gt;Load the File&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-orgae79d5d"&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;path&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Path&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;path&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;expanduser&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
 &lt;span class="n"&gt;downloader&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;TextDownloader&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;url&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;URL&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;target&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;path&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="s2"&gt;"conrad_joseph_secret_agent.txt"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;span class="n"&gt;text&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;downloader&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;download&lt;/span&gt;
@@ -765,9 +765,9 @@ So, there's 10,121 lines in the book (I don't know if that is long for a book, I
 &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-orgdc59cb8" class="outline-3"&gt;
-&lt;h3 id="orgdc59cb8"&gt;Reload&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-orgdc59cb8"&gt;
+&lt;div id="outline-container-org82a4d79" class="outline-3"&gt;
+&lt;h3 id="org82a4d79"&gt;Reload&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org82a4d79"&gt;
 &lt;p&gt;
 I ran &lt;code&gt;dos2unix&lt;/code&gt; on the file, let's see if it's better.
 &lt;/p&gt;
@@ -818,9 +818,9 @@ According to &lt;a href="https://www.wikiwand.com/en/ASCII"&gt;Wikipedia&lt;/a&g
 &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-orgb772bd5" class="outline-3"&gt;
-&lt;h3 id="orgb772bd5"&gt;Tokenizing with Spacy&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-orgb772bd5"&gt;
+&lt;div id="outline-container-org2c788b8" class="outline-3"&gt;
+&lt;h3 id="org2c788b8"&gt;Tokenizing with Spacy&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org2c788b8"&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;with&lt;/span&gt; &lt;span class="n"&gt;TIMER&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
     &lt;span class="n"&gt;document&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;nlp&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;text&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
@@ -908,9 +908,9 @@ I had to convert it to a tuple because &lt;code&gt;sents&lt;/code&gt; is actuall
 &lt;/p&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-org4a97ffb" class="outline-4"&gt;
-&lt;h4 id="org4a97ffb"&gt;Token Attributes&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org4a97ffb"&gt;
+&lt;div id="outline-container-orgbaf50d6" class="outline-4"&gt;
+&lt;h4 id="orgbaf50d6"&gt;Token Attributes&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-orgbaf50d6"&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"|Token | Stop-Word| Punctuation |"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"|-+-+-+-|"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;token&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;sentence&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
@@ -1180,9 +1180,9 @@ So spacy can help us identify different types of tokens, in this case stopwords,
 &lt;/ul&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org60e410b" class="outline-4"&gt;
-&lt;h4 id="org60e410b"&gt;Lemmatisation&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org60e410b"&gt;
+&lt;div id="outline-container-org93468c2" class="outline-4"&gt;
+&lt;h4 id="org93468c2"&gt;Lemmatisation&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org93468c2"&gt;
 &lt;p&gt;
 Spacy implements &lt;a href="https://www.wikiwand.com/en/Lemmatisation"&gt;Lemmatisation&lt;/a&gt;, the conversion of a token to the "standard form" for a word.
 &lt;/p&gt;
@@ -1434,17 +1434,17 @@ I filtered out the spaces because it broke my table, but it's part-of-speech lab
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org767e34b" class="outline-3"&gt;
-&lt;h3 id="org767e34b"&gt;A Detour Into Fuzzy Wuzzy&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org767e34b"&gt;
+&lt;div id="outline-container-org7112614" class="outline-3"&gt;
+&lt;h3 id="org7112614"&gt;A Detour Into Fuzzy Wuzzy&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org7112614"&gt;
 &lt;p&gt;
 &lt;a href="https://github.com/seatgeek/fuzzywuzzy"&gt;fuzzywuzzy&lt;/a&gt; is a library that does fuzzy string matching using the &lt;a href="https://www.wikiwand.com/en/Levenshtein_distance"&gt;Levenshtein Distance&lt;/a&gt; between strings. There's a &lt;a href="https://chairnerd.seatgeek.com/fuzzywuzzy-fuzzy-string-matching-in-python/"&gt;page&lt;/a&gt; showing more about how to use it based the example of finding concert information on the web.
 &lt;/p&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-org53d06d0" class="outline-4"&gt;
-&lt;h4 id="org53d06d0"&gt;Ratio&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org53d06d0"&gt;
+&lt;div id="outline-container-org6f1745d" class="outline-4"&gt;
+&lt;h4 id="org6f1745d"&gt;Ratio&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org6f1745d"&gt;
 &lt;p&gt;
 The &lt;code&gt;ratio&lt;/code&gt; function for fuzzywuzzy is an alias for the &lt;a href="https://docs.python.org/3/library/difflib.html"&gt;difflib&lt;/a&gt; &lt;code&gt;SequenceMatcher.ratio&lt;/code&gt; method (except they multiply by 100 and round off so it's a percentage rather than a fraction. The ratio it's calculating is:
 &lt;/p&gt;
@@ -1480,9 +1480,9 @@ The fuzzywuzzy page I mentioned earlier states that this will work for very shor
 &lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgec43902" class="outline-4"&gt;
-&lt;h4 id="orgec43902"&gt;Partial Ratio&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-orgec43902"&gt;
+&lt;div id="outline-container-orga8cacfe" class="outline-4"&gt;
+&lt;h4 id="orga8cacfe"&gt;Partial Ratio&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-orga8cacfe"&gt;
 &lt;p&gt;
 To get better matches for short-ish text, fuzzywuzzy has a &lt;code&gt;partial_ratio&lt;/code&gt; function. 
 &lt;/p&gt;
@@ -1505,9 +1505,9 @@ The &lt;code&gt;ratio&lt;/code&gt; doesn't handle sub-string matches as well as 
 &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-orge07e173" class="outline-4"&gt;
-&lt;h4 id="orge07e173"&gt;Token Sort and Token Set&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-orge07e173"&gt;
+&lt;div id="outline-container-org135af13" class="outline-4"&gt;
+&lt;h4 id="org135af13"&gt;Token Sort and Token Set&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org135af13"&gt;
 &lt;p&gt;
 Besides sub-strings, there might be cases where ordering doesn't matter, in which case you can try the &lt;code&gt;token_sort_ratio&lt;/code&gt; or &lt;code&gt;token_set_ratio&lt;/code&gt; functions.
 &lt;/p&gt;
@@ -1534,9 +1534,9 @@ The &lt;code&gt;token_sort_ratio&lt;/code&gt; sorts the tokens before comparing 
 &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-orgc3debd2" class="outline-4"&gt;
-&lt;h4 id="orgc3debd2"&gt;Process&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-orgc3debd2"&gt;
+&lt;div id="outline-container-org8159f3b" class="outline-4"&gt;
+&lt;h4 id="org8159f3b"&gt;Process&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org8159f3b"&gt;
 &lt;p&gt;
 Finally, you can pass &lt;code&gt;process.extract&lt;/code&gt; a string and a list of strings to compare to that string and it will return them in the order of similarity.
 &lt;/p&gt;
@@ -1607,9 +1607,9 @@ Based on the doc-string, it looks like this one tries to figure out the best met
 &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-orgc4cc518" class="outline-4"&gt;
-&lt;h4 id="orgc4cc518"&gt;Spell Check&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-orgc4cc518"&gt;
+&lt;div id="outline-container-org8207e2f" class="outline-4"&gt;
+&lt;h4 id="org8207e2f"&gt;Spell Check&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org8207e2f"&gt;
 &lt;p&gt;
 Although the fuzzywuzzy page states that their use case was matching the names of shows on different web-sites, it can also be used as a simple spell-checker.
 &lt;/p&gt;
@@ -1675,23 +1675,23 @@ Looking at the last row you can see one of the limitations of this kind of syste
 &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-orgdcaa0b8" class="outline-3"&gt;
-&lt;h3 id="orgdcaa0b8"&gt;A Diversion Into JellyFish&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-orgdcaa0b8"&gt;
+&lt;div id="outline-container-org1604c14" class="outline-3"&gt;
+&lt;h3 id="org1604c14"&gt;A Diversion Into JellyFish&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org1604c14"&gt;
 &lt;p&gt;
 &lt;a href="https://jellyfish.readthedocs.io/en/latest"&gt;JellyFish&lt;/a&gt; is another python library that implements distance functions (like the Levenstein Distance that FuzzyWuzzy does, but others as well) as well as &lt;a href="https://www.wikiwand.com/en/Stemming"&gt;stemming&lt;/a&gt; and &lt;a href="https://www.wikiwand.com/en/Phonetic_algorithm"&gt;phonetic encoding&lt;/a&gt;.
 &lt;/p&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org66a4ba0" class="outline-4"&gt;
-&lt;h4 id="org66a4ba0"&gt;Phonetic Encoding&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org66a4ba0"&gt;
+&lt;div id="outline-container-orge88afcf" class="outline-4"&gt;
+&lt;h4 id="orge88afcf"&gt;Phonetic Encoding&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-orge88afcf"&gt;
 &lt;p&gt;
 Phonetic encoding transforms words into a form that is based on the pronounciaton of the words. Using this should make matching spelling variations using the distance function(s) better.
 &lt;/p&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org224bd83" class="outline-5"&gt;
-&lt;h5 id="org224bd83"&gt;American Soundex&lt;/h5&gt;
-&lt;div class="outline-text-5" id="text-org224bd83"&gt;
+&lt;div id="outline-container-org0f407e2" class="outline-5"&gt;
+&lt;h5 id="org0f407e2"&gt;American Soundex&lt;/h5&gt;
+&lt;div class="outline-text-5" id="text-org0f407e2"&gt;
 &lt;p&gt;
 &lt;a href="https://www.wikiwand.com/en/Soundex"&gt;Soundex&lt;/a&gt; was originally patented in 1918 but JellyFish uses a variation called &lt;i&gt;American Soundex&lt;/i&gt; which was created in 1930 by analyzing U.S. census reports. Each encoding consists of a letter followed by three digits. The letter is the first letter of the word and the digits represent an encoding of the remaining consonants (a, e, i, o, u, y, h, and w are removed if they aren't the first letter).
 &lt;/p&gt;
@@ -1777,9 +1777,9 @@ It's a little hard to interpret these values, but it's interesting that &lt;i&gt
 &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-org7f98def" class="outline-5"&gt;
-&lt;h5 id="org7f98def"&gt;Metaphone&lt;/h5&gt;
-&lt;div class="outline-text-5" id="text-org7f98def"&gt;
+&lt;div id="outline-container-org71f7248" class="outline-5"&gt;
+&lt;h5 id="org71f7248"&gt;Metaphone&lt;/h5&gt;
+&lt;div class="outline-text-5" id="text-org71f7248"&gt;
 &lt;p&gt;
 &lt;a href="https://www.wikiwand.com/en/Metaphone"&gt;Metaphone&lt;/a&gt; was developed in 1990 and improves on Soundex to produce a more accurate encoding.
 &lt;/p&gt;
@@ -1840,9 +1840,9 @@ Metaphone is a &lt;i&gt;little&lt;/i&gt; more interpretable, but interestingly i
 &lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgb1ff7fa" class="outline-5"&gt;
-&lt;h5 id="orgb1ff7fa"&gt;New York State Identification and Intelligence System (NYSIIS)&lt;/h5&gt;
-&lt;div class="outline-text-5" id="text-orgb1ff7fa"&gt;
+&lt;div id="outline-container-orgc44eec7" class="outline-5"&gt;
+&lt;h5 id="orgc44eec7"&gt;New York State Identification and Intelligence System (NYSIIS)&lt;/h5&gt;
+&lt;div class="outline-text-5" id="text-orgc44eec7"&gt;
 &lt;p&gt;
 The &lt;a href="https://www.wikiwand.com/en/New_York_State_Identification_and_Intelligence_System"&gt;New York State Identification and Intelligence System&lt;/a&gt; is a slightly more accurate (compared to Soundex) encoder that was developed in 1970.
 &lt;/p&gt;
@@ -1899,9 +1899,9 @@ This seems even more interpretable than the metaphone encodings, and the gap in 
 &lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org78503e9" class="outline-5"&gt;
-&lt;h5 id="org78503e9"&gt;Match Rating Approach&lt;/h5&gt;
-&lt;div class="outline-text-5" id="text-org78503e9"&gt;
+&lt;div id="outline-container-orgfdd2333" class="outline-5"&gt;
+&lt;h5 id="orgfdd2333"&gt;Match Rating Approach&lt;/h5&gt;
+&lt;div class="outline-text-5" id="text-orgfdd2333"&gt;
 &lt;p&gt;
 The final phonetic encoding that jellyfish supports is the &lt;a href="https://www.wikiwand.com/en/Match_rating_approach"&gt;Match Rating Approach&lt;/a&gt; which was developed in 1977 by Western Airlines.
 &lt;/p&gt;
@@ -1969,9 +1969,9 @@ I think as with all things, you'd have to try them out to see how well each does
 &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-org185cb88" class="outline-3"&gt;
-&lt;h3 id="org185cb88"&gt;A Short Diversion Into FlashText&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org185cb88"&gt;
+&lt;div id="outline-container-org9f8571f" class="outline-3"&gt;
+&lt;h3 id="org9f8571f"&gt;A Short Diversion Into FlashText&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org9f8571f"&gt;
 &lt;p&gt;
 &lt;a href="https://flashtext.readthedocs.io/en/latest/"&gt;FlashText&lt;/a&gt; is a python module to help find and replace words in very large documents. It doesn't do all the interesting linguistic things that the other code we've been looking at does, but it was built specifically to be very fast so for cases where you have a lot of text you can use it to speed up searches.
 &lt;/p&gt;
@@ -2060,16 +2060,16 @@ Note that the matching isn't case-sensitive, so the previous search mathches "SE
 &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-org6b2df69" class="outline-2"&gt;
-&lt;h2 id="org6b2df69"&gt;End&lt;/h2&gt;
-&lt;div class="outline-text-2" id="text-org6b2df69"&gt;
+&lt;div id="outline-container-org515abb4" class="outline-2"&gt;
+&lt;h2 id="org515abb4"&gt;End&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-org515abb4"&gt;
 &lt;p&gt;
 Despite the name this was really a look at three-ish libraries to help with tokenization, lemmatizing, fuzzy string matching, and quick string searching and replacin.g
 &lt;/p&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org76b0959" class="outline-3"&gt;
-&lt;h3 id="org76b0959"&gt;Reference&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org76b0959"&gt;
+&lt;div id="outline-container-org08a394e" class="outline-3"&gt;
+&lt;h3 id="org08a394e"&gt;Reference&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org08a394e"&gt;
 &lt;ol class="org-ol"&gt;
 &lt;li&gt;Kasliwal N. Natural language processing with Python quick start guide: going from a Python developer to an effective natural language processing engineer [Internet]. 2018 [cited 2019 May 18]. Available from: &lt;a href="http://proquest.safaribooksonline.com/?fpi=9781789130386"&gt;http://proquest.safaribooksonline.com/?fpi=9781789130386&lt;/a&gt;&lt;/li&gt;
 &lt;/ol&gt;

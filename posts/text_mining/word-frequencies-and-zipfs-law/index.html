@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en" prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article#">
+<head>
+<meta charset="utf-8">
+<meta content="A look at word frequencies and Zipfs law." name="description">
+<meta content="width=device-width, initial-scale=1" name="viewport">
+<title>Word Frequencies and Zipfs Law | Tip of the Dnghu</title>
+<link href="../../../assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
+<link href="../../../assets/css/ipython.min.css" rel="stylesheet" type="text/css">
+<link href="../../../assets/css/nikola_ipython.css" rel="stylesheet" type="text/css">
+<meta content="#5670d4" name="theme-color">
+<meta content="Nikola (getnikola.com)" name="generator">
+<link href="../../../rss.xml" rel="alternate" title="RSS" type="application/rss+xml">
+<link href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/word-frequencies-and-zipfs-law/" rel="canonical"><!--[if lt IE 9]><script src="../../../assets/js/html5.js"></script><![endif]-->
+<link href="../../../apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180">
+<link href="../../../favicon-32x32.png" rel="icon" sizes="32x32" type="image/png">
+<link href="../../../favicon-16x16.png" rel="icon" sizes="16x16" type="image/png">
+<link href="../../../site.webmanifest" rel="manifest">
+<script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML" type="text/javascript"></script>
+<meta content="Cloistered Monkey" name="author">
+<link href="../../data/name-redaction/" rel="prev" title="Name Redaction" type="text/html">
+<meta content="Tip of the Dnghu" property="og:site_name">
+<meta content="Word Frequencies and Zipfs Law" property="og:title">
+<meta content="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/word-frequencies-and-zipfs-law/" property="og:url">
+<meta content="A look at word frequencies and Zipfs law." property="og:description">
+<meta content="article" property="og:type">
+<meta content="2019-06-19T17:47:38-07:00" property="article:published_time">
+<meta content="nlp" property="article:tag">
+<meta content="text-mining" property="article:tag">
+</head>
+<body>
+<a class="sr-only sr-only-focusable" href="#content">Skip to main content</a> <!-- Menubar -->
+<nav class="navbar navbar-expand-md static-top mb-4 navbar-light bg-light">
+<div class="container"><!-- This keeps the margins nice -->
+ <a class="navbar-brand" href="https://necromuralist.github.io/Tip-of-the-Dnghu/"><span id="blog-title">Tip of the Dnghu</span></a> <button aria-controls="bs-navbar" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#bs-navbar" data-toggle="collapse" type="button"><span class="navbar-toggler-icon"></span></button>
+<div class="collapse navbar-collapse" id="bs-navbar">
+<ul class="navbar-nav mr-auto">
+<li class="nav-item"><a class="nav-link" href="../../../archive.html">Archive</a></li>
+<li class="nav-item"><a class="nav-link" href="../../../categories/">Tags</a></li>
+<li class="nav-item"><a class="nav-link" href="../../../rss.xml">RSS feed</a></li>
+<li class="nav-item dropdown"><a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Pages</a>
+<div class="dropdown-menu"><a class="dropdown-item" href="https://necromuralist.github.io/">Cloistered Monkey</a></div>
+</li>
+</ul>
+<!-- DuckDuckGo custom search -->
+<form action="https://duckduckgo.com/" class="navbar-form pull-left" id="search" method="get" name="search"><input name="sites" type="hidden" value="https://necromuralist.github.io/Tip-of-the-Dnghu/"><input name="k8" type="hidden" value="#444444"><input name="k9" type="hidden" value="#D51920"><input name="kt" type="hidden" value="h"><input class="span2" maxlength="255" name="q" placeholder="Search…" type="text"><input style="visibility: hidden;display:none" type="submit" value="DuckDuckGo Search"></form>
+<!-- End of custom search -->
+<ul class="navbar-nav navbar-right">
+<li class="nav-item"><a class="nav-link" href="index.org" id="sourcelink">Source</a></li>
+</ul>
+</div>
+<!-- /.navbar-collapse --></div>
+<!-- /.container --></nav>
+<!-- End of Menubar -->
+<div class="container" id="content" role="main">
+<div class="body-content"><!--Body content-->
+<article class="post-text h-entry hentry postpage" itemscope="itemscope" itemtype="http://schema.org/Article">
+<header>
+<h1 class="p-name entry-title" itemprop="headline name"><a class="u-url" href=".">Word Frequencies and Zipfs Law</a></h1>
+<div class="metadata">
+<p class="byline author vcard"><span class="byline-name fn" itemprop="author">Cloistered Monkey</span></p>
+<p class="dateline"><a href="." rel="bookmark"><time class="published dt-published" datetime="2019-06-19T17:47:38-07:00" itemprop="datePublished" title="2019-06-19 17:47">2019-06-19 17:47</time></a></p>
+<p class="sourceline"><a class="sourcelink" href="index.org">Source</a></p>
+</div>
+</header>
+<div class="e-content entry-content" itemprop="articleBody text">
+<div class="outline-2" id="outline-container-orga53a2e5">
+<h2 id="orga53a2e5">Beginning</h2>
+<div class="outline-text-2" id="text-orga53a2e5"></div>
+<div class="outline-3" id="outline-container-org96457d0">
+<h3 id="org96457d0">Imports</h3>
+<div class="outline-text-3" id="text-org96457d0"></div>
+<div class="outline-4" id="outline-container-org5b6e335">
+<h4 id="org5b6e335">Python</h4>
+<div class="outline-text-4" id="text-org5b6e335">
+<div class="highlight">
+<pre><span></span><span class="kn">from</span> <span class="nn">argparse</span> <span class="kn">import</span> <span class="n">Namespace</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Counter</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+</pre></div>
+</div>
+</div>
+<div class="outline-4" id="outline-container-orgbf7312d">
+<h4 id="orgbf7312d">PyPi</h4>
+<div class="outline-text-4" id="text-orgbf7312d">
+<div class="highlight">
+<pre><span></span><span class="kn">import</span> <span class="nn">holoviews</span>
+<span class="kn">import</span> <span class="nn">pandas</span>
+<span class="kn">import</span> <span class="nn">spacy</span>
+</pre></div>
+</div>
+</div>
+<div class="outline-4" id="outline-container-org5d6f95c">
+<h4 id="org5d6f95c">My Stuff</h4>
+<div class="outline-text-4" id="text-org5d6f95c">
+<div class="highlight">
+<pre><span></span><span class="kn">from</span> <span class="nn">graeae</span> <span class="kn">import</span> <span class="n">EnvironmentLoader</span><span class="p">,</span> <span class="n">TextDownloader</span>
+<span class="kn">from</span> <span class="nn">graeae.timers</span> <span class="kn">import</span> <span class="n">Timer</span>
+<span class="kn">from</span> <span class="nn">graeae.visualization</span> <span class="kn">import</span> <span class="n">EmbedHoloview</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="outline-3" id="outline-container-org09823f2">
+<h3 id="org09823f2">Set Up</h3>
+<div class="outline-text-3" id="text-org09823f2"></div>
+<div class="outline-4" id="outline-container-orgfc317a6">
+<h4 id="orgfc317a6">Spacy</h4>
+<div class="outline-text-4" id="text-orgfc317a6">
+<div class="highlight">
+<pre><span></span><span class="n">nlp</span> <span class="o">=</span> <span class="n">spacy</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">"en_core_web_lg"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="outline-4" id="outline-container-orge3db823">
+<h4 id="orge3db823">The Path</h4>
+<div class="outline-text-4" id="text-orge3db823">
+<div class="highlight">
+<pre><span></span><span class="n">URL</span> <span class="o">=</span> <span class="s2">"https://www.gutenberg.org/files/974/974-0.txt"</span>
+<span class="n">environment</span> <span class="o">=</span> <span class="n">EnvironmentLoader</span><span class="p">()</span>
+<span class="n">book_path</span> <span class="o">=</span> <span class="n">environment</span><span class="p">[</span><span class="s2">"GUTENBERG"</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="outline-4" id="outline-container-orgd090f6c">
+<h4 id="orgd090f6c">The Timer</h4>
+<div class="outline-text-4" id="text-orgd090f6c">
+<div class="highlight">
+<pre><span></span><span class="n">TIMER</span> <span class="o">=</span> <span class="n">Timer</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="outline-3" id="outline-container-org6daadd8">
+<h3 id="org6daadd8">Load the File</h3>
+<div class="outline-text-3" id="text-org6daadd8">
+<div class="highlight">
+<pre><span></span><span class="n">book_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">book_path</span><span class="p">)</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span>
+<span class="n">downloader</span> <span class="o">=</span> <span class="n">TextDownloader</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">URL</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">book_path</span><span class="o">/</span><span class="s2">"conrad_joseph_secret_agent.txt"</span><span class="p">)</span>
+<span class="n">text</span> <span class="o">=</span> <span class="n">downloader</span><span class="o">.</span><span class="n">download</span>
+</pre></div>
+<pre class="example">
+2019-06-20 18:14:52,437 [1mTextDownloader[0m download: /home/brunhilde/data/datasets/gutenberg/conrad_joseph_secret_agent.txt exists, opening it
+
+</pre>
+<div class="highlight">
+<pre><span></span><span class="k">print</span><span class="p">(</span><span class="n">text</span><span class="p">[:</span><span class="mi">800</span><span class="p">])</span>
+</pre></div>
+<pre class="example">
+                  THE
+              SECRET AGENT
+             A SIMPLE TALE
+
+
+                   BY
+             JOSEPH CONRAD
+
+             SECOND EDITION
+
+             METHUEN & CO.,
+          36 ESSEX STREET W C.
+                 LONDON
+
+_First Published_ . . . _September_ 1907
+
+ _Second Edition_ . . . _October_ 1907
+
+                   TO
+              H. G. WELLS
+
+  THE CHRONICLER OF MR LEWISHAM’S LOVE
+    THE BIOGRAPHER OF KIPPS AND THE
+     HISTORIAN OF THE AGES TO COME
+
+  THIS SIMPLE TALE OF THE XI
+</pre></div>
+<div class="outline-4" id="outline-container-orgc820605">
+<h4 id="orgc820605">The Document</h4>
+<div class="outline-text-4" id="text-orgc820605">
+<div class="highlight">
+<pre><span></span>
+</pre></div>
+</div>
+</div>
+<div class="outline-4" id="outline-container-orgf540cf9">
+<h4 id="orgf540cf9">The Counter</h4>
+<div class="outline-text-4" id="text-orgf540cf9">
+<div class="highlight">
+<pre><span></span><span class="n">counter</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="outline-4" id="outline-container-org39c05c2">
+<h4 id="org39c05c2">The Plotting</h4>
+<div class="outline-text-4" id="text-org39c05c2">
+<div class="highlight">
+<pre><span></span><span class="n">SLUG</span> <span class="o">=</span> <span class="s2">"word-frequencies-and-zipfs-law"</span>
+<span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">"../../files/posts/text_mining"</span><span class="p">)</span><span class="o">/</span><span class="n">SLUG</span>
+<span class="n">Embed</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">EmbedHoloview</span><span class="p">,</span> <span class="n">folder_path</span><span class="o">=</span><span class="n">path</span><span class="p">)</span>
+<span class="n">holoviews</span><span class="o">.</span><span class="n">extension</span><span class="p">(</span><span class="s2">"bokeh"</span><span class="p">)</span>
+<span class="n">Plot</span> <span class="o">=</span> <span class="n">Namespace</span><span class="p">(</span>
+    <span class="n">height</span><span class="o">=</span><span class="mi">800</span><span class="p">,</span>
+    <span class="n">width</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="outline-2" id="outline-container-orge3e12e3">
+<h2 id="orge3e12e3">Middle</h2>
+<div class="outline-text-2" id="text-orge3e12e3">
+<div class="highlight">
+<pre><span></span><span class="n">TIMER</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="s2">"Finished counting tokens"</span>
+<span class="k">with</span> <span class="n">TIMER</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">document</span><span class="p">:</span>
+        <span class="n">counter</span><span class="p">[</span><span class="n">token</span><span class="o">.</span><span class="n">lemma_</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+</pre></div>
+<pre class="example">
+2019-06-20 17:41:59,573 graeae.timers.timer start: Started: 2019-06-20 17:41:59.573158
+2019-06-20 17:41:59,774 graeae.timers.timer end: Ended: 2019-06-20 17:41:59.774213
+2019-06-20 17:41:59,775 graeae.timers.timer end: Elapsed: 0:00:00.201055
+
+</pre>
+<div class="highlight">
+<pre><span></span><span class="k">for</span> <span class="n">token</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">counter</span><span class="o">.</span><span class="n">most_common</span><span class="p">()[:</span><span class="mi">10</span><span class="p">]:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s2">" - {token.strip()}: {count:,}"</span><span class="p">)</span>
+</pre></div>
+<ul class="org-ul">
+<li>-PRON-: 9,376</li>
+<li>: 6,649</li>
+<li>the: 5,755</li>
+<li>.: 5,689</li>
+<li>,: 5,440</li>
+<li>: 4,240</li>
+<li>of: 3,872</li>
+<li>be: 2,887</li>
+<li>": 2,642</li>
+<li>a: 2,527</li>
+</ul>
+<p>So I forgot to get rid of whitespace, punctuation, etcetera.</p>
+<div class="highlight">
+<pre><span></span><span class="n">counter</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
+<span class="n">unwanted</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"PUNCT"</span><span class="p">,</span> <span class="s2">"SPACE"</span><span class="p">,</span> <span class="s2">"SYM"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">document</span><span class="p">:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">token</span><span class="o">.</span><span class="n">pos_</span> <span class="ow">in</span> <span class="n">unwanted</span><span class="p">:</span>
+        <span class="n">counter</span><span class="p">[</span><span class="n">token</span><span class="o">.</span><span class="n">lemma_</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+<span class="k">for</span> <span class="n">token</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">counter</span><span class="o">.</span><span class="n">most_common</span><span class="p">()[:</span><span class="mi">10</span><span class="p">]:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s2">" - {token}: {count:,}"</span><span class="p">)</span>        
+</pre></div>
+<ul class="org-ul">
+<li>-PRON-: 9,376</li>
+<li>the: 5,755</li>
+<li>of: 3,872</li>
+<li>be: 2,887</li>
+<li>a: 2,526</li>
+<li>to: 2,186</li>
+<li>and: 2,055</li>
+<li>in: 1,697</li>
+<li>have: 1,419</li>
+<li>that: 1,071</li>
+</ul>
+<p>Surprisingly, pronouns are more common than stop words.</p>
+<div class="highlight">
+<pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">counter</span><span class="o">.</span><span class="n">most_common</span><span class="p">(),</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">"Lemma"</span><span class="p">,</span> <span class="s2">"Count"</span><span class="p">])</span>
+<span class="n">curve</span> <span class="o">=</span> <span class="n">holoviews</span><span class="o">.</span><span class="n">Curve</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="s2">"Lemma"</span><span class="p">,</span> <span class="s2">"Count"</span><span class="p">)</span><span class="o">.</span><span class="n">opts</span><span class="p">(</span>
+    <span class="n">height</span><span class="o">=</span><span class="n">Plot</span><span class="o">.</span><span class="n">height</span><span class="p">,</span>
+    <span class="n">width</span><span class="o">=</span><span class="n">Plot</span><span class="o">.</span><span class="n">width</span><span class="p">,</span>
+    <span class="n">xaxis</span><span class="o">=</span><span class="s2">"bare"</span><span class="p">,</span>
+<span class="p">)</span><span class="o">.</span><span class="n">opts</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="s2">"Lemma"</span><span class="p">)</span>
+<span class="n">embed</span> <span class="o">=</span> <span class="n">Embed</span><span class="p">(</span><span class="n">plot</span><span class="o">=</span><span class="n">curve</span><span class="p">,</span> <span class="n">file_name</span><span class="o">=</span><span class="s2">"all_words_count"</span><span class="p">)</span>
+<span class="n">embed</span><span class="p">()</span>
+</pre></div>
+<object data="all_words_count.html" height="800" style="width:100%" type="text/html">
+<p>Figure Missing</p>
+</object>
+<div class="highlight">
+<pre><span></span><span class="n">curve</span> <span class="o">=</span> <span class="n">holoviews</span><span class="o">.</span><span class="n">Curve</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="s2">"Lemma"</span><span class="p">,</span> <span class="s2">"Count"</span><span class="p">)</span><span class="o">.</span><span class="n">opts</span><span class="p">(</span>
+    <span class="n">height</span><span class="o">=</span><span class="n">Plot</span><span class="o">.</span><span class="n">height</span><span class="p">,</span>
+    <span class="n">width</span><span class="o">=</span><span class="n">Plot</span><span class="o">.</span><span class="n">width</span><span class="p">,</span>
+    <span class="n">xaxis</span><span class="o">=</span><span class="s2">"bare"</span><span class="p">,</span>
+    <span class="n">logy</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+    <span class="n">logx</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="p">)</span><span class="o">.</span><span class="n">opts</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="s2">"Lemma"</span><span class="p">)</span>
+<span class="n">embed</span> <span class="o">=</span> <span class="n">Embed</span><span class="p">(</span><span class="n">plot</span><span class="o">=</span><span class="n">curve</span><span class="p">,</span> <span class="n">file_name</span><span class="o">=</span><span class="s2">"all_words_count_log"</span><span class="p">)</span>
+<span class="n">embed</span><span class="p">()</span>
+</pre></div>
+<object data="all_words_count_log.html" height="800" style="width:100%" type="text/html">
+<p>Figure Missing</p>
+</object></div>
+<div class="outline-4" id="outline-container-org960a24c">
+<h4 id="org960a24c">Removing Stop Words</h4>
+<div class="outline-text-4" id="text-org960a24c">
+<div class="highlight">
+<pre><span></span><span class="n">counter</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">document</span><span class="p">:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">token</span><span class="o">.</span><span class="n">is_stop</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">token</span><span class="o">.</span><span class="n">pos_</span> <span class="ow">in</span> <span class="n">unwanted</span><span class="p">:</span>
+        <span class="n">counter</span><span class="p">[</span><span class="n">token</span><span class="o">.</span><span class="n">lemma_</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+<span class="k">for</span> <span class="n">token</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">counter</span><span class="o">.</span><span class="n">most_common</span><span class="p">()[:</span><span class="mi">10</span><span class="p">]:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s2">" - {token}: {count}"</span><span class="p">)</span>
+</pre></div>
+<ul class="org-ul">
+<li>Verloc: 762</li>
+<li>Mr: 536</li>
+<li>’s: 387</li>
+<li>not: 328</li>
+<li>man: 323</li>
+<li>Mrs: 281</li>
+<li>’: 266</li>
+<li>say: 245</li>
+<li>look: 215</li>
+<li>like: 213</li>
+</ul>
+<p>I guess pronouns are stop words… It looks like "Verloc" is now the most common token. I assume he's the main character in the book. According to the <a href="https://en.wikipedia.org/wiki/The_Secret_Agent?oldformat=true">WikiPedia article about The Secret Agent</a> -</p>
+<blockquote>
+<p>The story is set in London in 1886 and deals with Mr Anton Verloc and his work as a spy for an unnamed country (presumably Russia).</p>
+</blockquote>
+<div class="highlight">
+<pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">counter</span><span class="o">.</span><span class="n">most_common</span><span class="p">(),</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">"Lemma"</span><span class="p">,</span> <span class="s2">"Count"</span><span class="p">])</span>
+<span class="n">curve</span> <span class="o">=</span> <span class="n">holoviews</span><span class="o">.</span><span class="n">Curve</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="s2">"Lemma"</span><span class="p">,</span> <span class="s2">"Count"</span><span class="p">)</span><span class="o">.</span><span class="n">opts</span><span class="p">(</span>
+    <span class="n">height</span><span class="o">=</span><span class="n">Plot</span><span class="o">.</span><span class="n">height</span><span class="p">,</span>
+    <span class="n">width</span><span class="o">=</span><span class="n">Plot</span><span class="o">.</span><span class="n">width</span><span class="p">,</span>
+    <span class="n">xaxis</span><span class="o">=</span><span class="s2">"bare"</span><span class="p">,</span>
+    <span class="n">logy</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+    <span class="n">logx</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+    <span class="n">tools</span><span class="o">=</span><span class="p">[</span><span class="s2">"hover"</span><span class="p">],</span>
+<span class="p">)</span><span class="o">.</span><span class="n">opts</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="s2">"Lemma"</span><span class="p">)</span>
+<span class="n">embed</span> <span class="o">=</span> <span class="n">Embed</span><span class="p">(</span><span class="n">plot</span><span class="o">=</span><span class="n">curve</span><span class="p">,</span> <span class="n">file_name</span><span class="o">=</span><span class="s2">"cleaned_count"</span><span class="p">)</span>
+<span class="n">embed</span><span class="p">()</span>
+</pre></div>
+<object data="cleaned_count.html" height="800" style="width:100%" type="text/html">
+<p>Figure Missing</p>
+</object></div>
+</div>
+</div>
+<div class="outline-2" id="outline-container-org97f442c">
+<h2 id="org97f442c">End</h2>
+<div class="outline-text-2" id="text-org97f442c">
+<p>The idea behind this was to show that word counts follow <a href="https://en.wikipedia.org/wiki/Zipf's_law?oldformat=true">Zipf's Law</a>, which I wasn't able to do. If it was following Zipf's law then we would expect the log-log plots to turn into straight lines.</p>
+</div>
+</div>
+</div>
+<aside class="postpromonav">
+<nav>
+<ul class="tags" itemprop="keywords">
+<li><a class="tag p-category" href="../../../categories/nlp/" rel="tag">nlp</a></li>
+<li><a class="tag p-category" href="../../../categories/text-mining/" rel="tag">text-mining</a></li>
+</ul>
+<ul class="pager hidden-print">
+<li class="previous"><a href="../../data/name-redaction/" rel="prev" title="Name Redaction">Previous post</a></li>
+</ul>
+</nav>
+</aside>
+</article>
+<!--End of body content-->
+<footer id="footer">Contents © 2019 <a href="mailto:necromuralist@protonmail.com">Cloistered Monkey</a> - Powered by <a href="https://getnikola.com" rel="nofollow">Nikola</a></footer>
+</div>
+</div>
+<script src="../../../assets/js/all-nocdn.js"></script>
+<script>
+
+    baguetteBox.run('div#content', {
+        ignoreClass: 'islink',
+        captions: function(element) {
+            return element.getElementsByTagName('img')[0].alt;
+    }});
+</script>
+</body>
+</html>

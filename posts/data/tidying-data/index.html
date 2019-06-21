@@ -69,41 +69,41 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orgffcf5db">Beginning</a>
+<li><a href="#orgf68fcc7">Beginning</a>
 <ul>
-<li><a href="#org7cc60be">Imports</a></li>
-<li><a href="#org8ab9804">The Text File.</a></li>
-<li><a href="#org7172a8e">Setup Spacy</a></li>
-<li><a href="#org6679f1b">The Timer</a></li>
+<li><a href="#org0ad31f0">Imports</a></li>
+<li><a href="#org7278fda">The Text File.</a></li>
+<li><a href="#orgd4351b6">Setup Spacy</a></li>
+<li><a href="#orge99aa54">The Timer</a></li>
 </ul>
 </li>
-<li><a href="#orgdfd041e">Middle</a>
+<li><a href="#orge67f3c5">Middle</a>
 <ul>
-<li><a href="#orgcdfd32c">Load the File</a></li>
-<li><a href="#orgdc59cb8">Reload</a></li>
-<li><a href="#orgb772bd5">Tokenizing with Spacy</a></li>
-<li><a href="#org767e34b">A Detour Into Fuzzy Wuzzy</a></li>
-<li><a href="#orgdcaa0b8">A Diversion Into JellyFish</a></li>
-<li><a href="#org185cb88">A Short Diversion Into FlashText</a></li>
+<li><a href="#orgae79d5d">Load the File</a></li>
+<li><a href="#org82a4d79">Reload</a></li>
+<li><a href="#org2c788b8">Tokenizing with Spacy</a></li>
+<li><a href="#org7112614">A Detour Into Fuzzy Wuzzy</a></li>
+<li><a href="#org1604c14">A Diversion Into JellyFish</a></li>
+<li><a href="#org9f8571f">A Short Diversion Into FlashText</a></li>
 </ul>
 </li>
-<li><a href="#org6b2df69">End</a>
+<li><a href="#org515abb4">End</a>
 <ul>
-<li><a href="#org76b0959">Reference</a></li>
+<li><a href="#org08a394e">Reference</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
-<div class="outline-2" id="outline-container-orgffcf5db">
-<h2 id="orgffcf5db">Beginning</h2>
-<div class="outline-text-2" id="text-orgffcf5db"></div>
-<div class="outline-3" id="outline-container-org7cc60be">
-<h3 id="org7cc60be">Imports</h3>
-<div class="outline-text-3" id="text-org7cc60be"></div>
-<div class="outline-4" id="outline-container-org9d9004c">
-<h4 id="org9d9004c">Python</h4>
-<div class="outline-text-4" id="text-org9d9004c">
+<div class="outline-2" id="outline-container-orgf68fcc7">
+<h2 id="orgf68fcc7">Beginning</h2>
+<div class="outline-text-2" id="text-orgf68fcc7"></div>
+<div class="outline-3" id="outline-container-org0ad31f0">
+<h3 id="org0ad31f0">Imports</h3>
+<div class="outline-text-3" id="text-org0ad31f0"></div>
+<div class="outline-4" id="outline-container-org6e0de13">
+<h4 id="org6e0de13">Python</h4>
+<div class="outline-text-4" id="text-org6e0de13">
 <div class="highlight">
 <pre><span></span><span class="kn">from</span> <span class="nn">difflib</span> <span class="kn">import</span> <span class="n">SequenceMatcher</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
@@ -112,9 +112,9 @@
 </pre></div>
 </div>
 </div>
-<div class="outline-4" id="outline-container-org5a355db">
-<h4 id="org5a355db">PyPi</h4>
-<div class="outline-text-4" id="text-org5a355db">
+<div class="outline-4" id="outline-container-org937d237">
+<h4 id="org937d237">PyPi</h4>
+<div class="outline-text-4" id="text-org937d237">
 <div class="highlight">
 <pre><span></span><span class="kn">from</span> <span class="nn">flashtext</span> <span class="kn">import</span> <span class="n">KeywordProcessor</span>
 <span class="kn">from</span> <span class="nn">fuzzywuzzy</span> <span class="kn">import</span> <span class="n">fuzz</span><span class="p">,</span> <span class="n">process</span>
@@ -124,9 +124,9 @@
 </pre></div>
 </div>
 </div>
-<div class="outline-4" id="outline-container-org7fc4317">
-<h4 id="org7fc4317">My Projects</h4>
-<div class="outline-text-4" id="text-org7fc4317">
+<div class="outline-4" id="outline-container-orgff01f9d">
+<h4 id="orgff01f9d">My Projects</h4>
+<div class="outline-text-4" id="text-orgff01f9d">
 <div class="highlight">
 <pre><span></span><span class="kn">from</span> <span class="nn">graeae</span> <span class="kn">import</span> <span class="n">EnvironmentLoader</span><span class="p">,</span> <span class="n">TextDownloader</span>
 <span class="kn">from</span> <span class="nn">graeae.timers</span> <span class="kn">import</span> <span class="n">Timer</span>
@@ -134,9 +134,9 @@
 </div>
 </div>
 </div>
-<div class="outline-3" id="outline-container-org8ab9804">
-<h3 id="org8ab9804">The Text File.</h3>
-<div class="outline-text-3" id="text-org8ab9804">
+<div class="outline-3" id="outline-container-org7278fda">
+<h3 id="org7278fda">The Text File.</h3>
+<div class="outline-text-3" id="text-org7278fda">
 <p>This is the URL to Joseph Conrad's "The Secret Agent" from <a href="https://www.gutenberg.org/ebooks/974">Project Gutenberg</a>.</p>
 <div class="highlight">
 <pre><span></span><span class="n">URL</span> <span class="o">=</span> <span class="s2">"https://www.gutenberg.org/files/974/974-0.txt"</span>
@@ -147,17 +147,17 @@
 </pre></div>
 </div>
 </div>
-<div class="outline-3" id="outline-container-org7172a8e">
-<h3 id="org7172a8e">Setup Spacy</h3>
-<div class="outline-text-3" id="text-org7172a8e">
+<div class="outline-3" id="outline-container-orgd4351b6">
+<h3 id="orgd4351b6">Setup Spacy</h3>
+<div class="outline-text-3" id="text-orgd4351b6">
 <div class="highlight">
 <pre><span></span><span class="n">nlp</span> <span class="o">=</span> <span class="n">spacy</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">"en_core_web_md"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<div class="outline-3" id="outline-container-org6679f1b">
-<h3 id="org6679f1b">The Timer</h3>
-<div class="outline-text-3" id="text-org6679f1b">
+<div class="outline-3" id="outline-container-orge99aa54">
+<h3 id="orge99aa54">The Timer</h3>
+<div class="outline-text-3" id="text-orge99aa54">
 <p>This just tracks how longs things take.</p>
 <div class="highlight">
 <pre><span></span><span class="n">TIMER</span> <span class="o">=</span> <span class="n">Timer</span><span class="p">()</span>
@@ -165,12 +165,12 @@
 </div>
 </div>
 </div>
-<div class="outline-2" id="outline-container-orgdfd041e">
-<h2 id="orgdfd041e">Middle</h2>
-<div class="outline-text-2" id="text-orgdfd041e"></div>
-<div class="outline-3" id="outline-container-orgcdfd32c">
-<h3 id="orgcdfd32c">Load the File</h3>
-<div class="outline-text-3" id="text-orgcdfd32c">
+<div class="outline-2" id="outline-container-orge67f3c5">
+<h2 id="orge67f3c5">Middle</h2>
+<div class="outline-text-2" id="text-orge67f3c5"></div>
+<div class="outline-3" id="outline-container-orgae79d5d">
+<h3 id="orgae79d5d">Load the File</h3>
+<div class="outline-text-3" id="text-orgae79d5d">
 <div class="highlight">
 <pre><span></span><span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span>
 <span class="n">downloader</span> <span class="o">=</span> <span class="n">TextDownloader</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">URL</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">path</span><span class="o">/</span><span class="s2">"conrad_joseph_secret_agent.txt"</span><span class="p">)</span>
@@ -241,9 +241,9 @@ his wife was in charge of his brother-in-law.
 </pre></div>
 </div>
 </div>
-<div class="outline-3" id="outline-container-orgdc59cb8">
-<h3 id="orgdc59cb8">Reload</h3>
-<div class="outline-text-3" id="text-orgdc59cb8">
+<div class="outline-3" id="outline-container-org82a4d79">
+<h3 id="org82a4d79">Reload</h3>
+<div class="outline-text-3" id="text-org82a4d79">
 <p>I ran <code>dos2unix</code> on the file, let's see if it's better.</p>
 <div class="highlight">
 <pre><span></span><span class="n">downloader</span><span class="o">.</span><span class="n">_download</span> <span class="o">=</span> <span class="bp">None</span>
@@ -282,9 +282,9 @@ string as if to dry;
 <p>According to <a href="https://www.wikiwand.com/en/ASCII">Wikipedia</a>, there are 95 printable ASCII characters so this doesn't use all of them, but comes close.</p>
 </div>
 </div>
-<div class="outline-3" id="outline-container-orgb772bd5">
-<h3 id="orgb772bd5">Tokenizing with Spacy</h3>
-<div class="outline-text-3" id="text-orgb772bd5">
+<div class="outline-3" id="outline-container-org2c788b8">
+<h3 id="org2c788b8">Tokenizing with Spacy</h3>
+<div class="outline-text-3" id="text-org2c788b8">
 <div class="highlight">
 <pre><span></span><span class="k">with</span> <span class="n">TIMER</span><span class="p">:</span>
     <span class="n">document</span> <span class="o">=</span> <span class="n">nlp</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
@@ -348,9 +348,9 @@ contemplated open-mouthed, to the detriment of
 </pre>
 <p>I had to convert it to a tuple because <code>sents</code> is actually a generator, not a collection.</p>
 </div>
-<div class="outline-4" id="outline-container-org4a97ffb">
-<h4 id="org4a97ffb">Token Attributes</h4>
-<div class="outline-text-4" id="text-org4a97ffb">
+<div class="outline-4" id="outline-container-orgbaf50d6">
+<h4 id="orgbaf50d6">Token Attributes</h4>
+<div class="outline-text-4" id="text-orgbaf50d6">
 <div class="highlight">
 <pre><span></span><span class="k">print</span><span class="p">(</span><span class="s2">"|Token | Stop-Word| Punctuation |"</span><span class="p">)</span>
 <span class="k">print</span><span class="p">(</span><span class="s2">"|-+-+-+-|"</span><span class="p">)</span>
@@ -578,9 +578,9 @@ contemplated open-mouthed, to the detriment of
 </ul>
 </div>
 </div>
-<div class="outline-4" id="outline-container-org60e410b">
-<h4 id="org60e410b">Lemmatisation</h4>
-<div class="outline-text-4" id="text-org60e410b">
+<div class="outline-4" id="outline-container-org93468c2">
+<h4 id="org93468c2">Lemmatisation</h4>
+<div class="outline-text-4" id="text-org93468c2">
 <p>Spacy implements <a href="https://www.wikiwand.com/en/Lemmatisation">Lemmatisation</a>, the conversion of a token to the "standard form" for a word.</p>
 <div class="highlight">
 <pre><span></span><span class="k">print</span><span class="p">(</span><span class="s2">"|Token| Lemma|Part of Speech|"</span><span class="p">)</span>
@@ -785,14 +785,14 @@ contemplated open-mouthed, to the detriment of
 </div>
 </div>
 </div>
-<div class="outline-3" id="outline-container-org767e34b">
-<h3 id="org767e34b">A Detour Into Fuzzy Wuzzy</h3>
-<div class="outline-text-3" id="text-org767e34b">
+<div class="outline-3" id="outline-container-org7112614">
+<h3 id="org7112614">A Detour Into Fuzzy Wuzzy</h3>
+<div class="outline-text-3" id="text-org7112614">
 <p><a href="https://github.com/seatgeek/fuzzywuzzy">fuzzywuzzy</a> is a library that does fuzzy string matching using the <a href="https://www.wikiwand.com/en/Levenshtein_distance">Levenshtein Distance</a> between strings. There's a <a href="https://chairnerd.seatgeek.com/fuzzywuzzy-fuzzy-string-matching-in-python/">page</a> showing more about how to use it based the example of finding concert information on the web.</p>
 </div>
-<div class="outline-4" id="outline-container-org53d06d0">
-<h4 id="org53d06d0">Ratio</h4>
-<div class="outline-text-4" id="text-org53d06d0">
+<div class="outline-4" id="outline-container-org6f1745d">
+<h4 id="org6f1745d">Ratio</h4>
+<div class="outline-text-4" id="text-org6f1745d">
 <p>The <code>ratio</code> function for fuzzywuzzy is an alias for the <a href="https://docs.python.org/3/library/difflib.html">difflib</a> <code>SequenceMatcher.ratio</code> method (except they multiply by 100 and round off so it's a percentage rather than a fraction. The ratio it's calculating is:</p>
 <p>\[ ratio = \frac{2M}{T} \]</p>
 <p>Where <i>M</i> is the number of matching elements and <i>T</i> is the total number of elements in both sequences.</p>
@@ -814,9 +814,9 @@ contemplated open-mouthed, to the detriment of
 <p>The fuzzywuzzy page I mentioned earlier states that this will work for very short (one word) text or very long text, but not so well for things in between.</p>
 </div>
 </div>
-<div class="outline-4" id="outline-container-orgec43902">
-<h4 id="orgec43902">Partial Ratio</h4>
-<div class="outline-text-4" id="text-orgec43902">
+<div class="outline-4" id="outline-container-orga8cacfe">
+<h4 id="orga8cacfe">Partial Ratio</h4>
+<div class="outline-text-4" id="text-orga8cacfe">
 <p>To get better matches for short-ish text, fuzzywuzzy has a <code>partial_ratio</code> function.</p>
 <div class="highlight">
 <pre><span></span><span class="n">sentence_a</span> <span class="o">=</span> <span class="s2">"meaty beaty big and bouncy"</span>
@@ -832,9 +832,9 @@ contemplated open-mouthed, to the detriment of
 <p>The <code>ratio</code> doesn't handle sub-string matches as well as <code>partial_ratio</code> does.</p>
 </div>
 </div>
-<div class="outline-4" id="outline-container-orge07e173">
-<h4 id="orge07e173">Token Sort and Token Set</h4>
-<div class="outline-text-4" id="text-orge07e173">
+<div class="outline-4" id="outline-container-org135af13">
+<h4 id="org135af13">Token Sort and Token Set</h4>
+<div class="outline-text-4" id="text-org135af13">
 <p>Besides sub-strings, there might be cases where ordering doesn't matter, in which case you can try the <code>token_sort_ratio</code> or <code>token_set_ratio</code> functions.</p>
 <div class="highlight">
 <pre><span></span><span class="n">sentence_a</span> <span class="o">=</span> <span class="s2">"totally tubular terry"</span>
@@ -854,9 +854,9 @@ contemplated open-mouthed, to the detriment of
 <p>The <code>token_sort_ratio</code> sorts the tokens before comparing them, while the <code>token_set_ratio</code> sorts the intersection of the tokens first and then append the sorted tokens that aren't in both strings before calculating the similarity.</p>
 </div>
 </div>
-<div class="outline-4" id="outline-container-orgc3debd2">
-<h4 id="orgc3debd2">Process</h4>
-<div class="outline-text-4" id="text-orgc3debd2">
+<div class="outline-4" id="outline-container-org8159f3b">
+<h4 id="org8159f3b">Process</h4>
+<div class="outline-text-4" id="text-org8159f3b">
 <p>Finally, you can pass <code>process.extract</code> a string and a list of strings to compare to that string and it will return them in the order of similarity.</p>
 <p>By default this uses <code>fuzz.WRatio</code> to score the similarity.</p>
 <div class="highlight">
@@ -914,9 +914,9 @@ Return a measure of the sequences' similarity between 0 and 100, using different
 
 </pre></div>
 </div>
-<div class="outline-4" id="outline-container-orgc4cc518">
-<h4 id="orgc4cc518">Spell Check</h4>
-<div class="outline-text-4" id="text-orgc4cc518">
+<div class="outline-4" id="outline-container-org8207e2f">
+<h4 id="org8207e2f">Spell Check</h4>
+<div class="outline-text-4" id="text-org8207e2f">
 <p>Although the fuzzywuzzy page states that their use case was matching the names of shows on different web-sites, it can also be used as a simple spell-checker.</p>
 <div class="highlight">
 <pre><span></span><span class="n">dictionary</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"embarras"</span><span class="p">,</span> <span class="s2">"inoculate"</span><span class="p">,</span> <span class="s2">"misspell"</span><span class="p">]</span>
@@ -967,19 +967,19 @@ Return a measure of the sequences' similarity between 0 and 100, using different
 </div>
 </div>
 </div>
-<div class="outline-3" id="outline-container-orgdcaa0b8">
-<h3 id="orgdcaa0b8">A Diversion Into JellyFish</h3>
-<div class="outline-text-3" id="text-orgdcaa0b8">
+<div class="outline-3" id="outline-container-org1604c14">
+<h3 id="org1604c14">A Diversion Into JellyFish</h3>
+<div class="outline-text-3" id="text-org1604c14">
 <p><a href="https://jellyfish.readthedocs.io/en/latest">JellyFish</a> is another python library that implements distance functions (like the Levenstein Distance that FuzzyWuzzy does, but others as well) as well as <a href="https://www.wikiwand.com/en/Stemming">stemming</a> and <a href="https://www.wikiwand.com/en/Phonetic_algorithm">phonetic encoding</a>.</p>
 </div>
-<div class="outline-4" id="outline-container-org66a4ba0">
-<h4 id="org66a4ba0">Phonetic Encoding</h4>
-<div class="outline-text-4" id="text-org66a4ba0">
+<div class="outline-4" id="outline-container-orge88afcf">
+<h4 id="orge88afcf">Phonetic Encoding</h4>
+<div class="outline-text-4" id="text-orge88afcf">
 <p>Phonetic encoding transforms words into a form that is based on the pronounciaton of the words. Using this should make matching spelling variations using the distance function(s) better.</p>
 </div>
-<div class="outline-5" id="outline-container-org224bd83">
-<h5 id="org224bd83">American Soundex</h5>
-<div class="outline-text-5" id="text-org224bd83">
+<div class="outline-5" id="outline-container-org0f407e2">
+<h5 id="org0f407e2">American Soundex</h5>
+<div class="outline-text-5" id="text-org0f407e2">
 <p><a href="https://www.wikiwand.com/en/Soundex">Soundex</a> was originally patented in 1918 but JellyFish uses a variation called <i>American Soundex</i> which was created in 1930 by analyzing U.S. census reports. Each encoding consists of a letter followed by three digits. The letter is the first letter of the word and the digits represent an encoding of the remaining consonants (a, e, i, o, u, y, h, and w are removed if they aren't the first letter).</p>
 <p>The exact procedure is pretty straight-forward, but the main thing to note is that it always has the same form (you either pad or cut off the coded consonants to get three digits).</p>
 <div class="highlight">
@@ -1047,9 +1047,9 @@ Return a measure of the sequences' similarity between 0 and 100, using different
 <p>It's a little hard to interpret these values, but it's interesting that <i>guy</i> and <i>sky</i> are so much more similar than <i>glove</i> and <i>love</i> and <i>eight</i> and <i>ate</i> are.</p>
 </div>
 </div>
-<div class="outline-5" id="outline-container-org7f98def">
-<h5 id="org7f98def">Metaphone</h5>
-<div class="outline-text-5" id="text-org7f98def">
+<div class="outline-5" id="outline-container-org71f7248">
+<h5 id="org71f7248">Metaphone</h5>
+<div class="outline-text-5" id="text-org71f7248">
 <p><a href="https://www.wikiwand.com/en/Metaphone">Metaphone</a> was developed in 1990 and improves on Soundex to produce a more accurate encoding.</p>
 <div class="highlight">
 <pre><span></span><span class="n">rupert_robert_rwanda</span><span class="p">(</span><span class="n">jellyfish</span><span class="o">.</span><span class="n">metaphone</span><span class="p">)</span>
@@ -1093,9 +1093,9 @@ Return a measure of the sequences' similarity between 0 and 100, using different
 <p>Metaphone is a <i>little</i> more interpretable, but interestingly in this case the similarity flips and <i>love</i> and <i>glove</i> are rated more similar. Also, in this case they all had a Levenshtein Distance of 1, while their similarity-ratios where quite different (Levenstein Distance is the number of edits you need to transform one sequence to another).</p>
 </div>
 </div>
-<div class="outline-5" id="outline-container-orgb1ff7fa">
-<h5 id="orgb1ff7fa">New York State Identification and Intelligence System (NYSIIS)</h5>
-<div class="outline-text-5" id="text-orgb1ff7fa">
+<div class="outline-5" id="outline-container-orgc44eec7">
+<h5 id="orgc44eec7">New York State Identification and Intelligence System (NYSIIS)</h5>
+<div class="outline-text-5" id="text-orgc44eec7">
 <p>The <a href="https://www.wikiwand.com/en/New_York_State_Identification_and_Intelligence_System">New York State Identification and Intelligence System</a> is a slightly more accurate (compared to Soundex) encoder that was developed in 1970.</p>
 <div class="highlight">
 <pre><span></span><span class="n">rupert_robert_rwanda</span><span class="p">(</span><span class="n">jellyfish</span><span class="o">.</span><span class="n">nysiis</span><span class="p">)</span>
@@ -1138,9 +1138,9 @@ Return a measure of the sequences' similarity between 0 and 100, using different
 <p>This seems even more interpretable than the metaphone encodings, and the gap in the similarities is even greater.</p>
 </div>
 </div>
-<div class="outline-5" id="outline-container-org78503e9">
-<h5 id="org78503e9">Match Rating Approach</h5>
-<div class="outline-text-5" id="text-org78503e9">
+<div class="outline-5" id="outline-container-orgfdd2333">
+<h5 id="orgfdd2333">Match Rating Approach</h5>
+<div class="outline-text-5" id="text-orgfdd2333">
 <p>The final phonetic encoding that jellyfish supports is the <a href="https://www.wikiwand.com/en/Match_rating_approach">Match Rating Approach</a> which was developed in 1977 by Western Airlines.</p>
 <div class="highlight">
 <pre><span></span><span class="n">rupert_robert_rwanda</span><span class="p">(</span><span class="n">jellyfish</span><span class="o">.</span><span class="n">match_rating_codex</span><span class="p">)</span>
@@ -1187,9 +1187,9 @@ Return a measure of the sequences' similarity between 0 and 100, using different
 </div>
 </div>
 </div>
-<div class="outline-3" id="outline-container-org185cb88">
-<h3 id="org185cb88">A Short Diversion Into FlashText</h3>
-<div class="outline-text-3" id="text-org185cb88">
+<div class="outline-3" id="outline-container-org9f8571f">
+<h3 id="org9f8571f">A Short Diversion Into FlashText</h3>
+<div class="outline-text-3" id="text-org9f8571f">
 <p><a href="https://flashtext.readthedocs.io/en/latest/">FlashText</a> is a python module to help find and replace words in very large documents. It doesn't do all the interesting linguistic things that the other code we've been looking at does, but it was built specifically to be very fast so for cases where you have a lot of text you can use it to speed up searches.</p>
 <p>I don't really have any large text to test it on, but here's a quick look at how it works. You can search for matching words.</p>
 <div class="highlight">
@@ -1253,14 +1253,14 @@ more completely than that of a secret agent of police.
 </div>
 </div>
 </div>
-<div class="outline-2" id="outline-container-org6b2df69">
-<h2 id="org6b2df69">End</h2>
-<div class="outline-text-2" id="text-org6b2df69">
+<div class="outline-2" id="outline-container-org515abb4">
+<h2 id="org515abb4">End</h2>
+<div class="outline-text-2" id="text-org515abb4">
 <p>Despite the name this was really a look at three-ish libraries to help with tokenization, lemmatizing, fuzzy string matching, and quick string searching and replacin.g</p>
 </div>
-<div class="outline-3" id="outline-container-org76b0959">
-<h3 id="org76b0959">Reference</h3>
-<div class="outline-text-3" id="text-org76b0959">
+<div class="outline-3" id="outline-container-org08a394e">
+<h3 id="org08a394e">Reference</h3>
+<div class="outline-text-3" id="text-org08a394e">
 <ol class="org-ol">
 <li>Kasliwal N. Natural language processing with Python quick start guide: going from a Python developer to an effective natural language processing engineer [Internet]. 2018 [cited 2019 May 18]. Available from: <a href="http://proquest.safaribooksonline.com/?fpi=9781789130386">http://proquest.safaribooksonline.com/?fpi=9781789130386</a></li>
 </ol>

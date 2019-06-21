@@ -1,58 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tip of the Dnghu (Posts about walk-through)</title><link>https://necromuralist.github.io/Tip-of-the-Dnghu/</link><description></description><atom:link href="https://necromuralist.github.io/Tip-of-the-Dnghu/categories/walk-through.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2019 &lt;a href="mailto:necromuralist@protonmail.com"&gt;Cloistered Monkey&lt;/a&gt; </copyright><lastBuildDate>Sun, 19 May 2019 19:48:50 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Newsgroups Example</title><link>https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/</link><dc:creator>Cloistered Monkey</dc:creator><description>&lt;div id="table-of-contents"&gt;
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tip of the Dnghu (Posts about walk-through)</title><link>https://necromuralist.github.io/Tip-of-the-Dnghu/</link><description></description><atom:link href="https://necromuralist.github.io/Tip-of-the-Dnghu/categories/walk-through.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2019 &lt;a href="mailto:necromuralist@protonmail.com"&gt;Cloistered Monkey&lt;/a&gt; </copyright><lastBuildDate>Mon, 20 May 2019 18:48:20 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Newsgroups Example</title><link>https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/</link><dc:creator>Cloistered Monkey</dc:creator><description>&lt;div id="table-of-contents"&gt;
 &lt;h2&gt;Table of Contents&lt;/h2&gt;
 &lt;div id="text-table-of-contents"&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#orgf6ec422"&gt;Beginning&lt;/a&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#orgb1df323"&gt;Beginning&lt;/a&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#org044bc75"&gt;Imports&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#orge9bccb4"&gt;Set Up&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#orga8c4ba8"&gt;Imports&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#orgb703285"&gt;Set Up&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#orgcf1a3eb"&gt;Middle&lt;/a&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#org0d7bf84"&gt;Middle&lt;/a&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#org80cd3c6"&gt;Loading the Data&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#org485e0a4"&gt;Setting Up The Test Set&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#org38828f5"&gt;The Document Term Matrix&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#orgb99565c"&gt;Term-Frequency/Inverse Document Frequency&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#orgcadb35c"&gt;A Logistic Regression Pipeline&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#org39d15c9"&gt;Cross Validation&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#org3ce1c9e"&gt;Testing&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#org1b272b8"&gt;A Confusion Matrix&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#org9696917"&gt;Loading the Data&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#org47852fc"&gt;Setting Up The Test Set&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#org4dbf5b8"&gt;The Document Term Matrix&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#org92ddeba"&gt;Term-Frequency/Inverse Document Frequency&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#orga536ad7"&gt;A Logistic Regression Pipeline&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#org29f4fe1"&gt;Cross Validation&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#orgf95d1d8"&gt;Testing&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#org8803884"&gt;A Confusion Matrix&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#orgce571ee"&gt;End&lt;/a&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#org3b3724e"&gt;End&lt;/a&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#org9723bb1"&gt;Original Source&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#org6a76866"&gt;Original Source&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgf6ec422" class="outline-2"&gt;
-&lt;h2 id="orgf6ec422"&gt;Beginning&lt;/h2&gt;
-&lt;div class="outline-text-2" id="text-orgf6ec422"&gt;
+&lt;div id="outline-container-orgb1df323" class="outline-2"&gt;
+&lt;h2 id="orgb1df323"&gt;Beginning&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-orgb1df323"&gt;
 &lt;p&gt;
 This is going to be a look at the &lt;a href="https://archive.ics.uci.edu/ml/datasets/twenty+newsgroups"&gt;Twenty Newsgroups&lt;/a&gt; dataset which has posts from twenty newsgroups classified by the newsgroup that they were in. It will be sort of a mad-dash through a simple pipeline to create a model that can classify them.
 &lt;/p&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-org044bc75" class="outline-3"&gt;
-&lt;h3 id="org044bc75"&gt;Imports&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org044bc75"&gt;
+&lt;div id="outline-container-orga8c4ba8" class="outline-3"&gt;
+&lt;h3 id="orga8c4ba8"&gt;Imports&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-orga8c4ba8"&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgd9f897b" class="outline-4"&gt;
-&lt;h4 id="orgd9f897b"&gt;Python&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-orgd9f897b"&gt;
+&lt;div id="outline-container-orgb94fdb7" class="outline-4"&gt;
+&lt;h4 id="orgb94fdb7"&gt;Python&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-orgb94fdb7"&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;functools&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;partial&lt;/span&gt;
 &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;pathlib&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;Path&lt;/span&gt;
 &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;os&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgf9d7031" class="outline-4"&gt;
-&lt;h4 id="orgf9d7031"&gt;PyPi&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-orgf9d7031"&gt;
+&lt;div id="outline-container-org48c1cb7" class="outline-4"&gt;
+&lt;h4 id="org48c1cb7"&gt;PyPi&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org48c1cb7"&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;dotenv&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;load_dotenv&lt;/span&gt;
 &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;sklearn.datasets&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;fetch_20newsgroups&lt;/span&gt;
 &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;sklearn.feature_extraction.text&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;
@@ -76,9 +76,9 @@ This is going to be a look at the &lt;a href="https://archive.ics.uci.edu/ml/dat
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orge41a628" class="outline-4"&gt;
-&lt;h4 id="orge41a628"&gt;My Stuff&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-orge41a628"&gt;
+&lt;div id="outline-container-org386375a" class="outline-4"&gt;
+&lt;h4 id="org386375a"&gt;My Stuff&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org386375a"&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;graeae.tables&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;CountPercentage&lt;/span&gt;
 &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;graeae.timers&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;Timer&lt;/span&gt;
 &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;graeae.visualization&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;EmbedHoloview&lt;/span&gt;
@@ -86,13 +86,13 @@ This is going to be a look at the &lt;a href="https://archive.ics.uci.edu/ml/dat
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orge9bccb4" class="outline-3"&gt;
-&lt;h3 id="orge9bccb4"&gt;Set Up&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-orge9bccb4"&gt;
+&lt;div id="outline-container-orgb703285" class="outline-3"&gt;
+&lt;h3 id="orgb703285"&gt;Set Up&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-orgb703285"&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org84348be" class="outline-4"&gt;
-&lt;h4 id="org84348be"&gt;Load the Dotenv&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org84348be"&gt;
+&lt;div id="outline-container-orgd608c42" class="outline-4"&gt;
+&lt;h4 id="orgd608c42"&gt;Load the Dotenv&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-orgd608c42"&gt;
 &lt;p&gt;
 This loads some extra environment variables, in particular the path to the sklearn-data folder.
 &lt;/p&gt;
@@ -101,9 +101,9 @@ This loads some extra environment variables, in particular the path to the sklea
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgf2ff858" class="outline-4"&gt;
-&lt;h4 id="orgf2ff858"&gt;The Timer&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-orgf2ff858"&gt;
+&lt;div id="outline-container-org7ac52c2" class="outline-4"&gt;
+&lt;h4 id="org7ac52c2"&gt;The Timer&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org7ac52c2"&gt;
 &lt;p&gt;
 This is an object to keep track of how long things take.
 &lt;/p&gt;
@@ -111,9 +111,9 @@ This is an object to keep track of how long things take.
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org4bc3234" class="outline-4"&gt;
-&lt;h4 id="org4bc3234"&gt;The Table&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org4bc3234"&gt;
+&lt;div id="outline-container-org21d170a" class="outline-4"&gt;
+&lt;h4 id="org21d170a"&gt;The Table&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org21d170a"&gt;
 &lt;p&gt;
 This is a helper to print org-tables from data-frames.
 &lt;/p&gt;
@@ -122,9 +122,9 @@ This is a helper to print org-tables from data-frames.
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgec6f328" class="outline-4"&gt;
-&lt;h4 id="orgec6f328"&gt;Plotting&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-orgec6f328"&gt;
+&lt;div id="outline-container-org6209732" class="outline-4"&gt;
+&lt;h4 id="org6209732"&gt;Plotting&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org6209732"&gt;
 &lt;p&gt;
 This helps save the plots to the right folder for nikola.
 &lt;/p&gt;
@@ -136,13 +136,13 @@ This helps save the plots to the right folder for nikola.
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgcf1a3eb" class="outline-2"&gt;
-&lt;h2 id="orgcf1a3eb"&gt;Middle&lt;/h2&gt;
-&lt;div class="outline-text-2" id="text-orgcf1a3eb"&gt;
+&lt;div id="outline-container-org0d7bf84" class="outline-2"&gt;
+&lt;h2 id="org0d7bf84"&gt;Middle&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-org0d7bf84"&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org80cd3c6" class="outline-3"&gt;
-&lt;h3 id="org80cd3c6"&gt;Loading the Data&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org80cd3c6"&gt;
+&lt;div id="outline-container-org9696917" class="outline-3"&gt;
+&lt;h3 id="org9696917"&gt;Loading the Data&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org9696917"&gt;
 &lt;p&gt;
 We're going to be using the &lt;a href="https://scikit-learn.org/0.19/datasets/twenty_newsgroups.html"&gt;20 Newsgroups dataset&lt;/a&gt; that you can download using sklearn's &lt;a href="https://scikit-learn.org/0.19/modules/generated/sklearn.datasets.fetch_20newsgroups.html#sklearn.datasets.fetch_20newsgroups"&gt;fetch_20newsgroups&lt;/a&gt; function. By default it downloads it to a folder named &lt;code&gt;scikit_learn_data&lt;/code&gt; in your home directory, but since &lt;i&gt;everybody&lt;/i&gt; seems to want to add folders to my home directory I prefer to put it in a hidden folder so I'm not always staring at all these folders. To make it more likely that I'll remember the right folder name I put it in an environment variable.
 &lt;/p&gt;
@@ -226,9 +226,9 @@ So, reading the blob the first thing to notice is that they already split the da
 &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-org485e0a4" class="outline-3"&gt;
-&lt;h3 id="org485e0a4"&gt;Setting Up The Test Set&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org485e0a4"&gt;
+&lt;div id="outline-container-org47852fc" class="outline-3"&gt;
+&lt;h3 id="org47852fc"&gt;Setting Up The Test Set&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org47852fc"&gt;
 &lt;p&gt;
 Normally I would use sklearn's &lt;a href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html"&gt;train_test_split&lt;/a&gt; to split the data set up, but since they set it up so that you have to download the test set separately, I guess I'll go with that.
 &lt;/p&gt;
@@ -252,9 +252,9 @@ Testing: 7,532 (40 %)
 &lt;/pre&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-org1069c27" class="outline-4"&gt;
-&lt;h4 id="org1069c27"&gt;What does an entry look like?&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org1069c27"&gt;
+&lt;div id="outline-container-org4b32218" class="outline-4"&gt;
+&lt;h4 id="org4b32218"&gt;What does an entry look like?&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org4b32218"&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;index&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;min&lt;/span&gt;&lt;span class="p"&gt;((&lt;/span&gt;&lt;span class="nb"&gt;len&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x_train&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;index&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt; &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;index&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="nb"&gt;range&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;len&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x_train&lt;/span&gt;&lt;span class="p"&gt;))))&lt;/span&gt;
 &lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x_train&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;index&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
@@ -306,9 +306,9 @@ Looks like there's a lot of noise in these things.
 &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-orgd2eff98" class="outline-4"&gt;
-&lt;h4 id="orgd2eff98"&gt;How are the groups distributed?&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-orgd2eff98"&gt;
+&lt;div id="outline-container-org961a725" class="outline-4"&gt;
+&lt;h4 id="org961a725"&gt;How are the groups distributed?&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org961a725"&gt;
 &lt;p&gt;
 The labels are numbers representing which Newsgroup each of the documents came from, but they also give us a translation in the form of the &lt;code&gt;dataset.target_names&lt;/code&gt; list so we can take a look at how much of each group is represented.
 &lt;/p&gt;
@@ -481,9 +481,9 @@ Actually, now that I plot it it looks like the last three are underepresented, e
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org38828f5" class="outline-3"&gt;
-&lt;h3 id="org38828f5"&gt;The Document Term Matrix&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org38828f5"&gt;
+&lt;div id="outline-container-org4dbf5b8" class="outline-3"&gt;
+&lt;h3 id="org4dbf5b8"&gt;The Document Term Matrix&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org4dbf5b8"&gt;
 &lt;p&gt;
 To work with the data-set we need to convert it to some kind of numeric value. In this case I'm going to use sklearn's &lt;a href="https://scikit-learn.org/0.19/modules/generated/sklearn.feature_extraction.text.CountVectorizer.html#sklearn.feature_extraction.text.CountVectorizer"&gt;CountVectorizer&lt;/a&gt; to create a matrix where each row represents a document and each column is a term in the &lt;a href="https://www.wikiwand.com/en/Text_corpus"&gt;corpus&lt;/a&gt; (creating a &lt;a href="https://www.wikiwand.com/en/Bag-of-words_model"&gt;Bag of Words&lt;/a&gt;/&lt;a href="https://www.wikiwand.com/en/Document-term_matrix"&gt;Document Term Matrix&lt;/a&gt;) The values are the count of the terms in each document. Sklearn has an alternative download function - &lt;a href="https://scikit-learn.org/0.19/modules/generated/sklearn.datasets.fetch_20newsgroups_vectorized.html#sklearn.datasets.fetch_20newsgroups_vectorized"&gt;fetch_20newsgroups_vectorized&lt;/a&gt; that will download it already vectorized, but since you have to do the conversion yourself in most cases I thought it would be better not to use it.
 &lt;/p&gt;
@@ -521,9 +521,9 @@ I was going to inspect the matrix, but it's a sparse matrix so you have to conve
 &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-orgb99565c" class="outline-3"&gt;
-&lt;h3 id="orgb99565c"&gt;Term-Frequency/Inverse Document Frequency&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-orgb99565c"&gt;
+&lt;div id="outline-container-org92ddeba" class="outline-3"&gt;
+&lt;h3 id="org92ddeba"&gt;Term-Frequency/Inverse Document Frequency&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org92ddeba"&gt;
 &lt;p&gt;
 If we just use the counts (the Term-Frequency (TF)), then the most common word per document will have the highest value, but if a word is spread across all or at least many documents, then even if it's common in a document it probably won't help us distinguish the documents from each other in a meaningful way. To deal with this we can add a penalty (the Inverse-Document-Frequency (IDF) weight) that lowers the value for a term the more common it is among all the documents. Together the two methods are knows as &lt;a href="https://www.wikiwand.com/en/Tf%E2%80%93idf"&gt;TF-IDF.&lt;/a&gt; Here sklearn's &lt;a href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfTransformer.html"&gt;TfidfTransformer&lt;/a&gt; does the transform for us.
 &lt;/p&gt;
@@ -540,9 +540,9 @@ Documents: 11,314 Terms: 130,107
 &lt;/pre&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgcadb35c" class="outline-3"&gt;
-&lt;h3 id="orgcadb35c"&gt;A Logistic Regression Pipeline&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-orgcadb35c"&gt;
+&lt;div id="outline-container-orga536ad7" class="outline-3"&gt;
+&lt;h3 id="orga536ad7"&gt;A Logistic Regression Pipeline&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-orga536ad7"&gt;
 &lt;p&gt;
 To classify the documents we're going to use &lt;a href="https://www.wikiwand.com/en/Logistic_regression"&gt;Logistic Regression&lt;/a&gt; (also from &lt;a href="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html"&gt;sklearn&lt;/a&gt;). In addition, instead of creating the Document Term Matrix in separate steps as above, I'm going to create a &lt;a href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html"&gt;Pipeline&lt;/a&gt; so sklearn can do it in a single call. An sklearn Pipeline takes as all but the last of it's constructor's argument a list of &lt;code&gt;(name, transform)&lt;/code&gt; tuples, where the &lt;code&gt;transform&lt;/code&gt; argument is an object that has a &lt;code&gt;fit_transform&lt;/code&gt; method (like the &lt;code&gt;CountVectorizer&lt;/code&gt; we saw earlier). The last of argument of the constructor is the model that you are going to fit on the data that the pipeline has transformed. If you don't want to customize the names there's a &lt;a href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.make_pipeline.html#sklearn.pipeline.make_pipeline"&gt;make_pipeline&lt;/a&gt; function that just takes the transformer and model instances as arguments and automatically names them for you, returning the pipeline as its output.
 &lt;/p&gt;
@@ -563,9 +563,9 @@ I'm using the defaults for Logistic Regression in general, but it will output a 
 &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-org39d15c9" class="outline-3"&gt;
-&lt;h3 id="org39d15c9"&gt;Cross Validation&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org39d15c9"&gt;
+&lt;div id="outline-container-org29f4fe1" class="outline-3"&gt;
+&lt;h3 id="org29f4fe1"&gt;Cross Validation&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org29f4fe1"&gt;
 &lt;p&gt;
 Now we can do some cross validation.
 &lt;/p&gt;
@@ -655,9 +655,9 @@ It looks like even with the default parameters the model got a mean/median &lt;a
 &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-org3ce1c9e" class="outline-3"&gt;
-&lt;h3 id="org3ce1c9e"&gt;Testing&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org3ce1c9e"&gt;
+&lt;div id="outline-container-orgf95d1d8" class="outline-3"&gt;
+&lt;h3 id="orgf95d1d8"&gt;Testing&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-orgf95d1d8"&gt;
 &lt;p&gt;
 Let's try fitting it to the whole training set and see how it does.
 &lt;/p&gt;
@@ -706,9 +706,9 @@ The precision and recall are the same as the F1 score, so it isn't better at eit
 &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-org1b272b8" class="outline-3"&gt;
-&lt;h3 id="org1b272b8"&gt;A Confusion Matrix&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org1b272b8"&gt;
+&lt;div id="outline-container-org8803884" class="outline-3"&gt;
+&lt;h3 id="org8803884"&gt;A Confusion Matrix&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org8803884"&gt;
 &lt;p&gt;
 Having a single value like the F1 score helps us evaluate the model, but using a &lt;a href="https://www.wikiwand.com/en/Confusion_matrix"&gt;Confusion Matrix&lt;/a&gt; (via sklearn's &lt;a href="https://scikit-learn.org/stable/modules/generated/sklearn.metrics.confusion_matrix.html"&gt;confusion_matrix&lt;/a&gt; function) will help us understand how the model did a little more.
 &lt;/p&gt;
@@ -811,17 +811,17 @@ In the dataset (as in life) the most confusisng seemed to be religion, politics,
 &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-orgce571ee" class="outline-2"&gt;
-&lt;h2 id="orgce571ee"&gt;End&lt;/h2&gt;
-&lt;div class="outline-text-2" id="text-orgce571ee"&gt;
+&lt;div id="outline-container-org3b3724e" class="outline-2"&gt;
+&lt;h2 id="org3b3724e"&gt;End&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-org3b3724e"&gt;
 &lt;p&gt;
 So here we have a basic walk-through using sklearn to model a document classifier built with Logistic Regression. One of the nice things about logistic regression is that the weights tell you which variables are the most important, but I've never tried that with documents so I don't know how to do that here. There are many improvements that could be made (would have to be made) if this were an attempt to make a real model, but the simplicity of the steps shows how much you can do with off-the-shelf software. Eighty-three percent isn't perfect, but it's pretty good.
 &lt;/p&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-org9723bb1" class="outline-3"&gt;
-&lt;h3 id="org9723bb1"&gt;Original Source&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org9723bb1"&gt;
+&lt;div id="outline-container-org6a76866" class="outline-3"&gt;
+&lt;h3 id="org6a76866"&gt;Original Source&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org6a76866"&gt;
 &lt;ol class="org-ol"&gt;
 &lt;li&gt;Kasliwal N. Natural language processing with Python quick start guide: going from a Python developer to an effective natural language processing engineer [Internet]. 2018 [cited 2019 May 18]. Available from: &lt;a href="http://proquest.safaribooksonline.com/?fpi=9781789130386"&gt;http://proquest.safaribooksonline.com/?fpi=9781789130386&lt;/a&gt;&lt;/li&gt;
 &lt;/ol&gt;

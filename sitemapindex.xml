@@ -7,78 +7,90 @@
                         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
  <sitemap>
   <loc>https://necromuralist.github.io/Tip-of-the-Dnghu/categories/cat_data.xml</loc>
-  <lastmod>2019-05-27T23:21:00Z</lastmod>
+  <lastmod>2019-05-30T02:56:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://necromuralist.github.io/Tip-of-the-Dnghu/categories/cat_links.xml</loc>
-  <lastmod>2019-05-06T00:12:00Z</lastmod>
+  <lastmod>2019-05-06T21:23:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://necromuralist.github.io/Tip-of-the-Dnghu/categories/cat_nlp.xml</loc>
-  <lastmod>2019-05-19T19:48:00Z</lastmod>
+  <lastmod>2019-06-20T22:16:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://necromuralist.github.io/Tip-of-the-Dnghu/categories/cat_reading.xml</loc>
-  <lastmod>2019-05-06T00:12:00Z</lastmod>
+  <lastmod>2019-05-06T21:23:00Z</lastmod>
+ </sitemap>
+ <sitemap>
+  <loc>https://necromuralist.github.io/Tip-of-the-Dnghu/categories/cat_text-mining.xml</loc>
+  <lastmod>2019-06-21T19:24:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://necromuralist.github.io/Tip-of-the-Dnghu/categories/cleaning.xml</loc>
-  <lastmod>2019-05-27T23:21:00Z</lastmod>
+  <lastmod>2019-05-30T02:56:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://necromuralist.github.io/Tip-of-the-Dnghu/categories/data.xml</loc>
-  <lastmod>2019-05-27T23:21:00Z</lastmod>
+  <lastmod>2019-05-30T02:56:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://necromuralist.github.io/Tip-of-the-Dnghu/categories/lecture.xml</loc>
-  <lastmod>2019-05-18T17:31:00Z</lastmod>
+  <lastmod>2019-05-09T20:48:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://necromuralist.github.io/Tip-of-the-Dnghu/categories/links.xml</loc>
-  <lastmod>2019-05-06T00:12:00Z</lastmod>
+  <lastmod>2019-05-06T21:23:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://necromuralist.github.io/Tip-of-the-Dnghu/categories/list.xml</loc>
-  <lastmod>2019-05-06T00:12:00Z</lastmod>
+  <lastmod>2019-05-06T21:23:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://necromuralist.github.io/Tip-of-the-Dnghu/categories/nlp.xml</loc>
-  <lastmod>2019-05-19T19:48:00Z</lastmod>
+  <lastmod>2019-06-21T19:25:00Z</lastmod>
+ </sitemap>
+ <sitemap>
+  <loc>https://necromuralist.github.io/Tip-of-the-Dnghu/categories/parts-of-speech.xml</loc>
+  <lastmod>2019-05-31T00:52:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://necromuralist.github.io/Tip-of-the-Dnghu/categories/reading.xml</loc>
-  <lastmod>2019-05-06T00:12:00Z</lastmod>
+  <lastmod>2019-05-06T21:23:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://necromuralist.github.io/Tip-of-the-Dnghu/categories/reference.xml</loc>
-  <lastmod>2019-05-06T00:12:00Z</lastmod>
+  <lastmod>2019-05-06T21:23:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://necromuralist.github.io/Tip-of-the-Dnghu/categories/review.xml</loc>
-  <lastmod>2019-05-06T00:12:00Z</lastmod>
+  <lastmod>2019-05-06T21:23:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://necromuralist.github.io/Tip-of-the-Dnghu/categories/search.xml</loc>
-  <lastmod>2019-05-18T17:31:00Z</lastmod>
+  <lastmod>2019-05-09T20:48:00Z</lastmod>
+ </sitemap>
+ <sitemap>
+  <loc>https://necromuralist.github.io/Tip-of-the-Dnghu/categories/text-mining.xml</loc>
+  <lastmod>2019-06-21T19:24:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://necromuralist.github.io/Tip-of-the-Dnghu/categories/text.xml</loc>
-  <lastmod>2019-05-18T17:31:00Z</lastmod>
+  <lastmod>2019-05-09T20:48:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://necromuralist.github.io/Tip-of-the-Dnghu/categories/tidying.xml</loc>
-  <lastmod>2019-05-27T22:49:00Z</lastmod>
+  <lastmod>2019-05-30T02:56:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://necromuralist.github.io/Tip-of-the-Dnghu/categories/walk-through.xml</loc>
-  <lastmod>2019-05-19T19:48:00Z</lastmod>
+  <lastmod>2019-05-20T18:48:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://necromuralist.github.io/Tip-of-the-Dnghu/rss.xml</loc>
-  <lastmod>2019-05-27T23:21:00Z</lastmod>
+  <lastmod>2019-06-21T19:25:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://necromuralist.github.io/Tip-of-the-Dnghu/sitemap.xml</loc>
-  <lastmod>2019-05-27T23:21:00Z</lastmod>
+  <lastmod>2019-06-21T19:25:00Z</lastmod>
  </sitemap>
 </sitemapindex>

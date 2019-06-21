@@ -19,6 +19,7 @@
 <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML" type="text/javascript"></script>
 <meta content="Cloistered Monkey" name="author">
 <link href="../tidying-data/" rel="prev" title="Some Tools For Tidying Data" type="text/html">
+<link href="../../text_mining/word-frequencies-and-zipfs-law/" rel="next" title="Word Frequencies and Zipfs Law" type="text/html">
 <meta content="Tip of the Dnghu" property="og:site_name">
 <meta content="Name Redaction" property="og:title">
 <meta content="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/name-redaction/" property="og:url">
@@ -68,45 +69,45 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org30b9a88">Beginning</a>
+<li><a href="#org5485fbf">Beginning</a>
 <ul>
-<li><a href="#orge6e9a8a">Imports</a></li>
-<li><a href="#orgf188059">Set Up</a></li>
-<li><a href="#org393993e">Load the File</a></li>
+<li><a href="#orgbee770d">Imports</a></li>
+<li><a href="#orgd5666d0">Set Up</a></li>
+<li><a href="#org21c410b">Load the File</a></li>
 </ul>
 </li>
-<li><a href="#org1a76e1f">Middle</a>
+<li><a href="#org62abcee">Middle</a>
 <ul>
-<li><a href="#orgbd3216f">A Little spacy</a></li>
-<li><a href="#orgcd37d19">Redacting Names</a></li>
+<li><a href="#org1d02e2f">A Little spacy</a></li>
+<li><a href="#orge7f16da">Redacting Names</a></li>
 </ul>
 </li>
-<li><a href="#orgaec543c">End</a>
+<li><a href="#org8dbbaee">End</a>
 <ul>
-<li><a href="#orgbe440e6">Reference</a></li>
+<li><a href="#org85568b9">Reference</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
-<div class="outline-2" id="outline-container-org30b9a88">
-<h2 id="org30b9a88">Beginning</h2>
-<div class="outline-text-2" id="text-org30b9a88"></div>
-<div class="outline-3" id="outline-container-orge6e9a8a">
-<h3 id="orge6e9a8a">Imports</h3>
-<div class="outline-text-3" id="text-orge6e9a8a"></div>
-<div class="outline-4" id="outline-container-org1242ad2">
-<h4 id="org1242ad2">Python</h4>
-<div class="outline-text-4" id="text-org1242ad2">
+<div class="outline-2" id="outline-container-org5485fbf">
+<h2 id="org5485fbf">Beginning</h2>
+<div class="outline-text-2" id="text-org5485fbf"></div>
+<div class="outline-3" id="outline-container-orgbee770d">
+<h3 id="orgbee770d">Imports</h3>
+<div class="outline-text-3" id="text-orgbee770d"></div>
+<div class="outline-4" id="outline-container-org18df4e1">
+<h4 id="org18df4e1">Python</h4>
+<div class="outline-text-4" id="text-org18df4e1">
 <div class="highlight">
 <pre><span></span>from pathlib import Path
 from typing import Collection
 </pre></div>
 </div>
 </div>
-<div class="outline-4" id="outline-container-orgd576b86">
-<h4 id="orgd576b86">PyPi</h4>
-<div class="outline-text-4" id="text-orgd576b86">
+<div class="outline-4" id="outline-container-org99afbfe">
+<h4 id="org99afbfe">PyPi</h4>
+<div class="outline-text-4" id="text-org99afbfe">
 <div class="highlight">
 <pre><span></span>from spacy import displacy
 
@@ -115,9 +116,9 @@ import textacy
 </pre></div>
 </div>
 </div>
-<div class="outline-4" id="outline-container-org4fa87ec">
-<h4 id="org4fa87ec">My Stuff</h4>
-<div class="outline-text-4" id="text-org4fa87ec">
+<div class="outline-4" id="outline-container-orgb86812e">
+<h4 id="orgb86812e">My Stuff</h4>
+<div class="outline-text-4" id="text-orgb86812e">
 <div class="highlight">
 <pre><span></span>from graeae.timers import Timer
 from graeae import EnvironmentLoader, TextDownloader
@@ -125,20 +126,20 @@ from graeae import EnvironmentLoader, TextDownloader
 </div>
 </div>
 </div>
-<div class="outline-3" id="outline-container-orgf188059">
-<h3 id="orgf188059">Set Up</h3>
-<div class="outline-text-3" id="text-orgf188059"></div>
-<div class="outline-4" id="outline-container-org210949a">
-<h4 id="org210949a">The Timer</h4>
-<div class="outline-text-4" id="text-org210949a">
+<div class="outline-3" id="outline-container-orgd5666d0">
+<h3 id="orgd5666d0">Set Up</h3>
+<div class="outline-text-3" id="text-orgd5666d0"></div>
+<div class="outline-4" id="outline-container-org97e3320">
+<h4 id="org97e3320">The Timer</h4>
+<div class="outline-text-4" id="text-org97e3320">
 <div class="highlight">
 <pre><span></span>TIMER = Timer()
 </pre></div>
 </div>
 </div>
-<div class="outline-4" id="outline-container-org9c138b8">
-<h4 id="org9c138b8">Spacy</h4>
-<div class="outline-text-4" id="text-org9c138b8">
+<div class="outline-4" id="outline-container-org43d1495">
+<h4 id="org43d1495">Spacy</h4>
+<div class="outline-text-4" id="text-org43d1495">
 <p>This loads the large English model tha spacy provides.</p>
 <div class="highlight">
 <pre><span></span>with TIMER:
@@ -154,9 +155,9 @@ from graeae import EnvironmentLoader, TextDownloader
 </div>
 </div>
 </div>
-<div class="outline-3" id="outline-container-org393993e">
-<h3 id="org393993e">Load the File</h3>
-<div class="outline-text-3" id="text-org393993e">
+<div class="outline-3" id="outline-container-org21c410b">
+<h3 id="org21c410b">Load the File</h3>
+<div class="outline-text-3" id="text-org21c410b">
 <div class="highlight">
 <pre><span></span>URL = "https://www.gutenberg.org/files/974/974-0.txt"
 environment = EnvironmentLoader()
@@ -171,12 +172,12 @@ text = downloader.download
 </pre></div>
 </div>
 </div>
-<div class="outline-2" id="outline-container-org1a76e1f">
-<h2 id="org1a76e1f">Middle</h2>
-<div class="outline-text-2" id="text-org1a76e1f"></div>
-<div class="outline-3" id="outline-container-orgbd3216f">
-<h3 id="orgbd3216f">A Little spacy</h3>
-<div class="outline-text-3" id="text-orgbd3216f">
+<div class="outline-2" id="outline-container-org62abcee">
+<h2 id="org62abcee">Middle</h2>
+<div class="outline-text-2" id="text-org62abcee"></div>
+<div class="outline-3" id="outline-container-org1d02e2f">
+<h3 id="org1d02e2f">A Little spacy</h3>
+<div class="outline-text-3" id="text-org1d02e2f">
 <div class="highlight">
 <pre><span></span>document = nlp(text)
 </pre></div>
@@ -334,9 +335,9 @@ for entity_type in sorted(entity_types):
 <p>The categories seem kind of arbitrary, but perhaps that's because of the book that I chose.</p>
 </div>
 </div>
-<div class="outline-3" id="outline-container-orgcd37d19">
-<h3 id="orgcd37d19">Redacting Names</h3>
-<div class="outline-text-3" id="text-orgcd37d19">
+<div class="outline-3" id="outline-container-orge7f16da">
+<h3 id="orge7f16da">Redacting Names</h3>
+<div class="outline-text-3" id="text-orge7f16da">
 <p>It's getting a little unwieldy to handle the entire <i>Secret Agent</i> novel so I'll switch to somet oy sentence fragments.</p>
 <div class="highlight">
 <pre><span></span>fragment = "Mr. Jason Ottomatic and Tom Tuttle (of Tacoma) went to see Billy Buttman at Barney's."
@@ -411,9 +412,9 @@ Mr. [REDACTED] and [REDACTED] (of Tacoma) went to see [REDACTED] at Barney's.
 </pre>
 <p>Besides the merge I switched to using <code>token.string</code> which (mostly) keeeps the whitespace.</p>
 </div>
-<div class="outline-4" id="outline-container-org11ecf25">
-<h4 id="org11ecf25">More Redaction</h4>
-<div class="outline-text-4" id="text-org11ecf25">
+<div class="outline-4" id="outline-container-orged3a213">
+<h4 id="orged3a213">More Redaction</h4>
+<div class="outline-text-4" id="text-orged3a213">
 <p>We've been told that our identification of where the second person is from, and where all three met might give out too much information as well. Looking at the list of <a href="https://spacy.io/usage/linguistic-features#named-entities">bulit-in named entities</a> doesn't make it obvious what the two entity types would be, so I guess I'll brute-force it.</p>
 <div class="highlight">
 <pre><span></span>document = nlp(fragment)
@@ -524,14 +525,14 @@ for entity in document.ents:
 </div>
 </div>
 </div>
-<div class="outline-2" id="outline-container-orgaec543c">
-<h2 id="orgaec543c">End</h2>
-<div class="outline-text-2" id="text-orgaec543c">
+<div class="outline-2" id="outline-container-org8dbbaee">
+<h2 id="org8dbbaee">End</h2>
+<div class="outline-text-2" id="text-org8dbbaee">
 <p>This was a brief look at how you can use a slightly more informed approach to identify parts of a text without using regular expressions and things of that nature to match strings. By using identifiable named entities, spacy is able to help us identify entire classes of entities to match without knowing what they look like beforehand. Of course, it would be dangerous to do this too blindly, there might always be things that confuse the model, but spacy does fairly well right out of the box.</p>
 </div>
-<div class="outline-3" id="outline-container-orgbe440e6">
-<h3 id="orgbe440e6">Reference</h3>
-<div class="outline-text-3" id="text-orgbe440e6">
+<div class="outline-3" id="outline-container-org85568b9">
+<h3 id="org85568b9">Reference</h3>
+<div class="outline-text-3" id="text-org85568b9">
 <p>This was based on a chapter in this book.</p>
 <ol class="org-ol">
 <li>Kasliwal N. Natural language processing with Python quick start guide: going from a Python developer to an effective natural language processing engineer [Internet]. 2018 [cited 2019 May 18]. Available from: <a href="http://proquest.safaribooksonline.com/?fpi=9781789130386">http://proquest.safaribooksonline.com/?fpi=9781789130386</a></li>
@@ -548,6 +549,7 @@ for entity in document.ents:
 </ul>
 <ul class="pager hidden-print">
 <li class="previous"><a href="../tidying-data/" rel="prev" title="Some Tools For Tidying Data">Previous post</a></li>
+<li class="next"><a href="../../text_mining/word-frequencies-and-zipfs-law/" rel="next" title="Word Frequencies and Zipfs Law">Next post</a></li>
 </ul>
 </nav>
 </aside>

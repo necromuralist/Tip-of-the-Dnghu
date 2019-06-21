@@ -1,48 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tip of the Dnghu (Posts about cleaning)</title><link>https://necromuralist.github.io/Tip-of-the-Dnghu/</link><description></description><atom:link href="https://necromuralist.github.io/Tip-of-the-Dnghu/categories/cleaning.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2019 &lt;a href="mailto:necromuralist@protonmail.com"&gt;Cloistered Monkey&lt;/a&gt; </copyright><lastBuildDate>Tue, 28 May 2019 03:58:41 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Name Redaction</title><link>https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/name-redaction/</link><dc:creator>Cloistered Monkey</dc:creator><description>&lt;div id="table-of-contents"&gt;
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tip of the Dnghu (Posts about cleaning)</title><link>https://necromuralist.github.io/Tip-of-the-Dnghu/</link><description></description><atom:link href="https://necromuralist.github.io/Tip-of-the-Dnghu/categories/cleaning.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2019 &lt;a href="mailto:necromuralist@protonmail.com"&gt;Cloistered Monkey&lt;/a&gt; </copyright><lastBuildDate>Thu, 30 May 2019 02:56:38 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Name Redaction</title><link>https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/name-redaction/</link><dc:creator>Cloistered Monkey</dc:creator><description>&lt;div id="table-of-contents"&gt;
 &lt;h2&gt;Table of Contents&lt;/h2&gt;
 &lt;div id="text-table-of-contents"&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/name-redaction/#org30b9a88"&gt;Beginning&lt;/a&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/name-redaction/#org5485fbf"&gt;Beginning&lt;/a&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/name-redaction/#orge6e9a8a"&gt;Imports&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/name-redaction/#orgf188059"&gt;Set Up&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/name-redaction/#org393993e"&gt;Load the File&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/name-redaction/#orgbee770d"&gt;Imports&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/name-redaction/#orgd5666d0"&gt;Set Up&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/name-redaction/#org21c410b"&gt;Load the File&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/name-redaction/#org1a76e1f"&gt;Middle&lt;/a&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/name-redaction/#org62abcee"&gt;Middle&lt;/a&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/name-redaction/#orgbd3216f"&gt;A Little spacy&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/name-redaction/#orgcd37d19"&gt;Redacting Names&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/name-redaction/#org1d02e2f"&gt;A Little spacy&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/name-redaction/#orge7f16da"&gt;Redacting Names&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/name-redaction/#orgaec543c"&gt;End&lt;/a&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/name-redaction/#org8dbbaee"&gt;End&lt;/a&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/name-redaction/#orgbe440e6"&gt;Reference&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/name-redaction/#org85568b9"&gt;Reference&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org30b9a88" class="outline-2"&gt;
-&lt;h2 id="org30b9a88"&gt;Beginning&lt;/h2&gt;
-&lt;div class="outline-text-2" id="text-org30b9a88"&gt;
+&lt;div id="outline-container-org5485fbf" class="outline-2"&gt;
+&lt;h2 id="org5485fbf"&gt;Beginning&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-org5485fbf"&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orge6e9a8a" class="outline-3"&gt;
-&lt;h3 id="orge6e9a8a"&gt;Imports&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-orge6e9a8a"&gt;
+&lt;div id="outline-container-orgbee770d" class="outline-3"&gt;
+&lt;h3 id="orgbee770d"&gt;Imports&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-orgbee770d"&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org1242ad2" class="outline-4"&gt;
-&lt;h4 id="org1242ad2"&gt;Python&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org1242ad2"&gt;
+&lt;div id="outline-container-org18df4e1" class="outline-4"&gt;
+&lt;h4 id="org18df4e1"&gt;Python&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org18df4e1"&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;from pathlib import Path
 from typing import Collection
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgd576b86" class="outline-4"&gt;
-&lt;h4 id="orgd576b86"&gt;PyPi&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-orgd576b86"&gt;
+&lt;div id="outline-container-org99afbfe" class="outline-4"&gt;
+&lt;h4 id="org99afbfe"&gt;PyPi&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org99afbfe"&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;from spacy import displacy
 
 import spacy
@@ -50,29 +50,29 @@ import textacy
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org4fa87ec" class="outline-4"&gt;
-&lt;h4 id="org4fa87ec"&gt;My Stuff&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org4fa87ec"&gt;
+&lt;div id="outline-container-orgb86812e" class="outline-4"&gt;
+&lt;h4 id="orgb86812e"&gt;My Stuff&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-orgb86812e"&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;from graeae.timers import Timer
 from graeae import EnvironmentLoader, TextDownloader
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgf188059" class="outline-3"&gt;
-&lt;h3 id="orgf188059"&gt;Set Up&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-orgf188059"&gt;
+&lt;div id="outline-container-orgd5666d0" class="outline-3"&gt;
+&lt;h3 id="orgd5666d0"&gt;Set Up&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-orgd5666d0"&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org210949a" class="outline-4"&gt;
-&lt;h4 id="org210949a"&gt;The Timer&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org210949a"&gt;
+&lt;div id="outline-container-org97e3320" class="outline-4"&gt;
+&lt;h4 id="org97e3320"&gt;The Timer&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org97e3320"&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;TIMER = Timer()
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org9c138b8" class="outline-4"&gt;
-&lt;h4 id="org9c138b8"&gt;Spacy&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org9c138b8"&gt;
+&lt;div id="outline-container-org43d1495" class="outline-4"&gt;
+&lt;h4 id="org43d1495"&gt;Spacy&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org43d1495"&gt;
 &lt;p&gt;
 This loads the large English model tha spacy provides.
 &lt;/p&gt;
@@ -93,9 +93,9 @@ Although it took a long time to download the model doesn't actually take a long 
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org393993e" class="outline-3"&gt;
-&lt;h3 id="org393993e"&gt;Load the File&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org393993e"&gt;
+&lt;div id="outline-container-org21c410b" class="outline-3"&gt;
+&lt;h3 id="org21c410b"&gt;Load the File&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org21c410b"&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;URL = "https://www.gutenberg.org/files/974/974-0.txt"
 environment = EnvironmentLoader()
 path = environment["GUTENBERG"]
@@ -113,13 +113,13 @@ text = downloader.download
 &lt;/div&gt;
 
 
-&lt;div id="outline-container-org1a76e1f" class="outline-2"&gt;
-&lt;h2 id="org1a76e1f"&gt;Middle&lt;/h2&gt;
-&lt;div class="outline-text-2" id="text-org1a76e1f"&gt;
+&lt;div id="outline-container-org62abcee" class="outline-2"&gt;
+&lt;h2 id="org62abcee"&gt;Middle&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-org62abcee"&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgbd3216f" class="outline-3"&gt;
-&lt;h3 id="orgbd3216f"&gt;A Little spacy&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-orgbd3216f"&gt;
+&lt;div id="outline-container-org1d02e2f" class="outline-3"&gt;
+&lt;h3 id="org1d02e2f"&gt;A Little spacy&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org1d02e2f"&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;document = nlp(text)
 &lt;/pre&gt;&lt;/div&gt;
 
@@ -319,9 +319,9 @@ The categories seem kind of arbitrary, but perhaps that's because of the book th
 &lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgcd37d19" class="outline-3"&gt;
-&lt;h3 id="orgcd37d19"&gt;Redacting Names&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-orgcd37d19"&gt;
+&lt;div id="outline-container-orge7f16da" class="outline-3"&gt;
+&lt;h3 id="orge7f16da"&gt;Redacting Names&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-orge7f16da"&gt;
 &lt;p&gt;
 It's getting a little unwieldy to handle the entire &lt;i&gt;Secret Agent&lt;/i&gt; novel so I'll switch to somet oy sentence fragments.
 &lt;/p&gt;
@@ -418,9 +418,9 @@ Besides the merge I switched to using &lt;code&gt;token.string&lt;/code&gt; whic
 &lt;/p&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-org11ecf25" class="outline-4"&gt;
-&lt;h4 id="org11ecf25"&gt;More Redaction&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org11ecf25"&gt;
+&lt;div id="outline-container-orged3a213" class="outline-4"&gt;
+&lt;h4 id="orged3a213"&gt;More Redaction&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-orged3a213"&gt;
 &lt;p&gt;
 We've been told that our identification of where the second person is from, and where all three met might give out too much information as well. Looking at the list of &lt;a href="https://spacy.io/usage/linguistic-features#named-entities"&gt;bulit-in named entities&lt;/a&gt; doesn't make it obvious what the two entity types would be, so I guess I'll brute-force it.
 &lt;/p&gt;
@@ -557,16 +557,16 @@ It looks like "President" isn't one of the entities spacy knows about. So perhap
 &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-orgaec543c" class="outline-2"&gt;
-&lt;h2 id="orgaec543c"&gt;End&lt;/h2&gt;
-&lt;div class="outline-text-2" id="text-orgaec543c"&gt;
+&lt;div id="outline-container-org8dbbaee" class="outline-2"&gt;
+&lt;h2 id="org8dbbaee"&gt;End&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-org8dbbaee"&gt;
 &lt;p&gt;
 This was a brief look at how you can use a slightly more informed approach to identify parts of a text without using regular expressions and things of that nature to match strings. By using identifiable named entities, spacy is able to help us identify entire classes of entities to match without knowing what they look like beforehand. Of course, it would be dangerous to do this too blindly, there might always be things that confuse the model, but spacy does fairly well right out of the box.
 &lt;/p&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgbe440e6" class="outline-3"&gt;
-&lt;h3 id="orgbe440e6"&gt;Reference&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-orgbe440e6"&gt;
+&lt;div id="outline-container-org85568b9" class="outline-3"&gt;
+&lt;h3 id="org85568b9"&gt;Reference&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org85568b9"&gt;
 &lt;p&gt;
 This was based on a chapter in this book.
 &lt;/p&gt;

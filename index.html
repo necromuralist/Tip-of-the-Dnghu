@@ -17,7 +17,7 @@
 <link href="favicon-16x16.png" rel="icon" sizes="16x16" type="image/png">
 <link href="site.webmanifest" rel="manifest">
 <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML" type="text/javascript"></script>
-<link href="posts/data/name-redaction/" rel="prefetch" type="text/html">
+<link href="posts/text_mining/word-frequencies-and-zipfs-law/" rel="prefetch" type="text/html">
 </head>
 <body>
 <a class="sr-only sr-only-focusable" href="#content">Skip to main content</a> <!-- Menubar -->
@@ -46,6 +46,295 @@
 <div class="postindex">
 <article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article">
 <header>
+<h1 class="p-name entry-title"><a class="u-url" href="posts/text_mining/word-frequencies-and-zipfs-law/">Word Frequencies and Zipfs Law</a></h1>
+<div class="metadata">
+<p class="byline author vcard"><span class="byline-name fn" itemprop="author">Cloistered Monkey</span></p>
+<p class="dateline"><a href="posts/text_mining/word-frequencies-and-zipfs-law/" rel="bookmark"><time class="published dt-published" datetime="2019-06-19T17:47:38-07:00" itemprop="datePublished" title="2019-06-19 17:47">2019-06-19 17:47</time></a></p>
+</div>
+</header>
+<div class="e-content entry-content">
+<div class="outline-2" id="outline-container-orga53a2e5">
+<h2 id="orga53a2e5">Beginning</h2>
+<div class="outline-text-2" id="text-orga53a2e5"></div>
+<div class="outline-3" id="outline-container-org96457d0">
+<h3 id="org96457d0">Imports</h3>
+<div class="outline-text-3" id="text-org96457d0"></div>
+<div class="outline-4" id="outline-container-org5b6e335">
+<h4 id="org5b6e335">Python</h4>
+<div class="outline-text-4" id="text-org5b6e335">
+<div class="highlight">
+<pre><span></span><span class="kn">from</span> <span class="nn">argparse</span> <span class="kn">import</span> <span class="n">Namespace</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Counter</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+</pre></div>
+</div>
+</div>
+<div class="outline-4" id="outline-container-orgbf7312d">
+<h4 id="orgbf7312d">PyPi</h4>
+<div class="outline-text-4" id="text-orgbf7312d">
+<div class="highlight">
+<pre><span></span><span class="kn">import</span> <span class="nn">holoviews</span>
+<span class="kn">import</span> <span class="nn">pandas</span>
+<span class="kn">import</span> <span class="nn">spacy</span>
+</pre></div>
+</div>
+</div>
+<div class="outline-4" id="outline-container-org5d6f95c">
+<h4 id="org5d6f95c">My Stuff</h4>
+<div class="outline-text-4" id="text-org5d6f95c">
+<div class="highlight">
+<pre><span></span><span class="kn">from</span> <span class="nn">graeae</span> <span class="kn">import</span> <span class="n">EnvironmentLoader</span><span class="p">,</span> <span class="n">TextDownloader</span>
+<span class="kn">from</span> <span class="nn">graeae.timers</span> <span class="kn">import</span> <span class="n">Timer</span>
+<span class="kn">from</span> <span class="nn">graeae.visualization</span> <span class="kn">import</span> <span class="n">EmbedHoloview</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="outline-3" id="outline-container-org09823f2">
+<h3 id="org09823f2">Set Up</h3>
+<div class="outline-text-3" id="text-org09823f2"></div>
+<div class="outline-4" id="outline-container-orgfc317a6">
+<h4 id="orgfc317a6">Spacy</h4>
+<div class="outline-text-4" id="text-orgfc317a6">
+<div class="highlight">
+<pre><span></span><span class="n">nlp</span> <span class="o">=</span> <span class="n">spacy</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">"en_core_web_lg"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="outline-4" id="outline-container-orge3db823">
+<h4 id="orge3db823">The Path</h4>
+<div class="outline-text-4" id="text-orge3db823">
+<div class="highlight">
+<pre><span></span><span class="n">URL</span> <span class="o">=</span> <span class="s2">"https://www.gutenberg.org/files/974/974-0.txt"</span>
+<span class="n">environment</span> <span class="o">=</span> <span class="n">EnvironmentLoader</span><span class="p">()</span>
+<span class="n">book_path</span> <span class="o">=</span> <span class="n">environment</span><span class="p">[</span><span class="s2">"GUTENBERG"</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="outline-4" id="outline-container-orgd090f6c">
+<h4 id="orgd090f6c">The Timer</h4>
+<div class="outline-text-4" id="text-orgd090f6c">
+<div class="highlight">
+<pre><span></span><span class="n">TIMER</span> <span class="o">=</span> <span class="n">Timer</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="outline-3" id="outline-container-org6daadd8">
+<h3 id="org6daadd8">Load the File</h3>
+<div class="outline-text-3" id="text-org6daadd8">
+<div class="highlight">
+<pre><span></span><span class="n">book_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">book_path</span><span class="p">)</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span>
+<span class="n">downloader</span> <span class="o">=</span> <span class="n">TextDownloader</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">URL</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">book_path</span><span class="o">/</span><span class="s2">"conrad_joseph_secret_agent.txt"</span><span class="p">)</span>
+<span class="n">text</span> <span class="o">=</span> <span class="n">downloader</span><span class="o">.</span><span class="n">download</span>
+</pre></div>
+<pre class="example">
+2019-06-20 18:14:52,437 [1mTextDownloader[0m download: /home/brunhilde/data/datasets/gutenberg/conrad_joseph_secret_agent.txt exists, opening it
+
+</pre>
+<div class="highlight">
+<pre><span></span><span class="k">print</span><span class="p">(</span><span class="n">text</span><span class="p">[:</span><span class="mi">800</span><span class="p">])</span>
+</pre></div>
+<pre class="example">
+                  THE
+              SECRET AGENT
+             A SIMPLE TALE
+
+
+                   BY
+             JOSEPH CONRAD
+
+             SECOND EDITION
+
+             METHUEN & CO.,
+          36 ESSEX STREET W C.
+                 LONDON
+
+_First Published_ . . . _September_ 1907
+
+ _Second Edition_ . . . _October_ 1907
+
+                   TO
+              H. G. WELLS
+
+  THE CHRONICLER OF MR LEWISHAM’S LOVE
+    THE BIOGRAPHER OF KIPPS AND THE
+     HISTORIAN OF THE AGES TO COME
+
+  THIS SIMPLE TALE OF THE XI
+</pre></div>
+<div class="outline-4" id="outline-container-orgc820605">
+<h4 id="orgc820605">The Document</h4>
+<div class="outline-text-4" id="text-orgc820605">
+<div class="highlight">
+<pre><span></span>
+</pre></div>
+</div>
+</div>
+<div class="outline-4" id="outline-container-orgf540cf9">
+<h4 id="orgf540cf9">The Counter</h4>
+<div class="outline-text-4" id="text-orgf540cf9">
+<div class="highlight">
+<pre><span></span><span class="n">counter</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="outline-4" id="outline-container-org39c05c2">
+<h4 id="org39c05c2">The Plotting</h4>
+<div class="outline-text-4" id="text-org39c05c2">
+<div class="highlight">
+<pre><span></span><span class="n">SLUG</span> <span class="o">=</span> <span class="s2">"word-frequencies-and-zipfs-law"</span>
+<span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">"../../files/posts/text_mining"</span><span class="p">)</span><span class="o">/</span><span class="n">SLUG</span>
+<span class="n">Embed</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">EmbedHoloview</span><span class="p">,</span> <span class="n">folder_path</span><span class="o">=</span><span class="n">path</span><span class="p">)</span>
+<span class="n">holoviews</span><span class="o">.</span><span class="n">extension</span><span class="p">(</span><span class="s2">"bokeh"</span><span class="p">)</span>
+<span class="n">Plot</span> <span class="o">=</span> <span class="n">Namespace</span><span class="p">(</span>
+    <span class="n">height</span><span class="o">=</span><span class="mi">800</span><span class="p">,</span>
+    <span class="n">width</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="outline-2" id="outline-container-orge3e12e3">
+<h2 id="orge3e12e3">Middle</h2>
+<div class="outline-text-2" id="text-orge3e12e3">
+<div class="highlight">
+<pre><span></span><span class="n">TIMER</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="s2">"Finished counting tokens"</span>
+<span class="k">with</span> <span class="n">TIMER</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">document</span><span class="p">:</span>
+        <span class="n">counter</span><span class="p">[</span><span class="n">token</span><span class="o">.</span><span class="n">lemma_</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+</pre></div>
+<pre class="example">
+2019-06-20 17:41:59,573 graeae.timers.timer start: Started: 2019-06-20 17:41:59.573158
+2019-06-20 17:41:59,774 graeae.timers.timer end: Ended: 2019-06-20 17:41:59.774213
+2019-06-20 17:41:59,775 graeae.timers.timer end: Elapsed: 0:00:00.201055
+
+</pre>
+<div class="highlight">
+<pre><span></span><span class="k">for</span> <span class="n">token</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">counter</span><span class="o">.</span><span class="n">most_common</span><span class="p">()[:</span><span class="mi">10</span><span class="p">]:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s2">" - {token.strip()}: {count:,}"</span><span class="p">)</span>
+</pre></div>
+<ul class="org-ul">
+<li>-PRON-: 9,376</li>
+<li>: 6,649</li>
+<li>the: 5,755</li>
+<li>.: 5,689</li>
+<li>,: 5,440</li>
+<li>: 4,240</li>
+<li>of: 3,872</li>
+<li>be: 2,887</li>
+<li>": 2,642</li>
+<li>a: 2,527</li>
+</ul>
+<p>So I forgot to get rid of whitespace, punctuation, etcetera.</p>
+<div class="highlight">
+<pre><span></span><span class="n">counter</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
+<span class="n">unwanted</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"PUNCT"</span><span class="p">,</span> <span class="s2">"SPACE"</span><span class="p">,</span> <span class="s2">"SYM"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">document</span><span class="p">:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">token</span><span class="o">.</span><span class="n">pos_</span> <span class="ow">in</span> <span class="n">unwanted</span><span class="p">:</span>
+        <span class="n">counter</span><span class="p">[</span><span class="n">token</span><span class="o">.</span><span class="n">lemma_</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+<span class="k">for</span> <span class="n">token</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">counter</span><span class="o">.</span><span class="n">most_common</span><span class="p">()[:</span><span class="mi">10</span><span class="p">]:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s2">" - {token}: {count:,}"</span><span class="p">)</span>        
+</pre></div>
+<ul class="org-ul">
+<li>-PRON-: 9,376</li>
+<li>the: 5,755</li>
+<li>of: 3,872</li>
+<li>be: 2,887</li>
+<li>a: 2,526</li>
+<li>to: 2,186</li>
+<li>and: 2,055</li>
+<li>in: 1,697</li>
+<li>have: 1,419</li>
+<li>that: 1,071</li>
+</ul>
+<p>Surprisingly, pronouns are more common than stop words.</p>
+<div class="highlight">
+<pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">counter</span><span class="o">.</span><span class="n">most_common</span><span class="p">(),</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">"Lemma"</span><span class="p">,</span> <span class="s2">"Count"</span><span class="p">])</span>
+<span class="n">curve</span> <span class="o">=</span> <span class="n">holoviews</span><span class="o">.</span><span class="n">Curve</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="s2">"Lemma"</span><span class="p">,</span> <span class="s2">"Count"</span><span class="p">)</span><span class="o">.</span><span class="n">opts</span><span class="p">(</span>
+    <span class="n">height</span><span class="o">=</span><span class="n">Plot</span><span class="o">.</span><span class="n">height</span><span class="p">,</span>
+    <span class="n">width</span><span class="o">=</span><span class="n">Plot</span><span class="o">.</span><span class="n">width</span><span class="p">,</span>
+    <span class="n">xaxis</span><span class="o">=</span><span class="s2">"bare"</span><span class="p">,</span>
+<span class="p">)</span><span class="o">.</span><span class="n">opts</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="s2">"Lemma"</span><span class="p">)</span>
+<span class="n">embed</span> <span class="o">=</span> <span class="n">Embed</span><span class="p">(</span><span class="n">plot</span><span class="o">=</span><span class="n">curve</span><span class="p">,</span> <span class="n">file_name</span><span class="o">=</span><span class="s2">"all_words_count"</span><span class="p">)</span>
+<span class="n">embed</span><span class="p">()</span>
+</pre></div>
+<object data="posts/text_mining/word-frequencies-and-zipfs-law/all_words_count.html" height="800" style="width:100%" type="text/html">
+<p>Figure Missing</p>
+</object>
+<div class="highlight">
+<pre><span></span><span class="n">curve</span> <span class="o">=</span> <span class="n">holoviews</span><span class="o">.</span><span class="n">Curve</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="s2">"Lemma"</span><span class="p">,</span> <span class="s2">"Count"</span><span class="p">)</span><span class="o">.</span><span class="n">opts</span><span class="p">(</span>
+    <span class="n">height</span><span class="o">=</span><span class="n">Plot</span><span class="o">.</span><span class="n">height</span><span class="p">,</span>
+    <span class="n">width</span><span class="o">=</span><span class="n">Plot</span><span class="o">.</span><span class="n">width</span><span class="p">,</span>
+    <span class="n">xaxis</span><span class="o">=</span><span class="s2">"bare"</span><span class="p">,</span>
+    <span class="n">logy</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+    <span class="n">logx</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="p">)</span><span class="o">.</span><span class="n">opts</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="s2">"Lemma"</span><span class="p">)</span>
+<span class="n">embed</span> <span class="o">=</span> <span class="n">Embed</span><span class="p">(</span><span class="n">plot</span><span class="o">=</span><span class="n">curve</span><span class="p">,</span> <span class="n">file_name</span><span class="o">=</span><span class="s2">"all_words_count_log"</span><span class="p">)</span>
+<span class="n">embed</span><span class="p">()</span>
+</pre></div>
+<object data="posts/text_mining/word-frequencies-and-zipfs-law/all_words_count_log.html" height="800" style="width:100%" type="text/html">
+<p>Figure Missing</p>
+</object></div>
+<div class="outline-4" id="outline-container-org960a24c">
+<h4 id="org960a24c">Removing Stop Words</h4>
+<div class="outline-text-4" id="text-org960a24c">
+<div class="highlight">
+<pre><span></span><span class="n">counter</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">document</span><span class="p">:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">token</span><span class="o">.</span><span class="n">is_stop</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">token</span><span class="o">.</span><span class="n">pos_</span> <span class="ow">in</span> <span class="n">unwanted</span><span class="p">:</span>
+        <span class="n">counter</span><span class="p">[</span><span class="n">token</span><span class="o">.</span><span class="n">lemma_</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+<span class="k">for</span> <span class="n">token</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">counter</span><span class="o">.</span><span class="n">most_common</span><span class="p">()[:</span><span class="mi">10</span><span class="p">]:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s2">" - {token}: {count}"</span><span class="p">)</span>
+</pre></div>
+<ul class="org-ul">
+<li>Verloc: 762</li>
+<li>Mr: 536</li>
+<li>’s: 387</li>
+<li>not: 328</li>
+<li>man: 323</li>
+<li>Mrs: 281</li>
+<li>’: 266</li>
+<li>say: 245</li>
+<li>look: 215</li>
+<li>like: 213</li>
+</ul>
+<p>I guess pronouns are stop words… It looks like "Verloc" is now the most common token. I assume he's the main character in the book. According to the <a href="https://en.wikipedia.org/wiki/The_Secret_Agent?oldformat=true">WikiPedia article about The Secret Agent</a> -</p>
+<blockquote>
+<p>The story is set in London in 1886 and deals with Mr Anton Verloc and his work as a spy for an unnamed country (presumably Russia).</p>
+</blockquote>
+<div class="highlight">
+<pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">counter</span><span class="o">.</span><span class="n">most_common</span><span class="p">(),</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">"Lemma"</span><span class="p">,</span> <span class="s2">"Count"</span><span class="p">])</span>
+<span class="n">curve</span> <span class="o">=</span> <span class="n">holoviews</span><span class="o">.</span><span class="n">Curve</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="s2">"Lemma"</span><span class="p">,</span> <span class="s2">"Count"</span><span class="p">)</span><span class="o">.</span><span class="n">opts</span><span class="p">(</span>
+    <span class="n">height</span><span class="o">=</span><span class="n">Plot</span><span class="o">.</span><span class="n">height</span><span class="p">,</span>
+    <span class="n">width</span><span class="o">=</span><span class="n">Plot</span><span class="o">.</span><span class="n">width</span><span class="p">,</span>
+    <span class="n">xaxis</span><span class="o">=</span><span class="s2">"bare"</span><span class="p">,</span>
+    <span class="n">logy</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+    <span class="n">logx</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+    <span class="n">tools</span><span class="o">=</span><span class="p">[</span><span class="s2">"hover"</span><span class="p">],</span>
+<span class="p">)</span><span class="o">.</span><span class="n">opts</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="s2">"Lemma"</span><span class="p">)</span>
+<span class="n">embed</span> <span class="o">=</span> <span class="n">Embed</span><span class="p">(</span><span class="n">plot</span><span class="o">=</span><span class="n">curve</span><span class="p">,</span> <span class="n">file_name</span><span class="o">=</span><span class="s2">"cleaned_count"</span><span class="p">)</span>
+<span class="n">embed</span><span class="p">()</span>
+</pre></div>
+<object data="posts/text_mining/word-frequencies-and-zipfs-law/cleaned_count.html" height="800" style="width:100%" type="text/html">
+<p>Figure Missing</p>
+</object></div>
+</div>
+</div>
+<div class="outline-2" id="outline-container-org97f442c">
+<h2 id="org97f442c">End</h2>
+<div class="outline-text-2" id="text-org97f442c">
+<p>The idea behind this was to show that word counts follow <a href="https://en.wikipedia.org/wiki/Zipf's_law?oldformat=true">Zipf's Law</a>, which I wasn't able to do. If it was following Zipf's law then we would expect the log-log plots to turn into straight lines.</p>
+</div>
+</div>
+</div>
+</article>
+<article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article">
+<header>
 <h1 class="p-name entry-title"><a class="u-url" href="posts/data/name-redaction/">Name Redaction</a></h1>
 <div class="metadata">
 <p class="byline author vcard"><span class="byline-name fn" itemprop="author">Cloistered Monkey</span></p>
@@ -57,45 +346,45 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="posts/data/name-redaction/#org30b9a88">Beginning</a>
+<li><a href="posts/data/name-redaction/#org5485fbf">Beginning</a>
 <ul>
-<li><a href="posts/data/name-redaction/#orge6e9a8a">Imports</a></li>
-<li><a href="posts/data/name-redaction/#orgf188059">Set Up</a></li>
-<li><a href="posts/data/name-redaction/#org393993e">Load the File</a></li>
+<li><a href="posts/data/name-redaction/#orgbee770d">Imports</a></li>
+<li><a href="posts/data/name-redaction/#orgd5666d0">Set Up</a></li>
+<li><a href="posts/data/name-redaction/#org21c410b">Load the File</a></li>
 </ul>
 </li>
-<li><a href="posts/data/name-redaction/#org1a76e1f">Middle</a>
+<li><a href="posts/data/name-redaction/#org62abcee">Middle</a>
 <ul>
-<li><a href="posts/data/name-redaction/#orgbd3216f">A Little spacy</a></li>
-<li><a href="posts/data/name-redaction/#orgcd37d19">Redacting Names</a></li>
+<li><a href="posts/data/name-redaction/#org1d02e2f">A Little spacy</a></li>
+<li><a href="posts/data/name-redaction/#orge7f16da">Redacting Names</a></li>
 </ul>
 </li>
-<li><a href="posts/data/name-redaction/#orgaec543c">End</a>
+<li><a href="posts/data/name-redaction/#org8dbbaee">End</a>
 <ul>
-<li><a href="posts/data/name-redaction/#orgbe440e6">Reference</a></li>
+<li><a href="posts/data/name-redaction/#org85568b9">Reference</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
-<div class="outline-2" id="outline-container-org30b9a88">
-<h2 id="org30b9a88">Beginning</h2>
-<div class="outline-text-2" id="text-org30b9a88"></div>
-<div class="outline-3" id="outline-container-orge6e9a8a">
-<h3 id="orge6e9a8a">Imports</h3>
-<div class="outline-text-3" id="text-orge6e9a8a"></div>
-<div class="outline-4" id="outline-container-org1242ad2">
-<h4 id="org1242ad2">Python</h4>
-<div class="outline-text-4" id="text-org1242ad2">
+<div class="outline-2" id="outline-container-org5485fbf">
+<h2 id="org5485fbf">Beginning</h2>
+<div class="outline-text-2" id="text-org5485fbf"></div>
+<div class="outline-3" id="outline-container-orgbee770d">
+<h3 id="orgbee770d">Imports</h3>
+<div class="outline-text-3" id="text-orgbee770d"></div>
+<div class="outline-4" id="outline-container-org18df4e1">
+<h4 id="org18df4e1">Python</h4>
+<div class="outline-text-4" id="text-org18df4e1">
 <div class="highlight">
 <pre><span></span>from pathlib import Path
 from typing import Collection
 </pre></div>
 </div>
 </div>
-<div class="outline-4" id="outline-container-orgd576b86">
-<h4 id="orgd576b86">PyPi</h4>
-<div class="outline-text-4" id="text-orgd576b86">
+<div class="outline-4" id="outline-container-org99afbfe">
+<h4 id="org99afbfe">PyPi</h4>
+<div class="outline-text-4" id="text-org99afbfe">
 <div class="highlight">
 <pre><span></span>from spacy import displacy
 
@@ -104,9 +393,9 @@ import textacy
 </pre></div>
 </div>
 </div>
-<div class="outline-4" id="outline-container-org4fa87ec">
-<h4 id="org4fa87ec">My Stuff</h4>
-<div class="outline-text-4" id="text-org4fa87ec">
+<div class="outline-4" id="outline-container-orgb86812e">
+<h4 id="orgb86812e">My Stuff</h4>
+<div class="outline-text-4" id="text-orgb86812e">
 <div class="highlight">
 <pre><span></span>from graeae.timers import Timer
 from graeae import EnvironmentLoader, TextDownloader
@@ -114,20 +403,20 @@ from graeae import EnvironmentLoader, TextDownloader
 </div>
 </div>
 </div>
-<div class="outline-3" id="outline-container-orgf188059">
-<h3 id="orgf188059">Set Up</h3>
-<div class="outline-text-3" id="text-orgf188059"></div>
-<div class="outline-4" id="outline-container-org210949a">
-<h4 id="org210949a">The Timer</h4>
-<div class="outline-text-4" id="text-org210949a">
+<div class="outline-3" id="outline-container-orgd5666d0">
+<h3 id="orgd5666d0">Set Up</h3>
+<div class="outline-text-3" id="text-orgd5666d0"></div>
+<div class="outline-4" id="outline-container-org97e3320">
+<h4 id="org97e3320">The Timer</h4>
+<div class="outline-text-4" id="text-org97e3320">
 <div class="highlight">
 <pre><span></span>TIMER = Timer()
 </pre></div>
 </div>
 </div>
-<div class="outline-4" id="outline-container-org9c138b8">
-<h4 id="org9c138b8">Spacy</h4>
-<div class="outline-text-4" id="text-org9c138b8">
+<div class="outline-4" id="outline-container-org43d1495">
+<h4 id="org43d1495">Spacy</h4>
+<div class="outline-text-4" id="text-org43d1495">
 <p>This loads the large English model tha spacy provides.</p>
 <div class="highlight">
 <pre><span></span>with TIMER:
@@ -143,9 +432,9 @@ from graeae import EnvironmentLoader, TextDownloader
 </div>
 </div>
 </div>
-<div class="outline-3" id="outline-container-org393993e">
-<h3 id="org393993e">Load the File</h3>
-<div class="outline-text-3" id="text-org393993e">
+<div class="outline-3" id="outline-container-org21c410b">
+<h3 id="org21c410b">Load the File</h3>
+<div class="outline-text-3" id="text-org21c410b">
 <div class="highlight">
 <pre><span></span>URL = "https://www.gutenberg.org/files/974/974-0.txt"
 environment = EnvironmentLoader()
@@ -160,12 +449,12 @@ text = downloader.download
 </pre></div>
 </div>
 </div>
-<div class="outline-2" id="outline-container-org1a76e1f">
-<h2 id="org1a76e1f">Middle</h2>
-<div class="outline-text-2" id="text-org1a76e1f"></div>
-<div class="outline-3" id="outline-container-orgbd3216f">
-<h3 id="orgbd3216f">A Little spacy</h3>
-<div class="outline-text-3" id="text-orgbd3216f">
+<div class="outline-2" id="outline-container-org62abcee">
+<h2 id="org62abcee">Middle</h2>
+<div class="outline-text-2" id="text-org62abcee"></div>
+<div class="outline-3" id="outline-container-org1d02e2f">
+<h3 id="org1d02e2f">A Little spacy</h3>
+<div class="outline-text-3" id="text-org1d02e2f">
 <div class="highlight">
 <pre><span></span>document = nlp(text)
 </pre></div>
@@ -323,9 +612,9 @@ for entity_type in sorted(entity_types):
 <p>The categories seem kind of arbitrary, but perhaps that's because of the book that I chose.</p>
 </div>
 </div>
-<div class="outline-3" id="outline-container-orgcd37d19">
-<h3 id="orgcd37d19">Redacting Names</h3>
-<div class="outline-text-3" id="text-orgcd37d19">
+<div class="outline-3" id="outline-container-orge7f16da">
+<h3 id="orge7f16da">Redacting Names</h3>
+<div class="outline-text-3" id="text-orge7f16da">
 <p>It's getting a little unwieldy to handle the entire <i>Secret Agent</i> novel so I'll switch to somet oy sentence fragments.</p>
 <div class="highlight">
 <pre><span></span>fragment = "Mr. Jason Ottomatic and Tom Tuttle (of Tacoma) went to see Billy Buttman at Barney's."
@@ -400,9 +689,9 @@ Mr. [REDACTED] and [REDACTED] (of Tacoma) went to see [REDACTED] at Barney's.
 </pre>
 <p>Besides the merge I switched to using <code>token.string</code> which (mostly) keeeps the whitespace.</p>
 </div>
-<div class="outline-4" id="outline-container-org11ecf25">
-<h4 id="org11ecf25">More Redaction</h4>
-<div class="outline-text-4" id="text-org11ecf25">
+<div class="outline-4" id="outline-container-orged3a213">
+<h4 id="orged3a213">More Redaction</h4>
+<div class="outline-text-4" id="text-orged3a213">
 <p>We've been told that our identification of where the second person is from, and where all three met might give out too much information as well. Looking at the list of <a href="https://spacy.io/usage/linguistic-features#named-entities">bulit-in named entities</a> doesn't make it obvious what the two entity types would be, so I guess I'll brute-force it.</p>
 <div class="highlight">
 <pre><span></span>document = nlp(fragment)
@@ -513,14 +802,14 @@ for entity in document.ents:
 </div>
 </div>
 </div>
-<div class="outline-2" id="outline-container-orgaec543c">
-<h2 id="orgaec543c">End</h2>
-<div class="outline-text-2" id="text-orgaec543c">
+<div class="outline-2" id="outline-container-org8dbbaee">
+<h2 id="org8dbbaee">End</h2>
+<div class="outline-text-2" id="text-org8dbbaee">
 <p>This was a brief look at how you can use a slightly more informed approach to identify parts of a text without using regular expressions and things of that nature to match strings. By using identifiable named entities, spacy is able to help us identify entire classes of entities to match without knowing what they look like beforehand. Of course, it would be dangerous to do this too blindly, there might always be things that confuse the model, but spacy does fairly well right out of the box.</p>
 </div>
-<div class="outline-3" id="outline-container-orgbe440e6">
-<h3 id="orgbe440e6">Reference</h3>
-<div class="outline-text-3" id="text-orgbe440e6">
+<div class="outline-3" id="outline-container-org85568b9">
+<h3 id="org85568b9">Reference</h3>
+<div class="outline-text-3" id="text-org85568b9">
 <p>This was based on a chapter in this book.</p>
 <ol class="org-ol">
 <li>Kasliwal N. Natural language processing with Python quick start guide: going from a Python developer to an effective natural language processing engineer [Internet]. 2018 [cited 2019 May 18]. Available from: <a href="http://proquest.safaribooksonline.com/?fpi=9781789130386">http://proquest.safaribooksonline.com/?fpi=9781789130386</a></li>
@@ -543,41 +832,41 @@ for entity in document.ents:
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="posts/data/tidying-data/#orgffcf5db">Beginning</a>
+<li><a href="posts/data/tidying-data/#orgf68fcc7">Beginning</a>
 <ul>
-<li><a href="posts/data/tidying-data/#org7cc60be">Imports</a></li>
-<li><a href="posts/data/tidying-data/#org8ab9804">The Text File.</a></li>
-<li><a href="posts/data/tidying-data/#org7172a8e">Setup Spacy</a></li>
-<li><a href="posts/data/tidying-data/#org6679f1b">The Timer</a></li>
+<li><a href="posts/data/tidying-data/#org0ad31f0">Imports</a></li>
+<li><a href="posts/data/tidying-data/#org7278fda">The Text File.</a></li>
+<li><a href="posts/data/tidying-data/#orgd4351b6">Setup Spacy</a></li>
+<li><a href="posts/data/tidying-data/#orge99aa54">The Timer</a></li>
 </ul>
 </li>
-<li><a href="posts/data/tidying-data/#orgdfd041e">Middle</a>
+<li><a href="posts/data/tidying-data/#orge67f3c5">Middle</a>
 <ul>
-<li><a href="posts/data/tidying-data/#orgcdfd32c">Load the File</a></li>
-<li><a href="posts/data/tidying-data/#orgdc59cb8">Reload</a></li>
-<li><a href="posts/data/tidying-data/#orgb772bd5">Tokenizing with Spacy</a></li>
-<li><a href="posts/data/tidying-data/#org767e34b">A Detour Into Fuzzy Wuzzy</a></li>
-<li><a href="posts/data/tidying-data/#orgdcaa0b8">A Diversion Into JellyFish</a></li>
-<li><a href="posts/data/tidying-data/#org185cb88">A Short Diversion Into FlashText</a></li>
+<li><a href="posts/data/tidying-data/#orgae79d5d">Load the File</a></li>
+<li><a href="posts/data/tidying-data/#org82a4d79">Reload</a></li>
+<li><a href="posts/data/tidying-data/#org2c788b8">Tokenizing with Spacy</a></li>
+<li><a href="posts/data/tidying-data/#org7112614">A Detour Into Fuzzy Wuzzy</a></li>
+<li><a href="posts/data/tidying-data/#org1604c14">A Diversion Into JellyFish</a></li>
+<li><a href="posts/data/tidying-data/#org9f8571f">A Short Diversion Into FlashText</a></li>
 </ul>
 </li>
-<li><a href="posts/data/tidying-data/#org6b2df69">End</a>
+<li><a href="posts/data/tidying-data/#org515abb4">End</a>
 <ul>
-<li><a href="posts/data/tidying-data/#org76b0959">Reference</a></li>
+<li><a href="posts/data/tidying-data/#org08a394e">Reference</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
-<div class="outline-2" id="outline-container-orgffcf5db">
-<h2 id="orgffcf5db">Beginning</h2>
-<div class="outline-text-2" id="text-orgffcf5db"></div>
-<div class="outline-3" id="outline-container-org7cc60be">
-<h3 id="org7cc60be">Imports</h3>
-<div class="outline-text-3" id="text-org7cc60be"></div>
-<div class="outline-4" id="outline-container-org9d9004c">
-<h4 id="org9d9004c">Python</h4>
-<div class="outline-text-4" id="text-org9d9004c">
+<div class="outline-2" id="outline-container-orgf68fcc7">
+<h2 id="orgf68fcc7">Beginning</h2>
+<div class="outline-text-2" id="text-orgf68fcc7"></div>
+<div class="outline-3" id="outline-container-org0ad31f0">
+<h3 id="org0ad31f0">Imports</h3>
+<div class="outline-text-3" id="text-org0ad31f0"></div>
+<div class="outline-4" id="outline-container-org6e0de13">
+<h4 id="org6e0de13">Python</h4>
+<div class="outline-text-4" id="text-org6e0de13">
 <div class="highlight">
 <pre><span></span><span class="kn">from</span> <span class="nn">difflib</span> <span class="kn">import</span> <span class="n">SequenceMatcher</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
@@ -586,9 +875,9 @@ for entity in document.ents:
 </pre></div>
 </div>
 </div>
-<div class="outline-4" id="outline-container-org5a355db">
-<h4 id="org5a355db">PyPi</h4>
-<div class="outline-text-4" id="text-org5a355db">
+<div class="outline-4" id="outline-container-org937d237">
+<h4 id="org937d237">PyPi</h4>
+<div class="outline-text-4" id="text-org937d237">
 <div class="highlight">
 <pre><span></span><span class="kn">from</span> <span class="nn">flashtext</span> <span class="kn">import</span> <span class="n">KeywordProcessor</span>
 <span class="kn">from</span> <span class="nn">fuzzywuzzy</span> <span class="kn">import</span> <span class="n">fuzz</span><span class="p">,</span> <span class="n">process</span>
@@ -598,9 +887,9 @@ for entity in document.ents:
 </pre></div>
 </div>
 </div>
-<div class="outline-4" id="outline-container-org7fc4317">
-<h4 id="org7fc4317">My Projects</h4>
-<div class="outline-text-4" id="text-org7fc4317">
+<div class="outline-4" id="outline-container-orgff01f9d">
+<h4 id="orgff01f9d">My Projects</h4>
+<div class="outline-text-4" id="text-orgff01f9d">
 <div class="highlight">
 <pre><span></span><span class="kn">from</span> <span class="nn">graeae</span> <span class="kn">import</span> <span class="n">EnvironmentLoader</span><span class="p">,</span> <span class="n">TextDownloader</span>
 <span class="kn">from</span> <span class="nn">graeae.timers</span> <span class="kn">import</span> <span class="n">Timer</span>
@@ -608,9 +897,9 @@ for entity in document.ents:
 </div>
 </div>
 </div>
-<div class="outline-3" id="outline-container-org8ab9804">
-<h3 id="org8ab9804">The Text File.</h3>
-<div class="outline-text-3" id="text-org8ab9804">
+<div class="outline-3" id="outline-container-org7278fda">
+<h3 id="org7278fda">The Text File.</h3>
+<div class="outline-text-3" id="text-org7278fda">
 <p>This is the URL to Joseph Conrad's "The Secret Agent" from <a href="https://www.gutenberg.org/ebooks/974">Project Gutenberg</a>.</p>
 <div class="highlight">
 <pre><span></span><span class="n">URL</span> <span class="o">=</span> <span class="s2">"https://www.gutenberg.org/files/974/974-0.txt"</span>
@@ -621,17 +910,17 @@ for entity in document.ents:
 </pre></div>
 </div>
 </div>
-<div class="outline-3" id="outline-container-org7172a8e">
-<h3 id="org7172a8e">Setup Spacy</h3>
-<div class="outline-text-3" id="text-org7172a8e">
+<div class="outline-3" id="outline-container-orgd4351b6">
+<h3 id="orgd4351b6">Setup Spacy</h3>
+<div class="outline-text-3" id="text-orgd4351b6">
 <div class="highlight">
 <pre><span></span><span class="n">nlp</span> <span class="o">=</span> <span class="n">spacy</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">"en_core_web_md"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<div class="outline-3" id="outline-container-org6679f1b">
-<h3 id="org6679f1b">The Timer</h3>
-<div class="outline-text-3" id="text-org6679f1b">
+<div class="outline-3" id="outline-container-orge99aa54">
+<h3 id="orge99aa54">The Timer</h3>
+<div class="outline-text-3" id="text-orge99aa54">
 <p>This just tracks how longs things take.</p>
 <div class="highlight">
 <pre><span></span><span class="n">TIMER</span> <span class="o">=</span> <span class="n">Timer</span><span class="p">()</span>
@@ -639,12 +928,12 @@ for entity in document.ents:
 </div>
 </div>
 </div>
-<div class="outline-2" id="outline-container-orgdfd041e">
-<h2 id="orgdfd041e">Middle</h2>
-<div class="outline-text-2" id="text-orgdfd041e"></div>
-<div class="outline-3" id="outline-container-orgcdfd32c">
-<h3 id="orgcdfd32c">Load the File</h3>
-<div class="outline-text-3" id="text-orgcdfd32c">
+<div class="outline-2" id="outline-container-orge67f3c5">
+<h2 id="orge67f3c5">Middle</h2>
+<div class="outline-text-2" id="text-orge67f3c5"></div>
+<div class="outline-3" id="outline-container-orgae79d5d">
+<h3 id="orgae79d5d">Load the File</h3>
+<div class="outline-text-3" id="text-orgae79d5d">
 <div class="highlight">
 <pre><span></span><span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span>
 <span class="n">downloader</span> <span class="o">=</span> <span class="n">TextDownloader</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">URL</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">path</span><span class="o">/</span><span class="s2">"conrad_joseph_secret_agent.txt"</span><span class="p">)</span>
@@ -715,9 +1004,9 @@ his wife was in charge of his brother-in-law.
 </pre></div>
 </div>
 </div>
-<div class="outline-3" id="outline-container-orgdc59cb8">
-<h3 id="orgdc59cb8">Reload</h3>
-<div class="outline-text-3" id="text-orgdc59cb8">
+<div class="outline-3" id="outline-container-org82a4d79">
+<h3 id="org82a4d79">Reload</h3>
+<div class="outline-text-3" id="text-org82a4d79">
 <p>I ran <code>dos2unix</code> on the file, let's see if it's better.</p>
 <div class="highlight">
 <pre><span></span><span class="n">downloader</span><span class="o">.</span><span class="n">_download</span> <span class="o">=</span> <span class="bp">None</span>
@@ -756,9 +1045,9 @@ string as if to dry;
 <p>According to <a href="https://www.wikiwand.com/en/ASCII">Wikipedia</a>, there are 95 printable ASCII characters so this doesn't use all of them, but comes close.</p>
 </div>
 </div>
-<div class="outline-3" id="outline-container-orgb772bd5">
-<h3 id="orgb772bd5">Tokenizing with Spacy</h3>
-<div class="outline-text-3" id="text-orgb772bd5">
+<div class="outline-3" id="outline-container-org2c788b8">
+<h3 id="org2c788b8">Tokenizing with Spacy</h3>
+<div class="outline-text-3" id="text-org2c788b8">
 <div class="highlight">
 <pre><span></span><span class="k">with</span> <span class="n">TIMER</span><span class="p">:</span>
     <span class="n">document</span> <span class="o">=</span> <span class="n">nlp</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
@@ -822,9 +1111,9 @@ contemplated open-mouthed, to the detriment of
 </pre>
 <p>I had to convert it to a tuple because <code>sents</code> is actually a generator, not a collection.</p>
 </div>
-<div class="outline-4" id="outline-container-org4a97ffb">
-<h4 id="org4a97ffb">Token Attributes</h4>
-<div class="outline-text-4" id="text-org4a97ffb">
+<div class="outline-4" id="outline-container-orgbaf50d6">
+<h4 id="orgbaf50d6">Token Attributes</h4>
+<div class="outline-text-4" id="text-orgbaf50d6">
 <div class="highlight">
 <pre><span></span><span class="k">print</span><span class="p">(</span><span class="s2">"|Token | Stop-Word| Punctuation |"</span><span class="p">)</span>
 <span class="k">print</span><span class="p">(</span><span class="s2">"|-+-+-+-|"</span><span class="p">)</span>
@@ -1052,9 +1341,9 @@ contemplated open-mouthed, to the detriment of
 </ul>
 </div>
 </div>
-<div class="outline-4" id="outline-container-org60e410b">
-<h4 id="org60e410b">Lemmatisation</h4>
-<div class="outline-text-4" id="text-org60e410b">
+<div class="outline-4" id="outline-container-org93468c2">
+<h4 id="org93468c2">Lemmatisation</h4>
+<div class="outline-text-4" id="text-org93468c2">
 <p>Spacy implements <a href="https://www.wikiwand.com/en/Lemmatisation">Lemmatisation</a>, the conversion of a token to the "standard form" for a word.</p>
 <div class="highlight">
 <pre><span></span><span class="k">print</span><span class="p">(</span><span class="s2">"|Token| Lemma|Part of Speech|"</span><span class="p">)</span>
@@ -1259,14 +1548,14 @@ contemplated open-mouthed, to the detriment of
 </div>
 </div>
 </div>
-<div class="outline-3" id="outline-container-org767e34b">
-<h3 id="org767e34b">A Detour Into Fuzzy Wuzzy</h3>
-<div class="outline-text-3" id="text-org767e34b">
+<div class="outline-3" id="outline-container-org7112614">
+<h3 id="org7112614">A Detour Into Fuzzy Wuzzy</h3>
+<div class="outline-text-3" id="text-org7112614">
 <p><a href="https://github.com/seatgeek/fuzzywuzzy">fuzzywuzzy</a> is a library that does fuzzy string matching using the <a href="https://www.wikiwand.com/en/Levenshtein_distance">Levenshtein Distance</a> between strings. There's a <a href="https://chairnerd.seatgeek.com/fuzzywuzzy-fuzzy-string-matching-in-python/">page</a> showing more about how to use it based the example of finding concert information on the web.</p>
 </div>
-<div class="outline-4" id="outline-container-org53d06d0">
-<h4 id="org53d06d0">Ratio</h4>
-<div class="outline-text-4" id="text-org53d06d0">
+<div class="outline-4" id="outline-container-org6f1745d">
+<h4 id="org6f1745d">Ratio</h4>
+<div class="outline-text-4" id="text-org6f1745d">
 <p>The <code>ratio</code> function for fuzzywuzzy is an alias for the <a href="https://docs.python.org/3/library/difflib.html">difflib</a> <code>SequenceMatcher.ratio</code> method (except they multiply by 100 and round off so it's a percentage rather than a fraction. The ratio it's calculating is:</p>
 <p>\[ ratio = \frac{2M}{T} \]</p>
 <p>Where <i>M</i> is the number of matching elements and <i>T</i> is the total number of elements in both sequences.</p>
@@ -1288,9 +1577,9 @@ contemplated open-mouthed, to the detriment of
 <p>The fuzzywuzzy page I mentioned earlier states that this will work for very short (one word) text or very long text, but not so well for things in between.</p>
 </div>
 </div>
-<div class="outline-4" id="outline-container-orgec43902">
-<h4 id="orgec43902">Partial Ratio</h4>
-<div class="outline-text-4" id="text-orgec43902">
+<div class="outline-4" id="outline-container-orga8cacfe">
+<h4 id="orga8cacfe">Partial Ratio</h4>
+<div class="outline-text-4" id="text-orga8cacfe">
 <p>To get better matches for short-ish text, fuzzywuzzy has a <code>partial_ratio</code> function.</p>
 <div class="highlight">
 <pre><span></span><span class="n">sentence_a</span> <span class="o">=</span> <span class="s2">"meaty beaty big and bouncy"</span>
@@ -1306,9 +1595,9 @@ contemplated open-mouthed, to the detriment of
 <p>The <code>ratio</code> doesn't handle sub-string matches as well as <code>partial_ratio</code> does.</p>
 </div>
 </div>
-<div class="outline-4" id="outline-container-orge07e173">
-<h4 id="orge07e173">Token Sort and Token Set</h4>
-<div class="outline-text-4" id="text-orge07e173">
+<div class="outline-4" id="outline-container-org135af13">
+<h4 id="org135af13">Token Sort and Token Set</h4>
+<div class="outline-text-4" id="text-org135af13">
 <p>Besides sub-strings, there might be cases where ordering doesn't matter, in which case you can try the <code>token_sort_ratio</code> or <code>token_set_ratio</code> functions.</p>
 <div class="highlight">
 <pre><span></span><span class="n">sentence_a</span> <span class="o">=</span> <span class="s2">"totally tubular terry"</span>
@@ -1328,9 +1617,9 @@ contemplated open-mouthed, to the detriment of
 <p>The <code>token_sort_ratio</code> sorts the tokens before comparing them, while the <code>token_set_ratio</code> sorts the intersection of the tokens first and then append the sorted tokens that aren't in both strings before calculating the similarity.</p>
 </div>
 </div>
-<div class="outline-4" id="outline-container-orgc3debd2">
-<h4 id="orgc3debd2">Process</h4>
-<div class="outline-text-4" id="text-orgc3debd2">
+<div class="outline-4" id="outline-container-org8159f3b">
+<h4 id="org8159f3b">Process</h4>
+<div class="outline-text-4" id="text-org8159f3b">
 <p>Finally, you can pass <code>process.extract</code> a string and a list of strings to compare to that string and it will return them in the order of similarity.</p>
 <p>By default this uses <code>fuzz.WRatio</code> to score the similarity.</p>
 <div class="highlight">
@@ -1388,9 +1677,9 @@ Return a measure of the sequences' similarity between 0 and 100, using different
 
 </pre></div>
 </div>
-<div class="outline-4" id="outline-container-orgc4cc518">
-<h4 id="orgc4cc518">Spell Check</h4>
-<div class="outline-text-4" id="text-orgc4cc518">
+<div class="outline-4" id="outline-container-org8207e2f">
+<h4 id="org8207e2f">Spell Check</h4>
+<div class="outline-text-4" id="text-org8207e2f">
 <p>Although the fuzzywuzzy page states that their use case was matching the names of shows on different web-sites, it can also be used as a simple spell-checker.</p>
 <div class="highlight">
 <pre><span></span><span class="n">dictionary</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"embarras"</span><span class="p">,</span> <span class="s2">"inoculate"</span><span class="p">,</span> <span class="s2">"misspell"</span><span class="p">]</span>
@@ -1441,19 +1730,19 @@ Return a measure of the sequences' similarity between 0 and 100, using different
 </div>
 </div>
 </div>
-<div class="outline-3" id="outline-container-orgdcaa0b8">
-<h3 id="orgdcaa0b8">A Diversion Into JellyFish</h3>
-<div class="outline-text-3" id="text-orgdcaa0b8">
+<div class="outline-3" id="outline-container-org1604c14">
+<h3 id="org1604c14">A Diversion Into JellyFish</h3>
+<div class="outline-text-3" id="text-org1604c14">
 <p><a href="https://jellyfish.readthedocs.io/en/latest">JellyFish</a> is another python library that implements distance functions (like the Levenstein Distance that FuzzyWuzzy does, but others as well) as well as <a href="https://www.wikiwand.com/en/Stemming">stemming</a> and <a href="https://www.wikiwand.com/en/Phonetic_algorithm">phonetic encoding</a>.</p>
 </div>
-<div class="outline-4" id="outline-container-org66a4ba0">
-<h4 id="org66a4ba0">Phonetic Encoding</h4>
-<div class="outline-text-4" id="text-org66a4ba0">
+<div class="outline-4" id="outline-container-orge88afcf">
+<h4 id="orge88afcf">Phonetic Encoding</h4>
+<div class="outline-text-4" id="text-orge88afcf">
 <p>Phonetic encoding transforms words into a form that is based on the pronounciaton of the words. Using this should make matching spelling variations using the distance function(s) better.</p>
 </div>
-<div class="outline-5" id="outline-container-org224bd83">
-<h5 id="org224bd83">American Soundex</h5>
-<div class="outline-text-5" id="text-org224bd83">
+<div class="outline-5" id="outline-container-org0f407e2">
+<h5 id="org0f407e2">American Soundex</h5>
+<div class="outline-text-5" id="text-org0f407e2">
 <p><a href="https://www.wikiwand.com/en/Soundex">Soundex</a> was originally patented in 1918 but JellyFish uses a variation called <i>American Soundex</i> which was created in 1930 by analyzing U.S. census reports. Each encoding consists of a letter followed by three digits. The letter is the first letter of the word and the digits represent an encoding of the remaining consonants (a, e, i, o, u, y, h, and w are removed if they aren't the first letter).</p>
 <p>The exact procedure is pretty straight-forward, but the main thing to note is that it always has the same form (you either pad or cut off the coded consonants to get three digits).</p>
 <div class="highlight">
@@ -1521,9 +1810,9 @@ Return a measure of the sequences' similarity between 0 and 100, using different
 <p>It's a little hard to interpret these values, but it's interesting that <i>guy</i> and <i>sky</i> are so much more similar than <i>glove</i> and <i>love</i> and <i>eight</i> and <i>ate</i> are.</p>
 </div>
 </div>
-<div class="outline-5" id="outline-container-org7f98def">
-<h5 id="org7f98def">Metaphone</h5>
-<div class="outline-text-5" id="text-org7f98def">
+<div class="outline-5" id="outline-container-org71f7248">
+<h5 id="org71f7248">Metaphone</h5>
+<div class="outline-text-5" id="text-org71f7248">
 <p><a href="https://www.wikiwand.com/en/Metaphone">Metaphone</a> was developed in 1990 and improves on Soundex to produce a more accurate encoding.</p>
 <div class="highlight">
 <pre><span></span><span class="n">rupert_robert_rwanda</span><span class="p">(</span><span class="n">jellyfish</span><span class="o">.</span><span class="n">metaphone</span><span class="p">)</span>
@@ -1567,9 +1856,9 @@ Return a measure of the sequences' similarity between 0 and 100, using different
 <p>Metaphone is a <i>little</i> more interpretable, but interestingly in this case the similarity flips and <i>love</i> and <i>glove</i> are rated more similar. Also, in this case they all had a Levenshtein Distance of 1, while their similarity-ratios where quite different (Levenstein Distance is the number of edits you need to transform one sequence to another).</p>
 </div>
 </div>
-<div class="outline-5" id="outline-container-orgb1ff7fa">
-<h5 id="orgb1ff7fa">New York State Identification and Intelligence System (NYSIIS)</h5>
-<div class="outline-text-5" id="text-orgb1ff7fa">
+<div class="outline-5" id="outline-container-orgc44eec7">
+<h5 id="orgc44eec7">New York State Identification and Intelligence System (NYSIIS)</h5>
+<div class="outline-text-5" id="text-orgc44eec7">
 <p>The <a href="https://www.wikiwand.com/en/New_York_State_Identification_and_Intelligence_System">New York State Identification and Intelligence System</a> is a slightly more accurate (compared to Soundex) encoder that was developed in 1970.</p>
 <div class="highlight">
 <pre><span></span><span class="n">rupert_robert_rwanda</span><span class="p">(</span><span class="n">jellyfish</span><span class="o">.</span><span class="n">nysiis</span><span class="p">)</span>
@@ -1612,9 +1901,9 @@ Return a measure of the sequences' similarity between 0 and 100, using different
 <p>This seems even more interpretable than the metaphone encodings, and the gap in the similarities is even greater.</p>
 </div>
 </div>
-<div class="outline-5" id="outline-container-org78503e9">
-<h5 id="org78503e9">Match Rating Approach</h5>
-<div class="outline-text-5" id="text-org78503e9">
+<div class="outline-5" id="outline-container-orgfdd2333">
+<h5 id="orgfdd2333">Match Rating Approach</h5>
+<div class="outline-text-5" id="text-orgfdd2333">
 <p>The final phonetic encoding that jellyfish supports is the <a href="https://www.wikiwand.com/en/Match_rating_approach">Match Rating Approach</a> which was developed in 1977 by Western Airlines.</p>
 <div class="highlight">
 <pre><span></span><span class="n">rupert_robert_rwanda</span><span class="p">(</span><span class="n">jellyfish</span><span class="o">.</span><span class="n">match_rating_codex</span><span class="p">)</span>
@@ -1661,9 +1950,9 @@ Return a measure of the sequences' similarity between 0 and 100, using different
 </div>
 </div>
 </div>
-<div class="outline-3" id="outline-container-org185cb88">
-<h3 id="org185cb88">A Short Diversion Into FlashText</h3>
-<div class="outline-text-3" id="text-org185cb88">
+<div class="outline-3" id="outline-container-org9f8571f">
+<h3 id="org9f8571f">A Short Diversion Into FlashText</h3>
+<div class="outline-text-3" id="text-org9f8571f">
 <p><a href="https://flashtext.readthedocs.io/en/latest/">FlashText</a> is a python module to help find and replace words in very large documents. It doesn't do all the interesting linguistic things that the other code we've been looking at does, but it was built specifically to be very fast so for cases where you have a lot of text you can use it to speed up searches.</p>
 <p>I don't really have any large text to test it on, but here's a quick look at how it works. You can search for matching words.</p>
 <div class="highlight">
@@ -1727,14 +2016,14 @@ more completely than that of a secret agent of police.
 </div>
 </div>
 </div>
-<div class="outline-2" id="outline-container-org6b2df69">
-<h2 id="org6b2df69">End</h2>
-<div class="outline-text-2" id="text-org6b2df69">
+<div class="outline-2" id="outline-container-org515abb4">
+<h2 id="org515abb4">End</h2>
+<div class="outline-text-2" id="text-org515abb4">
 <p>Despite the name this was really a look at three-ish libraries to help with tokenization, lemmatizing, fuzzy string matching, and quick string searching and replacin.g</p>
 </div>
-<div class="outline-3" id="outline-container-org76b0959">
-<h3 id="org76b0959">Reference</h3>
-<div class="outline-text-3" id="text-org76b0959">
+<div class="outline-3" id="outline-container-org08a394e">
+<h3 id="org08a394e">Reference</h3>
+<div class="outline-text-3" id="text-org08a394e">
 <ol class="org-ol">
 <li>Kasliwal N. Natural language processing with Python quick start guide: going from a Python developer to an effective natural language processing engineer [Internet]. 2018 [cited 2019 May 18]. Available from: <a href="http://proquest.safaribooksonline.com/?fpi=9781789130386">http://proquest.safaribooksonline.com/?fpi=9781789130386</a></li>
 </ol>
@@ -1756,43 +2045,43 @@ more completely than that of a secret agent of police.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="posts/nlp/newsgroups-example/#orgf6ec422">Beginning</a>
+<li><a href="posts/nlp/newsgroups-example/#orgb1df323">Beginning</a>
 <ul>
-<li><a href="posts/nlp/newsgroups-example/#org044bc75">Imports</a></li>
-<li><a href="posts/nlp/newsgroups-example/#orge9bccb4">Set Up</a></li>
+<li><a href="posts/nlp/newsgroups-example/#orga8c4ba8">Imports</a></li>
+<li><a href="posts/nlp/newsgroups-example/#orgb703285">Set Up</a></li>
 </ul>
 </li>
-<li><a href="posts/nlp/newsgroups-example/#orgcf1a3eb">Middle</a>
+<li><a href="posts/nlp/newsgroups-example/#org0d7bf84">Middle</a>
 <ul>
-<li><a href="posts/nlp/newsgroups-example/#org80cd3c6">Loading the Data</a></li>
-<li><a href="posts/nlp/newsgroups-example/#org485e0a4">Setting Up The Test Set</a></li>
-<li><a href="posts/nlp/newsgroups-example/#org38828f5">The Document Term Matrix</a></li>
-<li><a href="posts/nlp/newsgroups-example/#orgb99565c">Term-Frequency/Inverse Document Frequency</a></li>
-<li><a href="posts/nlp/newsgroups-example/#orgcadb35c">A Logistic Regression Pipeline</a></li>
-<li><a href="posts/nlp/newsgroups-example/#org39d15c9">Cross Validation</a></li>
-<li><a href="posts/nlp/newsgroups-example/#org3ce1c9e">Testing</a></li>
-<li><a href="posts/nlp/newsgroups-example/#org1b272b8">A Confusion Matrix</a></li>
+<li><a href="posts/nlp/newsgroups-example/#org9696917">Loading the Data</a></li>
+<li><a href="posts/nlp/newsgroups-example/#org47852fc">Setting Up The Test Set</a></li>
+<li><a href="posts/nlp/newsgroups-example/#org4dbf5b8">The Document Term Matrix</a></li>
+<li><a href="posts/nlp/newsgroups-example/#org92ddeba">Term-Frequency/Inverse Document Frequency</a></li>
+<li><a href="posts/nlp/newsgroups-example/#orga536ad7">A Logistic Regression Pipeline</a></li>
+<li><a href="posts/nlp/newsgroups-example/#org29f4fe1">Cross Validation</a></li>
+<li><a href="posts/nlp/newsgroups-example/#orgf95d1d8">Testing</a></li>
+<li><a href="posts/nlp/newsgroups-example/#org8803884">A Confusion Matrix</a></li>
 </ul>
 </li>
-<li><a href="posts/nlp/newsgroups-example/#orgce571ee">End</a>
+<li><a href="posts/nlp/newsgroups-example/#org3b3724e">End</a>
 <ul>
-<li><a href="posts/nlp/newsgroups-example/#org9723bb1">Original Source</a></li>
+<li><a href="posts/nlp/newsgroups-example/#org6a76866">Original Source</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
-<div class="outline-2" id="outline-container-orgf6ec422">
-<h2 id="orgf6ec422">Beginning</h2>
-<div class="outline-text-2" id="text-orgf6ec422">
+<div class="outline-2" id="outline-container-orgb1df323">
+<h2 id="orgb1df323">Beginning</h2>
+<div class="outline-text-2" id="text-orgb1df323">
 <p>This is going to be a look at the <a href="https://archive.ics.uci.edu/ml/datasets/twenty+newsgroups">Twenty Newsgroups</a> dataset which has posts from twenty newsgroups classified by the newsgroup that they were in. It will be sort of a mad-dash through a simple pipeline to create a model that can classify them.</p>
 </div>
-<div class="outline-3" id="outline-container-org044bc75">
-<h3 id="org044bc75">Imports</h3>
-<div class="outline-text-3" id="text-org044bc75"></div>
-<div class="outline-4" id="outline-container-orgd9f897b">
-<h4 id="orgd9f897b">Python</h4>
-<div class="outline-text-4" id="text-orgd9f897b">
+<div class="outline-3" id="outline-container-orga8c4ba8">
+<h3 id="orga8c4ba8">Imports</h3>
+<div class="outline-text-3" id="text-orga8c4ba8"></div>
+<div class="outline-4" id="outline-container-orgb94fdb7">
+<h4 id="orgb94fdb7">Python</h4>
+<div class="outline-text-4" id="text-orgb94fdb7">
 <div class="highlight">
 <pre><span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
@@ -1800,9 +2089,9 @@ more completely than that of a secret agent of police.
 </pre></div>
 </div>
 </div>
-<div class="outline-4" id="outline-container-orgf9d7031">
-<h4 id="orgf9d7031">PyPi</h4>
-<div class="outline-text-4" id="text-orgf9d7031">
+<div class="outline-4" id="outline-container-org48c1cb7">
+<h4 id="org48c1cb7">PyPi</h4>
+<div class="outline-text-4" id="text-org48c1cb7">
 <div class="highlight">
 <pre><span></span><span class="kn">from</span> <span class="nn">dotenv</span> <span class="kn">import</span> <span class="n">load_dotenv</span>
 <span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">fetch_20newsgroups</span>
@@ -1827,9 +2116,9 @@ more completely than that of a secret agent of police.
 </pre></div>
 </div>
 </div>
-<div class="outline-4" id="outline-container-orge41a628">
-<h4 id="orge41a628">My Stuff</h4>
-<div class="outline-text-4" id="text-orge41a628">
+<div class="outline-4" id="outline-container-org386375a">
+<h4 id="org386375a">My Stuff</h4>
+<div class="outline-text-4" id="text-org386375a">
 <div class="highlight">
 <pre><span></span><span class="kn">from</span> <span class="nn">graeae.tables</span> <span class="kn">import</span> <span class="n">CountPercentage</span>
 <span class="kn">from</span> <span class="nn">graeae.timers</span> <span class="kn">import</span> <span class="n">Timer</span>
@@ -1838,12 +2127,12 @@ more completely than that of a secret agent of police.
 </div>
 </div>
 </div>
-<div class="outline-3" id="outline-container-orge9bccb4">
-<h3 id="orge9bccb4">Set Up</h3>
-<div class="outline-text-3" id="text-orge9bccb4"></div>
-<div class="outline-4" id="outline-container-org84348be">
-<h4 id="org84348be">Load the Dotenv</h4>
-<div class="outline-text-4" id="text-org84348be">
+<div class="outline-3" id="outline-container-orgb703285">
+<h3 id="orgb703285">Set Up</h3>
+<div class="outline-text-3" id="text-orgb703285"></div>
+<div class="outline-4" id="outline-container-orgd608c42">
+<h4 id="orgd608c42">Load the Dotenv</h4>
+<div class="outline-text-4" id="text-orgd608c42">
 <p>This loads some extra environment variables, in particular the path to the sklearn-data folder.</p>
 <div class="highlight">
 <pre><span></span><span class="n">dotenv_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">"~/.env"</span><span class="p">)</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span>
@@ -1851,18 +2140,18 @@ more completely than that of a secret agent of police.
 </pre></div>
 </div>
 </div>
-<div class="outline-4" id="outline-container-orgf2ff858">
-<h4 id="orgf2ff858">The Timer</h4>
-<div class="outline-text-4" id="text-orgf2ff858">
+<div class="outline-4" id="outline-container-org7ac52c2">
+<h4 id="org7ac52c2">The Timer</h4>
+<div class="outline-text-4" id="text-org7ac52c2">
 <p>This is an object to keep track of how long things take.</p>
 <div class="highlight">
 <pre><span></span><span class="n">TIMER</span> <span class="o">=</span> <span class="n">Timer</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
-<div class="outline-4" id="outline-container-org4bc3234">
-<h4 id="org4bc3234">The Table</h4>
-<div class="outline-text-4" id="text-org4bc3234">
+<div class="outline-4" id="outline-container-org21d170a">
+<h4 id="org21d170a">The Table</h4>
+<div class="outline-text-4" id="text-org21d170a">
 <p>This is a helper to print org-tables from data-frames.</p>
 <div class="highlight">
 <pre><span></span><span class="n">TABLE</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">tabulate</span><span class="p">,</span> <span class="n">tablefmt</span><span class="o">=</span><span class="s2">"orgtbl"</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="s2">"keys"</span><span class="p">,</span>
@@ -1870,9 +2159,9 @@ more completely than that of a secret agent of police.
 </pre></div>
 </div>
 </div>
-<div class="outline-4" id="outline-container-orgec6f328">
-<h4 id="orgec6f328">Plotting</h4>
-<div class="outline-text-4" id="text-orgec6f328">
+<div class="outline-4" id="outline-container-org6209732">
+<h4 id="org6209732">Plotting</h4>
+<div class="outline-text-4" id="text-org6209732">
 <p>This helps save the plots to the right folder for nikola.</p>
 <div class="highlight">
 <pre><span></span><span class="n">SLUG</span> <span class="o">=</span> <span class="s2">"newsgroups-example"</span>
@@ -1883,12 +2172,12 @@ more completely than that of a secret agent of police.
 </div>
 </div>
 </div>
-<div class="outline-2" id="outline-container-orgcf1a3eb">
-<h2 id="orgcf1a3eb">Middle</h2>
-<div class="outline-text-2" id="text-orgcf1a3eb"></div>
-<div class="outline-3" id="outline-container-org80cd3c6">
-<h3 id="org80cd3c6">Loading the Data</h3>
-<div class="outline-text-3" id="text-org80cd3c6">
+<div class="outline-2" id="outline-container-org0d7bf84">
+<h2 id="org0d7bf84">Middle</h2>
+<div class="outline-text-2" id="text-org0d7bf84"></div>
+<div class="outline-3" id="outline-container-org9696917">
+<h3 id="org9696917">Loading the Data</h3>
+<div class="outline-text-3" id="text-org9696917">
 <p>We're going to be using the <a href="https://scikit-learn.org/0.19/datasets/twenty_newsgroups.html">20 Newsgroups dataset</a> that you can download using sklearn's <a href="https://scikit-learn.org/0.19/modules/generated/sklearn.datasets.fetch_20newsgroups.html#sklearn.datasets.fetch_20newsgroups">fetch_20newsgroups</a> function. By default it downloads it to a folder named <code>scikit_learn_data</code> in your home directory, but since <i>everybody</i> seems to want to add folders to my home directory I prefer to put it in a hidden folder so I'm not always staring at all these folders. To make it more likely that I'll remember the right folder name I put it in an environment variable.</p>
 <div class="highlight">
 <pre><span></span><span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"SKLEARN"</span><span class="p">))</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span>
@@ -1956,9 +2245,9 @@ extractor.
 <p>So, reading the blob the first thing to notice is that they already split the dataset into training and testing sets - even though I didn't specify anything all I really got was the training set.</p>
 </div>
 </div>
-<div class="outline-3" id="outline-container-org485e0a4">
-<h3 id="org485e0a4">Setting Up The Test Set</h3>
-<div class="outline-text-3" id="text-org485e0a4">
+<div class="outline-3" id="outline-container-org47852fc">
+<h3 id="org47852fc">Setting Up The Test Set</h3>
+<div class="outline-text-3" id="text-org47852fc">
 <p>Normally I would use sklearn's <a href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html">train_test_split</a> to split the data set up, but since they set it up so that you have to download the test set separately, I guess I'll go with that.</p>
 <div class="highlight">
 <pre><span></span><span class="n">test_set</span> <span class="o">=</span> <span class="n">fetch_20newsgroups</span><span class="p">(</span><span class="n">data_home</span><span class="o">=</span><span class="n">path</span><span class="p">,</span> <span class="n">subset</span><span class="o">=</span><span class="s2">"test"</span><span class="p">)</span>
@@ -1978,9 +2267,9 @@ Training: 11,314 (60 %)
 Testing: 7,532 (40 %)
 
 </pre></div>
-<div class="outline-4" id="outline-container-org1069c27">
-<h4 id="org1069c27">What does an entry look like?</h4>
-<div class="outline-text-4" id="text-org1069c27">
+<div class="outline-4" id="outline-container-org4b32218">
+<h4 id="org4b32218">What does an entry look like?</h4>
+<div class="outline-text-4" id="text-org4b32218">
 <div class="highlight">
 <pre><span></span><span class="n">index</span> <span class="o">=</span> <span class="nb">min</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">x_train</span><span class="p">[</span><span class="n">index</span><span class="p">])</span> <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x_train</span><span class="p">))))</span>
 <span class="k">print</span><span class="p">(</span><span class="n">x_train</span><span class="p">[</span><span class="n">index</span><span class="p">])</span>
@@ -2028,9 +2317,9 @@ all over the place.
 <p>Looks like there's a lot of noise in these things.</p>
 </div>
 </div>
-<div class="outline-4" id="outline-container-orgd2eff98">
-<h4 id="orgd2eff98">How are the groups distributed?</h4>
-<div class="outline-text-4" id="text-orgd2eff98">
+<div class="outline-4" id="outline-container-org961a725">
+<h4 id="org961a725">How are the groups distributed?</h4>
+<div class="outline-text-4" id="text-org961a725">
 <p>The labels are numbers representing which Newsgroup each of the documents came from, but they also give us a translation in the form of the <code>dataset.target_names</code> list so we can take a look at how much of each group is represented.</p>
 <div class="highlight">
 <pre><span></span><span class="n">labels</span> <span class="o">=</span> <span class="p">{</span><span class="n">index</span><span class="p">:</span> <span class="n">name</span> <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">target_names</span><span class="p">)}</span>
@@ -2168,9 +2457,9 @@ all over the place.
 </div>
 </div>
 </div>
-<div class="outline-3" id="outline-container-org38828f5">
-<h3 id="org38828f5">The Document Term Matrix</h3>
-<div class="outline-text-3" id="text-org38828f5">
+<div class="outline-3" id="outline-container-org4dbf5b8">
+<h3 id="org4dbf5b8">The Document Term Matrix</h3>
+<div class="outline-text-3" id="text-org4dbf5b8">
 <p>To work with the data-set we need to convert it to some kind of numeric value. In this case I'm going to use sklearn's <a href="https://scikit-learn.org/0.19/modules/generated/sklearn.feature_extraction.text.CountVectorizer.html#sklearn.feature_extraction.text.CountVectorizer">CountVectorizer</a> to create a matrix where each row represents a document and each column is a term in the <a href="https://www.wikiwand.com/en/Text_corpus">corpus</a> (creating a <a href="https://www.wikiwand.com/en/Bag-of-words_model">Bag of Words</a>/<a href="https://www.wikiwand.com/en/Document-term_matrix">Document Term Matrix</a>) The values are the count of the terms in each document. Sklearn has an alternative download function - <a href="https://scikit-learn.org/0.19/modules/generated/sklearn.datasets.fetch_20newsgroups_vectorized.html#sklearn.datasets.fetch_20newsgroups_vectorized">fetch_20newsgroups_vectorized</a> that will download it already vectorized, but since you have to do the conversion yourself in most cases I thought it would be better not to use it.</p>
 <div class="highlight">
 <pre><span></span><span class="n">vectorizer</span> <span class="o">=</span> <span class="n">CountVectorizer</span><span class="p">()</span>
@@ -2197,9 +2486,9 @@ Documents: 11,314 Terms: 130,107
 <p>I was going to inspect the matrix, but it's a sparse matrix so you have to convert it to another type to inspect it, and all it would be is a matrix of numbers (term counts) so I'll leave it for some other time.</p>
 </div>
 </div>
-<div class="outline-3" id="outline-container-orgb99565c">
-<h3 id="orgb99565c">Term-Frequency/Inverse Document Frequency</h3>
-<div class="outline-text-3" id="text-orgb99565c">
+<div class="outline-3" id="outline-container-org92ddeba">
+<h3 id="org92ddeba">Term-Frequency/Inverse Document Frequency</h3>
+<div class="outline-text-3" id="text-org92ddeba">
 <p>If we just use the counts (the Term-Frequency (TF)), then the most common word per document will have the highest value, but if a word is spread across all or at least many documents, then even if it's common in a document it probably won't help us distinguish the documents from each other in a meaningful way. To deal with this we can add a penalty (the Inverse-Document-Frequency (IDF) weight) that lowers the value for a term the more common it is among all the documents. Together the two methods are knows as <a href="https://www.wikiwand.com/en/Tf%E2%80%93idf">TF-IDF.</a> Here sklearn's <a href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfTransformer.html">TfidfTransformer</a> does the transform for us.</p>
 <div class="highlight">
 <pre><span></span><span class="n">transformer</span> <span class="o">=</span> <span class="n">TfidfTransformer</span><span class="p">()</span>
@@ -2212,9 +2501,9 @@ Documents: 11,314 Terms: 130,107
 
 </pre></div>
 </div>
-<div class="outline-3" id="outline-container-orgcadb35c">
-<h3 id="orgcadb35c">A Logistic Regression Pipeline</h3>
-<div class="outline-text-3" id="text-orgcadb35c">
+<div class="outline-3" id="outline-container-orga536ad7">
+<h3 id="orga536ad7">A Logistic Regression Pipeline</h3>
+<div class="outline-text-3" id="text-orga536ad7">
 <p>To classify the documents we're going to use <a href="https://www.wikiwand.com/en/Logistic_regression">Logistic Regression</a> (also from <a href="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html">sklearn</a>). In addition, instead of creating the Document Term Matrix in separate steps as above, I'm going to create a <a href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html">Pipeline</a> so sklearn can do it in a single call. An sklearn Pipeline takes as all but the last of it's constructor's argument a list of <code>(name, transform)</code> tuples, where the <code>transform</code> argument is an object that has a <code>fit_transform</code> method (like the <code>CountVectorizer</code> we saw earlier). The last of argument of the constructor is the model that you are going to fit on the data that the pipeline has transformed. If you don't want to customize the names there's a <a href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.make_pipeline.html#sklearn.pipeline.make_pipeline">make_pipeline</a> function that just takes the transformer and model instances as arguments and automatically names them for you, returning the pipeline as its output.</p>
 <p>I used the <code>CountVectorizer</code> followed by the <code>TfidfTransformer</code> to show them separately, but sklearn actually has a <a href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfVectorizer.html">TfidfVectorizer</a> class that does both of them for you so I'll use that here.</p>
 <div class="highlight">
@@ -2226,9 +2515,9 @@ Documents: 11,314 Terms: 130,107
 <p>I'm using the defaults for Logistic Regression in general, but it will output a lot of warnings if you don't set the solver and multi-class. I'm using the <a href="https://www.wikiwand.com/en/Limited-memory_BFGS">Limited-Memory Broyden-Fletcher-Goldfarb-Shanno</a> algorithm for the solver and setting the <code>multi_class</code> to "multinomial" (setting it to "auto" would do the same thing since there is more than one document-classification, rather than being a binary classification problem).</p>
 </div>
 </div>
-<div class="outline-3" id="outline-container-org39d15c9">
-<h3 id="org39d15c9">Cross Validation</h3>
-<div class="outline-text-3" id="text-org39d15c9">
+<div class="outline-3" id="outline-container-org29f4fe1">
+<h3 id="org29f4fe1">Cross Validation</h3>
+<div class="outline-text-3" id="text-org29f4fe1">
 <p>Now we can do some cross validation.</p>
 <div class="highlight">
 <pre><span></span><span class="k">with</span> <span class="n">TIMER</span><span class="p">:</span>
@@ -2296,9 +2585,9 @@ Documents: 11,314 Terms: 130,107
 <p>It looks like even with the default parameters the model got a mean/median <a href="https://www.wikiwand.com/en/F1_score">F1 Score</a> of 90 %, with a standard deviation of 0.0046, so the variance is pretty low.</p>
 </div>
 </div>
-<div class="outline-3" id="outline-container-org3ce1c9e">
-<h3 id="org3ce1c9e">Testing</h3>
-<div class="outline-text-3" id="text-org3ce1c9e">
+<div class="outline-3" id="outline-container-orgf95d1d8">
+<h3 id="orgf95d1d8">Testing</h3>
+<div class="outline-text-3" id="text-orgf95d1d8">
 <p>Let's try fitting it to the whole training set and see how it does.</p>
 <div class="highlight">
 <pre><span></span><span class="k">with</span> <span class="n">TIMER</span><span class="p">:</span>
@@ -2335,9 +2624,9 @@ Recall: 0.83
 <p>The precision and recall are the same as the F1 score, so it isn't better at either (or it's good at both, your pick).</p>
 </div>
 </div>
-<div class="outline-3" id="outline-container-org1b272b8">
-<h3 id="org1b272b8">A Confusion Matrix</h3>
-<div class="outline-text-3" id="text-org1b272b8">
+<div class="outline-3" id="outline-container-org8803884">
+<h3 id="org8803884">A Confusion Matrix</h3>
+<div class="outline-text-3" id="text-org8803884">
 <p>Having a single value like the F1 score helps us evaluate the model, but using a <a href="https://www.wikiwand.com/en/Confusion_matrix">Confusion Matrix</a> (via sklearn's <a href="https://scikit-learn.org/stable/modules/generated/sklearn.metrics.confusion_matrix.html">confusion_matrix</a> function) will help us understand how the model did a little more.</p>
 <div class="highlight">
 <pre><span></span><span class="n">confusion</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">y_true</span><span class="o">=</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="o">=</span><span class="n">predictions</span><span class="p">)</span>
@@ -2408,14 +2697,14 @@ Largest Confusion: 95
 </div>
 </div>
 </div>
-<div class="outline-2" id="outline-container-orgce571ee">
-<h2 id="orgce571ee">End</h2>
-<div class="outline-text-2" id="text-orgce571ee">
+<div class="outline-2" id="outline-container-org3b3724e">
+<h2 id="org3b3724e">End</h2>
+<div class="outline-text-2" id="text-org3b3724e">
 <p>So here we have a basic walk-through using sklearn to model a document classifier built with Logistic Regression. One of the nice things about logistic regression is that the weights tell you which variables are the most important, but I've never tried that with documents so I don't know how to do that here. There are many improvements that could be made (would have to be made) if this were an attempt to make a real model, but the simplicity of the steps shows how much you can do with off-the-shelf software. Eighty-three percent isn't perfect, but it's pretty good.</p>
 </div>
-<div class="outline-3" id="outline-container-org9723bb1">
-<h3 id="org9723bb1">Original Source</h3>
-<div class="outline-text-3" id="text-org9723bb1">
+<div class="outline-3" id="outline-container-org6a76866">
+<h3 id="org6a76866">Original Source</h3>
+<div class="outline-text-3" id="text-org6a76866">
 <ol class="org-ol">
 <li>Kasliwal N. Natural language processing with Python quick start guide: going from a Python developer to an effective natural language processing engineer [Internet]. 2018 [cited 2019 May 18]. Available from: <a href="http://proquest.safaribooksonline.com/?fpi=9781789130386">http://proquest.safaribooksonline.com/?fpi=9781789130386</a></li>
 </ol>
@@ -2437,40 +2726,40 @@ Largest Confusion: 95
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="posts/text_mining/the-vector-space-model/#orgd28d8ed">Beginning</a>
+<li><a href="posts/text_mining/the-vector-space-model/#orgc1aefd5">Beginning</a>
 <ul>
-<li><a href="posts/text_mining/the-vector-space-model/#org6cf2550">Imports</a></li>
-<li><a href="posts/text_mining/the-vector-space-model/#org8147776">The Query</a></li>
-<li><a href="posts/text_mining/the-vector-space-model/#orgbb09d3a">The Document</a></li>
+<li><a href="posts/text_mining/the-vector-space-model/#orgb32e3f7">Imports</a></li>
+<li><a href="posts/text_mining/the-vector-space-model/#org4214af9">The Query</a></li>
+<li><a href="posts/text_mining/the-vector-space-model/#orga562cf5">The Document</a></li>
 </ul>
 </li>
-<li><a href="posts/text_mining/the-vector-space-model/#orgf1a5025">Middle</a>
+<li><a href="posts/text_mining/the-vector-space-model/#orgdd03b34">Middle</a>
 <ul>
-<li><a href="posts/text_mining/the-vector-space-model/#org399e1fb">The Bit Vector</a></li>
-<li><a href="posts/text_mining/the-vector-space-model/#org458d05f">Term Frequency Vector</a></li>
-<li><a href="posts/text_mining/the-vector-space-model/#org341ab70">Inverse Document Frequency</a></li>
-<li><a href="posts/text_mining/the-vector-space-model/#org424e143">Ranking with TF-IDF Weighting</a></li>
-<li><a href="posts/text_mining/the-vector-space-model/#org5f93e74">Okapi BM25</a></li>
-<li><a href="posts/text_mining/the-vector-space-model/#org44d9854">Document Length Normalization</a></li>
-<li><a href="posts/text_mining/the-vector-space-model/#orgad9eec4">The State of the Art</a></li>
+<li><a href="posts/text_mining/the-vector-space-model/#org7a1c741">The Bit Vector</a></li>
+<li><a href="posts/text_mining/the-vector-space-model/#org76c95d6">Term Frequency Vector</a></li>
+<li><a href="posts/text_mining/the-vector-space-model/#orgf927758">Inverse Document Frequency</a></li>
+<li><a href="posts/text_mining/the-vector-space-model/#org6daf1f8">Ranking with TF-IDF Weighting</a></li>
+<li><a href="posts/text_mining/the-vector-space-model/#orgb61056b">Okapi BM25</a></li>
+<li><a href="posts/text_mining/the-vector-space-model/#org89a66c3">Document Length Normalization</a></li>
+<li><a href="posts/text_mining/the-vector-space-model/#org3dd934e">The State of the Art</a></li>
 </ul>
 </li>
-<li><a href="posts/text_mining/the-vector-space-model/#org5209dc3">End</a>
+<li><a href="posts/text_mining/the-vector-space-model/#org5ef4ccd">End</a>
 <ul>
-<li><a href="posts/text_mining/the-vector-space-model/#orgeb92dd5">VSM Improvements</a></li>
+<li><a href="posts/text_mining/the-vector-space-model/#orgb0efdd2">VSM Improvements</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
-<div class="outline-2" id="outline-container-orgd28d8ed">
-<h2 id="orgd28d8ed">Beginning</h2>
-<div class="outline-text-2" id="text-orgd28d8ed">
+<div class="outline-2" id="outline-container-orgc1aefd5">
+<h2 id="orgc1aefd5">Beginning</h2>
+<div class="outline-text-2" id="text-orgc1aefd5">
 <p>This is a brief write-up of some notes I took on the Vector Space Model (VSM) used to rank documents by relevancy to keywords in a query. The query is represented as a vector with a 1 for each of the search terms and, in the simplest case, the vector to determine relevance will hold a 1 in each place where the document has a word that matches a query term. This might be easier with an example.</p>
 </div>
-<div class="outline-3" id="outline-container-org6cf2550">
-<h3 id="org6cf2550">Imports</h3>
-<div class="outline-text-3" id="text-org6cf2550">
+<div class="outline-3" id="outline-container-orgb32e3f7">
+<h3 id="orgb32e3f7">Imports</h3>
+<div class="outline-text-3" id="text-orgb32e3f7">
 <div class="highlight">
 <pre><span></span># python
 from collections import Counter
@@ -2496,9 +2785,9 @@ Embed = partial(EmbedHoloview, folder_path=output)
 </pre></div>
 </div>
 </div>
-<div class="outline-3" id="outline-container-org8147776">
-<h3 id="org8147776">The Query</h3>
-<div class="outline-text-3" id="text-org8147776">
+<div class="outline-3" id="outline-container-org4214af9">
+<h3 id="org4214af9">The Query</h3>
+<div class="outline-text-3" id="text-org4214af9">
 <p>The user made a query with some key words which is normally represented by a vector with the count of each term as the values.</p>
 <div class="highlight">
 <pre><span></span>terms = set("movie horror blood".split())
@@ -2510,9 +2799,9 @@ print(terms)
 
 </pre></div>
 </div>
-<div class="outline-3" id="outline-container-orgbb09d3a">
-<h3 id="orgbb09d3a">The Document</h3>
-<div class="outline-text-3" id="text-orgbb09d3a">
+<div class="outline-3" id="outline-container-orga562cf5">
+<h3 id="orga562cf5">The Document</h3>
+<div class="outline-text-3" id="text-orga562cf5">
 <p>We want to retrieve the most relevant documents from a set of documents, which I'll represent as lists of words.</p>
 <div class="highlight">
 <pre><span></span>document_1 = "the movie was about workers at a blood bank".split()
@@ -2521,12 +2810,12 @@ document_2 = "a movie about blood blood and more blood".split()
 </div>
 </div>
 </div>
-<div class="outline-2" id="outline-container-orgf1a5025">
-<h2 id="orgf1a5025">Middle</h2>
-<div class="outline-text-2" id="text-orgf1a5025"></div>
-<div class="outline-3" id="outline-container-org399e1fb">
-<h3 id="org399e1fb">The Bit Vector</h3>
-<div class="outline-text-3" id="text-org399e1fb">
+<div class="outline-2" id="outline-container-orgdd03b34">
+<h2 id="orgdd03b34">Middle</h2>
+<div class="outline-text-2" id="text-orgdd03b34"></div>
+<div class="outline-3" id="outline-container-org7a1c741">
+<h3 id="org7a1c741">The Bit Vector</h3>
+<div class="outline-text-3" id="text-org7a1c741">
 <p>To represent similarity I'll use a vector with ones where there is a word match in the document.</p>
 <div class="highlight">
 <pre><span></span>def check_document(document: list, terms: set) -&gt; None:
@@ -2563,9 +2852,9 @@ Relevance: 2.0
 <p>So we con see one problem with our method right off the bat, in that repeated terms don't increase the relevance so both our documents have the same score, even though one mentioned blood more often.</p>
 </div>
 </div>
-<div class="outline-3" id="outline-container-org458d05f">
-<h3 id="org458d05f">Term Frequency Vector</h3>
-<div class="outline-text-3" id="text-org458d05f">
+<div class="outline-3" id="outline-container-org76c95d6">
+<h3 id="org76c95d6">Term Frequency Vector</h3>
+<div class="outline-text-3" id="text-org76c95d6">
 <p>One approach to fix our lack of giving weight to more occurences of a keyword is to use counts, Term Frequency (TF), instead just a 0 or 1 in our vector.</p>
 <div class="highlight">
 <pre><span></span>def counts(document: list, terms: set) -&gt; None:
@@ -2614,9 +2903,9 @@ Relevance: 5.0
 <p>My example is a little convoluted, but the point is that the most common words aren't necessarily the most helpful ones.</p>
 </div>
 </div>
-<div class="outline-3" id="outline-container-org341ab70">
-<h3 id="org341ab70">Inverse Document Frequency</h3>
-<div class="outline-text-3" id="text-org341ab70">
+<div class="outline-3" id="outline-container-orgf927758">
+<h3 id="orgf927758">Inverse Document Frequency</h3>
+<div class="outline-text-3" id="text-orgf927758">
 <p>This method seeks to overcome the problem of words that are too common by reducing the weight of a term the more common it is.</p>
 <p>\[ IDF(w) = \log \left(\frac{M + 1}{k} \right) \]</p>
 <p>Where <i>M</i> is the number of documents in the collection, <i>w</i> is the word (or term) that we are checking, and <i>k</i> is the number of documents containing <i>w</i>.</p>
@@ -2645,9 +2934,9 @@ Embed(plot=plot, file_name="inverse_document_frequency")()
 <p>You can see that as the number of documents with the word in it (<i>k</i>) goes up, the weight it gets (<i>IDF</i>) goes down until it reaches zero when all the documents have the word in it (<i>log(1)</i> equals 0). We have codified the notion that if a word is <i>too</i> common, then it is less important to relevance.</p>
 </div>
 </div>
-<div class="outline-3" id="outline-container-org424e143">
-<h3 id="org424e143">Ranking with TF-IDF Weighting</h3>
-<div class="outline-text-3" id="text-org424e143">
+<div class="outline-3" id="outline-container-org6daf1f8">
+<h3 id="org6daf1f8">Ranking with TF-IDF Weighting</h3>
+<div class="outline-text-3" id="text-org6daf1f8">
 <p>Okay, so we hav Term-Frequency as our basic measure of relevancy, and we have this notion that the more common a word is, the less important it is to relevancy, embodied by Inverse Document Frequency (IDF), how do we use them? Like this.</p>
 \begin{align} f(q,d) &amp;= \sum_{i=1}^N x_i y_i\\ &amp;= \sum_{w \in q \cap d} c(w,q) \cdot c(w, d) \log \frac{M+1}{df(w)}\\ \end{align}
 <p>So, let's unpack this a little.</p>
@@ -2664,9 +2953,9 @@ Embed(plot=plot, file_name="inverse_document_frequency")()
 <p>So the relevance of a document is the sum of the products of the Term Frequency for times the Inverse Document Frequency for each word in the query. <i>Why is this useful?</i> If a term from the query appears in the document, then it is probably more relevant than a document where it doesn't appear, and if the term appears a second time, then it reinforces the idea of its relevance, but as the term keeps appearing we get less and less assurance that it means something - does the twenty-first occurence tell us much more of its relevance than the twentieth? So we still count all the occurences (\(c(w, d)\)) but multiply it by a discounting factor to offset repetitions (the Inverse Document Frequency weight).</p>
 </div>
 </div>
-<div class="outline-3" id="outline-container-org5f93e74">
-<h3 id="org5f93e74">Okapi BM25</h3>
-<div class="outline-text-3" id="text-org5f93e74">
+<div class="outline-3" id="outline-container-orgb61056b">
+<h3 id="orgb61056b">Okapi BM25</h3>
+<div class="outline-text-3" id="text-orgb61056b">
 <p>The <a href="https://en.wikipedia.org/wiki/Okapi_BM25">Okapi BM25</a> ranking function works in a similar way to TF-IDF, but it uses a silghtly different method. Instead of just the count of the words in a document (<i>c(w, d)</i>), it also uses the number of documents that have the word (<i>k</i>). \[ y = \frac{(k + 1) c(w, d){c(w, d) + k} \]</p>
 <div class="highlight">
 <pre><span></span>hover = HoverTool(
@@ -2696,14 +2985,14 @@ Embed(plot=plot, file_name="bm25_transformation")()
 <p>Because of the way it's set up, <i>k + 1</i> acts as an upper bound on the output.</p>
 </div>
 </div>
-<div class="outline-3" id="outline-container-org44d9854">
-<h3 id="org44d9854">Document Length Normalization</h3>
-<div class="outline-text-3" id="text-org44d9854">
+<div class="outline-3" id="outline-container-org89a66c3">
+<h3 id="org89a66c3">Document Length Normalization</h3>
+<div class="outline-text-3" id="text-org89a66c3">
 <p>We have another problem to deal with - longer documents have more words and so are more likely to have the query terms, even if they aren't necessarily relevant. So one thing to do might be do drop really long documents, but some documents are long because the author was logorrheic, and others are long because the have a lot of content and so might be useful if we match them, so we don't want to throw everything away. What we want to do instead is add a penalty for longer documents.</p>
 </div>
-<div class="outline-4" id="outline-container-org9fb8e44">
-<h4 id="org9fb8e44">Pivoted Length Normalization</h4>
-<div class="outline-text-4" id="text-org9fb8e44">
+<div class="outline-4" id="outline-container-org707be92">
+<h4 id="org707be92">Pivoted Length Normalization</h4>
+<div class="outline-text-4" id="text-org707be92">
 <p>This is a method to add a penalty to longer documents and a reward for shorter documents. Here's the equation.</p>
 <p>\[ normalizer = 1 -b + b \left( \frac{\textit{document length}}{\textit{average document length}} \right) \]</p>
 <div class="highlight">
@@ -2740,37 +3029,37 @@ Embed(plot=plot, file_name="pivoted_linear_transformation")()
 </div>
 </div>
 </div>
-<div class="outline-3" id="outline-container-orgad9eec4">
-<h3 id="orgad9eec4">The State of the Art</h3>
-<div class="outline-text-3" id="text-orgad9eec4">
+<div class="outline-3" id="outline-container-org3dd934e">
+<h3 id="org3dd934e">The State of the Art</h3>
+<div class="outline-text-3" id="text-org3dd934e">
 <p>These are the two "best" Vector Space Model ranking functions.</p>
 <p>\[ b \in [0, 1]\\ k \in [0, +\inf) \]</p>
 </div>
-<div class="outline-4" id="outline-container-org5a97432">
-<h4 id="org5a97432">Pivoted Length Normalization</h4>
-<div class="outline-text-4" id="text-org5a97432">
+<div class="outline-4" id="outline-container-org643919c">
+<h4 id="org643919c">Pivoted Length Normalization</h4>
+<div class="outline-text-4" id="text-org643919c">
 <p>\[ f(q, d) = \sum_{w \in q \cap d} c(w, q) \frac{\ln(1 + ln(1 + c(w, d)))}{1 -b + b\frac{\vert d \vert}{\textit{avg dl}}} \og \frac{M + 1}{df(w)} \]</p>
 </div>
 </div>
-<div class="outline-4" id="outline-container-org22e1949">
-<h4 id="org22e1949">BM25 With Document Length Normalization</h4>
-<div class="outline-text-4" id="text-org22e1949">
+<div class="outline-4" id="outline-container-org9a2b7d5">
+<h4 id="org9a2b7d5">BM25 With Document Length Normalization</h4>
+<div class="outline-text-4" id="text-org9a2b7d5">
 <p>\[ f(q, d) = \sum_{w \in q \cap d} c(w, d) \frac{(k+1) c(w, d)}{c(w, d) + k(1 - b + b \frac{\vert d \vert}{\textit{avg dl}})} \log \frac{M+1}{df(w)} \]</p>
 </div>
 </div>
 </div>
 </div>
-<div class="outline-2" id="outline-container-org5209dc3">
-<h2 id="org5209dc3">End</h2>
-<div class="outline-text-2" id="text-org5209dc3"></div>
-<div class="outline-3" id="outline-container-orgeb92dd5">
-<h3 id="orgeb92dd5">VSM Improvements</h3>
-<div class="outline-text-3" id="text-orgeb92dd5">
+<div class="outline-2" id="outline-container-org5ef4ccd">
+<h2 id="org5ef4ccd">End</h2>
+<div class="outline-text-2" id="text-org5ef4ccd"></div>
+<div class="outline-3" id="outline-container-orgb0efdd2">
+<h3 id="orgb0efdd2">VSM Improvements</h3>
+<div class="outline-text-3" id="text-orgb0efdd2">
 <p>These are variations that you can try to improve the effectiveness of Vector Space Model Ranking.</p>
 </div>
-<div class="outline-4" id="outline-container-orgebd928a">
-<h4 id="orgebd928a">Fix the "Dimension"</h4>
-<div class="outline-text-4" id="text-orgebd928a">
+<div class="outline-4" id="outline-container-org6bec97b">
+<h4 id="org6bec97b">Fix the "Dimension"</h4>
+<div class="outline-text-4" id="text-org6bec97b">
 <ul class="org-ul">
 <li>Use stemmed words, remove stop-words, use ngrams…</li>
 <li>Language and domain-specific tokenization</li>
@@ -2778,9 +3067,9 @@ Embed(plot=plot, file_name="pivoted_linear_transformation")()
 </ul>
 </div>
 </div>
-<div class="outline-4" id="outline-container-org386a4f4">
-<h4 id="org386a4f4">Changing the Similarity Function</h4>
-<div class="outline-text-4" id="text-org386a4f4">
+<div class="outline-4" id="outline-container-org216597c">
+<h4 id="org216597c">Changing the Similarity Function</h4>
+<div class="outline-text-4" id="text-org216597c">
 <ul class="org-ul">
 <li>Cosine Similarity</li>
 <li>Euclidean distance</li>
@@ -2788,12 +3077,12 @@ Embed(plot=plot, file_name="pivoted_linear_transformation")()
 </ul>
 </div>
 </div>
-<div class="outline-4" id="outline-container-orgeb92466">
-<h4 id="orgeb92466">Use BM25 Variations</h4>
-<div class="outline-text-4" id="text-orgeb92466"></div>
+<div class="outline-4" id="outline-container-orge7cd216">
+<h4 id="orge7cd216">Use BM25 Variations</h4>
+<div class="outline-text-4" id="text-orge7cd216"></div>
 <ul class="org-ul">
-<li><a id="orgb0d8db2"></a>BM25F<br>
-<div class="outline-text-5" id="text-orgb0d8db2">
+<li><a id="orgc21ccd2"></a>BM25F<br>
+<div class="outline-text-5" id="text-orgc21ccd2">
 <p>This is for structured documents (the <i>F</i> stands for "fields" within the document (e.g. title)).</p>
 <ul class="org-ul">
 <li>Uses the "fields", not just the main text</li>
@@ -2801,8 +3090,8 @@ Embed(plot=plot, file_name="pivoted_linear_transformation")()
 </ul>
 </div>
 </li>
-<li><a id="orgda3920e"></a>BM25+<br>
-<div class="outline-text-5" id="text-orgda3920e">
+<li><a id="orgd6c094f"></a>BM25+<br>
+<div class="outline-text-5" id="text-orgd6c094f">
 <p>This avoids over-penalizing long documents by adding a small constant to the term-frequencies. This has been shown (and proven analytically) to be better than BM25 alone.</p>
 </div>
 </li>
@@ -2825,19 +3114,19 @@ Embed(plot=plot, file_name="pivoted_linear_transformation")()
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="posts/text_mining/link-page/#orgc8819f1">Text Mining</a>
+<li><a href="posts/text_mining/link-page/#orge695bc7">Text Mining</a>
 <ul>
-<li><a href="posts/text_mining/link-page/#org518bb89">Text Retrieval MOOC Link Page</a></li>
+<li><a href="posts/text_mining/link-page/#org0605c54">Text Retrieval MOOC Link Page</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
-<div class="outline-2" id="outline-container-orgc8819f1">
-<h2 id="orgc8819f1">Text Mining</h2>
-<div class="outline-text-2" id="text-orgc8819f1"></div>
-<div class="outline-3" id="outline-container-org518bb89">
-<h3 id="org518bb89"><a href="http://sifaka.cs.uiuc.edu/ir/resources/mooctr.html">Text Retrieval MOOC Link Page</a></h3>
+<div class="outline-2" id="outline-container-orge695bc7">
+<h2 id="orge695bc7">Text Mining</h2>
+<div class="outline-text-2" id="text-orge695bc7"></div>
+<div class="outline-3" id="outline-container-org0605c54">
+<h3 id="org0605c54"><a href="http://sifaka.cs.uiuc.edu/ir/resources/mooctr.html">Text Retrieval MOOC Link Page</a></h3>
 </div>
 </div>
 </div>
@@ -2855,31 +3144,31 @@ Embed(plot=plot, file_name="pivoted_linear_transformation")()
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="posts/nlp/natural-language-processing-review/#org135edfb">Departure</a>
+<li><a href="posts/nlp/natural-language-processing-review/#org84661bb">Departure</a>
 <ul>
-<li><a href="posts/nlp/natural-language-processing-review/#org7e06a96">Imports</a></li>
-<li><a href="posts/nlp/natural-language-processing-review/#orgdeba5b4">Set Up</a></li>
+<li><a href="posts/nlp/natural-language-processing-review/#org73b470d">Imports</a></li>
+<li><a href="posts/nlp/natural-language-processing-review/#org42ae74b">Set Up</a></li>
 </ul>
 </li>
-<li><a href="posts/nlp/natural-language-processing-review/#orgcb992f7">Initiation</a>
+<li><a href="posts/nlp/natural-language-processing-review/#org3a3a2d8">Initiation</a>
 <ul>
-<li><a href="posts/nlp/natural-language-processing-review/#orge1766fa">Some Vocabulary</a></li>
+<li><a href="posts/nlp/natural-language-processing-review/#org7d9ec8f">Some Vocabulary</a></li>
 </ul>
 </li>
-<li><a href="posts/nlp/natural-language-processing-review/#orgcab9b54">Return</a>
+<li><a href="posts/nlp/natural-language-processing-review/#org5eedc76">Return</a>
 <ul>
-<li><a href="posts/nlp/natural-language-processing-review/#org811932c">Sources</a></li>
+<li><a href="posts/nlp/natural-language-processing-review/#org394b493">Sources</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
-<div class="outline-2" id="outline-container-org135edfb">
-<h2 id="org135edfb">Departure</h2>
-<div class="outline-text-2" id="text-org135edfb"></div>
-<div class="outline-3" id="outline-container-org7e06a96">
-<h3 id="org7e06a96">Imports</h3>
-<div class="outline-text-3" id="text-org7e06a96">
+<div class="outline-2" id="outline-container-org84661bb">
+<h2 id="org84661bb">Departure</h2>
+<div class="outline-text-2" id="text-org84661bb"></div>
+<div class="outline-3" id="outline-container-org73b470d">
+<h3 id="org73b470d">Imports</h3>
+<div class="outline-text-3" id="text-org73b470d">
 <div class="highlight">
 <pre><span></span>from pathlib import Path
 </pre></div>
@@ -2890,9 +3179,9 @@ from nltk.tokenize import TweetTokenizer
 </pre></div>
 </div>
 </div>
-<div class="outline-3" id="outline-container-orgdeba5b4">
-<h3 id="orgdeba5b4">Set Up</h3>
-<div class="outline-text-3" id="text-orgdeba5b4">
+<div class="outline-3" id="outline-container-org42ae74b">
+<h3 id="org42ae74b">Set Up</h3>
+<div class="outline-text-3" id="text-org42ae74b">
 <p>I'm using the <code>en</code> model. Even after you install spacy you have to tell it which model to download.</p>
 <pre class="example">
 python -m spacy download en
@@ -2911,26 +3200,26 @@ if not OUTPUT_FOLDER.is_dir():
 </div>
 </div>
 </div>
-<div class="outline-2" id="outline-container-orgcb992f7">
-<h2 id="orgcb992f7">Initiation</h2>
-<div class="outline-text-2" id="text-orgcb992f7"></div>
-<div class="outline-3" id="outline-container-orge1766fa">
-<h3 id="orge1766fa">Some Vocabulary</h3>
-<div class="outline-text-3" id="text-orge1766fa"></div>
-<div class="outline-4" id="outline-container-org1e84389">
-<h4 id="org1e84389">Natural Language Processing</h4>
-<div class="outline-text-4" id="text-org1e84389">
+<div class="outline-2" id="outline-container-org3a3a2d8">
+<h2 id="org3a3a2d8">Initiation</h2>
+<div class="outline-text-2" id="text-org3a3a2d8"></div>
+<div class="outline-3" id="outline-container-org7d9ec8f">
+<h3 id="org7d9ec8f">Some Vocabulary</h3>
+<div class="outline-text-3" id="text-org7d9ec8f"></div>
+<div class="outline-4" id="outline-container-org1418e2d">
+<h4 id="org1418e2d">Natural Language Processing</h4>
+<div class="outline-text-4" id="text-org1418e2d">
 <p><a href="https://www.wikiwand.com/en/Natural_language_processing">Natural Language Processing</a> is the computational study of human language with the aim of solving practical problems involving language. There is a related field called <a href="https://www.wikiwand.com/en/Computational_linguistics">Computational Linguistics</a> which is concerned more with the modeling of human language but seems related.</p>
 </div>
 </div>
-<div class="outline-4" id="outline-container-org7d9cda9">
-<h4 id="org7d9cda9">Corpora</h4>
-<div class="outline-text-4" id="text-org7d9cda9">
+<div class="outline-4" id="outline-container-org1f31c43">
+<h4 id="org1f31c43">Corpora</h4>
+<div class="outline-text-4" id="text-org1f31c43">
 <p>A text-dataset is called a <i>corpus</i>, usually made up of texts and metadata associated with each text. Texts are made up of characters grouped into units called <i>tokens</i>. In English a token is generally a word or number.</p>
 </div>
-<div class="outline-5" id="outline-container-org4148ec7">
-<h5 id="org4148ec7">Tokenization</h5>
-<div class="outline-text-5" id="text-org4148ec7">
+<div class="outline-5" id="outline-container-orgf1e23f4">
+<h5 id="orgf1e23f4">Tokenization</h5>
+<div class="outline-text-5" id="text-orgf1e23f4">
 <p>The process of breaking a text up into <i>tokens</i> is called tokenization. Here's some examples of how to do it with <a href="https://spacy.io/usage/spacy-101">spacy</a> and the <a href="https://www.nltk.org">Natural Language Toolkit (NLTK)</a>.</p>
 <div class="highlight">
 <pre><span></span>text = "Those are my principles, and if you don't like them... well, I have others.".lower()
@@ -2967,21 +3256,21 @@ print([str(token) for token in processor(tweet)])
 </div>
 </div>
 </div>
-<div class="outline-4" id="outline-container-org76982d9">
-<h4 id="org76982d9">Types</h4>
-<div class="outline-text-4" id="text-org76982d9">
+<div class="outline-4" id="outline-container-org1f1bfef">
+<h4 id="org1f1bfef">Types</h4>
+<div class="outline-text-4" id="text-org1f1bfef">
 <p><i>Types</i> are the unique tokens in a corpus. The set of all the types in the corpus is its <i>vocabulary</i> or <i>lexicon</i>.</p>
 </div>
 </div>
-<div class="outline-4" id="outline-container-org9a0347d">
-<h4 id="org9a0347d">Word Classes</h4>
-<div class="outline-text-4" id="text-org9a0347d">
+<div class="outline-4" id="outline-container-org13b0655">
+<h4 id="org13b0655">Word Classes</h4>
+<div class="outline-text-4" id="text-org13b0655">
 <p>There are two classes of words <i>content words</i> and <i>stopwords</i>. Stopwords are there mostly to glue the content words together ("a", "an", "the", etc.) and provide more noise than information.</p>
 </div>
 </div>
-<div class="outline-4" id="outline-container-org23392d7">
-<h4 id="org23392d7">N-Grams</h4>
-<div class="outline-text-4" id="text-org23392d7">
+<div class="outline-4" id="outline-container-orgfc21ad3">
+<h4 id="orgfc21ad3">N-Grams</h4>
+<div class="outline-text-4" id="text-orgfc21ad3">
 <p><i>N-grams</i> are consecutive token-sequences of a fixed length (<i>n</i>). Common special cases are:</p>
 <ul class="org-ul">
 <li>unigrams: <i>n</i> = 1</li>
@@ -2991,9 +3280,9 @@ print([str(token) for token in processor(tweet)])
 <p>Although n-grams are generally words in some cases they can be characters - if the suffixes are meaningful, for instance.</p>
 </div>
 </div>
-<div class="outline-4" id="outline-container-org857d8a3">
-<h4 id="org857d8a3">Lemma</h4>
-<div class="outline-text-4" id="text-org857d8a3">
+<div class="outline-4" id="outline-container-org8721d6d">
+<h4 id="org8721d6d">Lemma</h4>
+<div class="outline-text-4" id="text-org8721d6d">
 <p><a href="https://www.wikiwand.com/en/Lemma_(morphology)">Lemmas</a> are root-forms for words that can have different forms. As an example - <i>go</i> is the lemma for <i>go</i>, <i>going</i>, <i>went</i>, and <i>gone</i>.</p>
 <div class="highlight">
 <pre><span></span>document = processor("an undefined problem has an infinite number of solutions")
@@ -3015,9 +3304,9 @@ Token: solutions -&gt; Lemma: solution
 <p>There is a related method called <i>stemming</i> which strips the endings off of words instead of changing to their lemmas. lemmatization is probably preferable, but is a more difficult method compared to stemming.</p>
 </div>
 </div>
-<div class="outline-4" id="outline-container-orgfe133dc">
-<h4 id="orgfe133dc">Chunking</h4>
-<div class="outline-text-4" id="text-orgfe133dc">
+<div class="outline-4" id="outline-container-org7481552">
+<h4 id="org7481552">Chunking</h4>
+<div class="outline-text-4" id="text-org7481552">
 <p>There are different ways of chunking text instead of just using <i>n-grams</i>, one way is called <i>chunking</i> which breaks the text up into phrases.</p>
 <div class="highlight">
 <pre><span></span>document = processor("Mary had a little lamb, its fleece was white as snow.")
@@ -3034,12 +3323,12 @@ snow - NP
 </div>
 </div>
 </div>
-<div class="outline-2" id="outline-container-orgcab9b54">
-<h2 id="orgcab9b54">Return</h2>
-<div class="outline-text-2" id="text-orgcab9b54"></div>
-<div class="outline-3" id="outline-container-org811932c">
-<h3 id="org811932c">Sources</h3>
-<div class="outline-text-3" id="text-org811932c">
+<div class="outline-2" id="outline-container-org5eedc76">
+<h2 id="org5eedc76">Return</h2>
+<div class="outline-text-2" id="text-org5eedc76"></div>
+<div class="outline-3" id="outline-container-org394b493">
+<h3 id="org394b493">Sources</h3>
+<div class="outline-text-3" id="text-org394b493">
 <ul class="org-ul">
 <li>Rao D, McMahan B. Natural language processing with PyTorch: build intelligent language applications using deep learning. Sebastopol, CA: OReilly Media; 2019.</li>
 </ul>
@@ -3057,11 +3346,11 @@ snow - NP
 </div>
 </header>
 <div class="e-content entry-content">
-<div class="outline-2" id="outline-container-org973fd69">
-<h2 id="org973fd69">Books on Natural Language Processing</h2>
-<div class="outline-text-2" id="text-org973fd69"></div>
-<div class="outline-3" id="outline-container-orgf1f4540">
-<h3 id="orgf1f4540">Rao D, McMahan B. Natural language processing with PyTorch: build intelligent language applications using deep learning. Sebastopol, CA: OReilly Media; 2019.</h3>
+<div class="outline-2" id="outline-container-orgf0a9335">
+<h2 id="orgf0a9335">Books on Natural Language Processing</h2>
+<div class="outline-text-2" id="text-orgf0a9335"></div>
+<div class="outline-3" id="outline-container-org0f89b9a">
+<h3 id="org0f89b9a">Rao D, McMahan B. Natural language processing with PyTorch: build intelligent language applications using deep learning. Sebastopol, CA: OReilly Media; 2019.</h3>
 </div>
 </div>
 </div>

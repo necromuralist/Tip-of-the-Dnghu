@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tip of the Dnghu (Posts about review)</title><link>https://necromuralist.github.io/Tip-of-the-Dnghu/</link><description></description><atom:link href="https://necromuralist.github.io/Tip-of-the-Dnghu/categories/review.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2019 &lt;a href="mailto:necromuralist@protonmail.com"&gt;Cloistered Monkey&lt;/a&gt; </copyright><lastBuildDate>Mon, 06 May 2019 00:12:59 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Natural Language Processing Review</title><link>https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/</link><dc:creator>Cloistered Monkey</dc:creator><description>&lt;div id="table-of-contents"&gt;
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tip of the Dnghu (Posts about review)</title><link>https://necromuralist.github.io/Tip-of-the-Dnghu/</link><description></description><atom:link href="https://necromuralist.github.io/Tip-of-the-Dnghu/categories/review.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2019 &lt;a href="mailto:necromuralist@protonmail.com"&gt;Cloistered Monkey&lt;/a&gt; </copyright><lastBuildDate>Mon, 06 May 2019 21:23:31 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Natural Language Processing Review</title><link>https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/</link><dc:creator>Cloistered Monkey</dc:creator><description>&lt;div id="table-of-contents"&gt;
 &lt;h2&gt;Table of Contents&lt;/h2&gt;
 &lt;div id="text-table-of-contents"&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/#org135edfb"&gt;Departure&lt;/a&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/#org84661bb"&gt;Departure&lt;/a&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/#org7e06a96"&gt;Imports&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/#orgdeba5b4"&gt;Set Up&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/#org73b470d"&gt;Imports&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/#org42ae74b"&gt;Set Up&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/#orgcb992f7"&gt;Initiation&lt;/a&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/#org3a3a2d8"&gt;Initiation&lt;/a&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/#orge1766fa"&gt;Some Vocabulary&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/#org7d9ec8f"&gt;Some Vocabulary&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/#orgcab9b54"&gt;Return&lt;/a&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/#org5eedc76"&gt;Return&lt;/a&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/#org811932c"&gt;Sources&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/#org394b493"&gt;Sources&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org135edfb" class="outline-2"&gt;
-&lt;h2 id="org135edfb"&gt;Departure&lt;/h2&gt;
-&lt;div class="outline-text-2" id="text-org135edfb"&gt;
+&lt;div id="outline-container-org84661bb" class="outline-2"&gt;
+&lt;h2 id="org84661bb"&gt;Departure&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-org84661bb"&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org7e06a96" class="outline-3"&gt;
-&lt;h3 id="org7e06a96"&gt;Imports&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org7e06a96"&gt;
+&lt;div id="outline-container-org73b470d" class="outline-3"&gt;
+&lt;h3 id="org73b470d"&gt;Imports&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org73b470d"&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;from pathlib import Path
 &lt;/pre&gt;&lt;/div&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;from spacy import displacy
@@ -37,9 +37,9 @@ from nltk.tokenize import TweetTokenizer
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgdeba5b4" class="outline-3"&gt;
-&lt;h3 id="orgdeba5b4"&gt;Set Up&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-orgdeba5b4"&gt;
+&lt;div id="outline-container-org42ae74b" class="outline-3"&gt;
+&lt;h3 id="org42ae74b"&gt;Set Up&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org42ae74b"&gt;
 &lt;p&gt;
 I'm using the &lt;code&gt;en&lt;/code&gt; model. Even after you install spacy you have to tell it which model to download.
 &lt;/p&gt;
@@ -65,32 +65,32 @@ if not OUTPUT_FOLDER.is_dir():
 &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-orgcb992f7" class="outline-2"&gt;
-&lt;h2 id="orgcb992f7"&gt;Initiation&lt;/h2&gt;
-&lt;div class="outline-text-2" id="text-orgcb992f7"&gt;
+&lt;div id="outline-container-org3a3a2d8" class="outline-2"&gt;
+&lt;h2 id="org3a3a2d8"&gt;Initiation&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-org3a3a2d8"&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orge1766fa" class="outline-3"&gt;
-&lt;h3 id="orge1766fa"&gt;Some Vocabulary&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-orge1766fa"&gt;
+&lt;div id="outline-container-org7d9ec8f" class="outline-3"&gt;
+&lt;h3 id="org7d9ec8f"&gt;Some Vocabulary&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org7d9ec8f"&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org1e84389" class="outline-4"&gt;
-&lt;h4 id="org1e84389"&gt;Natural Language Processing&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org1e84389"&gt;
+&lt;div id="outline-container-org1418e2d" class="outline-4"&gt;
+&lt;h4 id="org1418e2d"&gt;Natural Language Processing&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org1418e2d"&gt;
 &lt;p&gt;
 &lt;a href="https://www.wikiwand.com/en/Natural_language_processing"&gt;Natural Language Processing&lt;/a&gt; is the computational study of human language with the aim of solving practical problems involving language. There is a related field called &lt;a href="https://www.wikiwand.com/en/Computational_linguistics"&gt;Computational Linguistics&lt;/a&gt; which is concerned more with the modeling of human language but seems related.
 &lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org7d9cda9" class="outline-4"&gt;
-&lt;h4 id="org7d9cda9"&gt;Corpora&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org7d9cda9"&gt;
+&lt;div id="outline-container-org1f31c43" class="outline-4"&gt;
+&lt;h4 id="org1f31c43"&gt;Corpora&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org1f31c43"&gt;
 &lt;p&gt;
 A text-dataset is called a &lt;i&gt;corpus&lt;/i&gt;, usually made up of texts and metadata associated with each text. Texts are made up of characters grouped into units called &lt;i&gt;tokens&lt;/i&gt;. In English a token is generally a word or number.
 &lt;/p&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org4148ec7" class="outline-5"&gt;
-&lt;h5 id="org4148ec7"&gt;Tokenization&lt;/h5&gt;
-&lt;div class="outline-text-5" id="text-org4148ec7"&gt;
+&lt;div id="outline-container-orgf1e23f4" class="outline-5"&gt;
+&lt;h5 id="orgf1e23f4"&gt;Tokenization&lt;/h5&gt;
+&lt;div class="outline-text-5" id="text-orgf1e23f4"&gt;
 &lt;p&gt;
 The process of breaking a text up into &lt;i&gt;tokens&lt;/i&gt; is called tokenization. Here's some examples of how to do it with &lt;a href="https://spacy.io/usage/spacy-101"&gt;spacy&lt;/a&gt; and the &lt;a href="https://www.nltk.org"&gt;Natural Language Toolkit (NLTK)&lt;/a&gt;.
 &lt;/p&gt;
@@ -138,25 +138,25 @@ In this case, the TweetTokenizer and spacy treated the hash-tag and smiley diffe
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org76982d9" class="outline-4"&gt;
-&lt;h4 id="org76982d9"&gt;Types&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org76982d9"&gt;
+&lt;div id="outline-container-org1f1bfef" class="outline-4"&gt;
+&lt;h4 id="org1f1bfef"&gt;Types&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org1f1bfef"&gt;
 &lt;p&gt;
 &lt;i&gt;Types&lt;/i&gt; are the unique tokens in a corpus. The set of all the types in the corpus is its &lt;i&gt;vocabulary&lt;/i&gt; or &lt;i&gt;lexicon&lt;/i&gt;. 
 &lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org9a0347d" class="outline-4"&gt;
-&lt;h4 id="org9a0347d"&gt;Word Classes&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org9a0347d"&gt;
+&lt;div id="outline-container-org13b0655" class="outline-4"&gt;
+&lt;h4 id="org13b0655"&gt;Word Classes&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org13b0655"&gt;
 &lt;p&gt;
 There are two classes of words &lt;i&gt;content words&lt;/i&gt; and &lt;i&gt;stopwords&lt;/i&gt;. Stopwords are there mostly to glue the content words together ("a", "an", "the", etc.) and provide more noise than information.
 &lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org23392d7" class="outline-4"&gt;
-&lt;h4 id="org23392d7"&gt;N-Grams&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org23392d7"&gt;
+&lt;div id="outline-container-orgfc21ad3" class="outline-4"&gt;
+&lt;h4 id="orgfc21ad3"&gt;N-Grams&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-orgfc21ad3"&gt;
 &lt;p&gt;
 &lt;i&gt;N-grams&lt;/i&gt; are consecutive token-sequences of a fixed length (&lt;i&gt;n&lt;/i&gt;). Common special cases are:
 &lt;/p&gt;
@@ -171,9 +171,9 @@ Although n-grams are generally words in some cases they can be characters - if t
 &lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org857d8a3" class="outline-4"&gt;
-&lt;h4 id="org857d8a3"&gt;Lemma&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org857d8a3"&gt;
+&lt;div id="outline-container-org8721d6d" class="outline-4"&gt;
+&lt;h4 id="org8721d6d"&gt;Lemma&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org8721d6d"&gt;
 &lt;p&gt;
 &lt;a href="https://www.wikiwand.com/en/Lemma_(morphology)"&gt;Lemmas&lt;/a&gt; are root-forms for words that can have different forms. As an example - &lt;i&gt;go&lt;/i&gt; is the lemma for &lt;i&gt;go&lt;/i&gt;, &lt;i&gt;going&lt;/i&gt;, &lt;i&gt;went&lt;/i&gt;, and &lt;i&gt;gone&lt;/i&gt;.
 &lt;/p&gt;
@@ -201,9 +201,9 @@ There is a related method called &lt;i&gt;stemming&lt;/i&gt; which strips the en
 &lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgfe133dc" class="outline-4"&gt;
-&lt;h4 id="orgfe133dc"&gt;Chunking&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-orgfe133dc"&gt;
+&lt;div id="outline-container-org7481552" class="outline-4"&gt;
+&lt;h4 id="org7481552"&gt;Chunking&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org7481552"&gt;
 &lt;p&gt;
 There are different ways of chunking text instead of just using &lt;i&gt;n-grams&lt;/i&gt;, one way is called &lt;i&gt;chunking&lt;/i&gt; which breaks the text up into phrases.
 &lt;/p&gt;
@@ -225,13 +225,13 @@ snow - NP
 &lt;/div&gt;
 
 
-&lt;div id="outline-container-orgcab9b54" class="outline-2"&gt;
-&lt;h2 id="orgcab9b54"&gt;Return&lt;/h2&gt;
-&lt;div class="outline-text-2" id="text-orgcab9b54"&gt;
+&lt;div id="outline-container-org5eedc76" class="outline-2"&gt;
+&lt;h2 id="org5eedc76"&gt;Return&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-org5eedc76"&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org811932c" class="outline-3"&gt;
-&lt;h3 id="org811932c"&gt;Sources&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org811932c"&gt;
+&lt;div id="outline-container-org394b493" class="outline-3"&gt;
+&lt;h3 id="org394b493"&gt;Sources&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org394b493"&gt;
 &lt;ul class="org-ul"&gt;
 &lt;li&gt;Rao D, McMahan B. Natural language processing with PyTorch: build intelligent language applications using deep learning. Sebastopol, CA: OReilly Media; 2019.&lt;/li&gt;
 &lt;/ul&gt;

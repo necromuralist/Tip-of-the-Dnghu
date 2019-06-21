@@ -1,48 +1,345 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tip of the Dnghu</title><link>https://necromuralist.github.io/Tip-of-the-Dnghu/</link><description>Natural Language Processing Notes</description><atom:link href="https://necromuralist.github.io/Tip-of-the-Dnghu/rss.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2019 &lt;a href="mailto:necromuralist@protonmail.com"&gt;Cloistered Monkey&lt;/a&gt; </copyright><lastBuildDate>Tue, 28 May 2019 03:58:54 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Name Redaction</title><link>https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/name-redaction/</link><dc:creator>Cloistered Monkey</dc:creator><description>&lt;div id="table-of-contents"&gt;
+<?xml-stylesheet type="text/xsl" href="assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tip of the Dnghu</title><link>https://necromuralist.github.io/Tip-of-the-Dnghu/</link><description>Natural Language Processing Notes</description><atom:link href="https://necromuralist.github.io/Tip-of-the-Dnghu/rss.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2019 &lt;a href="mailto:necromuralist@protonmail.com"&gt;Cloistered Monkey&lt;/a&gt; </copyright><lastBuildDate>Fri, 21 Jun 2019 19:25:18 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Word Frequencies and Zipfs Law</title><link>https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/word-frequencies-and-zipfs-law/</link><dc:creator>Cloistered Monkey</dc:creator><description>&lt;div id="outline-container-orga53a2e5" class="outline-2"&gt;
+&lt;h2 id="orga53a2e5"&gt;Beginning&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-orga53a2e5"&gt;
+&lt;/div&gt;
+&lt;div id="outline-container-org96457d0" class="outline-3"&gt;
+&lt;h3 id="org96457d0"&gt;Imports&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org96457d0"&gt;
+&lt;/div&gt;
+&lt;div id="outline-container-org5b6e335" class="outline-4"&gt;
+&lt;h4 id="org5b6e335"&gt;Python&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org5b6e335"&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;argparse&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;Namespace&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;collections&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;Counter&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;functools&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;partial&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;pathlib&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;Path&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id="outline-container-orgbf7312d" class="outline-4"&gt;
+&lt;h4 id="orgbf7312d"&gt;PyPi&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-orgbf7312d"&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;holoviews&lt;/span&gt;
+&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;pandas&lt;/span&gt;
+&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;spacy&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id="outline-container-org5d6f95c" class="outline-4"&gt;
+&lt;h4 id="org5d6f95c"&gt;My Stuff&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org5d6f95c"&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;graeae&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;EnvironmentLoader&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;TextDownloader&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;graeae.timers&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;Timer&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;graeae.visualization&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;EmbedHoloview&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id="outline-container-org09823f2" class="outline-3"&gt;
+&lt;h3 id="org09823f2"&gt;Set Up&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org09823f2"&gt;
+&lt;/div&gt;
+&lt;div id="outline-container-orgfc317a6" class="outline-4"&gt;
+&lt;h4 id="orgfc317a6"&gt;Spacy&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-orgfc317a6"&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;nlp&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;spacy&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;load&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"en_core_web_lg"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id="outline-container-orge3db823" class="outline-4"&gt;
+&lt;h4 id="orge3db823"&gt;The Path&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-orge3db823"&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;URL&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;"https://www.gutenberg.org/files/974/974-0.txt"&lt;/span&gt;
+&lt;span class="n"&gt;environment&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;EnvironmentLoader&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="n"&gt;book_path&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;environment&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;"GUTENBERG"&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id="outline-container-orgd090f6c" class="outline-4"&gt;
+&lt;h4 id="orgd090f6c"&gt;The Timer&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-orgd090f6c"&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;TIMER&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Timer&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id="outline-container-org6daadd8" class="outline-3"&gt;
+&lt;h3 id="org6daadd8"&gt;Load the File&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org6daadd8"&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;book_path&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Path&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;book_path&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;expanduser&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="n"&gt;downloader&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;TextDownloader&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;url&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;URL&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;target&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;book_path&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="s2"&gt;"conrad_joseph_secret_agent.txt"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;text&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;downloader&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;download&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;pre class="example"&gt;
+2019-06-20 18:14:52,437 [1mTextDownloader[0m download: /home/brunhilde/data/datasets/gutenberg/conrad_joseph_secret_agent.txt exists, opening it
+
+&lt;/pre&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;text&lt;/span&gt;&lt;span class="p"&gt;[:&lt;/span&gt;&lt;span class="mi"&gt;800&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;pre class="example"&gt;
+                  THE
+              SECRET AGENT
+             A SIMPLE TALE
+
+
+                   BY
+             JOSEPH CONRAD
+
+             SECOND EDITION
+
+             METHUEN &amp;amp; CO.,
+          36 ESSEX STREET W C.
+                 LONDON
+
+_First Published_ . . . _September_ 1907
+
+ _Second Edition_ . . . _October_ 1907
+
+                   TO
+              H. G. WELLS
+
+  THE CHRONICLER OF MR LEWISHAM’S LOVE
+    THE BIOGRAPHER OF KIPPS AND THE
+     HISTORIAN OF THE AGES TO COME
+
+  THIS SIMPLE TALE OF THE XI
+&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id="outline-container-orgc820605" class="outline-4"&gt;
+&lt;h4 id="orgc820605"&gt;The Document&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-orgc820605"&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div id="outline-container-orgf540cf9" class="outline-4"&gt;
+&lt;h4 id="orgf540cf9"&gt;The Counter&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-orgf540cf9"&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;counter&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Counter&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div id="outline-container-org39c05c2" class="outline-4"&gt;
+&lt;h4 id="org39c05c2"&gt;The Plotting&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org39c05c2"&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;SLUG&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;"word-frequencies-and-zipfs-law"&lt;/span&gt;
+&lt;span class="n"&gt;path&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Path&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"../../files/posts/text_mining"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;SLUG&lt;/span&gt;
+&lt;span class="n"&gt;Embed&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;partial&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;EmbedHoloview&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;folder_path&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;path&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;holoviews&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;extension&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"bokeh"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;Plot&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Namespace&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
+    &lt;span class="n"&gt;height&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;800&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="n"&gt;width&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;1000&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id="outline-container-orge3e12e3" class="outline-2"&gt;
+&lt;h2 id="orge3e12e3"&gt;Middle&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-orge3e12e3"&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;TIMER&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;message&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;"Finished counting tokens"&lt;/span&gt;
+&lt;span class="k"&gt;with&lt;/span&gt; &lt;span class="n"&gt;TIMER&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;token&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;document&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+	&lt;span class="n"&gt;counter&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;token&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;lemma_&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;+=&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;pre class="example"&gt;
+2019-06-20 17:41:59,573 graeae.timers.timer start: Started: 2019-06-20 17:41:59.573158
+2019-06-20 17:41:59,774 graeae.timers.timer end: Ended: 2019-06-20 17:41:59.774213
+2019-06-20 17:41:59,775 graeae.timers.timer end: Elapsed: 0:00:00.201055
+
+&lt;/pre&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;token&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;count&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;counter&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;most_common&lt;/span&gt;&lt;span class="p"&gt;()[:&lt;/span&gt;&lt;span class="mi"&gt;10&lt;/span&gt;&lt;span class="p"&gt;]:&lt;/span&gt;
+    &lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;f&lt;/span&gt;&lt;span class="s2"&gt;" - {token.strip()}: {count:,}"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;ul class="org-ul"&gt;
+&lt;li&gt;-PRON-: 9,376&lt;/li&gt;
+&lt;li&gt;: 6,649&lt;/li&gt;
+&lt;li&gt;the: 5,755&lt;/li&gt;
+&lt;li&gt;.: 5,689&lt;/li&gt;
+&lt;li&gt;,: 5,440&lt;/li&gt;
+&lt;li&gt;: 4,240&lt;/li&gt;
+&lt;li&gt;of: 3,872&lt;/li&gt;
+&lt;li&gt;be: 2,887&lt;/li&gt;
+&lt;li&gt;": 2,642&lt;/li&gt;
+&lt;li&gt;a: 2,527&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;
+So I forgot to get rid of whitespace, punctuation, etcetera.
+&lt;/p&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;counter&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Counter&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="n"&gt;unwanted&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"PUNCT"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;"SPACE"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;"SYM"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;token&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;document&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="ow"&gt;not&lt;/span&gt; &lt;span class="n"&gt;token&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;pos_&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;unwanted&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+	&lt;span class="n"&gt;counter&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;token&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;lemma_&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;+=&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;
+
+&lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;token&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;count&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;counter&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;most_common&lt;/span&gt;&lt;span class="p"&gt;()[:&lt;/span&gt;&lt;span class="mi"&gt;10&lt;/span&gt;&lt;span class="p"&gt;]:&lt;/span&gt;
+    &lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;f&lt;/span&gt;&lt;span class="s2"&gt;" - {token}: {count:,}"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;        
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;ul class="org-ul"&gt;
+&lt;li&gt;-PRON-: 9,376&lt;/li&gt;
+&lt;li&gt;the: 5,755&lt;/li&gt;
+&lt;li&gt;of: 3,872&lt;/li&gt;
+&lt;li&gt;be: 2,887&lt;/li&gt;
+&lt;li&gt;a: 2,526&lt;/li&gt;
+&lt;li&gt;to: 2,186&lt;/li&gt;
+&lt;li&gt;and: 2,055&lt;/li&gt;
+&lt;li&gt;in: 1,697&lt;/li&gt;
+&lt;li&gt;have: 1,419&lt;/li&gt;
+&lt;li&gt;that: 1,071&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;
+Surprisingly, pronouns are more common than stop words.
+&lt;/p&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;data&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;pandas&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;DataFrame&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;counter&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;most_common&lt;/span&gt;&lt;span class="p"&gt;(),&lt;/span&gt; &lt;span class="n"&gt;columns&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;"Lemma"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;"Count"&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+&lt;span class="n"&gt;curve&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;holoviews&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Curve&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;data&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;"Lemma"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;"Count"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;opts&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
+    &lt;span class="n"&gt;height&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;Plot&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;height&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="n"&gt;width&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;Plot&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;width&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="n"&gt;xaxis&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;"bare"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;opts&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;xlabel&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;"Lemma"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;embed&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Embed&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;plot&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;curve&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;file_name&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;"all_words_count"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;embed&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;object type="text/html" data="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/word-frequencies-and-zipfs-law/all_words_count.html" style="width:100%" height="800"&gt;
+  &lt;p&gt;Figure Missing&lt;/p&gt;
+&lt;/object&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;curve&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;holoviews&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Curve&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;data&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;"Lemma"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;"Count"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;opts&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
+    &lt;span class="n"&gt;height&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;Plot&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;height&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="n"&gt;width&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;Plot&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;width&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="n"&gt;xaxis&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;"bare"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="n"&gt;logy&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;True&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="n"&gt;logx&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;True&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;opts&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;xlabel&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;"Lemma"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;embed&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Embed&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;plot&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;curve&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;file_name&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;"all_words_count_log"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;embed&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;object type="text/html" data="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/word-frequencies-and-zipfs-law/all_words_count_log.html" style="width:100%" height="800"&gt;
+  &lt;p&gt;Figure Missing&lt;/p&gt;
+&lt;/object&gt;
+&lt;/div&gt;
+&lt;div id="outline-container-org960a24c" class="outline-4"&gt;
+&lt;h4 id="org960a24c"&gt;Removing Stop Words&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org960a24c"&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;counter&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Counter&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;token&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;document&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="ow"&gt;not&lt;/span&gt; &lt;span class="n"&gt;token&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;is_stop&lt;/span&gt; &lt;span class="ow"&gt;and&lt;/span&gt; &lt;span class="ow"&gt;not&lt;/span&gt; &lt;span class="n"&gt;token&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;pos_&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;unwanted&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+	&lt;span class="n"&gt;counter&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;token&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;lemma_&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;+=&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;
+
+&lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;token&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;count&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;counter&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;most_common&lt;/span&gt;&lt;span class="p"&gt;()[:&lt;/span&gt;&lt;span class="mi"&gt;10&lt;/span&gt;&lt;span class="p"&gt;]:&lt;/span&gt;
+    &lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;f&lt;/span&gt;&lt;span class="s2"&gt;" - {token}: {count}"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;ul class="org-ul"&gt;
+&lt;li&gt;Verloc: 762&lt;/li&gt;
+&lt;li&gt;Mr: 536&lt;/li&gt;
+&lt;li&gt;’s: 387&lt;/li&gt;
+&lt;li&gt;not: 328&lt;/li&gt;
+&lt;li&gt;man: 323&lt;/li&gt;
+&lt;li&gt;Mrs: 281&lt;/li&gt;
+&lt;li&gt;’: 266&lt;/li&gt;
+&lt;li&gt;say: 245&lt;/li&gt;
+&lt;li&gt;look: 215&lt;/li&gt;
+&lt;li&gt;like: 213&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;
+I guess pronouns are stop words… It looks like "Verloc" is now the most common token. I assume he's the main character in the book. According to the &lt;a href="https://en.wikipedia.org/wiki/The_Secret_Agent?oldformat=true"&gt;WikiPedia article about The Secret Agent&lt;/a&gt; - 
+&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;
+The story is set in London in 1886 and deals with Mr Anton Verloc and his work as a spy for an unnamed country (presumably Russia).
+&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;data&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;pandas&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;DataFrame&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;counter&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;most_common&lt;/span&gt;&lt;span class="p"&gt;(),&lt;/span&gt; &lt;span class="n"&gt;columns&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;"Lemma"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;"Count"&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+&lt;span class="n"&gt;curve&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;holoviews&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Curve&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;data&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;"Lemma"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;"Count"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;opts&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
+    &lt;span class="n"&gt;height&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;Plot&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;height&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="n"&gt;width&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;Plot&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;width&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="n"&gt;xaxis&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;"bare"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="n"&gt;logy&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;True&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="n"&gt;logx&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;True&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="n"&gt;tools&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;"hover"&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt;
+&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;opts&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;xlabel&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;"Lemma"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;embed&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Embed&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;plot&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;curve&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;file_name&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;"cleaned_count"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;embed&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;object type="text/html" data="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/word-frequencies-and-zipfs-law/cleaned_count.html" style="width:100%" height="800"&gt;
+  &lt;p&gt;Figure Missing&lt;/p&gt;
+&lt;/object&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div id="outline-container-org97f442c" class="outline-2"&gt;
+&lt;h2 id="org97f442c"&gt;End&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-org97f442c"&gt;
+&lt;p&gt;
+The idea behind this was to show that word counts follow &lt;a href="https://en.wikipedia.org/wiki/Zipf's_law?oldformat=true"&gt;Zipf's Law&lt;/a&gt;, which I wasn't able to do. If it was following Zipf's law then we would expect the log-log plots to turn into straight lines.
+&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description><category>nlp</category><category>text-mining</category><guid>https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/word-frequencies-and-zipfs-law/</guid><pubDate>Thu, 20 Jun 2019 00:47:38 GMT</pubDate></item><item><title>Name Redaction</title><link>https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/name-redaction/</link><dc:creator>Cloistered Monkey</dc:creator><description>&lt;div id="table-of-contents"&gt;
 &lt;h2&gt;Table of Contents&lt;/h2&gt;
 &lt;div id="text-table-of-contents"&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/name-redaction/#org30b9a88"&gt;Beginning&lt;/a&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/name-redaction/#org5485fbf"&gt;Beginning&lt;/a&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/name-redaction/#orge6e9a8a"&gt;Imports&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/name-redaction/#orgf188059"&gt;Set Up&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/name-redaction/#org393993e"&gt;Load the File&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/name-redaction/#orgbee770d"&gt;Imports&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/name-redaction/#orgd5666d0"&gt;Set Up&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/name-redaction/#org21c410b"&gt;Load the File&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/name-redaction/#org1a76e1f"&gt;Middle&lt;/a&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/name-redaction/#org62abcee"&gt;Middle&lt;/a&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/name-redaction/#orgbd3216f"&gt;A Little spacy&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/name-redaction/#orgcd37d19"&gt;Redacting Names&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/name-redaction/#org1d02e2f"&gt;A Little spacy&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/name-redaction/#orge7f16da"&gt;Redacting Names&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/name-redaction/#orgaec543c"&gt;End&lt;/a&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/name-redaction/#org8dbbaee"&gt;End&lt;/a&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/name-redaction/#orgbe440e6"&gt;Reference&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/name-redaction/#org85568b9"&gt;Reference&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org30b9a88" class="outline-2"&gt;
-&lt;h2 id="org30b9a88"&gt;Beginning&lt;/h2&gt;
-&lt;div class="outline-text-2" id="text-org30b9a88"&gt;
+&lt;div id="outline-container-org5485fbf" class="outline-2"&gt;
+&lt;h2 id="org5485fbf"&gt;Beginning&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-org5485fbf"&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orge6e9a8a" class="outline-3"&gt;
-&lt;h3 id="orge6e9a8a"&gt;Imports&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-orge6e9a8a"&gt;
+&lt;div id="outline-container-orgbee770d" class="outline-3"&gt;
+&lt;h3 id="orgbee770d"&gt;Imports&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-orgbee770d"&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org1242ad2" class="outline-4"&gt;
-&lt;h4 id="org1242ad2"&gt;Python&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org1242ad2"&gt;
+&lt;div id="outline-container-org18df4e1" class="outline-4"&gt;
+&lt;h4 id="org18df4e1"&gt;Python&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org18df4e1"&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;from pathlib import Path
 from typing import Collection
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgd576b86" class="outline-4"&gt;
-&lt;h4 id="orgd576b86"&gt;PyPi&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-orgd576b86"&gt;
+&lt;div id="outline-container-org99afbfe" class="outline-4"&gt;
+&lt;h4 id="org99afbfe"&gt;PyPi&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org99afbfe"&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;from spacy import displacy
 
 import spacy
@@ -50,29 +347,29 @@ import textacy
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org4fa87ec" class="outline-4"&gt;
-&lt;h4 id="org4fa87ec"&gt;My Stuff&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org4fa87ec"&gt;
+&lt;div id="outline-container-orgb86812e" class="outline-4"&gt;
+&lt;h4 id="orgb86812e"&gt;My Stuff&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-orgb86812e"&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;from graeae.timers import Timer
 from graeae import EnvironmentLoader, TextDownloader
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgf188059" class="outline-3"&gt;
-&lt;h3 id="orgf188059"&gt;Set Up&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-orgf188059"&gt;
+&lt;div id="outline-container-orgd5666d0" class="outline-3"&gt;
+&lt;h3 id="orgd5666d0"&gt;Set Up&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-orgd5666d0"&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org210949a" class="outline-4"&gt;
-&lt;h4 id="org210949a"&gt;The Timer&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org210949a"&gt;
+&lt;div id="outline-container-org97e3320" class="outline-4"&gt;
+&lt;h4 id="org97e3320"&gt;The Timer&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org97e3320"&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;TIMER = Timer()
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org9c138b8" class="outline-4"&gt;
-&lt;h4 id="org9c138b8"&gt;Spacy&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org9c138b8"&gt;
+&lt;div id="outline-container-org43d1495" class="outline-4"&gt;
+&lt;h4 id="org43d1495"&gt;Spacy&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org43d1495"&gt;
 &lt;p&gt;
 This loads the large English model tha spacy provides.
 &lt;/p&gt;
@@ -93,9 +390,9 @@ Although it took a long time to download the model doesn't actually take a long 
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org393993e" class="outline-3"&gt;
-&lt;h3 id="org393993e"&gt;Load the File&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org393993e"&gt;
+&lt;div id="outline-container-org21c410b" class="outline-3"&gt;
+&lt;h3 id="org21c410b"&gt;Load the File&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org21c410b"&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;URL = "https://www.gutenberg.org/files/974/974-0.txt"
 environment = EnvironmentLoader()
 path = environment["GUTENBERG"]
@@ -113,13 +410,13 @@ text = downloader.download
 &lt;/div&gt;
 
 
-&lt;div id="outline-container-org1a76e1f" class="outline-2"&gt;
-&lt;h2 id="org1a76e1f"&gt;Middle&lt;/h2&gt;
-&lt;div class="outline-text-2" id="text-org1a76e1f"&gt;
+&lt;div id="outline-container-org62abcee" class="outline-2"&gt;
+&lt;h2 id="org62abcee"&gt;Middle&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-org62abcee"&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgbd3216f" class="outline-3"&gt;
-&lt;h3 id="orgbd3216f"&gt;A Little spacy&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-orgbd3216f"&gt;
+&lt;div id="outline-container-org1d02e2f" class="outline-3"&gt;
+&lt;h3 id="org1d02e2f"&gt;A Little spacy&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org1d02e2f"&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;document = nlp(text)
 &lt;/pre&gt;&lt;/div&gt;
 
@@ -319,9 +616,9 @@ The categories seem kind of arbitrary, but perhaps that's because of the book th
 &lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgcd37d19" class="outline-3"&gt;
-&lt;h3 id="orgcd37d19"&gt;Redacting Names&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-orgcd37d19"&gt;
+&lt;div id="outline-container-orge7f16da" class="outline-3"&gt;
+&lt;h3 id="orge7f16da"&gt;Redacting Names&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-orge7f16da"&gt;
 &lt;p&gt;
 It's getting a little unwieldy to handle the entire &lt;i&gt;Secret Agent&lt;/i&gt; novel so I'll switch to somet oy sentence fragments.
 &lt;/p&gt;
@@ -418,9 +715,9 @@ Besides the merge I switched to using &lt;code&gt;token.string&lt;/code&gt; whic
 &lt;/p&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-org11ecf25" class="outline-4"&gt;
-&lt;h4 id="org11ecf25"&gt;More Redaction&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org11ecf25"&gt;
+&lt;div id="outline-container-orged3a213" class="outline-4"&gt;
+&lt;h4 id="orged3a213"&gt;More Redaction&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-orged3a213"&gt;
 &lt;p&gt;
 We've been told that our identification of where the second person is from, and where all three met might give out too much information as well. Looking at the list of &lt;a href="https://spacy.io/usage/linguistic-features#named-entities"&gt;bulit-in named entities&lt;/a&gt; doesn't make it obvious what the two entity types would be, so I guess I'll brute-force it.
 &lt;/p&gt;
@@ -557,16 +854,16 @@ It looks like "President" isn't one of the entities spacy knows about. So perhap
 &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-orgaec543c" class="outline-2"&gt;
-&lt;h2 id="orgaec543c"&gt;End&lt;/h2&gt;
-&lt;div class="outline-text-2" id="text-orgaec543c"&gt;
+&lt;div id="outline-container-org8dbbaee" class="outline-2"&gt;
+&lt;h2 id="org8dbbaee"&gt;End&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-org8dbbaee"&gt;
 &lt;p&gt;
 This was a brief look at how you can use a slightly more informed approach to identify parts of a text without using regular expressions and things of that nature to match strings. By using identifiable named entities, spacy is able to help us identify entire classes of entities to match without knowing what they look like beforehand. Of course, it would be dangerous to do this too blindly, there might always be things that confuse the model, but spacy does fairly well right out of the box.
 &lt;/p&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgbe440e6" class="outline-3"&gt;
-&lt;h3 id="orgbe440e6"&gt;Reference&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-orgbe440e6"&gt;
+&lt;div id="outline-container-org85568b9" class="outline-3"&gt;
+&lt;h3 id="org85568b9"&gt;Reference&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org85568b9"&gt;
 &lt;p&gt;
 This was based on a chapter in this book.
 &lt;/p&gt;
@@ -580,43 +877,43 @@ This was based on a chapter in this book.
 &lt;h2&gt;Table of Contents&lt;/h2&gt;
 &lt;div id="text-table-of-contents"&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#orgffcf5db"&gt;Beginning&lt;/a&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#orgf68fcc7"&gt;Beginning&lt;/a&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#org7cc60be"&gt;Imports&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#org8ab9804"&gt;The Text File.&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#org7172a8e"&gt;Setup Spacy&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#org6679f1b"&gt;The Timer&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#org0ad31f0"&gt;Imports&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#org7278fda"&gt;The Text File.&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#orgd4351b6"&gt;Setup Spacy&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#orge99aa54"&gt;The Timer&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#orgdfd041e"&gt;Middle&lt;/a&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#orge67f3c5"&gt;Middle&lt;/a&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#orgcdfd32c"&gt;Load the File&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#orgdc59cb8"&gt;Reload&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#orgb772bd5"&gt;Tokenizing with Spacy&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#org767e34b"&gt;A Detour Into Fuzzy Wuzzy&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#orgdcaa0b8"&gt;A Diversion Into JellyFish&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#org185cb88"&gt;A Short Diversion Into FlashText&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#orgae79d5d"&gt;Load the File&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#org82a4d79"&gt;Reload&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#org2c788b8"&gt;Tokenizing with Spacy&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#org7112614"&gt;A Detour Into Fuzzy Wuzzy&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#org1604c14"&gt;A Diversion Into JellyFish&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#org9f8571f"&gt;A Short Diversion Into FlashText&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#org6b2df69"&gt;End&lt;/a&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#org515abb4"&gt;End&lt;/a&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#org76b0959"&gt;Reference&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/data/tidying-data/#org08a394e"&gt;Reference&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgffcf5db" class="outline-2"&gt;
-&lt;h2 id="orgffcf5db"&gt;Beginning&lt;/h2&gt;
-&lt;div class="outline-text-2" id="text-orgffcf5db"&gt;
+&lt;div id="outline-container-orgf68fcc7" class="outline-2"&gt;
+&lt;h2 id="orgf68fcc7"&gt;Beginning&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-orgf68fcc7"&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org7cc60be" class="outline-3"&gt;
-&lt;h3 id="org7cc60be"&gt;Imports&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org7cc60be"&gt;
+&lt;div id="outline-container-org0ad31f0" class="outline-3"&gt;
+&lt;h3 id="org0ad31f0"&gt;Imports&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org0ad31f0"&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org9d9004c" class="outline-4"&gt;
-&lt;h4 id="org9d9004c"&gt;Python&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org9d9004c"&gt;
+&lt;div id="outline-container-org6e0de13" class="outline-4"&gt;
+&lt;h4 id="org6e0de13"&gt;Python&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org6e0de13"&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;difflib&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;SequenceMatcher&lt;/span&gt;
 &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;pathlib&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;Path&lt;/span&gt;
 &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;typing&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;Callable&lt;/span&gt;
@@ -624,9 +921,9 @@ This was based on a chapter in this book.
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org5a355db" class="outline-4"&gt;
-&lt;h4 id="org5a355db"&gt;PyPi&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org5a355db"&gt;
+&lt;div id="outline-container-org937d237" class="outline-4"&gt;
+&lt;h4 id="org937d237"&gt;PyPi&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org937d237"&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;flashtext&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;KeywordProcessor&lt;/span&gt;
 &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;fuzzywuzzy&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;fuzz&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;process&lt;/span&gt;
 &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;tabulate&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;tabulate&lt;/span&gt;
@@ -635,18 +932,18 @@ This was based on a chapter in this book.
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org7fc4317" class="outline-4"&gt;
-&lt;h4 id="org7fc4317"&gt;My Projects&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org7fc4317"&gt;
+&lt;div id="outline-container-orgff01f9d" class="outline-4"&gt;
+&lt;h4 id="orgff01f9d"&gt;My Projects&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-orgff01f9d"&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;graeae&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;EnvironmentLoader&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;TextDownloader&lt;/span&gt;
 &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;graeae.timers&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;Timer&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org8ab9804" class="outline-3"&gt;
-&lt;h3 id="org8ab9804"&gt;The Text File.&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org8ab9804"&gt;
+&lt;div id="outline-container-org7278fda" class="outline-3"&gt;
+&lt;h3 id="org7278fda"&gt;The Text File.&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org7278fda"&gt;
 &lt;p&gt;
 This is the URL to Joseph Conrad's "The Secret Agent" from &lt;a href="https://www.gutenberg.org/ebooks/974"&gt;Project Gutenberg&lt;/a&gt;.
 &lt;/p&gt;
@@ -658,17 +955,17 @@ This is the URL to Joseph Conrad's "The Secret Agent" from &lt;a href="https://w
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org7172a8e" class="outline-3"&gt;
-&lt;h3 id="org7172a8e"&gt;Setup Spacy&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org7172a8e"&gt;
+&lt;div id="outline-container-orgd4351b6" class="outline-3"&gt;
+&lt;h3 id="orgd4351b6"&gt;Setup Spacy&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-orgd4351b6"&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;nlp&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;spacy&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;load&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"en_core_web_md"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-org6679f1b" class="outline-3"&gt;
-&lt;h3 id="org6679f1b"&gt;The Timer&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org6679f1b"&gt;
+&lt;div id="outline-container-orge99aa54" class="outline-3"&gt;
+&lt;h3 id="orge99aa54"&gt;The Timer&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-orge99aa54"&gt;
 &lt;p&gt;
 This just tracks how longs things take.
 &lt;/p&gt;
@@ -677,13 +974,13 @@ This just tracks how longs things take.
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgdfd041e" class="outline-2"&gt;
-&lt;h2 id="orgdfd041e"&gt;Middle&lt;/h2&gt;
-&lt;div class="outline-text-2" id="text-orgdfd041e"&gt;
+&lt;div id="outline-container-orge67f3c5" class="outline-2"&gt;
+&lt;h2 id="orge67f3c5"&gt;Middle&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-orge67f3c5"&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgcdfd32c" class="outline-3"&gt;
-&lt;h3 id="orgcdfd32c"&gt;Load the File&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-orgcdfd32c"&gt;
+&lt;div id="outline-container-orgae79d5d" class="outline-3"&gt;
+&lt;h3 id="orgae79d5d"&gt;Load the File&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-orgae79d5d"&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;path&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Path&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;path&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;expanduser&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
 &lt;span class="n"&gt;downloader&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;TextDownloader&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;url&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;URL&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;target&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;path&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="s2"&gt;"conrad_joseph_secret_agent.txt"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;span class="n"&gt;text&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;downloader&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;download&lt;/span&gt;
@@ -765,9 +1062,9 @@ So, there's 10,121 lines in the book (I don't know if that is long for a book, I
 &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-orgdc59cb8" class="outline-3"&gt;
-&lt;h3 id="orgdc59cb8"&gt;Reload&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-orgdc59cb8"&gt;
+&lt;div id="outline-container-org82a4d79" class="outline-3"&gt;
+&lt;h3 id="org82a4d79"&gt;Reload&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org82a4d79"&gt;
 &lt;p&gt;
 I ran &lt;code&gt;dos2unix&lt;/code&gt; on the file, let's see if it's better.
 &lt;/p&gt;
@@ -818,9 +1115,9 @@ According to &lt;a href="https://www.wikiwand.com/en/ASCII"&gt;Wikipedia&lt;/a&g
 &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-orgb772bd5" class="outline-3"&gt;
-&lt;h3 id="orgb772bd5"&gt;Tokenizing with Spacy&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-orgb772bd5"&gt;
+&lt;div id="outline-container-org2c788b8" class="outline-3"&gt;
+&lt;h3 id="org2c788b8"&gt;Tokenizing with Spacy&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org2c788b8"&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;with&lt;/span&gt; &lt;span class="n"&gt;TIMER&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
     &lt;span class="n"&gt;document&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;nlp&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;text&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
@@ -908,9 +1205,9 @@ I had to convert it to a tuple because &lt;code&gt;sents&lt;/code&gt; is actuall
 &lt;/p&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-org4a97ffb" class="outline-4"&gt;
-&lt;h4 id="org4a97ffb"&gt;Token Attributes&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org4a97ffb"&gt;
+&lt;div id="outline-container-orgbaf50d6" class="outline-4"&gt;
+&lt;h4 id="orgbaf50d6"&gt;Token Attributes&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-orgbaf50d6"&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"|Token | Stop-Word| Punctuation |"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"|-+-+-+-|"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;token&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;sentence&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
@@ -1180,9 +1477,9 @@ So spacy can help us identify different types of tokens, in this case stopwords,
 &lt;/ul&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org60e410b" class="outline-4"&gt;
-&lt;h4 id="org60e410b"&gt;Lemmatisation&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org60e410b"&gt;
+&lt;div id="outline-container-org93468c2" class="outline-4"&gt;
+&lt;h4 id="org93468c2"&gt;Lemmatisation&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org93468c2"&gt;
 &lt;p&gt;
 Spacy implements &lt;a href="https://www.wikiwand.com/en/Lemmatisation"&gt;Lemmatisation&lt;/a&gt;, the conversion of a token to the "standard form" for a word.
 &lt;/p&gt;
@@ -1434,17 +1731,17 @@ I filtered out the spaces because it broke my table, but it's part-of-speech lab
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org767e34b" class="outline-3"&gt;
-&lt;h3 id="org767e34b"&gt;A Detour Into Fuzzy Wuzzy&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org767e34b"&gt;
+&lt;div id="outline-container-org7112614" class="outline-3"&gt;
+&lt;h3 id="org7112614"&gt;A Detour Into Fuzzy Wuzzy&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org7112614"&gt;
 &lt;p&gt;
 &lt;a href="https://github.com/seatgeek/fuzzywuzzy"&gt;fuzzywuzzy&lt;/a&gt; is a library that does fuzzy string matching using the &lt;a href="https://www.wikiwand.com/en/Levenshtein_distance"&gt;Levenshtein Distance&lt;/a&gt; between strings. There's a &lt;a href="https://chairnerd.seatgeek.com/fuzzywuzzy-fuzzy-string-matching-in-python/"&gt;page&lt;/a&gt; showing more about how to use it based the example of finding concert information on the web.
 &lt;/p&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-org53d06d0" class="outline-4"&gt;
-&lt;h4 id="org53d06d0"&gt;Ratio&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org53d06d0"&gt;
+&lt;div id="outline-container-org6f1745d" class="outline-4"&gt;
+&lt;h4 id="org6f1745d"&gt;Ratio&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org6f1745d"&gt;
 &lt;p&gt;
 The &lt;code&gt;ratio&lt;/code&gt; function for fuzzywuzzy is an alias for the &lt;a href="https://docs.python.org/3/library/difflib.html"&gt;difflib&lt;/a&gt; &lt;code&gt;SequenceMatcher.ratio&lt;/code&gt; method (except they multiply by 100 and round off so it's a percentage rather than a fraction. The ratio it's calculating is:
 &lt;/p&gt;
@@ -1480,9 +1777,9 @@ The fuzzywuzzy page I mentioned earlier states that this will work for very shor
 &lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgec43902" class="outline-4"&gt;
-&lt;h4 id="orgec43902"&gt;Partial Ratio&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-orgec43902"&gt;
+&lt;div id="outline-container-orga8cacfe" class="outline-4"&gt;
+&lt;h4 id="orga8cacfe"&gt;Partial Ratio&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-orga8cacfe"&gt;
 &lt;p&gt;
 To get better matches for short-ish text, fuzzywuzzy has a &lt;code&gt;partial_ratio&lt;/code&gt; function. 
 &lt;/p&gt;
@@ -1505,9 +1802,9 @@ The &lt;code&gt;ratio&lt;/code&gt; doesn't handle sub-string matches as well as 
 &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-orge07e173" class="outline-4"&gt;
-&lt;h4 id="orge07e173"&gt;Token Sort and Token Set&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-orge07e173"&gt;
+&lt;div id="outline-container-org135af13" class="outline-4"&gt;
+&lt;h4 id="org135af13"&gt;Token Sort and Token Set&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org135af13"&gt;
 &lt;p&gt;
 Besides sub-strings, there might be cases where ordering doesn't matter, in which case you can try the &lt;code&gt;token_sort_ratio&lt;/code&gt; or &lt;code&gt;token_set_ratio&lt;/code&gt; functions.
 &lt;/p&gt;
@@ -1534,9 +1831,9 @@ The &lt;code&gt;token_sort_ratio&lt;/code&gt; sorts the tokens before comparing 
 &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-orgc3debd2" class="outline-4"&gt;
-&lt;h4 id="orgc3debd2"&gt;Process&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-orgc3debd2"&gt;
+&lt;div id="outline-container-org8159f3b" class="outline-4"&gt;
+&lt;h4 id="org8159f3b"&gt;Process&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org8159f3b"&gt;
 &lt;p&gt;
 Finally, you can pass &lt;code&gt;process.extract&lt;/code&gt; a string and a list of strings to compare to that string and it will return them in the order of similarity.
 &lt;/p&gt;
@@ -1607,9 +1904,9 @@ Based on the doc-string, it looks like this one tries to figure out the best met
 &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-orgc4cc518" class="outline-4"&gt;
-&lt;h4 id="orgc4cc518"&gt;Spell Check&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-orgc4cc518"&gt;
+&lt;div id="outline-container-org8207e2f" class="outline-4"&gt;
+&lt;h4 id="org8207e2f"&gt;Spell Check&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org8207e2f"&gt;
 &lt;p&gt;
 Although the fuzzywuzzy page states that their use case was matching the names of shows on different web-sites, it can also be used as a simple spell-checker.
 &lt;/p&gt;
@@ -1675,23 +1972,23 @@ Looking at the last row you can see one of the limitations of this kind of syste
 &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-orgdcaa0b8" class="outline-3"&gt;
-&lt;h3 id="orgdcaa0b8"&gt;A Diversion Into JellyFish&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-orgdcaa0b8"&gt;
+&lt;div id="outline-container-org1604c14" class="outline-3"&gt;
+&lt;h3 id="org1604c14"&gt;A Diversion Into JellyFish&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org1604c14"&gt;
 &lt;p&gt;
 &lt;a href="https://jellyfish.readthedocs.io/en/latest"&gt;JellyFish&lt;/a&gt; is another python library that implements distance functions (like the Levenstein Distance that FuzzyWuzzy does, but others as well) as well as &lt;a href="https://www.wikiwand.com/en/Stemming"&gt;stemming&lt;/a&gt; and &lt;a href="https://www.wikiwand.com/en/Phonetic_algorithm"&gt;phonetic encoding&lt;/a&gt;.
 &lt;/p&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org66a4ba0" class="outline-4"&gt;
-&lt;h4 id="org66a4ba0"&gt;Phonetic Encoding&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org66a4ba0"&gt;
+&lt;div id="outline-container-orge88afcf" class="outline-4"&gt;
+&lt;h4 id="orge88afcf"&gt;Phonetic Encoding&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-orge88afcf"&gt;
 &lt;p&gt;
 Phonetic encoding transforms words into a form that is based on the pronounciaton of the words. Using this should make matching spelling variations using the distance function(s) better.
 &lt;/p&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org224bd83" class="outline-5"&gt;
-&lt;h5 id="org224bd83"&gt;American Soundex&lt;/h5&gt;
-&lt;div class="outline-text-5" id="text-org224bd83"&gt;
+&lt;div id="outline-container-org0f407e2" class="outline-5"&gt;
+&lt;h5 id="org0f407e2"&gt;American Soundex&lt;/h5&gt;
+&lt;div class="outline-text-5" id="text-org0f407e2"&gt;
 &lt;p&gt;
 &lt;a href="https://www.wikiwand.com/en/Soundex"&gt;Soundex&lt;/a&gt; was originally patented in 1918 but JellyFish uses a variation called &lt;i&gt;American Soundex&lt;/i&gt; which was created in 1930 by analyzing U.S. census reports. Each encoding consists of a letter followed by three digits. The letter is the first letter of the word and the digits represent an encoding of the remaining consonants (a, e, i, o, u, y, h, and w are removed if they aren't the first letter).
 &lt;/p&gt;
@@ -1777,9 +2074,9 @@ It's a little hard to interpret these values, but it's interesting that &lt;i&gt
 &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-org7f98def" class="outline-5"&gt;
-&lt;h5 id="org7f98def"&gt;Metaphone&lt;/h5&gt;
-&lt;div class="outline-text-5" id="text-org7f98def"&gt;
+&lt;div id="outline-container-org71f7248" class="outline-5"&gt;
+&lt;h5 id="org71f7248"&gt;Metaphone&lt;/h5&gt;
+&lt;div class="outline-text-5" id="text-org71f7248"&gt;
 &lt;p&gt;
 &lt;a href="https://www.wikiwand.com/en/Metaphone"&gt;Metaphone&lt;/a&gt; was developed in 1990 and improves on Soundex to produce a more accurate encoding.
 &lt;/p&gt;
@@ -1840,9 +2137,9 @@ Metaphone is a &lt;i&gt;little&lt;/i&gt; more interpretable, but interestingly i
 &lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgb1ff7fa" class="outline-5"&gt;
-&lt;h5 id="orgb1ff7fa"&gt;New York State Identification and Intelligence System (NYSIIS)&lt;/h5&gt;
-&lt;div class="outline-text-5" id="text-orgb1ff7fa"&gt;
+&lt;div id="outline-container-orgc44eec7" class="outline-5"&gt;
+&lt;h5 id="orgc44eec7"&gt;New York State Identification and Intelligence System (NYSIIS)&lt;/h5&gt;
+&lt;div class="outline-text-5" id="text-orgc44eec7"&gt;
 &lt;p&gt;
 The &lt;a href="https://www.wikiwand.com/en/New_York_State_Identification_and_Intelligence_System"&gt;New York State Identification and Intelligence System&lt;/a&gt; is a slightly more accurate (compared to Soundex) encoder that was developed in 1970.
 &lt;/p&gt;
@@ -1899,9 +2196,9 @@ This seems even more interpretable than the metaphone encodings, and the gap in 
 &lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org78503e9" class="outline-5"&gt;
-&lt;h5 id="org78503e9"&gt;Match Rating Approach&lt;/h5&gt;
-&lt;div class="outline-text-5" id="text-org78503e9"&gt;
+&lt;div id="outline-container-orgfdd2333" class="outline-5"&gt;
+&lt;h5 id="orgfdd2333"&gt;Match Rating Approach&lt;/h5&gt;
+&lt;div class="outline-text-5" id="text-orgfdd2333"&gt;
 &lt;p&gt;
 The final phonetic encoding that jellyfish supports is the &lt;a href="https://www.wikiwand.com/en/Match_rating_approach"&gt;Match Rating Approach&lt;/a&gt; which was developed in 1977 by Western Airlines.
 &lt;/p&gt;
@@ -1969,9 +2266,9 @@ I think as with all things, you'd have to try them out to see how well each does
 &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-org185cb88" class="outline-3"&gt;
-&lt;h3 id="org185cb88"&gt;A Short Diversion Into FlashText&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org185cb88"&gt;
+&lt;div id="outline-container-org9f8571f" class="outline-3"&gt;
+&lt;h3 id="org9f8571f"&gt;A Short Diversion Into FlashText&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org9f8571f"&gt;
 &lt;p&gt;
 &lt;a href="https://flashtext.readthedocs.io/en/latest/"&gt;FlashText&lt;/a&gt; is a python module to help find and replace words in very large documents. It doesn't do all the interesting linguistic things that the other code we've been looking at does, but it was built specifically to be very fast so for cases where you have a lot of text you can use it to speed up searches.
 &lt;/p&gt;
@@ -2060,16 +2357,16 @@ Note that the matching isn't case-sensitive, so the previous search mathches "SE
 &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-org6b2df69" class="outline-2"&gt;
-&lt;h2 id="org6b2df69"&gt;End&lt;/h2&gt;
-&lt;div class="outline-text-2" id="text-org6b2df69"&gt;
+&lt;div id="outline-container-org515abb4" class="outline-2"&gt;
+&lt;h2 id="org515abb4"&gt;End&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-org515abb4"&gt;
 &lt;p&gt;
 Despite the name this was really a look at three-ish libraries to help with tokenization, lemmatizing, fuzzy string matching, and quick string searching and replacin.g
 &lt;/p&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org76b0959" class="outline-3"&gt;
-&lt;h3 id="org76b0959"&gt;Reference&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org76b0959"&gt;
+&lt;div id="outline-container-org08a394e" class="outline-3"&gt;
+&lt;h3 id="org08a394e"&gt;Reference&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org08a394e"&gt;
 &lt;ol class="org-ol"&gt;
 &lt;li&gt;Kasliwal N. Natural language processing with Python quick start guide: going from a Python developer to an effective natural language processing engineer [Internet]. 2018 [cited 2019 May 18]. Available from: &lt;a href="http://proquest.safaribooksonline.com/?fpi=9781789130386"&gt;http://proquest.safaribooksonline.com/?fpi=9781789130386&lt;/a&gt;&lt;/li&gt;
 &lt;/ol&gt;
@@ -2079,56 +2376,56 @@ Despite the name this was really a look at three-ish libraries to help with toke
 &lt;h2&gt;Table of Contents&lt;/h2&gt;
 &lt;div id="text-table-of-contents"&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#orgf6ec422"&gt;Beginning&lt;/a&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#orgb1df323"&gt;Beginning&lt;/a&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#org044bc75"&gt;Imports&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#orge9bccb4"&gt;Set Up&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#orga8c4ba8"&gt;Imports&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#orgb703285"&gt;Set Up&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#orgcf1a3eb"&gt;Middle&lt;/a&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#org0d7bf84"&gt;Middle&lt;/a&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#org80cd3c6"&gt;Loading the Data&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#org485e0a4"&gt;Setting Up The Test Set&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#org38828f5"&gt;The Document Term Matrix&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#orgb99565c"&gt;Term-Frequency/Inverse Document Frequency&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#orgcadb35c"&gt;A Logistic Regression Pipeline&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#org39d15c9"&gt;Cross Validation&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#org3ce1c9e"&gt;Testing&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#org1b272b8"&gt;A Confusion Matrix&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#org9696917"&gt;Loading the Data&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#org47852fc"&gt;Setting Up The Test Set&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#org4dbf5b8"&gt;The Document Term Matrix&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#org92ddeba"&gt;Term-Frequency/Inverse Document Frequency&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#orga536ad7"&gt;A Logistic Regression Pipeline&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#org29f4fe1"&gt;Cross Validation&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#orgf95d1d8"&gt;Testing&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#org8803884"&gt;A Confusion Matrix&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#orgce571ee"&gt;End&lt;/a&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#org3b3724e"&gt;End&lt;/a&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#org9723bb1"&gt;Original Source&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/newsgroups-example/#org6a76866"&gt;Original Source&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgf6ec422" class="outline-2"&gt;
-&lt;h2 id="orgf6ec422"&gt;Beginning&lt;/h2&gt;
-&lt;div class="outline-text-2" id="text-orgf6ec422"&gt;
+&lt;div id="outline-container-orgb1df323" class="outline-2"&gt;
+&lt;h2 id="orgb1df323"&gt;Beginning&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-orgb1df323"&gt;
 &lt;p&gt;
 This is going to be a look at the &lt;a href="https://archive.ics.uci.edu/ml/datasets/twenty+newsgroups"&gt;Twenty Newsgroups&lt;/a&gt; dataset which has posts from twenty newsgroups classified by the newsgroup that they were in. It will be sort of a mad-dash through a simple pipeline to create a model that can classify them.
 &lt;/p&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-org044bc75" class="outline-3"&gt;
-&lt;h3 id="org044bc75"&gt;Imports&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org044bc75"&gt;
+&lt;div id="outline-container-orga8c4ba8" class="outline-3"&gt;
+&lt;h3 id="orga8c4ba8"&gt;Imports&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-orga8c4ba8"&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgd9f897b" class="outline-4"&gt;
-&lt;h4 id="orgd9f897b"&gt;Python&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-orgd9f897b"&gt;
+&lt;div id="outline-container-orgb94fdb7" class="outline-4"&gt;
+&lt;h4 id="orgb94fdb7"&gt;Python&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-orgb94fdb7"&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;functools&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;partial&lt;/span&gt;
 &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;pathlib&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;Path&lt;/span&gt;
 &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;os&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgf9d7031" class="outline-4"&gt;
-&lt;h4 id="orgf9d7031"&gt;PyPi&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-orgf9d7031"&gt;
+&lt;div id="outline-container-org48c1cb7" class="outline-4"&gt;
+&lt;h4 id="org48c1cb7"&gt;PyPi&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org48c1cb7"&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;dotenv&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;load_dotenv&lt;/span&gt;
 &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;sklearn.datasets&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;fetch_20newsgroups&lt;/span&gt;
 &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;sklearn.feature_extraction.text&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;
@@ -2152,9 +2449,9 @@ This is going to be a look at the &lt;a href="https://archive.ics.uci.edu/ml/dat
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orge41a628" class="outline-4"&gt;
-&lt;h4 id="orge41a628"&gt;My Stuff&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-orge41a628"&gt;
+&lt;div id="outline-container-org386375a" class="outline-4"&gt;
+&lt;h4 id="org386375a"&gt;My Stuff&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org386375a"&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;graeae.tables&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;CountPercentage&lt;/span&gt;
 &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;graeae.timers&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;Timer&lt;/span&gt;
 &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;graeae.visualization&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;EmbedHoloview&lt;/span&gt;
@@ -2162,13 +2459,13 @@ This is going to be a look at the &lt;a href="https://archive.ics.uci.edu/ml/dat
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orge9bccb4" class="outline-3"&gt;
-&lt;h3 id="orge9bccb4"&gt;Set Up&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-orge9bccb4"&gt;
+&lt;div id="outline-container-orgb703285" class="outline-3"&gt;
+&lt;h3 id="orgb703285"&gt;Set Up&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-orgb703285"&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org84348be" class="outline-4"&gt;
-&lt;h4 id="org84348be"&gt;Load the Dotenv&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org84348be"&gt;
+&lt;div id="outline-container-orgd608c42" class="outline-4"&gt;
+&lt;h4 id="orgd608c42"&gt;Load the Dotenv&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-orgd608c42"&gt;
 &lt;p&gt;
 This loads some extra environment variables, in particular the path to the sklearn-data folder.
 &lt;/p&gt;
@@ -2177,9 +2474,9 @@ This loads some extra environment variables, in particular the path to the sklea
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgf2ff858" class="outline-4"&gt;
-&lt;h4 id="orgf2ff858"&gt;The Timer&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-orgf2ff858"&gt;
+&lt;div id="outline-container-org7ac52c2" class="outline-4"&gt;
+&lt;h4 id="org7ac52c2"&gt;The Timer&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org7ac52c2"&gt;
 &lt;p&gt;
 This is an object to keep track of how long things take.
 &lt;/p&gt;
@@ -2187,9 +2484,9 @@ This is an object to keep track of how long things take.
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org4bc3234" class="outline-4"&gt;
-&lt;h4 id="org4bc3234"&gt;The Table&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org4bc3234"&gt;
+&lt;div id="outline-container-org21d170a" class="outline-4"&gt;
+&lt;h4 id="org21d170a"&gt;The Table&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org21d170a"&gt;
 &lt;p&gt;
 This is a helper to print org-tables from data-frames.
 &lt;/p&gt;
@@ -2198,9 +2495,9 @@ This is a helper to print org-tables from data-frames.
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgec6f328" class="outline-4"&gt;
-&lt;h4 id="orgec6f328"&gt;Plotting&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-orgec6f328"&gt;
+&lt;div id="outline-container-org6209732" class="outline-4"&gt;
+&lt;h4 id="org6209732"&gt;Plotting&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org6209732"&gt;
 &lt;p&gt;
 This helps save the plots to the right folder for nikola.
 &lt;/p&gt;
@@ -2212,13 +2509,13 @@ This helps save the plots to the right folder for nikola.
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgcf1a3eb" class="outline-2"&gt;
-&lt;h2 id="orgcf1a3eb"&gt;Middle&lt;/h2&gt;
-&lt;div class="outline-text-2" id="text-orgcf1a3eb"&gt;
+&lt;div id="outline-container-org0d7bf84" class="outline-2"&gt;
+&lt;h2 id="org0d7bf84"&gt;Middle&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-org0d7bf84"&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org80cd3c6" class="outline-3"&gt;
-&lt;h3 id="org80cd3c6"&gt;Loading the Data&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org80cd3c6"&gt;
+&lt;div id="outline-container-org9696917" class="outline-3"&gt;
+&lt;h3 id="org9696917"&gt;Loading the Data&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org9696917"&gt;
 &lt;p&gt;
 We're going to be using the &lt;a href="https://scikit-learn.org/0.19/datasets/twenty_newsgroups.html"&gt;20 Newsgroups dataset&lt;/a&gt; that you can download using sklearn's &lt;a href="https://scikit-learn.org/0.19/modules/generated/sklearn.datasets.fetch_20newsgroups.html#sklearn.datasets.fetch_20newsgroups"&gt;fetch_20newsgroups&lt;/a&gt; function. By default it downloads it to a folder named &lt;code&gt;scikit_learn_data&lt;/code&gt; in your home directory, but since &lt;i&gt;everybody&lt;/i&gt; seems to want to add folders to my home directory I prefer to put it in a hidden folder so I'm not always staring at all these folders. To make it more likely that I'll remember the right folder name I put it in an environment variable.
 &lt;/p&gt;
@@ -2302,9 +2599,9 @@ So, reading the blob the first thing to notice is that they already split the da
 &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-org485e0a4" class="outline-3"&gt;
-&lt;h3 id="org485e0a4"&gt;Setting Up The Test Set&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org485e0a4"&gt;
+&lt;div id="outline-container-org47852fc" class="outline-3"&gt;
+&lt;h3 id="org47852fc"&gt;Setting Up The Test Set&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org47852fc"&gt;
 &lt;p&gt;
 Normally I would use sklearn's &lt;a href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html"&gt;train_test_split&lt;/a&gt; to split the data set up, but since they set it up so that you have to download the test set separately, I guess I'll go with that.
 &lt;/p&gt;
@@ -2328,9 +2625,9 @@ Testing: 7,532 (40 %)
 &lt;/pre&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-org1069c27" class="outline-4"&gt;
-&lt;h4 id="org1069c27"&gt;What does an entry look like?&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org1069c27"&gt;
+&lt;div id="outline-container-org4b32218" class="outline-4"&gt;
+&lt;h4 id="org4b32218"&gt;What does an entry look like?&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org4b32218"&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;index&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;min&lt;/span&gt;&lt;span class="p"&gt;((&lt;/span&gt;&lt;span class="nb"&gt;len&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x_train&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;index&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt; &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;index&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="nb"&gt;range&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;len&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x_train&lt;/span&gt;&lt;span class="p"&gt;))))&lt;/span&gt;
 &lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x_train&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;index&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
@@ -2382,9 +2679,9 @@ Looks like there's a lot of noise in these things.
 &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-orgd2eff98" class="outline-4"&gt;
-&lt;h4 id="orgd2eff98"&gt;How are the groups distributed?&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-orgd2eff98"&gt;
+&lt;div id="outline-container-org961a725" class="outline-4"&gt;
+&lt;h4 id="org961a725"&gt;How are the groups distributed?&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org961a725"&gt;
 &lt;p&gt;
 The labels are numbers representing which Newsgroup each of the documents came from, but they also give us a translation in the form of the &lt;code&gt;dataset.target_names&lt;/code&gt; list so we can take a look at how much of each group is represented.
 &lt;/p&gt;
@@ -2557,9 +2854,9 @@ Actually, now that I plot it it looks like the last three are underepresented, e
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org38828f5" class="outline-3"&gt;
-&lt;h3 id="org38828f5"&gt;The Document Term Matrix&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org38828f5"&gt;
+&lt;div id="outline-container-org4dbf5b8" class="outline-3"&gt;
+&lt;h3 id="org4dbf5b8"&gt;The Document Term Matrix&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org4dbf5b8"&gt;
 &lt;p&gt;
 To work with the data-set we need to convert it to some kind of numeric value. In this case I'm going to use sklearn's &lt;a href="https://scikit-learn.org/0.19/modules/generated/sklearn.feature_extraction.text.CountVectorizer.html#sklearn.feature_extraction.text.CountVectorizer"&gt;CountVectorizer&lt;/a&gt; to create a matrix where each row represents a document and each column is a term in the &lt;a href="https://www.wikiwand.com/en/Text_corpus"&gt;corpus&lt;/a&gt; (creating a &lt;a href="https://www.wikiwand.com/en/Bag-of-words_model"&gt;Bag of Words&lt;/a&gt;/&lt;a href="https://www.wikiwand.com/en/Document-term_matrix"&gt;Document Term Matrix&lt;/a&gt;) The values are the count of the terms in each document. Sklearn has an alternative download function - &lt;a href="https://scikit-learn.org/0.19/modules/generated/sklearn.datasets.fetch_20newsgroups_vectorized.html#sklearn.datasets.fetch_20newsgroups_vectorized"&gt;fetch_20newsgroups_vectorized&lt;/a&gt; that will download it already vectorized, but since you have to do the conversion yourself in most cases I thought it would be better not to use it.
 &lt;/p&gt;
@@ -2597,9 +2894,9 @@ I was going to inspect the matrix, but it's a sparse matrix so you have to conve
 &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-orgb99565c" class="outline-3"&gt;
-&lt;h3 id="orgb99565c"&gt;Term-Frequency/Inverse Document Frequency&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-orgb99565c"&gt;
+&lt;div id="outline-container-org92ddeba" class="outline-3"&gt;
+&lt;h3 id="org92ddeba"&gt;Term-Frequency/Inverse Document Frequency&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org92ddeba"&gt;
 &lt;p&gt;
 If we just use the counts (the Term-Frequency (TF)), then the most common word per document will have the highest value, but if a word is spread across all or at least many documents, then even if it's common in a document it probably won't help us distinguish the documents from each other in a meaningful way. To deal with this we can add a penalty (the Inverse-Document-Frequency (IDF) weight) that lowers the value for a term the more common it is among all the documents. Together the two methods are knows as &lt;a href="https://www.wikiwand.com/en/Tf%E2%80%93idf"&gt;TF-IDF.&lt;/a&gt; Here sklearn's &lt;a href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfTransformer.html"&gt;TfidfTransformer&lt;/a&gt; does the transform for us.
 &lt;/p&gt;
@@ -2616,9 +2913,9 @@ Documents: 11,314 Terms: 130,107
 &lt;/pre&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgcadb35c" class="outline-3"&gt;
-&lt;h3 id="orgcadb35c"&gt;A Logistic Regression Pipeline&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-orgcadb35c"&gt;
+&lt;div id="outline-container-orga536ad7" class="outline-3"&gt;
+&lt;h3 id="orga536ad7"&gt;A Logistic Regression Pipeline&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-orga536ad7"&gt;
 &lt;p&gt;
 To classify the documents we're going to use &lt;a href="https://www.wikiwand.com/en/Logistic_regression"&gt;Logistic Regression&lt;/a&gt; (also from &lt;a href="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html"&gt;sklearn&lt;/a&gt;). In addition, instead of creating the Document Term Matrix in separate steps as above, I'm going to create a &lt;a href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html"&gt;Pipeline&lt;/a&gt; so sklearn can do it in a single call. An sklearn Pipeline takes as all but the last of it's constructor's argument a list of &lt;code&gt;(name, transform)&lt;/code&gt; tuples, where the &lt;code&gt;transform&lt;/code&gt; argument is an object that has a &lt;code&gt;fit_transform&lt;/code&gt; method (like the &lt;code&gt;CountVectorizer&lt;/code&gt; we saw earlier). The last of argument of the constructor is the model that you are going to fit on the data that the pipeline has transformed. If you don't want to customize the names there's a &lt;a href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.make_pipeline.html#sklearn.pipeline.make_pipeline"&gt;make_pipeline&lt;/a&gt; function that just takes the transformer and model instances as arguments and automatically names them for you, returning the pipeline as its output.
 &lt;/p&gt;
@@ -2639,9 +2936,9 @@ I'm using the defaults for Logistic Regression in general, but it will output a 
 &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-org39d15c9" class="outline-3"&gt;
-&lt;h3 id="org39d15c9"&gt;Cross Validation&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org39d15c9"&gt;
+&lt;div id="outline-container-org29f4fe1" class="outline-3"&gt;
+&lt;h3 id="org29f4fe1"&gt;Cross Validation&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org29f4fe1"&gt;
 &lt;p&gt;
 Now we can do some cross validation.
 &lt;/p&gt;
@@ -2731,9 +3028,9 @@ It looks like even with the default parameters the model got a mean/median &lt;a
 &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-org3ce1c9e" class="outline-3"&gt;
-&lt;h3 id="org3ce1c9e"&gt;Testing&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org3ce1c9e"&gt;
+&lt;div id="outline-container-orgf95d1d8" class="outline-3"&gt;
+&lt;h3 id="orgf95d1d8"&gt;Testing&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-orgf95d1d8"&gt;
 &lt;p&gt;
 Let's try fitting it to the whole training set and see how it does.
 &lt;/p&gt;
@@ -2782,9 +3079,9 @@ The precision and recall are the same as the F1 score, so it isn't better at eit
 &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-org1b272b8" class="outline-3"&gt;
-&lt;h3 id="org1b272b8"&gt;A Confusion Matrix&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org1b272b8"&gt;
+&lt;div id="outline-container-org8803884" class="outline-3"&gt;
+&lt;h3 id="org8803884"&gt;A Confusion Matrix&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org8803884"&gt;
 &lt;p&gt;
 Having a single value like the F1 score helps us evaluate the model, but using a &lt;a href="https://www.wikiwand.com/en/Confusion_matrix"&gt;Confusion Matrix&lt;/a&gt; (via sklearn's &lt;a href="https://scikit-learn.org/stable/modules/generated/sklearn.metrics.confusion_matrix.html"&gt;confusion_matrix&lt;/a&gt; function) will help us understand how the model did a little more.
 &lt;/p&gt;
@@ -2887,17 +3184,17 @@ In the dataset (as in life) the most confusisng seemed to be religion, politics,
 &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-orgce571ee" class="outline-2"&gt;
-&lt;h2 id="orgce571ee"&gt;End&lt;/h2&gt;
-&lt;div class="outline-text-2" id="text-orgce571ee"&gt;
+&lt;div id="outline-container-org3b3724e" class="outline-2"&gt;
+&lt;h2 id="org3b3724e"&gt;End&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-org3b3724e"&gt;
 &lt;p&gt;
 So here we have a basic walk-through using sklearn to model a document classifier built with Logistic Regression. One of the nice things about logistic regression is that the weights tell you which variables are the most important, but I've never tried that with documents so I don't know how to do that here. There are many improvements that could be made (would have to be made) if this were an attempt to make a real model, but the simplicity of the steps shows how much you can do with off-the-shelf software. Eighty-three percent isn't perfect, but it's pretty good.
 &lt;/p&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-org9723bb1" class="outline-3"&gt;
-&lt;h3 id="org9723bb1"&gt;Original Source&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org9723bb1"&gt;
+&lt;div id="outline-container-org6a76866" class="outline-3"&gt;
+&lt;h3 id="org6a76866"&gt;Original Source&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org6a76866"&gt;
 &lt;ol class="org-ol"&gt;
 &lt;li&gt;Kasliwal N. Natural language processing with Python quick start guide: going from a Python developer to an effective natural language processing engineer [Internet]. 2018 [cited 2019 May 18]. Available from: &lt;a href="http://proquest.safaribooksonline.com/?fpi=9781789130386"&gt;http://proquest.safaribooksonline.com/?fpi=9781789130386&lt;/a&gt;&lt;/li&gt;
 &lt;/ol&gt;
@@ -2907,42 +3204,42 @@ So here we have a basic walk-through using sklearn to model a document classifie
 &lt;h2&gt;Table of Contents&lt;/h2&gt;
 &lt;div id="text-table-of-contents"&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#orgd28d8ed"&gt;Beginning&lt;/a&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#orgc1aefd5"&gt;Beginning&lt;/a&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#org6cf2550"&gt;Imports&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#org8147776"&gt;The Query&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#orgbb09d3a"&gt;The Document&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#orgb32e3f7"&gt;Imports&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#org4214af9"&gt;The Query&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#orga562cf5"&gt;The Document&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#orgf1a5025"&gt;Middle&lt;/a&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#orgdd03b34"&gt;Middle&lt;/a&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#org399e1fb"&gt;The Bit Vector&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#org458d05f"&gt;Term Frequency Vector&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#org341ab70"&gt;Inverse Document Frequency&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#org424e143"&gt;Ranking with TF-IDF Weighting&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#org5f93e74"&gt;Okapi BM25&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#org44d9854"&gt;Document Length Normalization&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#orgad9eec4"&gt;The State of the Art&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#org7a1c741"&gt;The Bit Vector&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#org76c95d6"&gt;Term Frequency Vector&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#orgf927758"&gt;Inverse Document Frequency&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#org6daf1f8"&gt;Ranking with TF-IDF Weighting&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#orgb61056b"&gt;Okapi BM25&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#org89a66c3"&gt;Document Length Normalization&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#org3dd934e"&gt;The State of the Art&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#org5209dc3"&gt;End&lt;/a&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#org5ef4ccd"&gt;End&lt;/a&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#orgeb92dd5"&gt;VSM Improvements&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/the-vector-space-model/#orgb0efdd2"&gt;VSM Improvements&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgd28d8ed" class="outline-2"&gt;
-&lt;h2 id="orgd28d8ed"&gt;Beginning&lt;/h2&gt;
-&lt;div class="outline-text-2" id="text-orgd28d8ed"&gt;
+&lt;div id="outline-container-orgc1aefd5" class="outline-2"&gt;
+&lt;h2 id="orgc1aefd5"&gt;Beginning&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-orgc1aefd5"&gt;
 &lt;p&gt;
 This is a brief write-up of some notes I took on the Vector Space Model (VSM) used to rank documents by relevancy to keywords in a query. The query is represented as a vector with a 1 for each of the search terms and, in the simplest case, the vector to determine relevance will hold a 1 in each place where the document has a word that matches a query term. This might be easier with an example.
 &lt;/p&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org6cf2550" class="outline-3"&gt;
-&lt;h3 id="org6cf2550"&gt;Imports&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org6cf2550"&gt;
+&lt;div id="outline-container-orgb32e3f7" class="outline-3"&gt;
+&lt;h3 id="orgb32e3f7"&gt;Imports&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-orgb32e3f7"&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;# python
 from collections import Counter
 from functools import partial
@@ -2971,9 +3268,9 @@ Embed = partial(EmbedHoloview, folder_path=output)
 &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-org8147776" class="outline-3"&gt;
-&lt;h3 id="org8147776"&gt;The Query&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org8147776"&gt;
+&lt;div id="outline-container-org4214af9" class="outline-3"&gt;
+&lt;h3 id="org4214af9"&gt;The Query&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org4214af9"&gt;
 &lt;p&gt;
 The user made a query with some key words which is normally represented by a vector with the count of each term as the values.
 &lt;/p&gt;
@@ -2990,9 +3287,9 @@ print(terms)
 &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-orgbb09d3a" class="outline-3"&gt;
-&lt;h3 id="orgbb09d3a"&gt;The Document&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-orgbb09d3a"&gt;
+&lt;div id="outline-container-orga562cf5" class="outline-3"&gt;
+&lt;h3 id="orga562cf5"&gt;The Document&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-orga562cf5"&gt;
 &lt;p&gt;
 We want to retrieve the most relevant documents from a set of documents, which I'll represent as lists of words.
 &lt;/p&gt;
@@ -3004,13 +3301,13 @@ document_2 = "a movie about blood blood and more blood".split()
 &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-orgf1a5025" class="outline-2"&gt;
-&lt;h2 id="orgf1a5025"&gt;Middle&lt;/h2&gt;
-&lt;div class="outline-text-2" id="text-orgf1a5025"&gt;
+&lt;div id="outline-container-orgdd03b34" class="outline-2"&gt;
+&lt;h2 id="orgdd03b34"&gt;Middle&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-orgdd03b34"&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org399e1fb" class="outline-3"&gt;
-&lt;h3 id="org399e1fb"&gt;The Bit Vector&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org399e1fb"&gt;
+&lt;div id="outline-container-org7a1c741" class="outline-3"&gt;
+&lt;h3 id="org7a1c741"&gt;The Bit Vector&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org7a1c741"&gt;
 &lt;p&gt;
 To represent similarity I'll use a vector with ones where there is a word match in the document.
 &lt;/p&gt;
@@ -3054,9 +3351,9 @@ So we con see one problem with our method right off the bat, in that repeated te
 &lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org458d05f" class="outline-3"&gt;
-&lt;h3 id="org458d05f"&gt;Term Frequency Vector&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org458d05f"&gt;
+&lt;div id="outline-container-org76c95d6" class="outline-3"&gt;
+&lt;h3 id="org76c95d6"&gt;Term Frequency Vector&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org76c95d6"&gt;
 &lt;p&gt;
 One approach to fix our lack of giving weight to more occurences of a keyword is to use counts, Term Frequency (TF), instead just a 0 or 1 in our vector.
 &lt;/p&gt;
@@ -3116,9 +3413,9 @@ My example is a little convoluted, but the point is that the most common words a
 &lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org341ab70" class="outline-3"&gt;
-&lt;h3 id="org341ab70"&gt;Inverse Document Frequency&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org341ab70"&gt;
+&lt;div id="outline-container-orgf927758" class="outline-3"&gt;
+&lt;h3 id="orgf927758"&gt;Inverse Document Frequency&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-orgf927758"&gt;
 &lt;p&gt;
 This method seeks to overcome the problem of words that are too common by reducing the weight of a term the more common it is.
 &lt;/p&gt;
@@ -3161,9 +3458,9 @@ You can see that as the number of documents with the word in it (&lt;i&gt;k&lt;/
 &lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org424e143" class="outline-3"&gt;
-&lt;h3 id="org424e143"&gt;Ranking with TF-IDF Weighting&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org424e143"&gt;
+&lt;div id="outline-container-org6daf1f8" class="outline-3"&gt;
+&lt;h3 id="org6daf1f8"&gt;Ranking with TF-IDF Weighting&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org6daf1f8"&gt;
 &lt;p&gt;
 Okay, so we hav Term-Frequency as our basic measure of relevancy, and we have this notion that the more common a word is, the less important it is to relevancy, embodied by Inverse Document Frequency (IDF), how do we use them? Like this.
 &lt;/p&gt;
@@ -3192,9 +3489,9 @@ So the relevance of a document is the sum of the products of the Term Frequency 
 &lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org5f93e74" class="outline-3"&gt;
-&lt;h3 id="org5f93e74"&gt;Okapi BM25&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org5f93e74"&gt;
+&lt;div id="outline-container-orgb61056b" class="outline-3"&gt;
+&lt;h3 id="orgb61056b"&gt;Okapi BM25&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-orgb61056b"&gt;
 &lt;p&gt;
 The &lt;a href="https://en.wikipedia.org/wiki/Okapi_BM25"&gt;Okapi BM25&lt;/a&gt; ranking function works in a similar way to TF-IDF, but it uses a silghtly different method. Instead of just the count of the words in a document (&lt;i&gt;c(w, d)&lt;/i&gt;), it also uses the number of documents that have the word (&lt;i&gt;k&lt;/i&gt;).
 \[
@@ -3233,16 +3530,16 @@ Because of the way it's set up, &lt;i&gt;k + 1&lt;/i&gt; acts as an upper bound 
 &lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org44d9854" class="outline-3"&gt;
-&lt;h3 id="org44d9854"&gt;Document Length Normalization&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org44d9854"&gt;
+&lt;div id="outline-container-org89a66c3" class="outline-3"&gt;
+&lt;h3 id="org89a66c3"&gt;Document Length Normalization&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org89a66c3"&gt;
 &lt;p&gt;
 We have another problem to deal with - longer documents have more words and so are more likely to have the query terms, even if they aren't necessarily relevant. So one thing to do might be do drop really long documents, but some documents are long because the author was logorrheic, and others are long because the have a lot of content and so might be useful if we match them, so we don't want to throw everything away. What we want to do instead is add a penalty for longer documents.
 &lt;/p&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org9fb8e44" class="outline-4"&gt;
-&lt;h4 id="org9fb8e44"&gt;Pivoted Length Normalization&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org9fb8e44"&gt;
+&lt;div id="outline-container-org707be92" class="outline-4"&gt;
+&lt;h4 id="org707be92"&gt;Pivoted Length Normalization&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org707be92"&gt;
 &lt;p&gt;
 This is a method to add a penalty to longer documents and a reward for shorter documents. Here's the equation.
 &lt;/p&gt;
@@ -3291,9 +3588,9 @@ This term ends up in the denominator of the term-frequency equivalent calculatio
 &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-orgad9eec4" class="outline-3"&gt;
-&lt;h3 id="orgad9eec4"&gt;The State of the Art&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-orgad9eec4"&gt;
+&lt;div id="outline-container-org3dd934e" class="outline-3"&gt;
+&lt;h3 id="org3dd934e"&gt;The State of the Art&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org3dd934e"&gt;
 &lt;p&gt;
 These are the two "best" Vector Space Model ranking functions.
 &lt;/p&gt;
@@ -3305,9 +3602,9 @@ k \in [0, +\inf)
 \]
 &lt;/p&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org5a97432" class="outline-4"&gt;
-&lt;h4 id="org5a97432"&gt;Pivoted Length Normalization&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org5a97432"&gt;
+&lt;div id="outline-container-org643919c" class="outline-4"&gt;
+&lt;h4 id="org643919c"&gt;Pivoted Length Normalization&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org643919c"&gt;
 &lt;p&gt;
 \[
 f(q, d) = \sum_{w \in q \cap d} c(w, q) \frac{\ln(1 + ln(1 + c(w, d)))}{1 -b + b\frac{\vert d \vert}{\textit{avg dl}}} \og \frac{M + 1}{df(w)}
@@ -3315,9 +3612,9 @@ f(q, d) = \sum_{w \in q \cap d} c(w, q) \frac{\ln(1 + ln(1 + c(w, d)))}{1 -b + b
 &lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org22e1949" class="outline-4"&gt;
-&lt;h4 id="org22e1949"&gt;BM25 With Document Length Normalization&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org22e1949"&gt;
+&lt;div id="outline-container-org9a2b7d5" class="outline-4"&gt;
+&lt;h4 id="org9a2b7d5"&gt;BM25 With Document Length Normalization&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org9a2b7d5"&gt;
 &lt;p&gt;
 \[
 f(q, d) = \sum_{w \in q \cap d} c(w, d) \frac{(k+1) c(w, d)}{c(w, d) + k(1 - b + b \frac{\vert d \vert}{\textit{avg dl}})} \log \frac{M+1}{df(w)}
@@ -3328,21 +3625,21 @@ f(q, d) = \sum_{w \in q \cap d} c(w, d) \frac{(k+1) c(w, d)}{c(w, d) + k(1 - b +
 &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-org5209dc3" class="outline-2"&gt;
-&lt;h2 id="org5209dc3"&gt;End&lt;/h2&gt;
-&lt;div class="outline-text-2" id="text-org5209dc3"&gt;
+&lt;div id="outline-container-org5ef4ccd" class="outline-2"&gt;
+&lt;h2 id="org5ef4ccd"&gt;End&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-org5ef4ccd"&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgeb92dd5" class="outline-3"&gt;
-&lt;h3 id="orgeb92dd5"&gt;VSM Improvements&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-orgeb92dd5"&gt;
+&lt;div id="outline-container-orgb0efdd2" class="outline-3"&gt;
+&lt;h3 id="orgb0efdd2"&gt;VSM Improvements&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-orgb0efdd2"&gt;
 &lt;p&gt;
 These are variations that you can try to improve the effectiveness of Vector Space Model Ranking.
 &lt;/p&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-orgebd928a" class="outline-4"&gt;
-&lt;h4 id="orgebd928a"&gt;Fix the "Dimension"&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-orgebd928a"&gt;
+&lt;div id="outline-container-org6bec97b" class="outline-4"&gt;
+&lt;h4 id="org6bec97b"&gt;Fix the "Dimension"&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org6bec97b"&gt;
 &lt;ul class="org-ul"&gt;
 &lt;li&gt;Use stemmed words, remove stop-words, use ngrams…&lt;/li&gt;
 &lt;li&gt;Language and domain-specific tokenization&lt;/li&gt;
@@ -3350,9 +3647,9 @@ These are variations that you can try to improve the effectiveness of Vector Spa
 &lt;/ul&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org386a4f4" class="outline-4"&gt;
-&lt;h4 id="org386a4f4"&gt;Changing the Similarity Function&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org386a4f4"&gt;
+&lt;div id="outline-container-org216597c" class="outline-4"&gt;
+&lt;h4 id="org216597c"&gt;Changing the Similarity Function&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org216597c"&gt;
 &lt;ul class="org-ul"&gt;
 &lt;li&gt;Cosine Similarity&lt;/li&gt;
 &lt;li&gt;Euclidean distance&lt;/li&gt;
@@ -3360,13 +3657,13 @@ These are variations that you can try to improve the effectiveness of Vector Spa
 &lt;/ul&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgeb92466" class="outline-4"&gt;
-&lt;h4 id="orgeb92466"&gt;Use BM25 Variations&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-orgeb92466"&gt;
+&lt;div id="outline-container-orge7cd216" class="outline-4"&gt;
+&lt;h4 id="orge7cd216"&gt;Use BM25 Variations&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-orge7cd216"&gt;
 &lt;/div&gt;
 &lt;ul class="org-ul"&gt;
-&lt;li&gt;&lt;a id="orgb0d8db2"&gt;&lt;/a&gt;BM25F&lt;br&gt;
-&lt;div class="outline-text-5" id="text-orgb0d8db2"&gt;
+&lt;li&gt;&lt;a id="orgc21ccd2"&gt;&lt;/a&gt;BM25F&lt;br&gt;
+&lt;div class="outline-text-5" id="text-orgc21ccd2"&gt;
 &lt;p&gt;
 This is for structured documents (the &lt;i&gt;F&lt;/i&gt; stands for "fields" within the document (e.g. title)).
 &lt;/p&gt;
@@ -3376,8 +3673,8 @@ This is for structured documents (the &lt;i&gt;F&lt;/i&gt; stands for "fields" w
 &lt;/ul&gt;
 &lt;/div&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;a id="orgda3920e"&gt;&lt;/a&gt;BM25+&lt;br&gt;
-&lt;div class="outline-text-5" id="text-orgda3920e"&gt;
+&lt;li&gt;&lt;a id="orgd6c094f"&gt;&lt;/a&gt;BM25+&lt;br&gt;
+&lt;div class="outline-text-5" id="text-orgd6c094f"&gt;
 &lt;p&gt;
 This avoids over-penalizing long documents by adding a small constant to the term-frequencies. This has been shown (and proven analytically) to be better than BM25 alone.
 &lt;/p&gt;
@@ -3390,51 +3687,51 @@ This avoids over-penalizing long documents by adding a small constant to the ter
 &lt;h2&gt;Table of Contents&lt;/h2&gt;
 &lt;div id="text-table-of-contents"&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/link-page/#orgc8819f1"&gt;Text Mining&lt;/a&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/link-page/#orge695bc7"&gt;Text Mining&lt;/a&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/link-page/#org518bb89"&gt;Text Retrieval MOOC Link Page&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/link-page/#org0605c54"&gt;Text Retrieval MOOC Link Page&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgc8819f1" class="outline-2"&gt;
-&lt;h2 id="orgc8819f1"&gt;Text Mining&lt;/h2&gt;
-&lt;div class="outline-text-2" id="text-orgc8819f1"&gt;
+&lt;div id="outline-container-orge695bc7" class="outline-2"&gt;
+&lt;h2 id="orge695bc7"&gt;Text Mining&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-orge695bc7"&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org518bb89" class="outline-3"&gt;
-&lt;h3 id="org518bb89"&gt;&lt;a href="http://sifaka.cs.uiuc.edu/ir/resources/mooctr.html"&gt;Text Retrieval MOOC Link Page&lt;/a&gt;&lt;/h3&gt;
+&lt;div id="outline-container-org0605c54" class="outline-3"&gt;
+&lt;h3 id="org0605c54"&gt;&lt;a href="http://sifaka.cs.uiuc.edu/ir/resources/mooctr.html"&gt;Text Retrieval MOOC Link Page&lt;/a&gt;&lt;/h3&gt;
 &lt;/div&gt;
 &lt;/div&gt;</description><category>links</category><category>reference</category><guid>https://necromuralist.github.io/Tip-of-the-Dnghu/posts/text_mining/link-page/</guid><pubDate>Sat, 04 May 2019 22:08:18 GMT</pubDate></item><item><title>Natural Language Processing Review</title><link>https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/</link><dc:creator>Cloistered Monkey</dc:creator><description>&lt;div id="table-of-contents"&gt;
 &lt;h2&gt;Table of Contents&lt;/h2&gt;
 &lt;div id="text-table-of-contents"&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/#org135edfb"&gt;Departure&lt;/a&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/#org84661bb"&gt;Departure&lt;/a&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/#org7e06a96"&gt;Imports&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/#orgdeba5b4"&gt;Set Up&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/#org73b470d"&gt;Imports&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/#org42ae74b"&gt;Set Up&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/#orgcb992f7"&gt;Initiation&lt;/a&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/#org3a3a2d8"&gt;Initiation&lt;/a&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/#orge1766fa"&gt;Some Vocabulary&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/#org7d9ec8f"&gt;Some Vocabulary&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/#orgcab9b54"&gt;Return&lt;/a&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/#org5eedc76"&gt;Return&lt;/a&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/#org811932c"&gt;Sources&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/#org394b493"&gt;Sources&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org135edfb" class="outline-2"&gt;
-&lt;h2 id="org135edfb"&gt;Departure&lt;/h2&gt;
-&lt;div class="outline-text-2" id="text-org135edfb"&gt;
+&lt;div id="outline-container-org84661bb" class="outline-2"&gt;
+&lt;h2 id="org84661bb"&gt;Departure&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-org84661bb"&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org7e06a96" class="outline-3"&gt;
-&lt;h3 id="org7e06a96"&gt;Imports&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org7e06a96"&gt;
+&lt;div id="outline-container-org73b470d" class="outline-3"&gt;
+&lt;h3 id="org73b470d"&gt;Imports&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org73b470d"&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;from pathlib import Path
 &lt;/pre&gt;&lt;/div&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;from spacy import displacy
@@ -3443,9 +3740,9 @@ from nltk.tokenize import TweetTokenizer
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgdeba5b4" class="outline-3"&gt;
-&lt;h3 id="orgdeba5b4"&gt;Set Up&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-orgdeba5b4"&gt;
+&lt;div id="outline-container-org42ae74b" class="outline-3"&gt;
+&lt;h3 id="org42ae74b"&gt;Set Up&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org42ae74b"&gt;
 &lt;p&gt;
 I'm using the &lt;code&gt;en&lt;/code&gt; model. Even after you install spacy you have to tell it which model to download.
 &lt;/p&gt;
@@ -3471,32 +3768,32 @@ if not OUTPUT_FOLDER.is_dir():
 &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;div id="outline-container-orgcb992f7" class="outline-2"&gt;
-&lt;h2 id="orgcb992f7"&gt;Initiation&lt;/h2&gt;
-&lt;div class="outline-text-2" id="text-orgcb992f7"&gt;
+&lt;div id="outline-container-org3a3a2d8" class="outline-2"&gt;
+&lt;h2 id="org3a3a2d8"&gt;Initiation&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-org3a3a2d8"&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orge1766fa" class="outline-3"&gt;
-&lt;h3 id="orge1766fa"&gt;Some Vocabulary&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-orge1766fa"&gt;
+&lt;div id="outline-container-org7d9ec8f" class="outline-3"&gt;
+&lt;h3 id="org7d9ec8f"&gt;Some Vocabulary&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org7d9ec8f"&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org1e84389" class="outline-4"&gt;
-&lt;h4 id="org1e84389"&gt;Natural Language Processing&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org1e84389"&gt;
+&lt;div id="outline-container-org1418e2d" class="outline-4"&gt;
+&lt;h4 id="org1418e2d"&gt;Natural Language Processing&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org1418e2d"&gt;
 &lt;p&gt;
 &lt;a href="https://www.wikiwand.com/en/Natural_language_processing"&gt;Natural Language Processing&lt;/a&gt; is the computational study of human language with the aim of solving practical problems involving language. There is a related field called &lt;a href="https://www.wikiwand.com/en/Computational_linguistics"&gt;Computational Linguistics&lt;/a&gt; which is concerned more with the modeling of human language but seems related.
 &lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org7d9cda9" class="outline-4"&gt;
-&lt;h4 id="org7d9cda9"&gt;Corpora&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org7d9cda9"&gt;
+&lt;div id="outline-container-org1f31c43" class="outline-4"&gt;
+&lt;h4 id="org1f31c43"&gt;Corpora&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org1f31c43"&gt;
 &lt;p&gt;
 A text-dataset is called a &lt;i&gt;corpus&lt;/i&gt;, usually made up of texts and metadata associated with each text. Texts are made up of characters grouped into units called &lt;i&gt;tokens&lt;/i&gt;. In English a token is generally a word or number.
 &lt;/p&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org4148ec7" class="outline-5"&gt;
-&lt;h5 id="org4148ec7"&gt;Tokenization&lt;/h5&gt;
-&lt;div class="outline-text-5" id="text-org4148ec7"&gt;
+&lt;div id="outline-container-orgf1e23f4" class="outline-5"&gt;
+&lt;h5 id="orgf1e23f4"&gt;Tokenization&lt;/h5&gt;
+&lt;div class="outline-text-5" id="text-orgf1e23f4"&gt;
 &lt;p&gt;
 The process of breaking a text up into &lt;i&gt;tokens&lt;/i&gt; is called tokenization. Here's some examples of how to do it with &lt;a href="https://spacy.io/usage/spacy-101"&gt;spacy&lt;/a&gt; and the &lt;a href="https://www.nltk.org"&gt;Natural Language Toolkit (NLTK)&lt;/a&gt;.
 &lt;/p&gt;
@@ -3544,25 +3841,25 @@ In this case, the TweetTokenizer and spacy treated the hash-tag and smiley diffe
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org76982d9" class="outline-4"&gt;
-&lt;h4 id="org76982d9"&gt;Types&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org76982d9"&gt;
+&lt;div id="outline-container-org1f1bfef" class="outline-4"&gt;
+&lt;h4 id="org1f1bfef"&gt;Types&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org1f1bfef"&gt;
 &lt;p&gt;
 &lt;i&gt;Types&lt;/i&gt; are the unique tokens in a corpus. The set of all the types in the corpus is its &lt;i&gt;vocabulary&lt;/i&gt; or &lt;i&gt;lexicon&lt;/i&gt;. 
 &lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org9a0347d" class="outline-4"&gt;
-&lt;h4 id="org9a0347d"&gt;Word Classes&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org9a0347d"&gt;
+&lt;div id="outline-container-org13b0655" class="outline-4"&gt;
+&lt;h4 id="org13b0655"&gt;Word Classes&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org13b0655"&gt;
 &lt;p&gt;
 There are two classes of words &lt;i&gt;content words&lt;/i&gt; and &lt;i&gt;stopwords&lt;/i&gt;. Stopwords are there mostly to glue the content words together ("a", "an", "the", etc.) and provide more noise than information.
 &lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org23392d7" class="outline-4"&gt;
-&lt;h4 id="org23392d7"&gt;N-Grams&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org23392d7"&gt;
+&lt;div id="outline-container-orgfc21ad3" class="outline-4"&gt;
+&lt;h4 id="orgfc21ad3"&gt;N-Grams&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-orgfc21ad3"&gt;
 &lt;p&gt;
 &lt;i&gt;N-grams&lt;/i&gt; are consecutive token-sequences of a fixed length (&lt;i&gt;n&lt;/i&gt;). Common special cases are:
 &lt;/p&gt;
@@ -3577,9 +3874,9 @@ Although n-grams are generally words in some cases they can be characters - if t
 &lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org857d8a3" class="outline-4"&gt;
-&lt;h4 id="org857d8a3"&gt;Lemma&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-org857d8a3"&gt;
+&lt;div id="outline-container-org8721d6d" class="outline-4"&gt;
+&lt;h4 id="org8721d6d"&gt;Lemma&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org8721d6d"&gt;
 &lt;p&gt;
 &lt;a href="https://www.wikiwand.com/en/Lemma_(morphology)"&gt;Lemmas&lt;/a&gt; are root-forms for words that can have different forms. As an example - &lt;i&gt;go&lt;/i&gt; is the lemma for &lt;i&gt;go&lt;/i&gt;, &lt;i&gt;going&lt;/i&gt;, &lt;i&gt;went&lt;/i&gt;, and &lt;i&gt;gone&lt;/i&gt;.
 &lt;/p&gt;
@@ -3607,9 +3904,9 @@ There is a related method called &lt;i&gt;stemming&lt;/i&gt; which strips the en
 &lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgfe133dc" class="outline-4"&gt;
-&lt;h4 id="orgfe133dc"&gt;Chunking&lt;/h4&gt;
-&lt;div class="outline-text-4" id="text-orgfe133dc"&gt;
+&lt;div id="outline-container-org7481552" class="outline-4"&gt;
+&lt;h4 id="org7481552"&gt;Chunking&lt;/h4&gt;
+&lt;div class="outline-text-4" id="text-org7481552"&gt;
 &lt;p&gt;
 There are different ways of chunking text instead of just using &lt;i&gt;n-grams&lt;/i&gt;, one way is called &lt;i&gt;chunking&lt;/i&gt; which breaks the text up into phrases.
 &lt;/p&gt;
@@ -3631,23 +3928,23 @@ snow - NP
 &lt;/div&gt;
 
 
-&lt;div id="outline-container-orgcab9b54" class="outline-2"&gt;
-&lt;h2 id="orgcab9b54"&gt;Return&lt;/h2&gt;
-&lt;div class="outline-text-2" id="text-orgcab9b54"&gt;
+&lt;div id="outline-container-org5eedc76" class="outline-2"&gt;
+&lt;h2 id="org5eedc76"&gt;Return&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-org5eedc76"&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-org811932c" class="outline-3"&gt;
-&lt;h3 id="org811932c"&gt;Sources&lt;/h3&gt;
-&lt;div class="outline-text-3" id="text-org811932c"&gt;
+&lt;div id="outline-container-org394b493" class="outline-3"&gt;
+&lt;h3 id="org394b493"&gt;Sources&lt;/h3&gt;
+&lt;div class="outline-text-3" id="text-org394b493"&gt;
 &lt;ul class="org-ul"&gt;
 &lt;li&gt;Rao D, McMahan B. Natural language processing with PyTorch: build intelligent language applications using deep learning. Sebastopol, CA: OReilly Media; 2019.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;/div&gt;</description><category>nlp</category><category>review</category><guid>https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/</guid><pubDate>Mon, 08 Apr 2019 00:12:29 GMT</pubDate></item><item><title>Reading List</title><link>https://necromuralist.github.io/Tip-of-the-Dnghu/posts/reference/reading-list/</link><dc:creator>Cloistered Monkey</dc:creator><description>&lt;div id="outline-container-org973fd69" class="outline-2"&gt;
-&lt;h2 id="org973fd69"&gt;Books on Natural Language Processing&lt;/h2&gt;
-&lt;div class="outline-text-2" id="text-org973fd69"&gt;
+&lt;/div&gt;</description><category>nlp</category><category>review</category><guid>https://necromuralist.github.io/Tip-of-the-Dnghu/posts/nlp/natural-language-processing-review/</guid><pubDate>Mon, 08 Apr 2019 00:12:29 GMT</pubDate></item><item><title>Reading List</title><link>https://necromuralist.github.io/Tip-of-the-Dnghu/posts/reference/reading-list/</link><dc:creator>Cloistered Monkey</dc:creator><description>&lt;div id="outline-container-orgf0a9335" class="outline-2"&gt;
+&lt;h2 id="orgf0a9335"&gt;Books on Natural Language Processing&lt;/h2&gt;
+&lt;div class="outline-text-2" id="text-orgf0a9335"&gt;
 &lt;/div&gt;
-&lt;div id="outline-container-orgf1f4540" class="outline-3"&gt;
-&lt;h3 id="orgf1f4540"&gt;Rao D, McMahan B. Natural language processing with PyTorch: build intelligent language applications using deep learning. Sebastopol, CA: OReilly Media; 2019.&lt;/h3&gt;
+&lt;div id="outline-container-org0f89b9a" class="outline-3"&gt;
+&lt;h3 id="org0f89b9a"&gt;Rao D, McMahan B. Natural language processing with PyTorch: build intelligent language applications using deep learning. Sebastopol, CA: OReilly Media; 2019.&lt;/h3&gt;
 &lt;/div&gt;
 &lt;/div&gt;</description><category>list</category><category>reading</category><guid>https://necromuralist.github.io/Tip-of-the-Dnghu/posts/reference/reading-list/</guid><pubDate>Sun, 07 Apr 2019 23:34:53 GMT</pubDate></item></channel></rss>
