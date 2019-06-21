@@ -1,0 +1,260 @@
+#+BEGIN_COMMENT
+.. title: Word Frequencies and Zipfs Law
+.. slug: word-frequencies-and-zipfs-law
+.. date: 2019-06-19 17:47:38 UTC-07:00
+.. tags: nlp,text-mining
+.. category: Text-Mining
+.. link: 
+.. description: A look at word frequencies and Zipfs law.
+.. type: text
+.. status: 
+.. updated: 
+
+#+END_COMMENT
+#+BEGIN_SRC ipython :session zipfs :results none :exports none
+%load_ext autoreload
+%autoreload 2
+#+END_SRC
+* Beginning
+** Imports
+*** Python
+#+begin_src ipython :session zipfs :results none
+from argparse import Namespace
+from collections import Counter
+from functools import partial
+from pathlib import Path
+#+end_src
+*** PyPi
+#+begin_src ipython :session zipfs :results none
+import holoviews
+import pandas
+import spacy
+#+end_src
+*** My Stuff
+#+begin_src ipython :session zipfs :results none
+from graeae import EnvironmentLoader, TextDownloader
+from graeae.timers import Timer
+from graeae.visualization import EmbedHoloview
+#+end_src
+** Set Up
+*** Spacy
+#+begin_src ipython :session zipfs :results none
+nlp = spacy.load("en_core_web_lg")
+#+end_src
+*** The Path
+#+begin_src ipython :session zipfs :results none
+URL = "https://www.gutenberg.org/files/974/974-0.txt"
+environment = EnvironmentLoader()
+book_path = environment["GUTENBERG"]
+#+end_src
+*** The Timer
+#+begin_src ipython :session zipfs :results none
+TIMER = Timer()
+#+end_src
+** Load the File
+#+BEGIN_SRC ipython :session zipfs :results output :exports both
+book_path = Path(book_path).expanduser()
+downloader = TextDownloader(url=URL, target=book_path/"conrad_joseph_secret_agent.txt")
+text = downloader.download
+#+END_SRC
+
+#+RESULTS:
+: 2019-06-20 18:14:52,437 [1mTextDownloader[0m download: /home/brunhilde/data/datasets/gutenberg/conrad_joseph_secret_agent.txt exists, opening it
+
+#+BEGIN_SRC ipython :session zipfs :results output :exports both
+print(text[:800])
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+                                   THE
+                               SECRET AGENT
+                              A SIMPLE TALE
+
+
+                                    BY
+                              JOSEPH CONRAD
+
+                              SECOND EDITION
+
+                              METHUEN & CO.,
+                           36 ESSEX STREET W C.
+                                  LONDON
+
+                 _First Published_ . . . _September_ 1907
+
+                  _Second Edition_ . . . _October_ 1907
+
+                                    TO
+                               H. G. WELLS
+
+                   THE CHRONICLER OF MR LEWISHAM’S LOVE
+                     THE BIOGRAPHER OF KIPPS AND THE
+                      HISTORIAN OF THE AGES TO COME
+
+                   THIS SIMPLE TALE OF THE XI
+#+end_example
+*** The Document
+#+begin_src ipython :session zipfs :results nonedocument = nlp(text)
+#+end_src
+
+*** The Counter
+#+begin_src ipython :session zipfs :results none
+counter = Counter()
+#+end_src
+
+*** The Plotting
+#+begin_src ipython :session zipfs :results none
+SLUG = "word-frequencies-and-zipfs-law"
+path = Path("../../files/posts/text_mining")/SLUG
+Embed = partial(EmbedHoloview, folder_path=path)
+holoviews.extension("bokeh")
+Plot = Namespace(
+    height=800,
+    width=1000,
+)
+#+end_src
+* Middle
+#+begin_src ipython :session zipfs :results output :exports both
+TIMER.message = "Finished counting tokens"
+with TIMER:
+    for token in document:
+        counter[token.lemma_] += 1
+#+end_src
+
+#+RESULTS:
+: 2019-06-20 17:41:59,573 graeae.timers.timer start: Started: 2019-06-20 17:41:59.573158
+: 2019-06-20 17:41:59,774 graeae.timers.timer end: Ended: 2019-06-20 17:41:59.774213
+: 2019-06-20 17:41:59,775 graeae.timers.timer end: Elapsed: 0:00:00.201055
+
+#+begin_src ipython :session zipfs :results output raw :exports both
+for token, count in counter.most_common()[:10]:
+    print(f" - {token.strip()}: {count:,}")
+#+end_src
+
+#+RESULTS:
+ - -PRON-: 9,376
+ - : 6,649
+ - the: 5,755
+ - .: 5,689
+ - ,: 5,440
+ - : 4,240
+ - of: 3,872
+ - be: 2,887
+ - ": 2,642
+ - a: 2,527
+
+So I forgot to get rid of whitespace, punctuation, etcetera.
+
+#+begin_src ipython :session zipfs :results output raw :exports both
+counter = Counter()
+unwanted = ("PUNCT", "SPACE", "SYM")
+for token in document:
+    if not token.pos_ in unwanted:
+        counter[token.lemma_] += 1
+        
+for token, count in counter.most_common()[:10]:
+    print(f" - {token}: {count:,}")        
+#+end_src
+
+#+RESULTS:
+ - -PRON-: 9,376
+ - the: 5,755
+ - of: 3,872
+ - be: 2,887
+ - a: 2,526
+ - to: 2,186
+ - and: 2,055
+ - in: 1,697
+ - have: 1,419
+ - that: 1,071
+
+Surprisingly, pronouns are more common than stop words.
+
+#+begin_src ipython :session zipfs :results output raw :exports both
+data = pandas.DataFrame(counter.most_common(), columns=["Lemma", "Count"])
+curve = holoviews.Curve(data, "Lemma", "Count").opts(
+    height=Plot.height,
+    width=Plot.width,
+    xaxis="bare",
+).opts(xlabel="Lemma")
+embed = Embed(plot=curve, file_name="all_words_count")
+embed()
+#+end_src
+
+#+RESULTS:
+#+begin_export html
+<object type="text/html" data="all_words_count.html" style="width:100%" height=800>
+  <p>Figure Missing</p>
+</object>
+#+end_export
+
+#+begin_src ipython :session zipfs :results output raw :exports both
+curve = holoviews.Curve(data, "Lemma", "Count").opts(
+    height=Plot.height,
+    width=Plot.width,
+    xaxis="bare",
+    logy=True,
+    logx=True,
+).opts(xlabel="Lemma")
+embed = Embed(plot=curve, file_name="all_words_count_log")
+embed()
+#+end_src
+
+#+RESULTS:
+#+begin_export html
+<object type="text/html" data="all_words_count_log.html" style="width:100%" height=800>
+  <p>Figure Missing</p>
+</object>
+#+end_export
+*** Removing Stop Words
+#+begin_src ipython :session zipfs :results output raw :exports both
+counter = Counter()
+for token in document:
+    if not token.is_stop and not token.pos_ in unwanted:
+        counter[token.lemma_] += 1
+
+for token, count in counter.most_common()[:10]:
+    print(f" - {token}: {count}")
+#+end_src
+
+#+RESULTS:
+ - Verloc: 762
+ - Mr: 536
+ - ’s: 387
+ - not: 328
+ - man: 323
+ - Mrs: 281
+ - ’: 266
+ - say: 245
+ - look: 215
+ - like: 213
+
+I guess pronouns are stop words... It looks like "Verloc" is now the most common token. I assume he's the main character in the book. According to the [[https://en.wikipedia.org/wiki/The_Secret_Agent?oldformat=true][WikiPedia article about The Secret Agent]] - 
+
+#+begin_quote
+The story is set in London in 1886 and deals with Mr Anton Verloc and his work as a spy for an unnamed country (presumably Russia).
+#+end_quote
+
+#+begin_src ipython :session zipfs :results output raw :exports both
+data = pandas.DataFrame(counter.most_common(), columns=["Lemma", "Count"])
+curve = holoviews.Curve(data, "Lemma", "Count").opts(
+    height=Plot.height,
+    width=Plot.width,
+    xaxis="bare",
+    logy=True,
+    logx=True,
+    tools=["hover"],
+).opts(xlabel="Lemma")
+embed = Embed(plot=curve, file_name="cleaned_count")
+embed()
+#+end_src
+
+#+RESULTS:
+#+begin_export html
+<object type="text/html" data="cleaned_count.html" style="width:100%" height=800>
+  <p>Figure Missing</p>
+</object>
+#+end_export
+
+* End
