@@ -55,11 +55,11 @@ TIMER = Timer()
 #+BEGIN_SRC python :session zipfs :results output :exports both
 book_path = Path(book_path).expanduser()
 downloader = TextDownloader(url=URL, target=book_path/"conrad_joseph_secret_agent.txt")
-text = downloader.download
+text = downloader.download.lower()
 #+END_SRC
 
 #+RESULTS:
-: 2019-06-20 18:14:52,437 [1mTextDownloader[0m download: /home/brunhilde/data/datasets/gutenberg/conrad_joseph_secret_agent.txt exists, opening it
+: 2019-06-21 13:42:40,943 [1mTextDownloader[0m download: /home/brunhilde/data/datasets/gutenberg/conrad_joseph_secret_agent.txt exists, opening it
 
 #+BEGIN_SRC python :session zipfs :results output :exports both
 print(text[:800])
@@ -67,36 +67,40 @@ print(text[:800])
 
 #+RESULTS:
 #+begin_example
-                                   THE
-                               SECRET AGENT
-                              A SIMPLE TALE
+                                   the
+                               secret agent
+                              a simple tale
 
 
-                                    BY
-                              JOSEPH CONRAD
+                                    by
+                              joseph conrad
 
-                              SECOND EDITION
+                              second edition
 
-                              METHUEN & CO.,
-                           36 ESSEX STREET W C.
-                                  LONDON
+                              methuen & co.,
+                           36 essex street w c.
+                                  london
 
-                 _First Published_ . . . _September_ 1907
+                 _first published_ . . . _september_ 1907
 
-                  _Second Edition_ . . . _October_ 1907
+                  _second edition_ . . . _october_ 1907
 
-                                    TO
-                               H. G. WELLS
+                                    to
+                               h. g. wells
 
-                   THE CHRONICLER OF MR LEWISHAM’S LOVE
-                     THE BIOGRAPHER OF KIPPS AND THE
-                      HISTORIAN OF THE AGES TO COME
+                   the chronicler of mr lewisham’s love
+                     the biographer of kipps and the
+                      historian of the ages to come
 
-                   THIS SIMPLE TALE OF THE XI
+                   this simple tale of the xi
 #+end_example
+
 *** The Document
-#+begin_src python :session zipfs :results nonedocument = nlp(text)
+#+begin_src python :session zipfs :results output :exports both
+document = nlp(text)
 #+end_src
+
+#+RESULTS:
 
 *** The Counter
 #+begin_src python :session zipfs :results none
@@ -123,9 +127,9 @@ with TIMER:
 #+end_src
 
 #+RESULTS:
-: 2019-06-20 17:41:59,573 graeae.timers.timer start: Started: 2019-06-20 17:41:59.573158
-: 2019-06-20 17:41:59,774 graeae.timers.timer end: Ended: 2019-06-20 17:41:59.774213
-: 2019-06-20 17:41:59,775 graeae.timers.timer end: Elapsed: 0:00:00.201055
+: 2019-06-21 13:43:13,871 graeae.timers.timer start: Started: 2019-06-21 13:43:13.871027
+: 2019-06-21 13:43:14,046 graeae.timers.timer end: Ended: 2019-06-21 13:43:14.046282
+: 2019-06-21 13:43:14,047 graeae.timers.timer end: Elapsed: 0:00:00.175255
 
 #+begin_src python :session zipfs :results output raw :exports both
 for token, count in counter.most_common()[:10]:
@@ -133,16 +137,16 @@ for token, count in counter.most_common()[:10]:
 #+end_src
 
 #+RESULTS:
- - -PRON-: 9,376
- - : 6,649
- - the: 5,755
- - .: 5,689
- - ,: 5,440
- - : 4,240
- - of: 3,872
- - be: 2,887
- - ": 2,642
- - a: 2,527
+ - -PRON-: 8,601
+ - : 6,431
+ - the: 5,582
+ - .: 5,578
+ - ,: 5,299
+ - : 4,163
+ - of: 3,759
+ - be: 2,828
+ - ": 2,620
+ - a: 2,470
 
 So I forgot to get rid of whitespace, punctuation, etcetera.
 
@@ -158,16 +162,16 @@ for token, count in counter.most_common()[:10]:
 #+end_src
 
 #+RESULTS:
- - -PRON-: 9,376
- - the: 5,755
- - of: 3,872
- - be: 2,887
- - a: 2,526
- - to: 2,186
- - and: 2,055
- - in: 1,697
- - have: 1,419
- - that: 1,071
+ - -PRON-: 8,601
+ - the: 5,582
+ - of: 3,759
+ - be: 2,828
+ - a: 2,470
+ - to: 2,106
+ - and: 1,988
+ - in: 1,640
+ - have: 1,421
+ - that: 1,056
 
 Surprisingly, pronouns are more common than stop words.
 
@@ -177,7 +181,7 @@ curve = holoviews.Curve(data, "Lemma", "Count").opts(
     height=Plot.height,
     width=Plot.width,
     xaxis="bare",
-).opts(xlabel="Lemma")
+).opts(title="Lemma Count with Whitespace and Symbols Removed")
 embed = Embed(plot=curve, file_name="all_words_count")
 embed()
 #+end_src
@@ -196,7 +200,7 @@ curve = holoviews.Curve(data, "Lemma", "Count").opts(
     xaxis="bare",
     logy=True,
     logx=True,
-).opts(xlabel="Lemma")
+).opts(title="Lemma Count With Whitespace and Symbols Removed (log-log)")
 embed = Embed(plot=curve, file_name="all_words_count_log")
 embed()
 #+end_src
@@ -219,13 +223,13 @@ for token, count in counter.most_common()[:10]:
 #+end_src
 
 #+RESULTS:
- - Verloc: 762
- - Mr: 536
- - ’s: 387
+ - verloc: 762
+ - mr: 537
+ - ’s: 370
  - not: 328
- - man: 323
- - Mrs: 281
- - ’: 266
+ - man: 324
+ - mrs: 281
+ - ’: 281
  - say: 245
  - look: 215
  - like: 213
@@ -245,7 +249,7 @@ curve = holoviews.Curve(data, "Lemma", "Count").opts(
     logy=True,
     logx=True,
     tools=["hover"],
-).opts(xlabel="Lemma")
+).opts(title="Lemma-Count With Stopwords Removed (log-log)")
 embed = Embed(plot=curve, file_name="cleaned_count")
 embed()
 #+end_src
@@ -253,6 +257,99 @@ embed()
 #+RESULTS:
 #+begin_export html
 <object type="text/html" data="cleaned_count.html" style="width:100%" height=800>
+  <p>Figure Missing</p>
+</object>
+#+end_export
+
+The idea behind this was to see if the word-count =The Secret Agent= obeys [[https://en.wikipedia.org/wiki/Zipf%27s_law?oldformat=true][Zipf's Law]], as it's supposed to. If it did, then the line should have straightened out once I used a log-log plot, but it doesn't appear that it did.
+** Un-Lemmatized
+   Maybe it's the lemmatization of the words that is messing it up.
+#+begin_src python :session zipfs :results output raw :exports both
+counter = Counter()
+for token in document:
+    if not token.pos_ in unwanted:
+        counter[token.text] += 1
+
+for token, count in counter.most_common()[:10]:
+    print(f" - {token}: {count}")
+#+end_src
+
+#+RESULTS:
+ - the: 5582
+ - of: 3759
+ - a: 2470
+ - to: 2106
+ - and: 1988
+ - he: 1747
+ - his: 1652
+ - in: 1640
+ - was: 1247
+ - that: 1056
+
+#+begin_src python :session zipfs :results output raw :exports both
+data = pandas.DataFrame(counter.most_common(), columns=["Text", "Count"])
+curve = holoviews.Curve(data, "Text", "Count").opts(
+    height=Plot.height,
+    width=Plot.width,
+    xaxis="bare",
+    logy=True,
+    logx=True,
+    tools=["hover"],
+).opts(title="Token Frequency Counts (log-log)")
+embed = Embed(plot=curve, file_name="token_count")
+embed()
+#+end_src
+
+#+RESULTS:
+#+begin_export html
+<object type="text/html" data="token_count.html" style="width:100%" height=800>
+  <p>Figure Missing</p>
+</object>
+#+end_export
+
+It doesn't appear to have helped.
+*** Tokens Without Stopwords
+    Does removing the stop-words help in this case?
+
+#+begin_src python :session zipfs :results output raw :exports both
+counter = Counter()
+for token in document:
+    if not token.pos_ in unwanted and not token.is_stop:
+        counter[token.text] += 1
+
+for token, count in counter.most_common()[:10]:
+    print(f" - {token}: {count}")
+#+end_src
+
+#+RESULTS:
+ - verloc: 762
+ - ’s: 623
+ - mr: 537
+ - n’t: 328
+ - mrs: 281
+ - man: 260
+ - said: 221
+ - like: 202
+ - chief: 175
+ - ossipon: 175
+
+#+begin_src python :session zipfs :results output raw :exports both
+data = pandas.DataFrame(counter.most_common(), columns=["Text", "Count"])
+curve = holoviews.Curve(data, "Text", "Count").opts(
+    height=Plot.height,
+    width=Plot.width,
+    xaxis="bare",
+    logy=True,
+    logx=True,
+    tools=["hover"],
+).opts(title="Token Frequency Counts Without Stopwords (log-log)")
+embed = Embed(plot=curve, file_name="token_count_no_stop")
+embed()
+#+end_src
+
+#+RESULTS:
+#+begin_export html
+<object type="text/html" data="token_count_no_stop.html" style="width:100%" height=800>
   <p>Figure Missing</p>
 </object>
 #+end_export
