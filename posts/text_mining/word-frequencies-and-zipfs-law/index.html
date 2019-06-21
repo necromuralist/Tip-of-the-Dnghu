@@ -64,15 +64,15 @@
 </div>
 </header>
 <div class="e-content entry-content" itemprop="articleBody text">
-<div class="outline-2" id="outline-container-orga53a2e5">
-<h2 id="orga53a2e5">Beginning</h2>
-<div class="outline-text-2" id="text-orga53a2e5"></div>
-<div class="outline-3" id="outline-container-org96457d0">
-<h3 id="org96457d0">Imports</h3>
-<div class="outline-text-3" id="text-org96457d0"></div>
-<div class="outline-4" id="outline-container-org5b6e335">
-<h4 id="org5b6e335">Python</h4>
-<div class="outline-text-4" id="text-org5b6e335">
+<div class="outline-2" id="outline-container-orgf448331">
+<h2 id="orgf448331">Beginning</h2>
+<div class="outline-text-2" id="text-orgf448331"></div>
+<div class="outline-3" id="outline-container-org2aa29b1">
+<h3 id="org2aa29b1">Imports</h3>
+<div class="outline-text-3" id="text-org2aa29b1"></div>
+<div class="outline-4" id="outline-container-org234c33e">
+<h4 id="org234c33e">Python</h4>
+<div class="outline-text-4" id="text-org234c33e">
 <div class="highlight">
 <pre><span></span><span class="kn">from</span> <span class="nn">argparse</span> <span class="kn">import</span> <span class="n">Namespace</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Counter</span>
@@ -81,9 +81,9 @@
 </pre></div>
 </div>
 </div>
-<div class="outline-4" id="outline-container-orgbf7312d">
-<h4 id="orgbf7312d">PyPi</h4>
-<div class="outline-text-4" id="text-orgbf7312d">
+<div class="outline-4" id="outline-container-org37e52ae">
+<h4 id="org37e52ae">PyPi</h4>
+<div class="outline-text-4" id="text-org37e52ae">
 <div class="highlight">
 <pre><span></span><span class="kn">import</span> <span class="nn">holoviews</span>
 <span class="kn">import</span> <span class="nn">pandas</span>
@@ -91,9 +91,9 @@
 </pre></div>
 </div>
 </div>
-<div class="outline-4" id="outline-container-org5d6f95c">
-<h4 id="org5d6f95c">My Stuff</h4>
-<div class="outline-text-4" id="text-org5d6f95c">
+<div class="outline-4" id="outline-container-org38c8ef4">
+<h4 id="org38c8ef4">My Stuff</h4>
+<div class="outline-text-4" id="text-org38c8ef4">
 <div class="highlight">
 <pre><span></span><span class="kn">from</span> <span class="nn">graeae</span> <span class="kn">import</span> <span class="n">EnvironmentLoader</span><span class="p">,</span> <span class="n">TextDownloader</span>
 <span class="kn">from</span> <span class="nn">graeae.timers</span> <span class="kn">import</span> <span class="n">Timer</span>
@@ -102,20 +102,20 @@
 </div>
 </div>
 </div>
-<div class="outline-3" id="outline-container-org09823f2">
-<h3 id="org09823f2">Set Up</h3>
-<div class="outline-text-3" id="text-org09823f2"></div>
-<div class="outline-4" id="outline-container-orgfc317a6">
-<h4 id="orgfc317a6">Spacy</h4>
-<div class="outline-text-4" id="text-orgfc317a6">
+<div class="outline-3" id="outline-container-orgff7afa6">
+<h3 id="orgff7afa6">Set Up</h3>
+<div class="outline-text-3" id="text-orgff7afa6"></div>
+<div class="outline-4" id="outline-container-orgeef36c6">
+<h4 id="orgeef36c6">Spacy</h4>
+<div class="outline-text-4" id="text-orgeef36c6">
 <div class="highlight">
 <pre><span></span><span class="n">nlp</span> <span class="o">=</span> <span class="n">spacy</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">"en_core_web_lg"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<div class="outline-4" id="outline-container-orge3db823">
-<h4 id="orge3db823">The Path</h4>
-<div class="outline-text-4" id="text-orge3db823">
+<div class="outline-4" id="outline-container-orge2469ea">
+<h4 id="orge2469ea">The Path</h4>
+<div class="outline-text-4" id="text-orge2469ea">
 <div class="highlight">
 <pre><span></span><span class="n">URL</span> <span class="o">=</span> <span class="s2">"https://www.gutenberg.org/files/974/974-0.txt"</span>
 <span class="n">environment</span> <span class="o">=</span> <span class="n">EnvironmentLoader</span><span class="p">()</span>
@@ -123,77 +123,77 @@
 </pre></div>
 </div>
 </div>
-<div class="outline-4" id="outline-container-orgd090f6c">
-<h4 id="orgd090f6c">The Timer</h4>
-<div class="outline-text-4" id="text-orgd090f6c">
+<div class="outline-4" id="outline-container-org3388c30">
+<h4 id="org3388c30">The Timer</h4>
+<div class="outline-text-4" id="text-org3388c30">
 <div class="highlight">
 <pre><span></span><span class="n">TIMER</span> <span class="o">=</span> <span class="n">Timer</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 </div>
-<div class="outline-3" id="outline-container-org6daadd8">
-<h3 id="org6daadd8">Load the File</h3>
-<div class="outline-text-3" id="text-org6daadd8">
+<div class="outline-3" id="outline-container-org9a4899a">
+<h3 id="org9a4899a">Load the File</h3>
+<div class="outline-text-3" id="text-org9a4899a">
 <div class="highlight">
 <pre><span></span><span class="n">book_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">book_path</span><span class="p">)</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span>
 <span class="n">downloader</span> <span class="o">=</span> <span class="n">TextDownloader</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">URL</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">book_path</span><span class="o">/</span><span class="s2">"conrad_joseph_secret_agent.txt"</span><span class="p">)</span>
-<span class="n">text</span> <span class="o">=</span> <span class="n">downloader</span><span class="o">.</span><span class="n">download</span>
+<span class="n">text</span> <span class="o">=</span> <span class="n">downloader</span><span class="o">.</span><span class="n">download</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
 </pre></div>
 <pre class="example">
-2019-06-20 18:14:52,437 [1mTextDownloader[0m download: /home/brunhilde/data/datasets/gutenberg/conrad_joseph_secret_agent.txt exists, opening it
+2019-06-21 13:42:40,943 [1mTextDownloader[0m download: /home/brunhilde/data/datasets/gutenberg/conrad_joseph_secret_agent.txt exists, opening it
 
 </pre>
 <div class="highlight">
 <pre><span></span><span class="k">print</span><span class="p">(</span><span class="n">text</span><span class="p">[:</span><span class="mi">800</span><span class="p">])</span>
 </pre></div>
 <pre class="example">
-                  THE
-              SECRET AGENT
-             A SIMPLE TALE
+                  the
+              secret agent
+             a simple tale
 
 
-                   BY
-             JOSEPH CONRAD
+                   by
+             joseph conrad
 
-             SECOND EDITION
+             second edition
 
-             METHUEN & CO.,
-          36 ESSEX STREET W C.
-                 LONDON
+             methuen & co.,
+          36 essex street w c.
+                 london
 
-_First Published_ . . . _September_ 1907
+_first published_ . . . _september_ 1907
 
- _Second Edition_ . . . _October_ 1907
+ _second edition_ . . . _october_ 1907
 
-                   TO
-              H. G. WELLS
+                   to
+              h. g. wells
 
-  THE CHRONICLER OF MR LEWISHAM’S LOVE
-    THE BIOGRAPHER OF KIPPS AND THE
-     HISTORIAN OF THE AGES TO COME
+  the chronicler of mr lewisham’s love
+    the biographer of kipps and the
+     historian of the ages to come
 
-  THIS SIMPLE TALE OF THE XI
+  this simple tale of the xi
 </pre></div>
-<div class="outline-4" id="outline-container-orgc820605">
-<h4 id="orgc820605">The Document</h4>
-<div class="outline-text-4" id="text-orgc820605">
+<div class="outline-4" id="outline-container-orgd9136d2">
+<h4 id="orgd9136d2">The Document</h4>
+<div class="outline-text-4" id="text-orgd9136d2">
 <div class="highlight">
-<pre><span></span>
+<pre><span></span><span class="n">document</span> <span class="o">=</span> <span class="n">nlp</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<div class="outline-4" id="outline-container-orgf540cf9">
-<h4 id="orgf540cf9">The Counter</h4>
-<div class="outline-text-4" id="text-orgf540cf9">
+<div class="outline-4" id="outline-container-org92b34fc">
+<h4 id="org92b34fc">The Counter</h4>
+<div class="outline-text-4" id="text-org92b34fc">
 <div class="highlight">
 <pre><span></span><span class="n">counter</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
-<div class="outline-4" id="outline-container-org39c05c2">
-<h4 id="org39c05c2">The Plotting</h4>
-<div class="outline-text-4" id="text-org39c05c2">
+<div class="outline-4" id="outline-container-org502898d">
+<h4 id="org502898d">The Plotting</h4>
+<div class="outline-text-4" id="text-org502898d">
 <div class="highlight">
 <pre><span></span><span class="n">SLUG</span> <span class="o">=</span> <span class="s2">"word-frequencies-and-zipfs-law"</span>
 <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">"../../files/posts/text_mining"</span><span class="p">)</span><span class="o">/</span><span class="n">SLUG</span>
@@ -208,9 +208,9 @@ _First Published_ . . . _September_ 1907
 </div>
 </div>
 </div>
-<div class="outline-2" id="outline-container-orge3e12e3">
-<h2 id="orge3e12e3">Middle</h2>
-<div class="outline-text-2" id="text-orge3e12e3">
+<div class="outline-2" id="outline-container-org693c067">
+<h2 id="org693c067">Middle</h2>
+<div class="outline-text-2" id="text-org693c067">
 <div class="highlight">
 <pre><span></span><span class="n">TIMER</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="s2">"Finished counting tokens"</span>
 <span class="k">with</span> <span class="n">TIMER</span><span class="p">:</span>
@@ -218,9 +218,9 @@ _First Published_ . . . _September_ 1907
         <span class="n">counter</span><span class="p">[</span><span class="n">token</span><span class="o">.</span><span class="n">lemma_</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
 </pre></div>
 <pre class="example">
-2019-06-20 17:41:59,573 graeae.timers.timer start: Started: 2019-06-20 17:41:59.573158
-2019-06-20 17:41:59,774 graeae.timers.timer end: Ended: 2019-06-20 17:41:59.774213
-2019-06-20 17:41:59,775 graeae.timers.timer end: Elapsed: 0:00:00.201055
+2019-06-21 13:43:13,871 graeae.timers.timer start: Started: 2019-06-21 13:43:13.871027
+2019-06-21 13:43:14,046 graeae.timers.timer end: Ended: 2019-06-21 13:43:14.046282
+2019-06-21 13:43:14,047 graeae.timers.timer end: Elapsed: 0:00:00.175255
 
 </pre>
 <div class="highlight">
@@ -228,16 +228,16 @@ _First Published_ . . . _September_ 1907
     <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s2">" - {token.strip()}: {count:,}"</span><span class="p">)</span>
 </pre></div>
 <ul class="org-ul">
-<li>-PRON-: 9,376</li>
-<li>: 6,649</li>
-<li>the: 5,755</li>
-<li>.: 5,689</li>
-<li>,: 5,440</li>
-<li>: 4,240</li>
-<li>of: 3,872</li>
-<li>be: 2,887</li>
-<li>": 2,642</li>
-<li>a: 2,527</li>
+<li>-PRON-: 8,601</li>
+<li>: 6,431</li>
+<li>the: 5,582</li>
+<li>.: 5,578</li>
+<li>,: 5,299</li>
+<li>: 4,163</li>
+<li>of: 3,759</li>
+<li>be: 2,828</li>
+<li>": 2,620</li>
+<li>a: 2,470</li>
 </ul>
 <p>So I forgot to get rid of whitespace, punctuation, etcetera.</p>
 <div class="highlight">
@@ -251,16 +251,16 @@ _First Published_ . . . _September_ 1907
     <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s2">" - {token}: {count:,}"</span><span class="p">)</span>        
 </pre></div>
 <ul class="org-ul">
-<li>-PRON-: 9,376</li>
-<li>the: 5,755</li>
-<li>of: 3,872</li>
-<li>be: 2,887</li>
-<li>a: 2,526</li>
-<li>to: 2,186</li>
-<li>and: 2,055</li>
-<li>in: 1,697</li>
-<li>have: 1,419</li>
-<li>that: 1,071</li>
+<li>-PRON-: 8,601</li>
+<li>the: 5,582</li>
+<li>of: 3,759</li>
+<li>be: 2,828</li>
+<li>a: 2,470</li>
+<li>to: 2,106</li>
+<li>and: 1,988</li>
+<li>in: 1,640</li>
+<li>have: 1,421</li>
+<li>that: 1,056</li>
 </ul>
 <p>Surprisingly, pronouns are more common than stop words.</p>
 <div class="highlight">
@@ -269,7 +269,7 @@ _First Published_ . . . _September_ 1907
     <span class="n">height</span><span class="o">=</span><span class="n">Plot</span><span class="o">.</span><span class="n">height</span><span class="p">,</span>
     <span class="n">width</span><span class="o">=</span><span class="n">Plot</span><span class="o">.</span><span class="n">width</span><span class="p">,</span>
     <span class="n">xaxis</span><span class="o">=</span><span class="s2">"bare"</span><span class="p">,</span>
-<span class="p">)</span><span class="o">.</span><span class="n">opts</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="s2">"Lemma"</span><span class="p">)</span>
+<span class="p">)</span><span class="o">.</span><span class="n">opts</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"Lemma Count with Whitespace and Symbols Removed"</span><span class="p">)</span>
 <span class="n">embed</span> <span class="o">=</span> <span class="n">Embed</span><span class="p">(</span><span class="n">plot</span><span class="o">=</span><span class="n">curve</span><span class="p">,</span> <span class="n">file_name</span><span class="o">=</span><span class="s2">"all_words_count"</span><span class="p">)</span>
 <span class="n">embed</span><span class="p">()</span>
 </pre></div>
@@ -283,16 +283,16 @@ _First Published_ . . . _September_ 1907
     <span class="n">xaxis</span><span class="o">=</span><span class="s2">"bare"</span><span class="p">,</span>
     <span class="n">logy</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
     <span class="n">logx</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-<span class="p">)</span><span class="o">.</span><span class="n">opts</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="s2">"Lemma"</span><span class="p">)</span>
+<span class="p">)</span><span class="o">.</span><span class="n">opts</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"Lemma Count With Whitespace and Symbols Removed (log-log)"</span><span class="p">)</span>
 <span class="n">embed</span> <span class="o">=</span> <span class="n">Embed</span><span class="p">(</span><span class="n">plot</span><span class="o">=</span><span class="n">curve</span><span class="p">,</span> <span class="n">file_name</span><span class="o">=</span><span class="s2">"all_words_count_log"</span><span class="p">)</span>
 <span class="n">embed</span><span class="p">()</span>
 </pre></div>
 <object data="all_words_count_log.html" height="800" style="width:100%" type="text/html">
 <p>Figure Missing</p>
 </object></div>
-<div class="outline-4" id="outline-container-org960a24c">
-<h4 id="org960a24c">Removing Stop Words</h4>
-<div class="outline-text-4" id="text-org960a24c">
+<div class="outline-4" id="outline-container-org2362d7f">
+<h4 id="org2362d7f">Removing Stop Words</h4>
+<div class="outline-text-4" id="text-org2362d7f">
 <div class="highlight">
 <pre><span></span><span class="n">counter</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
 <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">document</span><span class="p">:</span>
@@ -303,13 +303,13 @@ _First Published_ . . . _September_ 1907
     <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s2">" - {token}: {count}"</span><span class="p">)</span>
 </pre></div>
 <ul class="org-ul">
-<li>Verloc: 762</li>
-<li>Mr: 536</li>
-<li>’s: 387</li>
+<li>verloc: 762</li>
+<li>mr: 537</li>
+<li>’s: 370</li>
 <li>not: 328</li>
-<li>man: 323</li>
-<li>Mrs: 281</li>
-<li>’: 266</li>
+<li>man: 324</li>
+<li>mrs: 281</li>
+<li>’: 281</li>
 <li>say: 245</li>
 <li>look: 215</li>
 <li>like: 213</li>
@@ -327,18 +327,106 @@ _First Published_ . . . _September_ 1907
     <span class="n">logy</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
     <span class="n">logx</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
     <span class="n">tools</span><span class="o">=</span><span class="p">[</span><span class="s2">"hover"</span><span class="p">],</span>
-<span class="p">)</span><span class="o">.</span><span class="n">opts</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="s2">"Lemma"</span><span class="p">)</span>
+<span class="p">)</span><span class="o">.</span><span class="n">opts</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"Lemma-Count With Stopwords Removed (log-log)"</span><span class="p">)</span>
 <span class="n">embed</span> <span class="o">=</span> <span class="n">Embed</span><span class="p">(</span><span class="n">plot</span><span class="o">=</span><span class="n">curve</span><span class="p">,</span> <span class="n">file_name</span><span class="o">=</span><span class="s2">"cleaned_count"</span><span class="p">)</span>
 <span class="n">embed</span><span class="p">()</span>
 </pre></div>
 <object data="cleaned_count.html" height="800" style="width:100%" type="text/html">
 <p>Figure Missing</p>
+</object>
+<p>The idea behind this was to see if the word-count <code>The Secret Agent</code> obeys <a href="https://en.wikipedia.org/wiki/Zipf's_law?oldformat=true">Zipf's Law</a>, as it's supposed to. If it did, then the line should have straightened out once I used a log-log plot, but it doesn't appear that it did.</p>
+</div>
+</div>
+<div class="outline-3" id="outline-container-org89a0363">
+<h3 id="org89a0363">Un-Lemmatized</h3>
+<div class="outline-text-3" id="text-org89a0363">
+<p>Maybe it's the lemmatization of the words that is messing it up.</p>
+<div class="highlight">
+<pre><span></span><span class="n">counter</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">document</span><span class="p">:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">token</span><span class="o">.</span><span class="n">pos_</span> <span class="ow">in</span> <span class="n">unwanted</span><span class="p">:</span>
+        <span class="n">counter</span><span class="p">[</span><span class="n">token</span><span class="o">.</span><span class="n">text</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+<span class="k">for</span> <span class="n">token</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">counter</span><span class="o">.</span><span class="n">most_common</span><span class="p">()[:</span><span class="mi">10</span><span class="p">]:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s2">" - {token}: {count}"</span><span class="p">)</span>
+</pre></div>
+<ul class="org-ul">
+<li>the: 5582</li>
+<li>of: 3759</li>
+<li>a: 2470</li>
+<li>to: 2106</li>
+<li>and: 1988</li>
+<li>he: 1747</li>
+<li>his: 1652</li>
+<li>in: 1640</li>
+<li>was: 1247</li>
+<li>that: 1056</li>
+</ul>
+<div class="highlight">
+<pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">counter</span><span class="o">.</span><span class="n">most_common</span><span class="p">(),</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">"Text"</span><span class="p">,</span> <span class="s2">"Count"</span><span class="p">])</span>
+<span class="n">curve</span> <span class="o">=</span> <span class="n">holoviews</span><span class="o">.</span><span class="n">Curve</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="s2">"Text"</span><span class="p">,</span> <span class="s2">"Count"</span><span class="p">)</span><span class="o">.</span><span class="n">opts</span><span class="p">(</span>
+    <span class="n">height</span><span class="o">=</span><span class="n">Plot</span><span class="o">.</span><span class="n">height</span><span class="p">,</span>
+    <span class="n">width</span><span class="o">=</span><span class="n">Plot</span><span class="o">.</span><span class="n">width</span><span class="p">,</span>
+    <span class="n">xaxis</span><span class="o">=</span><span class="s2">"bare"</span><span class="p">,</span>
+    <span class="n">logy</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+    <span class="n">logx</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+    <span class="n">tools</span><span class="o">=</span><span class="p">[</span><span class="s2">"hover"</span><span class="p">],</span>
+<span class="p">)</span><span class="o">.</span><span class="n">opts</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"Token Frequency Counts (log-log)"</span><span class="p">)</span>
+<span class="n">embed</span> <span class="o">=</span> <span class="n">Embed</span><span class="p">(</span><span class="n">plot</span><span class="o">=</span><span class="n">curve</span><span class="p">,</span> <span class="n">file_name</span><span class="o">=</span><span class="s2">"token_count"</span><span class="p">)</span>
+<span class="n">embed</span><span class="p">()</span>
+</pre></div>
+<object data="token_count.html" height="800" style="width:100%" type="text/html">
+<p>Figure Missing</p>
+</object>
+<p>It doesn't appear to have helped.</p>
+</div>
+<div class="outline-4" id="outline-container-orgc0da42e">
+<h4 id="orgc0da42e">Tokens Without Stopwords</h4>
+<div class="outline-text-4" id="text-orgc0da42e">
+<p>Does removing the stop-words help in this case?</p>
+<div class="highlight">
+<pre><span></span><span class="n">counter</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">document</span><span class="p">:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">token</span><span class="o">.</span><span class="n">pos_</span> <span class="ow">in</span> <span class="n">unwanted</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">token</span><span class="o">.</span><span class="n">is_stop</span><span class="p">:</span>
+        <span class="n">counter</span><span class="p">[</span><span class="n">token</span><span class="o">.</span><span class="n">text</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+<span class="k">for</span> <span class="n">token</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">counter</span><span class="o">.</span><span class="n">most_common</span><span class="p">()[:</span><span class="mi">10</span><span class="p">]:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s2">" - {token}: {count}"</span><span class="p">)</span>
+</pre></div>
+<ul class="org-ul">
+<li>verloc: 762</li>
+<li>’s: 623</li>
+<li>mr: 537</li>
+<li>n’t: 328</li>
+<li>mrs: 281</li>
+<li>man: 260</li>
+<li>said: 221</li>
+<li>like: 202</li>
+<li>chief: 175</li>
+<li>ossipon: 175</li>
+</ul>
+<div class="highlight">
+<pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">counter</span><span class="o">.</span><span class="n">most_common</span><span class="p">(),</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">"Text"</span><span class="p">,</span> <span class="s2">"Count"</span><span class="p">])</span>
+<span class="n">curve</span> <span class="o">=</span> <span class="n">holoviews</span><span class="o">.</span><span class="n">Curve</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="s2">"Text"</span><span class="p">,</span> <span class="s2">"Count"</span><span class="p">)</span><span class="o">.</span><span class="n">opts</span><span class="p">(</span>
+    <span class="n">height</span><span class="o">=</span><span class="n">Plot</span><span class="o">.</span><span class="n">height</span><span class="p">,</span>
+    <span class="n">width</span><span class="o">=</span><span class="n">Plot</span><span class="o">.</span><span class="n">width</span><span class="p">,</span>
+    <span class="n">xaxis</span><span class="o">=</span><span class="s2">"bare"</span><span class="p">,</span>
+    <span class="n">logy</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+    <span class="n">logx</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+    <span class="n">tools</span><span class="o">=</span><span class="p">[</span><span class="s2">"hover"</span><span class="p">],</span>
+<span class="p">)</span><span class="o">.</span><span class="n">opts</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"Token Frequency Counts Without Stopwords (log-log)"</span><span class="p">)</span>
+<span class="n">embed</span> <span class="o">=</span> <span class="n">Embed</span><span class="p">(</span><span class="n">plot</span><span class="o">=</span><span class="n">curve</span><span class="p">,</span> <span class="n">file_name</span><span class="o">=</span><span class="s2">"token_count_no_stop"</span><span class="p">)</span>
+<span class="n">embed</span><span class="p">()</span>
+</pre></div>
+<object data="token_count_no_stop.html" height="800" style="width:100%" type="text/html">
+<p>Figure Missing</p>
 </object></div>
 </div>
 </div>
-<div class="outline-2" id="outline-container-org97f442c">
-<h2 id="org97f442c">End</h2>
-<div class="outline-text-2" id="text-org97f442c">
+</div>
+<div class="outline-2" id="outline-container-orgdbdbb02">
+<h2 id="orgdbdbb02">End</h2>
+<div class="outline-text-2" id="text-orgdbdbb02">
 <p>The idea behind this was to show that word counts follow <a href="https://en.wikipedia.org/wiki/Zipf's_law?oldformat=true">Zipf's Law</a>, which I wasn't able to do. If it was following Zipf's law then we would expect the log-log plots to turn into straight lines.</p>
 </div>
 </div>
