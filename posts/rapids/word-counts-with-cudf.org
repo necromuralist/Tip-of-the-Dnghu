@@ -1,0 +1,172 @@
+#+BEGIN_COMMENT
+.. title: Word Counts With cuDF
+.. slug: word-counts-with-cudf
+.. date: 2019-08-11 13:37:03 UTC-07:00
+.. tags: cuDF,rapids,nlp,data cleaning
+.. category: NLP
+.. link: 
+.. description: Taking document word counts with cuDF.
+.. type: text
+.. status: 
+.. updated: 
+
+#+END_COMMENT
+#+OPTIONS: ^:{}
+#+TOC: headlines 3
+* Beginning
+** Imports
+*** Python
+#+begin_src jupyter-python :session /ssh:Rapids:/home/rapids/.local/share/jupyter/runtime/kernel-19416.json :results none
+from datetime import datetime
+from pathlib import Path
+from string import punctuation
+#+end_src
+*** PyPi
+#+begin_src jupyter-python :session /ssh:Rapids:/home/rapids/.local/share/jupyter/runtime/kernel-19416.json :results none
+import cudf
+import nvstrings
+import nvtext
+import nltk
+#+end_src
+* Middle
+** Setting Up the Data
+   The [[https://web.eecs.umich.edu/~lahiri/gutenberg_dataset.html][Gutenberg Dataset]] is a subset of the Project Gutenberg corpus made up of 3,036 books written in English by 142 authors. They were cleaned to remove additional text added by Project Gutenberg (metadata, license information, and transcriber's notes). They are made up of a directory of text files (one for each book) with the names of the files taking the form =<author>___<title>.txt= with the names and titles with the names and titles written in caps-case and with spaces between the tokens (e.g. =Zane Grey___Valley of Wild Horses.txt=). This first section will read in the files.
+*** Some Helpers
+#+begin_src jupyter-python :session /ssh:Rapids:/home/rapids/.local/share/jupyter/runtime/kernel-19416.json :results none
+def remove_empty(lines: list) -> list:
+    """strips lines and filters empty ones
+
+    Returns:
+     list of cleaned lines
+    """
+    cleaned = (line.strip() for line in lines)
+    return [line for line in cleaned if line]
+#+end_src
+
+#+begin_src jupyter-python :session /ssh:Rapids:/home/rapids/.local/share/jupyter/runtime/kernel-19416.json :results none
+def texts_and_names(directory: Path) -> tuple:
+    """loads the files in the directory
+
+    Args:
+     directory: path to directory of text files
+
+    Returns:
+     list of texts as a single list of strings, list of file names for each string
+    """
+    texts = []
+    file_names = []
+    for path in directory.iterdir():
+        assert path.is_file()
+        with path.open() as lines:
+            lines = remove_empty(lines)
+            texts += lines
+
+            # strip off .txt
+            name = path.name[:-4]
+            # save one file name for each of the lines
+            file_names += [name] * len(lines)
+    return texts, file_names
+#+end_src
+
+*** Load the Lines
+#+begin_src jupyter-python :session /ssh:Rapids:/home/rapids/.local/share/jupyter/runtime/kernel-19416.json :results output :exports both
+books = Path("/home/jupyter/data").expanduser()
+assert books.is_dir()
+start = datetime.now()
+lines, names = texts_and_names(books)
+print(f"Elapsed: {datetime.now() - start}")
+print(f"{len(lines):,} lines")
+#+end_src
+
+#+RESULTS:
+: Elapsed: 0:00:06.099685
+: 19,259,957 lines
+
+*** Put Them Into a DataFrame
+#+begin_src jupyter-python :session /ssh:Rapids:/home/rapids/.local/share/jupyter/runtime/kernel-19416.json :results output :exports both
+data = cudf.DataFrame()
+start = datetime.now()
+data["text"] = nvstrings.to_device(lines)
+print(f"Elapsed: {datetime.now() - start}")
+#+end_src
+
+#+RESULTS:
+: Elapsed: 0:00:02.457527
+
+Add the labels.
+
+#+begin_src jupyter-python :session /ssh:Rapids:/home/rapids/.local/share/jupyter/runtime/kernel-19416.json :results output :exports both
+# add the filenames (without extension) so we can use a string method
+start = datetime.now()
+data["label"] = nvstrings.to_device(names)
+# now split the names and add them to the data frame
+author_title = data.label.str.split("___")
+data["author"] = author_title[0]
+data["title"] = author_title[1]
+
+# now get rid of our original label column
+data = data.drop(labels=["label"])
+print(f"Elapsed: {datetime.now() - start}")
+#+end_src
+
+#+RESULTS:
+: Elapsed: 0:00:01.515812
+
+**warning:** the example for the next block raises a =Segmentation fault= that crashes emacs (and the interpreter).
+#+begin_src jupyter-python :session /ssh:Rapids:/home/rapids/.local/share/jupyter/runtime/kernel-19416.json :results output raw :exports both
+# data.head().to_pandas()
+# p = data.to_pandas()
+#p.head()
+#+end_src
+
+** Removing the Punctuation and Lower Casing
+
+#+begin_src jupyter-python :session /ssh:Rapids:/home/rapids/.local/share/jupyter/runtime/kernel-19416.json :results output :exports both
+start = datetime.now()
+STOPWORDS = nltk.corpus.stopwords.words("english")
+STOPWORDS = nvstrings.to_device(STOPWORDS)
+
+data["text_clean"] = data["text"].str.replace("|".join(punctuation), " ")
+data["text_clean"] = data["text_clean"].str.lower()
+
+data["text_clean"] = nvtext.replace_tokens(data["text_clean"].data, STOPWORDS, " ")
+print("Elapsed: {datetime.now() - start}")
+#+end_src
+
+#+RESULTS:
+:RESULTS:
+# [goto error]
+#+begin_example
+---------------------------------------------------------------------------
+ValueError                                Traceback (most recent call last)
+ValueError: std::bad_alloc
+
+The above exception was the direct cause of the following exception:
+
+SystemError                               Traceback (most recent call last)
+<ipython-input-26-bb2984b95480> in <module>
+      3 STOPWORDS = nvstrings.to_device(STOPWORDS)
+      4 
+----> 5 data["text_clean"] = data["text"].str.replace("|".join(punctuation), " ")
+      6 data["text_clean"] = data["text_clean"].str.lower()
+      7 
+
+~/miniconda3/lib/python3.7/site-packages/cudf/dataframe/string.py in replace(self, pat, repl, n, case, flags, regex)
+    352         from cudf.dataframe import Series
+    353         return Series(
+--> 354             self._parent.data.replace(pat, repl, n=n, regex=regex),
+    355             index=self._index
+    356         )
+
+~/miniconda3/lib/python3.7/site-packages/nvstrings.py in replace(self, pat, repl, n, regex)
+   1474 
+   1475         """
+-> 1476         rtn = pyniNVStrings.n_replace(self.m_cptr, pat, repl, n, regex)
+   1477         if rtn is not None:
+   1478             rtn = nvstrings(rtn)
+
+SystemError: <built-in function n_replace> returned a result with an error set
+#+end_example
+:END:
+
+* End
